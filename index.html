@@ -10,20 +10,21 @@
 
     <!-- واجهة تسجيل الدخول -->
     <div id="loginPage" class="login-container">
-        <div class="login-box">
-            <h2>تسجيل الدخول</h2>
-            <form id="loginForm">
-                <label for="username">اسم المستخدم</label>
-                <input type="text" id="username" name="username" required>
-                <label for="password">كلمة المرور</label>
-                <input type="password" id="password" name="password" required>
-                <button type="submit">تسجيل الدخول</button>
-            </form>
-            <p id="error-message" style="color: red; display: none;">البيانات غير صحيحة، حاول مرة أخرى.</p>
+        <div class="logo">
+            <img src="https://myindianthings.com/cdn/shop/products/Gym_Yoga_wallpapers-compressed-page-008_800x.jpg?v=1658401561" alt="Gym Logo">
         </div>
+        <h2>تسجيل الدخول</h2>
+        <form id="loginForm">
+            <label for="username">اسم المستخدم</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">كلمة المرور</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">تسجيل الدخول</button>
+        </form>
+        <p id="error-message" style="color: red; display: none;">البيانات غير صحيحة، حاول مرة أخرى.</p>
     </div>
 
-    <!-- صفحة الإدارة بعد تسجيل الدخول -->
+    <!-- لوحة التحكم -->
     <div id="controlPanel" class="control-panel" style="display: none;">
         <div class="sidebar">
             <h2>إدارة الصالة الرياضية</h2>
@@ -36,45 +37,110 @@
                 <li><a href="#reports">التقارير</a></li>
             </ul>
         </div>
-
+        
         <div class="content">
             <div id="dashboard">
                 <h1>لوحة التحكم</h1>
                 <p>هنا تفاصيل لوحة التحكم العامة للصالة الرياضية.</p>
             </div>
 
+            <!-- قسم الأعضاء -->
             <div id="members" style="display: none;">
-                <h1>الأعضاء</h1>
-                <form id="memberForm">
-                    <label>الاسم الكامل</label>
-                    <input type="text" name="fullName" placeholder="أدخل الاسم الكامل" required>
-                    <label>البريد الإلكتروني</label>
-                    <input type="email" name="email" placeholder="أدخل البريد الإلكتروني" required>
-                    <label>العمر</label>
-                    <input type="number" name="age" placeholder="أدخل العمر" required>
-                    <label>رقم الهاتف</label>
-                    <input type="tel" name="phone" placeholder="أدخل رقم الهاتف" required>
-                    <label>العنوان</label>
-                    <input type="text" name="address" placeholder="أدخل العنوان" required>
+                <h1>إدارة الأعضاء</h1>
+                <form id="membersForm">
+                    <label for="memberName">الاسم</label>
+                    <input type="text" id="memberName" name="memberName" required>
+                    <label for="memberPhone">رقم الهاتف</label>
+                    <input type="text" id="memberPhone" name="memberPhone" required>
                     <button type="submit">إضافة عضو</button>
                 </form>
-                <h2>قائمة الأعضاء</h2>
-                <table id="memberTable">
-                    <tr>
-                        <th>الاسم</th>
-                        <th>البريد الإلكتروني</th>
-                        <th>العمر</th>
-                        <th>الهاتف</th>
-                        <th>العنوان</th>
-                    </tr>
+                <table id="membersTable">
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>رقم الهاتف</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
                 </table>
+            </div>
+
+            <!-- قسم الاشتراكات -->
+            <div id="subscriptions" style="display: none;">
+                <h1>إدارة الاشتراكات</h1>
+                <form id="subscriptionsForm">
+                    <label for="subscriptionName">اسم الاشتراك</label>
+                    <input type="text" id="subscriptionName" name="subscriptionName" required>
+                    <label for="subscriptionPrice">السعر</label>
+                    <input type="number" id="subscriptionPrice" name="subscriptionPrice" required>
+                    <button type="submit">إضافة اشتراك</button>
+                </form>
+                <table id="subscriptionsTable">
+                    <thead>
+                        <tr>
+                            <th>اسم الاشتراك</th>
+                            <th>السعر</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- قسم الحصص -->
+            <div id="classes" style="display: none;">
+                <h1>إدارة الحصص</h1>
+                <form id="classesForm">
+                    <label for="className">اسم الحصة</label>
+                    <input type="text" id="className" name="className" required>
+                    <label for="classTime">وقت الحصة</label>
+                    <input type="text" id="classTime" name="classTime" required>
+                    <button type="submit">إضافة حصة</button>
+                </form>
+                <table id="classesTable">
+                    <thead>
+                        <tr>
+                            <th>اسم الحصة</th>
+                            <th>وقت الحصة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- قسم المدربين -->
+            <div id="trainers" style="display: none;">
+                <h1>إدارة المدربين</h1>
+                <form id="trainersForm">
+                    <label for="trainerName">اسم المدرب</label>
+                    <input type="text" id="trainerName" name="trainerName" required>
+                    <label for="trainerSpeciality">التخصص</label>
+                    <input type="text" id="trainerSpeciality" name="trainerSpeciality" required>
+                    <button type="submit">إضافة مدرب</button>
+                </form>
+                <table id="trainersTable">
+                    <thead>
+                        <tr>
+                            <th>اسم المدرب</th>
+                            <th>التخصص</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- قسم التقارير -->
+            <div id="reports" style="display: none;">
+                <h1>التقارير</h1>
+                <p>هنا يمكنك إضافة التقارير الخاصة بالصالة الرياضية.</p>
             </div>
         </div>
     </div>
 
-    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
-        <div class="loading-spinner"></div>
-    </div>
+    <div id="loadingBar" class="loading-bar"></div>
 
     <script src="script.js"></script>
 </body>
