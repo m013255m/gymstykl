@@ -9,8 +9,6 @@ document.querySelectorAll('.sidebar ul li a').forEach(link => {
     });
 });
 
-document.getElementById('dashboard').style.display = 'block';
-
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -21,6 +19,11 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     if (username === 'admin' && password === 'admin123') {
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('controlPanel').style.display = 'flex';
+
+        document.getElementById('loadingOverlay').style.display = 'flex';
+        setTimeout(() => {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }, 2000);
     } else {
         document.getElementById('error-message').style.display = 'block';
     }
