@@ -1,50 +1,65 @@
-document.querySelectorAll('.sidebar ul li a').forEach(link => {
-    link.addEventListener('click', () => {
-        document.querySelectorAll('.content > div').forEach(section => {
-            section.style.display = 'none';
-        });
+// وظائف لتسجيل الدخول
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
 
-        const target = link.getAttribute('href').substring(1);
-        document.getElementById(target).style.display = 'block';
-    });
-});
-
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const username = e.target.username.value;
-    const password = e.target.password.value;
-
-    // بيانات تجريبية
-    if (username === 'admin' && password === 'admin123') {
+    if (username === 'admin' && password === '12345') {
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('controlPanel').style.display = 'flex';
-
-        document.getElementById('loadingOverlay').style.display = 'flex';
-        setTimeout(() => {
-            document.getElementById('loadingOverlay').style.display = 'none';
-        }, 2000);
     } else {
         document.getElementById('error-message').style.display = 'block';
     }
 });
 
-document.getElementById('memberForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+// إضافة بيانات الأعضاء
+document.getElementById('membersForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var name = document.getElementById('memberName').value;
+    var phone = document.getElementById('memberPhone').value;
 
-    const fullName = e.target.fullName.value;
-    const email = e.target.email.value;
-    const age = e.target.age.value;
-    const phone = e.target.phone.value;
-    const address = e.target.address.value;
+    var table = document.getElementById('membersTable').getElementsByTagName('tbody')[0];
+    var newRow = table.insertRow(table.rows.length);
+    newRow.innerHTML = `<td>${name}</td><td>${phone}</td><td><button class="delete">حذف</button></td>`;
 
-    const table = document.getElementById('memberTable');
-    const row = table.insertRow();
-    row.insertCell(0).textContent = fullName;
-    row.insertCell(1).textContent = email;
-    row.insertCell(2).textContent = age;
-    row.insertCell(3).textContent = phone;
-    row.insertCell(4).textContent = address;
+    document.getElementById('membersForm').reset();
+});
 
-    e.target.reset();
+// إضافة بيانات الاشتراكات
+document.getElementById('subscriptionsForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var name = document.getElementById('subscriptionName').value;
+    var price = document.getElementById('subscriptionPrice').value;
+
+    var table = document.getElementById('subscriptionsTable').getElementsByTagName('tbody')[0];
+    var newRow = table.insertRow(table.rows.length);
+    newRow.innerHTML = `<td>${name}</td><td>${price}</td><td><button class="delete">حذف</button></td>`;
+
+    document.getElementById('subscriptionsForm').reset();
+});
+
+// إضافة بيانات الحصص
+document.getElementById('classesForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var name = document.getElementById('className').value;
+    var time = document.getElementById('classTime').value;
+
+    var table = document.getElementById('classesTable').getElementsByTagName('tbody')[0];
+    var newRow = table.insertRow(table.rows.length);
+    newRow.innerHTML = `<td>${name}</td><td>${time}</td><td><button class="delete">حذف</button></td>`;
+
+    document.getElementById('classesForm').reset();
+});
+
+// إضافة بيانات المدربين
+document.getElementById('trainersForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var name = document.getElementById('trainerName').value;
+    var speciality = document.getElementById('trainerSpeciality').value;
+
+    var table = document.getElementById('trainersTable').getElementsByTagName('tbody')[0];
+    var newRow = table.insertRow(table.rows.length);
+    newRow.innerHTML = `<td>${name}</td><td>${speciality}</td><td><button class="delete">حذف</button></td>`;
+
+    document.getElementById('trainersForm').reset();
 });
