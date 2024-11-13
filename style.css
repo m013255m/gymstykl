@@ -1,3 +1,4 @@
+/* إعادة ضبط كافة الإعدادات */
 * {
     margin: 0;
     padding: 0;
@@ -7,7 +8,6 @@
 
 body {
     background-color: #f4f4f9;
-    direction: rtl;
     color: #333;
 }
 
@@ -21,13 +21,6 @@ body {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     text-align: center;
     position: relative;
-    z-index: 2;
-}
-
-.logo img {
-    width: 100%;
-    border-radius: 5px;
-    margin-bottom: 20px;
 }
 
 h2 {
@@ -71,7 +64,6 @@ button:hover {
     padding: 20px;
     min-height: 100vh;
     position: fixed;
-    z-index: 1;
 }
 
 .sidebar h2 {
@@ -112,23 +104,54 @@ h1 {
     color: #444;
 }
 
-.table td, .table th {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: center;
-}
-
-#membersTable, #subscriptionsTable, #classesTable, #trainersTable {
+table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
-#loadingBar {
+table td, table th {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+input[type="text"], input[type="number"], input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #ff7f00;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #e65c00;
+}
+
+/* التأثير عند الانتقال بين الأقسام */
+.section {
+    transition: transform 0.5s ease-in-out;
+}
+
+.section:hover {
+    transform: scale(1.05);
+}
+
+/* مؤشر التحميل */
+.loading-bar {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 0;
     height: 5px;
     background-color: #ff7f00;
     animation: loading 2s infinite;
