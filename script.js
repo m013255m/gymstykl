@@ -20,7 +20,7 @@ function displayMembers() {
     members.forEach(function(member) {
         const div = document.createElement("div");
         div.classList.add("list-item");
-        div.textContent = member;
+        div.innerHTML = `<i class="fas fa-user"></i> ${member}`;
         membersList.appendChild(div);
     });
 }
@@ -47,7 +47,7 @@ function displaySubscriptions() {
     subscriptions.forEach(function(subscription) {
         const div = document.createElement("div");
         div.classList.add("list-item");
-        div.textContent = subscription;
+        div.innerHTML = `<i class="fas fa-credit-card"></i> ${subscription}`;
         subscriptionsList.appendChild(div);
     });
 }
@@ -74,9 +74,7 @@ function displayNotifications() {
     notifications.forEach(function(notification) {
         const div = document.createElement("div");
         div.classList.add("list-item");
-        div.textContent = notification;
+        div.innerHTML = `<i class="fas fa-bell"></i> ${notification}`;
         notificationsList.appendChild(div);
     });
 }
-
-// باقي الأقسام مثل الحوافز، العروض، الجدولة والتخصيص، سيتم إضافتها بنفس الطريقة كما في المثال.
