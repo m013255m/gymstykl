@@ -1,19 +1,22 @@
+/* الأساسيات */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     direction: rtl;
-    background-color: #f0f0f0;
+    background-color: #f7f7f7;
     margin: 0;
     padding: 0;
+    color: #333;
 }
 
 #sidebar {
-    width: 200px;
+    width: 250px;
     position: fixed;
     top: 0;
     bottom: 0;
-    background-color: #333;
+    background-color: #222;
     color: white;
-    padding-top: 20px;
+    padding-top: 30px;
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 #sidebar ul {
@@ -23,43 +26,62 @@ body {
 
 #sidebar ul li {
     padding: 15px;
-    text-align: center;
+    text-align: right;
 }
 
 #sidebar ul li a {
     color: white;
     text-decoration: none;
     display: block;
+    font-size: 18px;
+    transition: background-color 0.3s;
 }
 
 #sidebar ul li a:hover {
-    background-color: #555;
+    background-color: #006400;
 }
 
 #content {
-    margin-left: 220px;
-    padding: 20px;
+    margin-left: 270px;
+    padding: 30px;
 }
 
 h2 {
-    color: #333;
+    font-size: 24px;
+    color: #006400;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+h2 i {
+    margin-left: 10px;
 }
 
 .input-field {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+.input-field:focus {
+    border-color: #28a745;
 }
 
 .btn {
-    padding: 10px 20px;
+    padding: 12px 20px;
     background-color: #28a745;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
 .btn:hover {
@@ -71,14 +93,46 @@ h2 {
 }
 
 .list-item {
-    padding: 10px;
-    margin: 5px 0;
+    padding: 15px;
+    margin: 10px 0;
     background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    transition: transform 0.3s;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
 }
 
 .list-item:hover {
     transform: scale(1.05);
+}
+
+.list-item i {
+    margin-left: 10px;
+}
+
+#sidebar a {
+    font-size: 20px;
+}
+
+input[type="file"] {
+    background-color: transparent;
+    border: none;
+}
+
+/* تحسين بعض التفاعلات */
+input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+    outline: none;
+    border: 2px solid #28a745;
+}
+
+/* تأثيرات الحركية */
+section {
+    margin-bottom: 30px;
+}
+
+section:hover {
+    background-color: #e9f5e9;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
