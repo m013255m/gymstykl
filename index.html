@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الصالة الرياضية</title>
+    <title>إدارة الجيم</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,10 +14,6 @@
         <li><a href="#dashboard">لوحة التحكم</a></li>
         <li><a href="#members">الأعضاء</a></li>
         <li><a href="#subscriptions">الإشتراكات</a></li>
-        <li><a href="#classes">الحصص</a></li>
-        <li><a href="#trainers">المدربين</a></li>
-        <li><a href="#reports">التقارير</a></li>
-        <!-- إضافات جديدة بناءً على الطلبات -->
         <li><a href="#notifications">الإشعارات والتنبيهات</a></li>
         <li><a href="#analytics">لوحة التحليلات</a></li>
         <li><a href="#documents">إدارة مستندات الأعضاء</a></li>
@@ -29,12 +25,12 @@
 </div>
 
 <div class="content">
-    <div id="dashboard">
+    <div id="dashboard" class="section">
         <h1>لوحة التحكم</h1>
-        <p>هنا تفاصيل لوحة التحكم العامة للصالة الرياضية.</p>
+        <p>هنا تفاصيل لوحة التحكم العامة لإدارة الجيم.</p>
     </div>
 
-    <div id="members" style="display: none;">
+    <div id="members" class="section">
         <h1>الأعضاء</h1>
         <form id="memberForm">
             <label>الاسم الكامل:</label>
@@ -58,7 +54,7 @@
         </table>
     </div>
 
-    <div id="subscriptions" style="display: none;">
+    <div id="subscriptions" class="section">
         <h1>الإشتراكات</h1>
         <form id="subscriptionForm">
             <label>اسم العضو:</label>
@@ -86,40 +82,73 @@
         </table>
     </div>
 
-    <!-- الأقسام الجديدة -->
-    <div id="notifications" style="display: none;">
+    <div id="notifications" class="section">
         <h1>الإشعارات والتنبيهات</h1>
-        <p>هنا يمكنك إدارة الإشعارات والتنبيهات الخاصة بالأعضاء والمدربين.</p>
+        <p>إدارة تنبيهات وإشعارات الأعضاء والمدربين.</p>
+        <form>
+            <label>عنوان الإشعار:</label>
+            <input type="text" required>
+            <label>تفاصيل الإشعار:</label>
+            <textarea required></textarea>
+            <button type="submit">إرسال إشعار</button>
+        </form>
     </div>
 
-    <div id="analytics" style="display: none;">
+    <div id="analytics" class="section">
         <h1>لوحة التحليلات</h1>
-        <p>هنا يمكن عرض تحليلات الأداء والإحصائيات المتنوعة.</p>
+        <p>عرض تحليلات الأداء والإحصائيات الرئيسية.</p>
     </div>
 
-    <div id="documents" style="display: none;">
+    <div id="documents" class="section">
         <h1>إدارة مستندات الأعضاء</h1>
-        <p>هنا يمكنك إضافة وإدارة المستندات المرتبطة بالأعضاء.</p>
+        <form>
+            <label>اسم العضو:</label>
+            <input type="text" required>
+            <label>نوع المستند:</label>
+            <select>
+                <option>بطاقة هوية</option>
+                <option>شهادة طبية</option>
+            </select>
+            <button type="submit">إضافة مستند</button>
+        </form>
     </div>
 
-    <div id="incentives" style="display: none;">
+    <div id="incentives" class="section">
         <h1>حوافز المدربين</h1>
-        <p>هنا يمكنك إدارة الحوافز المالية الخاصة بالمدربين.</p>
+        <form>
+            <label>اسم المدرب:</label>
+            <input type="text" required>
+            <label>قيمة الحافز:</label>
+            <input type="number" required>
+            <button type="submit">إضافة حافز</button>
+        </form>
     </div>
 
-    <div id="offers" style="display: none;">
+    <div id="offers" class="section">
         <h1>الصفحة الخاصة بالعروض</h1>
-        <p>هنا يمكنك إدارة العروض الخاصة بالأعضاء والاشتراكات.</p>
+        <form>
+            <label>عنوان العرض:</label>
+            <input type="text" required>
+            <label>تفاصيل العرض:</label>
+            <textarea required></textarea>
+            <button type="submit">إضافة عرض</button>
+        </form>
     </div>
 
-    <div id="scheduling" style="display: none;">
+    <div id="scheduling" class="section">
         <h1>نظام الجدولة المتقدمة</h1>
-        <p>هنا يمكنك جدولة الحصص والجلسات الخاصة بالأعضاء.</p>
+        <form>
+            <label>اسم الحصة:</label>
+            <input type="text" required>
+            <label>تاريخ ووقت الحصة:</label>
+            <input type="datetime-local" required>
+            <button type="submit">إضافة حصة</button>
+        </form>
     </div>
 
-    <div id="customization" style="display: none;">
+    <div id="customization" class="section">
         <h1>تخصيص واجهة المستخدم</h1>
-        <p>هنا يمكنك تخصيص واجهة المستخدم بما يناسب متطلباتك.</p>
+        <p>تخصيص الألوان والتصميم حسب تفضيلاتك.</p>
     </div>
 </div>
 
