@@ -1,40 +1,82 @@
-// دالة لتغيير القسم المعروض
-function showSection(sectionId) {
-    const sections = document.querySelectorAll('.section-content');
-    sections.forEach(section => {
-        if (section.id === sectionId) {
-            section.style.display = 'block';
-        } else {
-            section.style.display = 'none';
-        }
+// إضافة الأعضاء
+document.getElementById("members-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    const memberName = document.getElementById("member-name").value;
+    if (memberName) {
+        let members = JSON.parse(localStorage.getItem("members")) || [];
+        members.push(memberName);
+        localStorage.setItem("members", JSON.stringify(members));
+        displayMembers();
+        document.getElementById("member-name").value = "";
+    }
+});
+
+// عرض الأعضاء
+function displayMembers() {
+    const members = JSON.parse(localStorage.getItem("members")) || [];
+    const membersList = document.getElementById("members-list");
+    membersList.innerHTML = "";
+    members.forEach(function(member) {
+        const div = document.createElement("div");
+        div.classList.add("list-item");
+        div.textContent = member;
+        membersList.appendChild(div);
     });
 }
 
-// دالة لإضافة عضو جديد
-document.getElementById('member-form').addEventListener('submit', function(event) {
+// إضافة الاشتراكات
+document.getElementById("subscriptions-form").addEventListener("submit", function(event) {
     event.preventDefault();
-    const name = document.getElementById('member_name').value;
-    const email = document.getElementById('member_email').value;
-    const date = document.getElementById('subscription_date').value;
-    const plan = document.getElementById('subscription_plan').value;
-
-    const table = document.getElementById('members-table').getElementsByTagName('tbody')[0];
-    const row = table.insertRow();
-    row.insertCell(0).textContent = name;
-    row.insertCell(1).textContent = email;
-    row.insertCell(2).textContent = date;
-    row.insertCell(3).innerHTML = '<button class="btn-remove">إزالة</button>';
-
-    // حفظ البيانات في localStorage
-    const membersData = JSON.parse(localStorage.getItem('membersData')) || [];
-    membersData.push({ name, email, date, plan });
-    localStorage.setItem('membersData', JSON.stringify(membersData));
-
-    // إعادة تعيين النموذج
-    document.getElementById('member-form').reset();
+    
+    const subscriptionName = document.getElementById("subscription-name").value;
+    if (subscriptionName) {
+        let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
+        subscriptions.push(subscriptionName);
+        localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
+        displaySubscriptions();
+        document.getElementById("subscription-name").value = "";
+    }
 });
 
-// دالة لإنشاء نسخة احتياطية
-function createBackup() {
-    alert("تم إنشاء النسخة الاحتياطية بنجاح!");
+// عرض الاشتراكات
+function displaySubscriptions() {
+    const subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
+    const subscriptionsList = document.getElementById("subscriptions-list");
+    subscriptionsList.innerHTML = "";
+    subscriptions.forEach(function(subscription) {
+        const div = document.createElement("div");
+        div.classList.add("list-item");
+        div.textContent = subscription;
+        subscriptionsList.appendChild(div);
+    });
 }
+
+// إضافة الإشعارات
+document.getElementById("notifications-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    const notificationMessage = document.getElementById("notification-message").value;
+    if (notificationMessage) {
+        let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+        notifications.push(notificationMessage);
+        localStorage.setItem("notifications", JSON.stringify(notifications));
+        displayNotifications();
+        document.getElementById("notification-message").value = "";
+    }
+});
+
+// عرض الإشعارات
+function displayNotifications() {
+    const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+    const notificationsList = document.getElementById("notifications-list");
+    notificationsList.innerHTML = "";
+    notifications.forEach(function(notification) {
+        const div = document.createElement("div");
+        div.classList.add("list-item");
+        div.textContent = notification;
+        notificationsList.appendChild(div);
+    });
+}
+
+// باقي الأقسام مثل الحوافز، العروض، الجدولة والتخصيص، سيتم إضافتها بنفس الطريقة كما في المثال.
