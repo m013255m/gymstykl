@@ -6,7 +6,7 @@
     <title>إدارة الجيم</title>
     <link rel="icon" href="gym-icon.png" type="image/png"> <!-- أيقونة الموقع -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- أيقونات الموقع -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"> <!-- خط مميز -->
 </head>
 <body>
@@ -32,7 +32,7 @@
     </div>
 
     <div class="content">
-        <h1>لوحة تحكم إدارة الجيم</h1>
+        <h1>إدارة الجيم</h1>
 
         <!-- لوحة التحكم -->
         <section id="dashboard" class="section-content">
@@ -44,15 +44,77 @@
         <section id="members" class="section-content">
             <h2><i class="fas fa-users"></i> الأعضاء</h2>
             <form id="member-form">
-                <label>اسم العضو:</label>
-                <input type="text" name="member_name" required>
-                <label>تاريخ الاشتراك:</label>
-                <input type="date" name="subscription_date" required>
+                <label for="member_name">اسم العضو:</label>
+                <input type="text" id="member_name" name="member_name" required>
+                
+                <label for="member_email">البريد الإلكتروني:</label>
+                <input type="email" id="member_email" name="member_email" required>
+
+                <label for="subscription_date">تاريخ الاشتراك:</label>
+                <input type="date" id="subscription_date" name="subscription_date" required>
+
+                <label for="subscription_plan">خطة الاشتراك:</label>
+                <select id="subscription_plan" name="subscription_plan" required>
+                    <option value="monthly">شهري</option>
+                    <option value="yearly">سنوي</option>
+                </select>
+
                 <button type="submit">إضافة عضو</button>
             </form>
             <table id="members-table">
-                <tr><th>اسم العضو</th><th>تاريخ الاشتراك</th><th>إجراء</th></tr>
-                <!-- الأعضاء سيتم إضافتهم هنا -->
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>البريد الإلكتروني</th>
+                        <th>تاريخ الاشتراك</th>
+                        <th>الإجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- سيتم عرض الأعضاء هنا -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- الاشتراكات -->
+        <section id="subscriptions" class="section-content">
+            <h2><i class="fas fa-credit-card"></i> الإشتراكات</h2>
+            <p>إدارة الاشتراكات لجميع الأعضاء.</p>
+            <table id="subscriptions-table">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>الخطة</th>
+                        <th>تاريخ الدفع</th>
+                        <th>الإجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- سيتم عرض الاشتراكات هنا -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- الإشعارات والتنبيهات -->
+        <section id="notifications" class="section-content">
+            <h2><i class="fas fa-bell"></i> الإشعارات والتنبيهات</h2>
+            <form id="notification-form">
+                <label for="notification_message">الرسالة:</label>
+                <textarea id="notification_message" name="notification_message" required></textarea>
+
+                <button type="submit">إرسال إشعار</button>
+            </form>
+            <table id="notifications-table">
+                <thead>
+                    <tr>
+                        <th>الرسالة</th>
+                        <th>التاريخ</th>
+                        <th>الإجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- سيتم عرض الإشعارات هنا -->
+                </tbody>
             </table>
         </section>
 
@@ -63,8 +125,23 @@
             <p>يمكنك إنشاء نسخة احتياطية للبيانات الحالية. ستساعدك هذه النسخة على استعادة البيانات في حالة حدوث مشكلة.</p>
         </section>
 
-        <!-- باقي الأقسام كما في الكود السابق... -->
-        
+        <!-- الأعضاء الذين يجب عليهم تجديد الاشتراك -->
+        <section id="renewal-reminders" class="section-content">
+            <h2><i class="fas fa-bell"></i> الأعضاء الذين يجب عليهم تجديد الاشتراك</h2>
+            <table id="renewal-table">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>تاريخ الاشتراك</th>
+                        <th>التاريخ المتوقع للتجديد</th>
+                        <th>الإجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- سيتم عرض الأعضاء هنا -->
+                </tbody>
+            </table>
+        </section>
     </div>
 
     <script src="script.js"></script>
