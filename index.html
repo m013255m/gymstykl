@@ -17,6 +17,8 @@
         <li><a href="#classes">الحصص</a></li>
         <li><a href="#trainers">المدربين</a></li>
         <li><a href="#reports">التقارير</a></li>
+        <li><a href="#payments">المدفوعات</a></li> <!-- قسم المدفوعات -->
+        <li><a href="#inventory">المخزون</a></li> <!-- قسم المخزون -->
     </ul>
 </div>
 
@@ -74,6 +76,92 @@
                 <th>نوع الاشتراك</th>
                 <th>تاريخ البدء</th>
                 <th>تاريخ الانتهاء</th>
+            </tr>
+        </table>
+    </div>
+
+    <div id="classes" style="display: none;">
+        <h1>الحصص</h1>
+        <form id="classForm">
+            <label>اسم الحصة:</label>
+            <input type="text" name="className" required>
+            <label>المدرب:</label>
+            <input type="text" name="trainer" required>
+            <label>الوقت:</label>
+            <input type="time" name="classTime" required>
+            <button type="submit">إضافة حصة</button>
+        </form>
+        <h2>قائمة الحصص</h2>
+        <table id="classTable">
+            <tr>
+                <th>اسم الحصة</th>
+                <th>المدرب</th>
+                <th>الوقت</th>
+            </tr>
+        </table>
+    </div>
+
+    <div id="trainers" style="display: none;">
+        <h1>المدربين</h1>
+        <form id="trainerForm">
+            <label>الاسم:</label>
+            <input type="text" name="trainerName" required>
+            <label>التخصص:</label>
+            <input type="text" name="trainerSpecialty" required>
+            <label>الهاتف:</label>
+            <input type="tel" name="trainerPhone" required>
+            <button type="submit">إضافة مدرب</button>
+        </form>
+        <h2>قائمة المدربين</h2>
+        <table id="trainerTable">
+            <tr>
+                <th>الاسم</th>
+                <th>التخصص</th>
+                <th>الهاتف</th>
+            </tr>
+        </table>
+    </div>
+
+    <div id="reports" style="display: none;">
+        <h1>التقارير</h1>
+        <p>هنا يتم عرض التقارير المتعلقة بالأداء والإيرادات والمزيد.</p>
+    </div>
+
+    <div id="payments" style="display: none;">
+        <h1>المدفوعات</h1>
+        <form id="paymentForm">
+            <label>اسم العضو:</label>
+            <input type="text" name="paymentMember" required>
+            <label>المبلغ المدفوع:</label>
+            <input type="number" name="paymentAmount" required>
+            <button type="submit">إضافة مدفوعات</button>
+        </form>
+        <h2>قائمة المدفوعات</h2>
+        <table id="paymentTable">
+            <tr>
+                <th>العضو</th>
+                <th>المبلغ المدفوع</th>
+            </tr>
+        </table>
+    </div>
+
+    <div id="inventory" style="display: none;">
+        <h1>المخزون</h1>
+        <form id="inventoryForm">
+            <label>اسم العنصر:</label>
+            <input type="text" name="itemName" required>
+            <label>الكمية المتوفرة:</label>
+            <input type="number" name="itemQuantity" required>
+            <label>السعر:</label>
+            <input type="number" name="itemPrice" required>
+            <button type="submit">إضافة عنصر</button>
+        </form>
+        <h2>قائمة المخزون</h2>
+        <table id="inventoryTable">
+            <tr>
+                <th>اسم العنصر</th>
+                <th>الكمية المتوفرة</th>
+                <th>السعر</th>
             </tr>
         </table>
     </div>
