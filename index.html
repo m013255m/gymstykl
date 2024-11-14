@@ -3,40 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة صالة رياضية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <title>إدارة الصالة الرياضية</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <div id="sidebar">
-        <ul>
-            <li><a href="#members"><i class="fas fa-users"></i> الأعضاء</a></li>
-            <li><a href="#subscriptions"><i class="fas fa-credit-card"></i> الإشتراكات</a></li>
-            <li><a href="#notifications"><i class="fas fa-bell"></i> الإشعارات والتنبيهات</a></li>
-            <li><a href="#analytics"><i class="fas fa-chart-line"></i> لوحة التحليلات</a></li>
-            <li><a href="#documents"><i class="fas fa-file-alt"></i> إدارة مستندات الأعضاء</a></li>
-            <li><a href="#incentives"><i class="fas fa-trophy"></i> حوافز المدربين</a></li>
-            <li><a href="#offers"><i class="fas fa-gift"></i> الصفحة الخاصة بالعروض</a></li>
-            <li><a href="#scheduling"><i class="fas fa-calendar-check"></i> نظام الجدولة المتقدمة</a></li>
-            <li><a href="#customization"><i class="fas fa-cogs"></i> تخصيص واجهة المستخدم</a></li>
-            <li><a href="#reminders"><i class="fas fa-calendar-alt"></i> تذكير الأعضاء بتجديد الاشتراك</a></li>
-        </ul>
+
+<div class="sidebar">
+    <h2>Gym Management</h2>
+    <ul>
+        <li><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
+        <li><a href="#members"><i class="fas fa-users"></i> الأعضاء</a></li>
+        <li><a href="#subscriptions"><i class="fas fa-calendar-check"></i> الإشتراكات</a></li>
+        <li><a href="#classes"><i class="fas fa-chalkboard-teacher"></i> الحصص</a></li>
+        <li><a href="#trainers"><i class="fas fa-user-tie"></i> المدربين</a></li>
+        <li><a href="#reports"><i class="fas fa-file-alt"></i> التقارير</a></li>
+    </ul>
+</div>
+
+<div class="content">
+    <div id="dashboard">
+        <h1>لوحة التحكم</h1>
+        <p>هنا تفاصيل لوحة التحكم العامة للصالة الرياضية.</p>
     </div>
 
-    <div id="content">
-        <!-- الأعضاء -->
-        <section id="members">
-            <h2><i class="fas fa-users"></i> الأعضاء</h2>
-            <form id="members-form">
-                <input type="text" id="member-name" placeholder="اسم العضو" class="input-field">
-                <button type="submit" class="btn">إضافة عضو</button>
-            </form>
-            <div id="members-list" class="list-container"></div>
-        </section>
-
-        <!-- باقي الأقسام تضاف بنفس الطريقة -->
+    <div id="members" style="display: none;">
+        <h1>الأعضاء</h1>
+        <form id="memberForm">
+            <label>الاسم الكامل:</label>
+            <input type="text" name="fullName" required>
+            <label>العمر:</label>
+            <input type="number" name="age" required>
+            <label>رقم الهاتف:</label>
+            <input type="tel" name="phone" required>
+            <label>العنوان:</label>
+            <input type="text" name="address" required>
+            <button type="submit">إضافة عضو</button>
+        </form>
+        <h2>قائمة الأعضاء</h2>
+        <table id="memberTable">
+            <tr>
+                <th>الاسم</th>
+                <th>العمر</th>
+                <th>الهاتف</th>
+                <th>العنوان</th>
+            </tr>
+        </table>
     </div>
 
-    <script src="script.js"></script>
+    <div id="subscriptions" style="display: none;">
+        <h1>الإشتراكات</h1>
+        <form id="subscriptionForm">
+            <label>اسم العضو:</label>
+            <input type="text" name="memberName" required>
+            <label>نوع الاشتراك:</label>
+            <select name="subscriptionType">
+                <option value="شهري">شهري</option>
+                <option value="ربع سنوي">ربع سنوي</option>
+                <option value="سنوي">سنوي</option>
+            </select>
+            <label>تاريخ البدء:</label>
+            <input type="date" name="startDate" required>
+            <label>تاريخ الانتهاء:</label>
+            <input type="date" name="endDate" required>
+            <button type="submit">إضافة اشتراك</button>
+        </form>
+        <h2>قائمة الإشتراكات</h2>
+        <table id="subscriptionTable">
+            <tr>
+                <th>العضو</th>
+                <th>نوع الاشتراك</th>
+                <th>تاريخ البدء</th>
+                <th>تاريخ الانتهاء</th>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
