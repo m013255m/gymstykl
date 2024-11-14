@@ -83,7 +83,7 @@ label {
     color: #333;
 }
 
-input, select, button, textarea {
+input, select, button {
     margin: 10px 0;
     padding: 12px;
     font-size: 16px;
@@ -118,10 +118,11 @@ table, th, td {
 th {
     background-color: #333;
     color: white;
+    text-align: center;
 }
 
-td button {
-    padding: 5px 10px;
+td {
+    text-align: center;
 }
 
 @keyframes fadeIn {
