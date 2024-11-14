@@ -1,84 +1,127 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الصالة الرياضية</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
-<div class="sidebar">
-    <h2>Gym Management</h2>
-    <ul>
-        <li><a href="#dashboard">لوحة التحكم</a></li>
-        <li><a href="#members">الأعضاء</a></li>
-        <li><a href="#subscriptions">الإشتراكات</a></li>
-        <li><a href="#classes">الحصص</a></li>
-        <li><a href="#trainers">المدربين</a></li>
-        <li><a href="#reports">التقارير</a></li>
-    </ul>
-</div>
+body {
+    display: flex;
+    background-color: #f4f4f9;
+    direction: rtl;
+}
 
-<div class="content">
-    <div id="dashboard">
-        <h1>لوحة التحكم</h1>
-        <p>هنا تفاصيل لوحة التحكم العامة للصالة الرياضية.</p>
-    </div>
+.sidebar {
+    width: 250px;
+    background-color: #333;
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
 
-    <div id="members" style="display: none;">
-        <h1>الأعضاء</h1>
-        <form id="memberForm">
-            <label>الاسم الكامل:</label>
-            <input type="text" name="fullName" required>
-            <label>العمر:</label>
-            <input type="number" name="age" required>
-            <label>رقم الهاتف:</label>
-            <input type="tel" name="phone" required>
-            <label>العنوان:</label>
-            <input type="text" name="address" required>
-            <button type="submit">إضافة عضو</button>
-        </form>
-        <h2>قائمة الأعضاء</h2>
-        <table id="memberTable">
-            <tr>
-                <th>الاسم</th>
-                <th>العمر</th>
-                <th>الهاتف</th>
-                <th>العنوان</th>
-            </tr>
-        </table>
-    </div>
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
 
-    <div id="subscriptions" style="display: none;">
-        <h1>الإشتراكات</h1>
-        <form id="subscriptionForm">
-            <label>اسم العضو:</label>
-            <input type="text" name="memberName" required>
-            <label>نوع الاشتراك:</label>
-            <select name="subscriptionType">
-                <option value="شهري">شهري</option>
-                <option value="ربع سنوي">ربع سنوي</option>
-                <option value="سنوي">سنوي</option>
-            </select>
-            <label>تاريخ البدء:</label>
-            <input type="date" name="startDate" required>
-            <label>تاريخ الانتهاء:</label>
-            <input type="date" name="endDate" required>
-            <button type="submit">إضافة اشتراك</button>
-        </form>
-        <h2>قائمة الإشتراكات</h2>
-        <table id="subscriptionTable">
-            <tr>
-                <th>العضو</th>
-                <th>نوع الاشتراك</th>
-                <th>تاريخ البدء</th>
-                <th>تاريخ الانتهاء</th>
-            </tr>
-        </table>
-    </div>
-</div>
+.sidebar ul {
+    list-style-type: none;
+}
 
-<script src="script.js"></script>
-</body>
-</html>
+.sidebar ul li {
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.sidebar ul li:hover {
+    transform: scale(1.05);
+}
+
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+    transition: background 0.3s;
+}
+
+.sidebar ul li a:hover {
+    background-color: #555;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    padding: 20px;
+    background-color: #e6f7ff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease;
+}
+
+label {
+    font-size: 16px;
+    color: #333;
+}
+
+input, select, button {
+    margin: 10px 0;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 16px;
+}
+
+th {
+    background-color: #333;
+    color: white;
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
