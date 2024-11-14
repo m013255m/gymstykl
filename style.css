@@ -1,80 +1,138 @@
-// إضافة الأعضاء
-document.getElementById("members-form").addEventListener("submit", function(event) {
-    event.preventDefault();
-    
-    const memberName = document.getElementById("member-name").value;
-    if (memberName) {
-        let members = JSON.parse(localStorage.getItem("members")) || [];
-        members.push(memberName);
-        localStorage.setItem("members", JSON.stringify(members));
-        displayMembers();
-        document.getElementById("member-name").value = "";
-    }
-});
-
-// عرض الأعضاء
-function displayMembers() {
-    const members = JSON.parse(localStorage.getItem("members")) || [];
-    const membersList = document.getElementById("members-list");
-    membersList.innerHTML = "";
-    members.forEach(function(member) {
-        const div = document.createElement("div");
-        div.classList.add("list-item");
-        div.innerHTML = `<i class="fas fa-user"></i> ${member}`;
-        membersList.appendChild(div);
-    });
+/* الأساسيات */
+body {
+    font-family: 'Arial', sans-serif;
+    direction: rtl;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+    color: #333;
 }
 
-// إضافة الاشتراكات
-document.getElementById("subscriptions-form").addEventListener("submit", function(event) {
-    event.preventDefault();
-    
-    const subscriptionName = document.getElementById("subscription-name").value;
-    if (subscriptionName) {
-        let subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
-        subscriptions.push(subscriptionName);
-        localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
-        displaySubscriptions();
-        document.getElementById("subscription-name").value = "";
-    }
-});
-
-// عرض الاشتراكات
-function displaySubscriptions() {
-    const subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
-    const subscriptionsList = document.getElementById("subscriptions-list");
-    subscriptionsList.innerHTML = "";
-    subscriptions.forEach(function(subscription) {
-        const div = document.createElement("div");
-        div.classList.add("list-item");
-        div.innerHTML = `<i class="fas fa-credit-card"></i> ${subscription}`;
-        subscriptionsList.appendChild(div);
-    });
+#sidebar {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    background-color: #222;
+    color: white;
+    padding-top: 30px;
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-// إضافة الإشعارات
-document.getElementById("notifications-form").addEventListener("submit", function(event) {
-    event.preventDefault();
-    
-    const notificationMessage = document.getElementById("notification-message").value;
-    if (notificationMessage) {
-        let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
-        notifications.push(notificationMessage);
-        localStorage.setItem("notifications", JSON.stringify(notifications));
-        displayNotifications();
-        document.getElementById("notification-message").value = "";
-    }
-});
+#sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
 
-// عرض الإشعارات
-function displayNotifications() {
-    const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
-    const notificationsList = document.getElementById("notifications-list");
-    notificationsList.innerHTML = "";
-    notifications.forEach(function(notification) {
-        const div = document.createElement("div");
-        div.classList.add("list-item");
-        div.innerHTML = `<i class="fas fa-bell"></i> ${notification}`;
-        notificationsList.appendChild(div);
-    });
+#sidebar ul li {
+    padding: 15px;
+    text-align: right;
+}
+
+#sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+#sidebar ul li a:hover {
+    background-color: #006400;
+}
+
+#content {
+    margin-left: 270px;
+    padding: 30px;
+}
+
+h2 {
+    font-size: 24px;
+    color: #006400;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+h2 i {
+    margin-left: 10px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+.input-field:focus {
+    border-color: #28a745;
+}
+
+.btn {
+    padding: 12px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+.list-container {
+    margin-top: 20px;
+}
+
+.list-item {
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.list-item:hover {
+    transform: scale(1.05);
+}
+
+.list-item i {
+    margin-left: 10px;
+}
+
+#sidebar a {
+    font-size: 20px;
+}
+
+input[type="file"] {
+    background-color: transparent;
+    border: none;
+}
+
+/* تحسين بعض التفاعلات */
+input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+    outline: none;
+    border: 2px solid #28a745;
+}
+
+/* تأثيرات الحركية */
+section {
+    margin-bottom: 30px;
+}
+
+section:hover {
+    background-color: #e9f5e9;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
