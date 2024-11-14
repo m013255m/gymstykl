@@ -1,9 +1,13 @@
-// إشعار تجديد الاشتراك
+// إشعار تذكير تجديد الاشتراك
 function sendRenewalReminder(memberName) {
-    alert(`تم إرسال تذكير بتجديد الاشتراك إلى: ${memberName}`);
+    const renewalList = document.getElementById('renewal-list');
+    const newListItem = document.createElement('li');
+    newListItem.textContent = `تذكير بتجديد الاشتراك لـ ${memberName}`;
+    renewalList.appendChild(newListItem);
 }
 
-document.querySelectorAll('#renewal-reminders button').forEach(button => {
+// إضافة تذكيرات تجديد الاشتراك عند إضافة الأعضاء
+document.querySelectorAll('#members button').forEach(button => {
     button.addEventListener('click', () => {
         const memberName = button.parentElement.textContent.trim().split(' - ')[0];
         sendRenewalReminder(memberName);
