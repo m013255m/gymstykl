@@ -13,9 +13,10 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* جعل الشريط الجانبي على الجهة اليمنى */
+    align-items: flex-start; /* جعل الشريط الجانبي على الجهة اليمنى */
     position: fixed;
     height: 100vh;
+    right: 0; /* جعل الشريط الجانبي في الجهة اليمنى */
 }
 
 .sidebar .logo {
@@ -69,7 +70,7 @@ body {
 .content {
     flex: 1;
     padding: 20px;
-    margin-right: 270px; /* لتجنب التداخل مع الشريط الجانبي */
+    margin-left: 270px; /* لتجنب التداخل مع الشريط الجانبي */
 }
 
 h1 {
@@ -134,28 +135,18 @@ th {
     color: white;
 }
 
-td button {
-    background-color: #ff5555;
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+td {
+    background-color: #f9f9f9;
 }
 
-td button:hover {
-    background-color: #ff3333;
-}
-
-#renewal-list {
+#backup {
     margin-top: 20px;
-    background-color: #fff;
-    border-radius: 5px;
-    padding: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-#renewal-list ul {
-    list-style-type: none;
-    padding: 0;
+#backup button {
+    background-color: #28a745;
+}
+
+#backup button:hover {
+    background-color: #218838;
 }
