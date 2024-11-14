@@ -1,11 +1,11 @@
-document.querySelectorAll('.sidebar ul li a').forEach(link => {
-    link.addEventListener('click', () => {
-        document.querySelectorAll('.content > div').forEach(section => {
-            section.style.display = 'none';
+document.querySelectorAll(".sidebar ul li a").forEach(link => {
+    link.addEventListener("click", function(event) {
+        event.preventDefault();
+        document.querySelectorAll(".section").forEach(section => {
+            section.style.display = "none";
         });
-        
-        const target = link.getAttribute('href').substring(1);
-        document.getElementById(target).style.display = 'block';
+        const sectionId = link.getAttribute("href").substring(1);
+        document.getElementById(sectionId).style.display = "block";
     });
 });
 
