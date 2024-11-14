@@ -1,12 +1,11 @@
-document.querySelectorAll(".sidebar ul li a").forEach(link => {
-    link.addEventListener("click", function(event) {
-        event.preventDefault();
-        document.querySelectorAll(".section").forEach(section => {
-            section.style.display = "none";
-        });
-        const sectionId = link.getAttribute("href").substring(1);
-        document.getElementById(sectionId).style.display = "block";
+// إشعار تجديد الاشتراك
+function sendRenewalReminder(memberName) {
+    alert(`تم إرسال تذكير بتجديد الاشتراك إلى: ${memberName}`);
+}
+
+document.querySelectorAll('#renewal-reminders button').forEach(button => {
+    button.addEventListener('click', () => {
+        const memberName = button.parentElement.textContent.trim().split(' - ')[0];
+        sendRenewalReminder(memberName);
     });
 });
-
-document.getElementById("dashboard").style.display = "block";
