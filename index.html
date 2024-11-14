@@ -5,28 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الجيم</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="sidebar">
-        <h2>لوحة التحكم</h2>
+        <h2><i class="fas fa-dumbbell"></i> إدارة الجيم</h2>
         <ul>
-            <li><a href="#personal-sessions">إدارة الجلسات الشخصية</a></li>
-            <li><a href="#complaints-suggestions">الشكاوى والمقترحات</a></li>
-            <li><a href="#attendance-tracking">تتبع الحضور اليومي</a></li>
-            <li><a href="#diet-management">إدارة النظام الغذائي</a></li>
-            <li><a href="#announcements">الإعلانات والتحديثات</a></li>
-            <li><a href="#trainer-evaluation">تقييمات المدربين الشهرية</a></li>
-            <li><a href="#equipment-maintenance">إدارة المعدات والصيانة</a></li>
-            <li><a href="#monthly-reports">تقارير الأداء الشهري للأعضاء</a></li>
-            <li><a href="#renewal-reminders">تذكير الأعضاء بالتجديد</a></li>
+            <li><a href="#personal-sessions"><i class="fas fa-calendar-check"></i> إدارة الجلسات الشخصية</a></li>
+            <li><a href="#complaints-suggestions"><i class="fas fa-comments"></i> الشكاوى والمقترحات</a></li>
+            <li><a href="#attendance-tracking"><i class="fas fa-users"></i> تتبع الحضور اليومي</a></li>
+            <li><a href="#diet-management"><i class="fas fa-utensils"></i> إدارة النظام الغذائي</a></li>
+            <li><a href="#announcements"><i class="fas fa-bullhorn"></i> الإعلانات والتحديثات</a></li>
+            <li><a href="#trainer-evaluation"><i class="fas fa-award"></i> تقييمات المدربين الشهرية</a></li>
+            <li><a href="#equipment-maintenance"><i class="fas fa-tools"></i> إدارة المعدات والصيانة</a></li>
+            <li><a href="#monthly-reports"><i class="fas fa-chart-line"></i> تقارير الأداء الشهري للأعضاء</a></li>
+            <li><a href="#renewal-reminders"><i class="fas fa-bell"></i> تذكير الأعضاء بالتجديد</a></li>
         </ul>
     </div>
+
     <div class="content">
         <h1>لوحة تحكم إدارة الجيم</h1>
 
         <!-- إدارة الجلسات الشخصية -->
         <section id="personal-sessions">
-            <h2>إدارة الجلسات الشخصية</h2>
+            <h2><i class="fas fa-calendar-check"></i> إدارة الجلسات الشخصية</h2>
             <form>
                 <label>اسم المدرب:</label>
                 <input type="text" name="trainer_name" required>
@@ -42,7 +44,7 @@
 
         <!-- الشكاوى والمقترحات -->
         <section id="complaints-suggestions">
-            <h2>الشكاوى والمقترحات</h2>
+            <h2><i class="fas fa-comments"></i> الشكاوى والمقترحات</h2>
             <form>
                 <label>الاسم:</label>
                 <input type="text" name="name" required>
@@ -54,7 +56,7 @@
 
         <!-- تتبع الحضور اليومي -->
         <section id="attendance-tracking">
-            <h2>تتبع الحضور اليومي</h2>
+            <h2><i class="fas fa-users"></i> تتبع الحضور اليومي</h2>
             <table>
                 <tr><th>الاسم</th><th>الحضور</th><th>الإجراء</th></tr>
                 <tr>
@@ -62,13 +64,12 @@
                     <td><input type="checkbox"></td>
                     <td><button>حذف</button></td>
                 </tr>
-                <!-- Add more rows as needed -->
             </table>
         </section>
 
         <!-- إدارة النظام الغذائي -->
         <section id="diet-management">
-            <h2>إدارة النظام الغذائي</h2>
+            <h2><i class="fas fa-utensils"></i> إدارة النظام الغذائي</h2>
             <form>
                 <label>اسم العضو:</label>
                 <input type="text" name="member_name" required>
@@ -80,7 +81,7 @@
 
         <!-- الإعلانات والتحديثات -->
         <section id="announcements">
-            <h2>الإعلانات والتحديثات</h2>
+            <h2><i class="fas fa-bullhorn"></i> الإعلانات والتحديثات</h2>
             <form>
                 <label>عنوان الإعلان:</label>
                 <input type="text" name="announcement_title" required>
@@ -92,7 +93,7 @@
 
         <!-- تقييمات المدربين الشهرية -->
         <section id="trainer-evaluation">
-            <h2>تقييمات المدربين الشهرية</h2>
+            <h2><i class="fas fa-award"></i> تقييمات المدربين الشهرية</h2>
             <table>
                 <tr><th>المدرب</th><th>التقييم</th><th>الإجراء</th></tr>
                 <tr>
@@ -100,13 +101,12 @@
                     <td>5/5</td>
                     <td><button>حذف</button></td>
                 </tr>
-                <!-- Add more rows as needed -->
             </table>
         </section>
 
         <!-- إدارة المعدات والصيانة -->
         <section id="equipment-maintenance">
-            <h2>إدارة المعدات والصيانة</h2>
+            <h2><i class="fas fa-tools"></i> إدارة المعدات والصيانة</h2>
             <form>
                 <label>اسم المعدة:</label>
                 <input type="text" name="equipment_name" required>
@@ -118,7 +118,7 @@
 
         <!-- تقارير الأداء الشهري للأعضاء -->
         <section id="monthly-reports">
-            <h2>تقارير الأداء الشهري للأعضاء</h2>
+            <h2><i class="fas fa-chart-line"></i> تقارير الأداء الشهري للأعضاء</h2>
             <table>
                 <tr><th>العضو</th><th>الأداء</th><th>الإجراء</th></tr>
                 <tr>
@@ -126,17 +126,15 @@
                     <td>ممتاز</td>
                     <td><button>حذف</button></td>
                 </tr>
-                <!-- Add more rows as needed -->
             </table>
         </section>
 
         <!-- قسم التذكيرات بتجديد الاشتراكات -->
         <section id="renewal-reminders">
-            <h2>تذكير الأعضاء بتجديد الاشتراك</h2>
+            <h2><i class="fas fa-bell"></i> تذكير الأعضاء بتجديد الاشتراك</h2>
             <ul>
                 <li>عضو 1 - <button>إرسال تذكير</button></li>
                 <li>عضو 2 - <button>إرسال تذكير</button></li>
-                <!-- Add more reminders as needed -->
             </ul>
         </section>
     </div>
