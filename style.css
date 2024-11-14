@@ -23,7 +23,6 @@ body {
 .sidebar h2 {
     text-align: center;
     margin-bottom: 20px;
-    font-size: 24px;
 }
 
 .sidebar ul {
@@ -31,21 +30,16 @@ body {
 }
 
 .sidebar ul li {
-    margin-bottom: 15px;
-    transition: transform 0.3s ease;
-}
-
-.sidebar ul li:hover {
-    transform: scale(1.05);
+    margin: 15px 0;
 }
 
 .sidebar ul li a {
-    color: #fff;
+    color: white;
     text-decoration: none;
     font-size: 18px;
     display: block;
     padding: 10px;
-    transition: background 0.3s;
+    transition: background-color 0.3s;
 }
 
 .sidebar ul li a:hover {
@@ -55,28 +49,33 @@ body {
 .content {
     flex: 1;
     padding: 20px;
-    background-color: #e6f7ff;
 }
 
 h1 {
-    color: #333;
-    font-size: 24px;
-    margin-bottom: 20px;
+    color: #1f3d6d;
 }
 
-section {
-    margin-bottom: 40px;
+h2 {
+    margin-bottom: 15px;
+    color: #1f3d6d;
+}
+
+.section-content {
+    display: none;
+}
+
+.section-content.active {
+    display: block;
 }
 
 form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    margin-bottom: 20px;
 }
 
-input, textarea, select {
+form input, form select, form textarea {
+    width: 100%;
     padding: 10px;
-    font-size: 16px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
