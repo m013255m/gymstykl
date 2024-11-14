@@ -22,6 +22,7 @@ document.getElementById('memberForm').addEventListener('submit', function(e) {
     row.innerHTML = `<td>${fullName}</td><td>${age}</td><td>${phone}</td><td>${address}</td>`;
     document.getElementById('memberTable').appendChild(row);
 
+    localStorage.setItem('memberData', document.getElementById('memberTable').innerHTML);
     e.target.reset();
 });
 
@@ -36,5 +37,16 @@ document.getElementById('subscriptionForm').addEventListener('submit', function(
     row.innerHTML = `<td>${memberName}</td><td>${subscriptionType}</td><td>${startDate}</td><td>${endDate}</td>`;
     document.getElementById('subscriptionTable').appendChild(row);
 
+    localStorage.setItem('subscriptionData', document.getElementById('subscriptionTable').innerHTML);
     e.target.reset();
+});
+
+// Load saved data from localStorage
+window.addEventListener('load', () => {
+    if (localStorage.getItem('memberData')) {
+        document.getElementById('memberTable').innerHTML = localStorage.getItem('memberData');
+    }
+    if (localStorage.getItem('subscriptionData')) {
+        document.getElementById('subscriptionTable').innerHTML = localStorage.getItem('subscriptionData');
+    }
 });
