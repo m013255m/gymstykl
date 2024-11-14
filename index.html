@@ -3,125 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الجيم</title>
-    <link rel="icon" href="gym-icon.png" type="image/png"> <!-- أيقونة الموقع -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- أيقونات الموقع -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"> <!-- خط مميز -->
+    <title>إدارة صالة رياضية</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="sidebar">
-        <div class="logo">
-            <i class="fas fa-dumbbell"></i> <!-- أيقونة الجيم -->
-            <h2>إدارة الجيم</h2>
-        </div>
+    <div id="sidebar">
         <ul>
-            <li><a href="#dashboard" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
-            <li><a href="#members" onclick="showSection('members')"><i class="fas fa-users"></i> الأعضاء</a></li>
-            <li><a href="#subscriptions" onclick="showSection('subscriptions')"><i class="fas fa-credit-card"></i> الإشتراكات</a></li>
-            <li><a href="#notifications" onclick="showSection('notifications')"><i class="fas fa-bell"></i> الإشعارات والتنبيهات</a></li>
-            <li><a href="#analytics" onclick="showSection('analytics')"><i class="fas fa-chart-line"></i> لوحة التحليلات</a></li>
-            <li><a href="#documents" onclick="showSection('documents')"><i class="fas fa-file-alt"></i> إدارة مستندات الأعضاء</a></li>
-            <li><a href="#incentives" onclick="showSection('incentives')"><i class="fas fa-award"></i> حوافز المدربين</a></li>
-            <li><a href="#offers" onclick="showSection('offers')"><i class="fas fa-gift"></i> الصفحة الخاصة بالعروض</a></li>
-            <li><a href="#scheduling" onclick="showSection('scheduling')"><i class="fas fa-calendar-check"></i> نظام الجدولة المتقدمة</a></li>
-            <li><a href="#customization" onclick="showSection('customization')"><i class="fas fa-cogs"></i> تخصيص واجهة المستخدم</a></li>
-            <li><a href="#renewal-reminders" onclick="showSection('renewal-reminders')"><i class="fas fa-bell"></i> تذكير الأعضاء بتجديد الاشتراك</a></li>
-            <li><a href="#backup" onclick="showSection('backup')"><i class="fas fa-database"></i> إنشاء نسخة احتياطية</a></li>
+            <li><a href="#members">الأعضاء</a></li>
+            <li><a href="#subscriptions">الإشتراكات</a></li>
+            <li><a href="#notifications">الإشعارات والتنبيهات</a></li>
+            <li><a href="#analytics">لوحة التحليلات</a></li>
+            <li><a href="#documents">إدارة مستندات الأعضاء</a></li>
+            <li><a href="#incentives">حوافز المدربين</a></li>
+            <li><a href="#offers">الصفحة الخاصة بالعروض</a></li>
+            <li><a href="#scheduling">نظام الجدولة المتقدمة</a></li>
+            <li><a href="#customization">تخصيص واجهة المستخدم</a></li>
+            <li><a href="#reminders">تذكير الأعضاء بتجديد الاشتراك</a></li>
         </ul>
     </div>
 
-    <div class="content">
-        <h1>إدارة الجيم</h1>
-
-        <!-- لوحة التحكم -->
-        <section id="dashboard" class="section-content">
-            <h2><i class="fas fa-tachometer-alt"></i> لوحة التحكم</h2>
-            <p>نظرة عامة على الجيم وتفاصيل العمليات اليومية.</p>
+    <div id="content">
+        <!-- الأعضاء -->
+        <section id="members">
+            <h2>الأعضاء</h2>
+            <form id="members-form">
+                <input type="text" id="member-name" placeholder="اسم العضو" class="input-field">
+                <button type="submit" class="btn">إضافة عضو</button>
+            </form>
+            <div id="members-list" class="list-container"></div>
         </section>
 
-        <!-- الأعضاء -->
-        <section id="members" class="section-content">
-            <h2><i class="fas fa-users"></i> الأعضاء</h2>
-            <form id="member-form">
-                <label for="member_name">اسم العضو:</label>
-                <input type="text" id="member_name" name="member_name" required>
-
-                <label for="member_email">البريد الإلكتروني:</label>
-                <input type="email" id="member_email" name="member_email" required>
-
-                <label for="subscription_date">تاريخ الاشتراك:</label>
-                <input type="date" id="subscription_date" name="subscription_date" required>
-
-                <label for="subscription_plan">خطة الاشتراك:</label>
-                <select id="subscription_plan" name="subscription_plan" required>
-                    <option value="monthly">شهري</option>
-                    <option value="yearly">سنوي</option>
-                </select>
-
-                <button type="submit">إضافة عضو</button>
+        <!-- الاشتراكات -->
+        <section id="subscriptions">
+            <h2>الإشتراكات</h2>
+            <form id="subscriptions-form">
+                <input type="text" id="subscription-name" placeholder="اسم الاشتراك" class="input-field">
+                <button type="submit" class="btn">إضافة اشتراك</button>
             </form>
-            <table id="members-table">
-                <thead>
-                    <tr>
-                        <th>اسم العضو</th>
-                        <th>البريد الإلكتروني</th>
-                        <th>تاريخ الاشتراك</th>
-                        <th>الإجراء</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- سيتم عرض الأعضاء هنا -->
-                </tbody>
-            </table>
+            <div id="subscriptions-list" class="list-container"></div>
         </section>
 
         <!-- الإشعارات والتنبيهات -->
-        <section id="notifications" class="section-content">
-            <h2><i class="fas fa-bell"></i> الإشعارات والتنبيهات</h2>
-            <form id="notification-form">
-                <label for="notification_message">الرسالة:</label>
-                <textarea id="notification_message" name="notification_message" required></textarea>
-
-                <button type="submit">إرسال إشعار</button>
+        <section id="notifications">
+            <h2>الإشعارات والتنبيهات</h2>
+            <form id="notifications-form">
+                <textarea id="notification-message" placeholder="أدخل الرسالة" class="input-field"></textarea>
+                <button type="submit" class="btn">إرسال إشعار</button>
             </form>
-            <table id="notifications-table">
-                <thead>
-                    <tr>
-                        <th>الرسالة</th>
-                        <th>التاريخ</th>
-                        <th>الإجراء</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- سيتم عرض الإشعارات هنا -->
-                </tbody>
-            </table>
+            <div id="notifications-list" class="list-container"></div>
         </section>
 
-        <!-- إنشاء نسخة احتياطية -->
-        <section id="backup" class="section-content">
-            <h2><i class="fas fa-database"></i> إنشاء نسخة احتياطية</h2>
-            <button onclick="createBackup()">إنشاء نسخة احتياطية الآن</button>
-            <p>يمكنك إنشاء نسخة احتياطية للبيانات الحالية. ستساعدك هذه النسخة على استعادة البيانات في حالة حدوث مشكلة.</p>
+        <!-- لوحة التحليلات -->
+        <section id="analytics">
+            <h2>لوحة التحليلات</h2>
+            <div id="analytics-data" class="list-container">
+                <div class="list-item">إحصائية 1: 120 اشتراك جديد</div>
+                <div class="list-item">إحصائية 2: 45 تدريب اليوم</div>
+            </div>
         </section>
 
-        <!-- الأعضاء الذين يجب عليهم تجديد الاشتراك -->
-        <section id="renewal-reminders" class="section-content">
-            <h2><i class="fas fa-bell"></i> الأعضاء الذين يجب عليهم تجديد الاشتراك</h2>
-            <table id="renewal-table">
-                <thead>
-                    <tr>
-                        <th>اسم العضو</th>
-                        <th>تاريخ الاشتراك</th>
-                        <th>التاريخ المتوقع للتجديد</th>
-                        <th>الإجراء</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- سيتم عرض الأعضاء هنا -->
-                </tbody>
-            </table>
+        <!-- إدارة مستندات الأعضاء -->
+        <section id="documents">
+            <h2>إدارة مستندات الأعضاء</h2>
+            <form id="documents-form">
+                <input type="file" id="document-upload" class="input-field">
+                <button type="submit" class="btn">رفع المستند</button>
+            </form>
+            <div id="documents-list" class="list-container"></div>
+        </section>
+
+        <!-- حوافز المدربين -->
+        <section id="incentives">
+            <h2>حوافز المدربين</h2>
+            <form id="incentives-form">
+                <input type="text" id="trainer-name" placeholder="اسم المدرب" class="input-field">
+                <input type="number" id="trainer-incentive" placeholder="قيمة الحافز" class="input-field">
+                <button type="submit" class="btn">إضافة حافز</button>
+            </form>
+            <div id="incentives-list" class="list-container"></div>
+        </section>
+
+        <!-- الصفحة الخاصة بالعروض -->
+        <section id="offers">
+            <h2>الصفحة الخاصة بالعروض</h2>
+            <form id="offers-form">
+                <input type="text" id="offer-name" placeholder="اسم العرض" class="input-field">
+                <textarea id="offer-description" placeholder="تفاصيل العرض" class="input-field"></textarea>
+                <button type="submit" class="btn">إضافة عرض</button>
+            </form>
+            <div id="offers-list" class="list-container"></div>
+        </section>
+
+        <!-- نظام الجدولة المتقدمة -->
+        <section id="scheduling">
+            <h2>نظام الجدولة المتقدمة</h2>
+            <form id="scheduling-form">
+                <input type="date" id="schedule-date" class="input-field">
+                <input type="time" id="schedule-time" class="input-field">
+                <button type="submit" class="btn">إضافة جدول</button>
+            </form>
+            <div id="scheduling-list" class="list-container"></div>
+        </section>
+
+        <!-- تخصيص واجهة المستخدم -->
+        <section id="customization">
+            <h2>تخصيص واجهة المستخدم</h2>
+            <form id="customization-form">
+                <input type="color" id="color-theme" class="input-field">
+                <button type="submit" class="btn">تغيير الثيم</button>
+            </form>
+            <div id="customization-status" class="list-container"></div>
+        </section>
+
+        <!-- تذكير الأعضاء بتجديد الاشتراك -->
+        <section id="reminders">
+            <h2>تذكير الأعضاء بتجديد الاشتراك</h2>
+            <form id="reminders-form">
+                <input type="date" id="reminder-date" class="input-field">
+                <button type="submit" class="btn">إرسال تذكير</button>
+            </form>
+            <div id="reminders-list" class="list-container"></div>
         </section>
     </div>
 
