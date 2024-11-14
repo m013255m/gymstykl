@@ -63,6 +63,10 @@ h1 {
     margin-bottom: 20px;
 }
 
+section {
+    margin-bottom: 40px;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -74,12 +78,12 @@ form {
     animation: fadeIn 0.5s ease;
 }
 
-label, p {
+label {
     font-size: 16px;
     color: #333;
 }
 
-input, select, textarea, button {
+input, select, button, textarea {
     margin: 10px 0;
     padding: 12px;
     font-size: 16px;
@@ -114,22 +118,13 @@ table, th, td {
 th {
     background-color: #333;
     color: white;
-    text-align: center;
 }
 
-td {
-    text-align: center;
-}
-
-.section {
-    display: none;
+td button {
+    padding: 5px 10px;
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
