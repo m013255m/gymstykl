@@ -9,7 +9,7 @@
 <body>
 
 <div class="sidebar">
-    <h2>Gym Management</h2>
+    <h2>إدارة الجيم</h2>
     <ul>
         <li><a href="#dashboard">لوحة التحكم</a></li>
         <li><a href="#members">الأعضاء</a></li>
@@ -17,8 +17,14 @@
         <li><a href="#classes">الحصص</a></li>
         <li><a href="#trainers">المدربين</a></li>
         <li><a href="#reports">التقارير</a></li>
-        <li><a href="#payments">المدفوعات</a></li> <!-- قسم المدفوعات -->
-        <li><a href="#inventory">المخزون</a></li> <!-- قسم المخزون -->
+        <!-- إضافات جديدة بناءً على الطلبات -->
+        <li><a href="#notifications">الإشعارات والتنبيهات</a></li>
+        <li><a href="#analytics">لوحة التحليلات</a></li>
+        <li><a href="#documents">إدارة مستندات الأعضاء</a></li>
+        <li><a href="#incentives">حوافز المدربين</a></li>
+        <li><a href="#offers">الصفحة الخاصة بالعروض</a></li>
+        <li><a href="#scheduling">نظام الجدولة المتقدمة</a></li>
+        <li><a href="#customization">تخصيص واجهة المستخدم</a></li>
     </ul>
 </div>
 
@@ -80,90 +86,40 @@
         </table>
     </div>
 
-    <div id="classes" style="display: none;">
-        <h1>الحصص</h1>
-        <form id="classForm">
-            <label>اسم الحصة:</label>
-            <input type="text" name="className" required>
-            <label>المدرب:</label>
-            <input type="text" name="trainer" required>
-            <label>الوقت:</label>
-            <input type="time" name="classTime" required>
-            <button type="submit">إضافة حصة</button>
-        </form>
-        <h2>قائمة الحصص</h2>
-        <table id="classTable">
-            <tr>
-                <th>اسم الحصة</th>
-                <th>المدرب</th>
-                <th>الوقت</th>
-            </tr>
-        </table>
+    <!-- الأقسام الجديدة -->
+    <div id="notifications" style="display: none;">
+        <h1>الإشعارات والتنبيهات</h1>
+        <p>هنا يمكنك إدارة الإشعارات والتنبيهات الخاصة بالأعضاء والمدربين.</p>
     </div>
 
-    <div id="trainers" style="display: none;">
-        <h1>المدربين</h1>
-        <form id="trainerForm">
-            <label>الاسم:</label>
-            <input type="text" name="trainerName" required>
-            <label>التخصص:</label>
-            <input type="text" name="trainerSpecialty" required>
-            <label>الهاتف:</label>
-            <input type="tel" name="trainerPhone" required>
-            <button type="submit">إضافة مدرب</button>
-        </form>
-        <h2>قائمة المدربين</h2>
-        <table id="trainerTable">
-            <tr>
-                <th>الاسم</th>
-                <th>التخصص</th>
-                <th>الهاتف</th>
-            </tr>
-        </table>
+    <div id="analytics" style="display: none;">
+        <h1>لوحة التحليلات</h1>
+        <p>هنا يمكن عرض تحليلات الأداء والإحصائيات المتنوعة.</p>
     </div>
 
-    <div id="reports" style="display: none;">
-        <h1>التقارير</h1>
-        <p>هنا يتم عرض التقارير المتعلقة بالأداء والإيرادات والمزيد.</p>
+    <div id="documents" style="display: none;">
+        <h1>إدارة مستندات الأعضاء</h1>
+        <p>هنا يمكنك إضافة وإدارة المستندات المرتبطة بالأعضاء.</p>
     </div>
 
-    <div id="payments" style="display: none;">
-        <h1>المدفوعات</h1>
-        <form id="paymentForm">
-            <label>اسم العضو:</label>
-            <input type="text" name="paymentMember" required>
-            <label>المبلغ المدفوع:</label>
-            <input type="number" name="paymentAmount" required>
-            <button type="submit">إضافة مدفوعات</button>
-        </form>
-        <h2>قائمة المدفوعات</h2>
-        <table id="paymentTable">
-            <tr>
-                <th>العضو</th>
-                <th>المبلغ المدفوع</th>
-            </tr>
-        </table>
+    <div id="incentives" style="display: none;">
+        <h1>حوافز المدربين</h1>
+        <p>هنا يمكنك إدارة الحوافز المالية الخاصة بالمدربين.</p>
     </div>
 
-    <div id="inventory" style="display: none;">
-        <h1>المخزون</h1>
-        <form id="inventoryForm">
-            <label>اسم العنصر:</label>
-            <input type="text" name="itemName" required>
-            <label>الكمية المتوفرة:</label>
-            <input type="number" name="itemQuantity" required>
-            <label>السعر:</label>
-            <input type="number" name="itemPrice" required>
-            <button type="submit">إضافة عنصر</button>
-        </form>
-        <h2>قائمة المخزون</h2>
-        <table id="inventoryTable">
-            <tr>
-                <th>اسم العنصر</th>
-                <th>الكمية المتوفرة</th>
-                <th>السعر</th>
-            </tr>
-        </table>
+    <div id="offers" style="display: none;">
+        <h1>الصفحة الخاصة بالعروض</h1>
+        <p>هنا يمكنك إدارة العروض الخاصة بالأعضاء والاشتراكات.</p>
+    </div>
+
+    <div id="scheduling" style="display: none;">
+        <h1>نظام الجدولة المتقدمة</h1>
+        <p>هنا يمكنك جدولة الحصص والجلسات الخاصة بالأعضاء.</p>
+    </div>
+
+    <div id="customization" style="display: none;">
+        <h1>تخصيص واجهة المستخدم</h1>
+        <p>هنا يمكنك تخصيص واجهة المستخدم بما يناسب متطلباتك.</p>
     </div>
 </div>
 
