@@ -4,77 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الصالة الرياضية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-
 <div class="sidebar">
-    <h2><i class="fas fa-dumbbell"></i> إدارة الجيم</h2>
+    <h2><i class="fas fa-dumbbell"></i> Gym Management</h2>
     <ul>
-        <li><a href="#dashboard"><i class="fas fa-chart-line"></i> لوحة التحكم</a></li>
-        <li><a href="#members"><i class="fas fa-users"></i> الأعضاء</a></li>
-        <li><a href="#subscriptions"><i class="fas fa-calendar-alt"></i> الإشتراكات</a></li>
-        <li><a href="#renewals"><i class="fas fa-redo"></i> تجديد الإشتراكات</a></li>
-        <li><a href="#workouts"><i class="fas fa-running"></i> التمارين</a></li>
-        <li><a href="#meals"><i class="fas fa-utensils"></i> الوجبات</a></li>
-        <li><a href="#attendance"><i class="fas fa-check-circle"></i> الحضور</a></li>
-        <li><a href="#payments"><i class="fas fa-money-bill-wave"></i> المدفوعات</a></li>
-        <li><a href="#stock"><i class="fas fa-boxes"></i> المخزون</a></li>
-        <li><a href="#damaged-stock"><i class="fas fa-trash-alt"></i> المخزون التالف</a></li>
+        <li><a href="#dashboard"><i class="fas fa-home"></i> لوحة التحكم</a></li>
+        <li><a href="#members"><i class="fas fa-user-friends"></i> الأعضاء</a></li>
+        <li><a href="#subscriptions"><i class="fas fa-file-contract"></i> الإشتراكات</a></li>
+        <li><a href="#renewals"><i class="fas fa-sync-alt"></i> تجديد الإشتراكات</a></li>
+        <li><a href="#workouts"><i class="fas fa-dumbbell"></i> إدارة التمارين</a></li>
+        <li><a href="#meals"><i class="fas fa-utensils"></i> إدارة الوجبات</a></li>
+        <li><a href="#attendance"><i class="fas fa-calendar-check"></i> متابعة الحضور</a></li>
+        <li><a href="#payments"><i class="fas fa-money-check-alt"></i> إدارة المدفوعات</a></li>
         <li><a href="#complaints"><i class="fas fa-comments"></i> الشكاوى والإقتراحات</a></li>
+        <li><a href="#inventory"><i class="fas fa-boxes"></i> المخزون</a></li>
+        <li><a href="#damagedInventory"><i class="fas fa-trash-alt"></i> المخزون التالف</a></li>
     </ul>
 </div>
 
 <div class="content">
-    <!-- الأقسام السابقة (لوحة التحكم، الأعضاء، الإشتراكات، إلخ.) هنا -->
+    <div id="dashboard">
+        <h1>لوحة التحكم</h1>
+        <p>هنا تفاصيل لوحة التحكم العامة للصالة الرياضية.</p>
+    </div>
 
-    <!-- قسم المخزون -->
-    <div id="stock" style="display: none;">
-        <h1><i class="fas fa-boxes"></i> إدارة المخزون</h1>
-        <form id="stockForm">
-            <label><i class="fas fa-box"></i> اسم العنصر:</label>
-            <input type="text" name="itemName" required>
-            <label><i class="fas fa-sort-numeric-up"></i> الكمية:</label>
-            <input type="number" name="quantity" required>
-            <label><i class="fas fa-calendar-alt"></i> تاريخ الإضافة:</label>
-            <input type="date" name="addDate" required>
-            <label><i class="fas fa-sticky-note"></i> ملاحظات:</label>
-            <textarea name="notes"></textarea>
-            <button type="submit"><i class="fas fa-plus"></i> إضافة للمخزون</button>
+    <div id="members" style="display: none;">
+        <h1>الأعضاء</h1>
+        <form id="memberForm">
+            <label>الاسم الكامل:</label>
+            <input type="text" name="fullName" required>
+            <label>العمر:</label>
+            <input type="number" name="age" required>
+            <label>رقم الهاتف:</label>
+            <input type="tel" name="phone" required>
+            <label>العنوان:</label>
+            <input type="text" name="address" required>
+            <button type="submit">إضافة عضو</button>
         </form>
-        <h2>قائمة المخزون</h2>
-        <table id="stockTable">
+        <h2>قائمة الأعضاء</h2>
+        <table id="memberTable">
             <tr>
-                <th>اسم العنصر</th>
-                <th>الكمية</th>
-                <th>تاريخ الإضافة</th>
-                <th>الملاحظات</th>
+                <th>الاسم</th>
+                <th>العمر</th>
+                <th>الهاتف</th>
+                <th>العنوان</th>
             </tr>
         </table>
     </div>
 
-    <!-- قسم المخزون التالف -->
-    <div id="damaged-stock" style="display: none;">
-        <h1><i class="fas fa-trash-alt"></i> إدارة المخزون التالف</h1>
-        <form id="damagedStockForm">
-            <label><i class="fas fa-box"></i> اسم العنصر:</label>
+    <div id="inventory" style="display: none;">
+        <h1>المخزون</h1>
+        <form id="inventoryForm">
+            <label>اسم العنصر:</label>
             <input type="text" name="itemName" required>
-            <label><i class="fas fa-sort-numeric-up"></i> الكمية التالفة:</label>
-            <input type="number" name="damagedQuantity" required>
-            <label><i class="fas fa-calendar-alt"></i> تاريخ التلف:</label>
-            <input type="date" name="damageDate" required>
-            <label><i class="fas fa-sticky-note"></i> ملاحظات:</label>
-            <textarea name="notes"></textarea>
-            <button type="submit"><i class="fas fa-plus"></i> إضافة للتالف</button>
+            <label>الكمية:</label>
+            <input type="number" name="quantity" required>
+            <label>السعر:</label>
+            <input type="number" name="price" required>
+            <button type="submit">إضافة عنصر</button>
         </form>
-        <h2>قائمة المخزون التالف</h2>
-        <table id="damagedStockTable">
+        <h2>قائمة المخزون</h2>
+        <table id="inventoryTable">
             <tr>
                 <th>اسم العنصر</th>
                 <th>الكمية</th>
-                <th>تاريخ التلف</th>
-                <th>الملاحظات</th>
+                <th>السعر</th>
+            </tr>
+        </table>
+    </div>
+
+    <div id="damagedInventory" style="display: none;">
+        <h1>المخزون التالف</h1>
+        <form id="damagedInventoryForm">
+            <label>اسم العنصر:</label>
+            <input type="text" name="itemName" required>
+            <label>الكمية:</label>
+            <input type="number" name="quantity" required>
+            <label>الوصف:</label>
+            <textarea name="description" required></textarea>
+            <button type="submit">إضافة إلى المخزون التالف</button>
+        </form>
+        <h2>قائمة المخزون التالف</h2>
+        <table id="damagedInventoryTable">
+            <tr>
+                <th>اسم العنصر</th>
+                <th>الكمية</th>
+                <th>الوصف</th>
             </tr>
         </table>
     </div>
