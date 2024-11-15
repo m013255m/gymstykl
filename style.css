@@ -1,3 +1,4 @@
+/* إعدادات عامة */
 * {
     margin: 0;
     padding: 0;
@@ -8,9 +9,10 @@
 body {
     display: flex;
     background-color: #f4f4f9;
-    direction: rtl;
+    direction: rtl; /* لدعم اللغة العربية */
 }
 
+/* الشريط الجانبي */
 .sidebar {
     width: 250px;
     background-color: #333;
@@ -40,19 +42,32 @@ body {
     display: block;
     padding: 10px;
     transition: background 0.3s;
+    display: flex;
+    align-items: center;
 }
 
 .sidebar ul li a:hover {
     background-color: #555;
 }
 
+.sidebar ul li a i {
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+/* القسم الرئيسي */
 .content {
     flex: 1;
     padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    margin: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     color: #333;
+    margin-bottom: 20px;
 }
 
 form {
@@ -61,9 +76,21 @@ form {
     margin-top: 10px;
 }
 
-label, input, select, button {
+label {
+    margin: 10px 0 5px;
+    color: #555;
+}
+
+input, select, textarea, button {
     margin: 5px 0;
     padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+textarea {
+    resize: none;
 }
 
 button {
@@ -71,6 +98,7 @@ button {
     color: white;
     border: none;
     cursor: pointer;
+    transition: background 0.3s;
 }
 
 button:hover {
@@ -96,4 +124,80 @@ th {
 
 td {
     text-align: center;
+}
+
+/* تأثيرات عند التمرير */
+.sidebar ul li a:hover {
+    background-color: #444;
+    transform: scale(1.02);
+    transition: all 0.2s ease-in-out;
+}
+
+/* الحقول */
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* الرسوم المتحركة */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content > div {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* جدول مخصص */
+table th {
+    background-color: #007bff;
+}
+
+table td {
+    color: #555;
+}
+
+/* ألوان مخصصة للأقسام */
+.sidebar ul li a[href="#dashboard"] i {
+    color: #007bff;
+}
+
+.sidebar ul li a[href="#members"] i {
+    color: #28a745;
+}
+
+.sidebar ul li a[href="#subscriptions"] i {
+    color: #17a2b8;
+}
+
+.sidebar ul li a[href="#renewals"] i {
+    color: #ffc107;
+}
+
+.sidebar ul li a[href="#workouts"] i {
+    color: #dc3545;
+}
+
+.sidebar ul li a[href="#meals"] i {
+    color: #6f42c1;
+}
+
+.sidebar ul li a[href="#attendance"] i {
+    color: #20c997;
+}
+
+.sidebar ul li a[href="#payments"] i {
+    color: #fd7e14;
+}
+
+.sidebar ul li a[href="#complaints"] i {
+    color: #6610f2;
 }
