@@ -31,6 +31,7 @@
         <p>هنا تفاصيل لوحة التحكم العامة للصالة الرياضية.</p>
     </div>
 
+    <!-- الأعضاء -->
     <div id="members" style="display: none;">
         <h1>الأعضاء</h1>
         <form id="memberForm">
@@ -55,6 +56,22 @@
         </table>
     </div>
 
+    <!-- الاشتراكات -->
+    <div id="subscriptions" style="display: none;">
+        <h1>الإشتراكات</h1>
+        <form id="subscriptionForm">
+            <label>نوع الإشتراك:</label>
+            <select name="subscriptionType" required>
+                <option value="شهري">شهري</option>
+                <option value="سنوي">سنوي</option>
+            </select>
+            <label>مدة الإشتراك:</label>
+            <input type="number" name="duration" required>
+            <button type="submit">إضافة اشتراك</button>
+        </form>
+    </div>
+
+    <!-- المخزون -->
     <div id="inventory" style="display: none;">
         <h1>المخزون</h1>
         <form id="inventoryForm">
@@ -76,6 +93,7 @@
         </table>
     </div>
 
+    <!-- المخزون التالف -->
     <div id="damagedInventory" style="display: none;">
         <h1>المخزون التالف</h1>
         <form id="damagedInventoryForm">
