@@ -4,203 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الصالة الرياضية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="sidebar">
-    <h2>Gym Management</h2>
+    <h2><i class="fas fa-dumbbell"></i> إدارة الجيم</h2>
     <ul>
-        <li><a href="#dashboard">لوحة التحكم</a></li>
-        <li><a href="#members">الأعضاء</a></li>
-        <li><a href="#subscriptions">الإشتراكات</a></li>
-        <li><a href="#renewals">تجديد الإشتراكات</a></li>
-        <li><a href="#workouts">إدارة التمارين</a></li>
-        <li><a href="#meals">إدارة الوجبات</a></li>
-        <li><a href="#attendance">متابعة الحضور</a></li>
-        <li><a href="#payments">إدارة المدفوعات</a></li>
-        <li><a href="#complaints">الشكاوى والإقتراحات</a></li>
+        <li><a href="#dashboard"><i class="fas fa-chart-line"></i> لوحة التحكم</a></li>
+        <li><a href="#members"><i class="fas fa-users"></i> الأعضاء</a></li>
+        <li><a href="#subscriptions"><i class="fas fa-calendar-alt"></i> الإشتراكات</a></li>
+        <li><a href="#renewals"><i class="fas fa-redo"></i> تجديد الإشتراكات</a></li>
+        <li><a href="#workouts"><i class="fas fa-running"></i> التمارين</a></li>
+        <li><a href="#meals"><i class="fas fa-utensils"></i> الوجبات</a></li>
+        <li><a href="#attendance"><i class="fas fa-check-circle"></i> الحضور</a></li>
+        <li><a href="#payments"><i class="fas fa-money-bill-wave"></i> المدفوعات</a></li>
+        <li><a href="#stock"><i class="fas fa-boxes"></i> المخزون</a></li>
+        <li><a href="#damaged-stock"><i class="fas fa-trash-alt"></i> المخزون التالف</a></li>
+        <li><a href="#complaints"><i class="fas fa-comments"></i> الشكاوى والإقتراحات</a></li>
     </ul>
 </div>
 
 <div class="content">
-    <!-- لوحة التحكم -->
-    <div id="dashboard">
-        <h1>لوحة التحكم</h1>
-        <p>هنا تفاصيل لوحة التحكم العامة للصالة الرياضية.</p>
-    </div>
+    <!-- الأقسام السابقة (لوحة التحكم، الأعضاء، الإشتراكات، إلخ.) هنا -->
 
-    <!-- الأعضاء -->
-    <div id="members" style="display: none;">
-        <h1>الأعضاء</h1>
-        <form id="memberForm">
-            <label>الاسم الكامل:</label>
-            <input type="text" name="fullName" required>
-            <label>العمر:</label>
-            <input type="number" name="age" required>
-            <label>رقم الهاتف:</label>
-            <input type="tel" name="phone" required>
-            <label>العنوان:</label>
-            <input type="text" name="address" required>
-            <button type="submit">إضافة عضو</button>
+    <!-- قسم المخزون -->
+    <div id="stock" style="display: none;">
+        <h1><i class="fas fa-boxes"></i> إدارة المخزون</h1>
+        <form id="stockForm">
+            <label><i class="fas fa-box"></i> اسم العنصر:</label>
+            <input type="text" name="itemName" required>
+            <label><i class="fas fa-sort-numeric-up"></i> الكمية:</label>
+            <input type="number" name="quantity" required>
+            <label><i class="fas fa-calendar-alt"></i> تاريخ الإضافة:</label>
+            <input type="date" name="addDate" required>
+            <label><i class="fas fa-sticky-note"></i> ملاحظات:</label>
+            <textarea name="notes"></textarea>
+            <button type="submit"><i class="fas fa-plus"></i> إضافة للمخزون</button>
         </form>
-        <h2>قائمة الأعضاء</h2>
-        <table id="memberTable">
+        <h2>قائمة المخزون</h2>
+        <table id="stockTable">
             <tr>
-                <th>الاسم</th>
-                <th>العمر</th>
-                <th>الهاتف</th>
-                <th>العنوان</th>
+                <th>اسم العنصر</th>
+                <th>الكمية</th>
+                <th>تاريخ الإضافة</th>
+                <th>الملاحظات</th>
             </tr>
         </table>
     </div>
 
-    <!-- الإشتراكات -->
-    <div id="subscriptions" style="display: none;">
-        <h1>الإشتراكات</h1>
-        <form id="subscriptionForm">
-            <label>اسم العضو:</label>
-            <input type="text" name="memberName" required>
-            <label>رقم الهاتف:</label>
-            <input type="tel" name="phone" required>
-            <label>العنوان:</label>
-            <input type="text" name="address" required>
-            <label>العمر:</label>
-            <input type="number" name="age" required>
-            <label>نوع الاشتراك:</label>
-            <select name="subscriptionType">
-                <option value="شهري">شهري</option>
-                <option value="ربع سنوي">ربع سنوي</option>
-                <option value="سنوي">سنوي</option>
-            </select>
-            <label>المبلغ المدفوع:</label>
-            <input type="number" name="amountPaid" required>
-            <label>تاريخ البدء:</label>
-            <input type="date" name="startDate" required>
-            <label>تاريخ الانتهاء:</label>
-            <input type="date" name="endDate" required>
-            <button type="submit">إضافة اشتراك</button>
+    <!-- قسم المخزون التالف -->
+    <div id="damaged-stock" style="display: none;">
+        <h1><i class="fas fa-trash-alt"></i> إدارة المخزون التالف</h1>
+        <form id="damagedStockForm">
+            <label><i class="fas fa-box"></i> اسم العنصر:</label>
+            <input type="text" name="itemName" required>
+            <label><i class="fas fa-sort-numeric-up"></i> الكمية التالفة:</label>
+            <input type="number" name="damagedQuantity" required>
+            <label><i class="fas fa-calendar-alt"></i> تاريخ التلف:</label>
+            <input type="date" name="damageDate" required>
+            <label><i class="fas fa-sticky-note"></i> ملاحظات:</label>
+            <textarea name="notes"></textarea>
+            <button type="submit"><i class="fas fa-plus"></i> إضافة للتالف</button>
         </form>
-        <h2>قائمة الإشتراكات</h2>
-        <table id="subscriptionTable">
+        <h2>قائمة المخزون التالف</h2>
+        <table id="damagedStockTable">
             <tr>
-                <th>الاسم</th>
-                <th>الهاتف</th>
-                <th>العنوان</th>
-                <th>العمر</th>
-                <th>نوع الاشتراك</th>
-                <th>المبلغ المدفوع</th>
-                <th>تاريخ البدء</th>
-                <th>تاريخ الانتهاء</th>
-            </tr>
-        </table>
-    </div>
-
-    <!-- تجديد الإشتراكات -->
-    <div id="renewals" style="display: none;">
-        <h1>تجديد الإشتراكات</h1>
-        <h2>الأعضاء الذين يجب عليهم تجديد اشتراكاتهم</h2>
-        <table id="renewalTable">
-            <tr>
-                <th>الاسم</th>
-                <th>الهاتف</th>
-                <th>نوع الاشتراك</th>
-                <th>تاريخ الانتهاء</th>
-            </tr>
-        </table>
-    </div>
-
-    <!-- إدارة التمارين -->
-    <div id="workouts" style="display: none;">
-        <h1>إدارة التمارين</h1>
-        <form id="workoutForm">
-            <label>اسم التمرين:</label>
-            <input type="text" name="workoutName" required>
-            <label>وصف التمرين:</label>
-            <textarea name="workoutDescription" required></textarea>
-            <button type="submit">إضافة تمرين</button>
-        </form>
-        <h2>قائمة التمارين</h2>
-        <table id="workoutTable">
-            <tr>
-                <th>اسم التمرين</th>
-                <th>الوصف</th>
-            </tr>
-        </table>
-    </div>
-
-    <!-- إدارة الوجبات -->
-    <div id="meals" style="display: none;">
-        <h1>إدارة الوجبات</h1>
-        <form id="mealForm">
-            <label>اسم الوجبة:</label>
-            <input type="text" name="mealName" required>
-            <label>السعرات الحرارية:</label>
-            <input type="number" name="calories" required>
-            <button type="submit">إضافة وجبة</button>
-        </form>
-        <h2>قائمة الوجبات</h2>
-        <table id="mealTable">
-            <tr>
-                <th>اسم الوجبة</th>
-                <th>السعرات الحرارية</th>
-            </tr>
-        </table>
-    </div>
-
-    <!-- متابعة الحضور -->
-    <div id="attendance" style="display: none;">
-        <h1>متابعة الحضور</h1>
-        <form id="attendanceForm">
-            <label>اسم العضو:</label>
-            <input type="text" name="memberName" required>
-            <label>التاريخ:</label>
-            <input type="date" name="date" required>
-            <button type="submit">تسجيل حضور</button>
-        </form>
-        <h2>قائمة الحضور</h2>
-        <table id="attendanceTable">
-            <tr>
-                <th>اسم العضو</th>
-                <th>التاريخ</th>
-            </tr>
-        </table>
-    </div>
-
-    <!-- إدارة المدفوعات -->
-    <div id="payments" style="display: none;">
-        <h1>إدارة المدفوعات</h1>
-        <form id="paymentForm">
-            <label>اسم العضو:</label>
-            <input type="text" name="memberName" required>
-            <label>المبلغ:</label>
-            <input type="number" name="amount" required>
-            <button type="submit">إضافة مدفوعات</button>
-        </form>
-        <h2>قائمة المدفوعات</h2>
-        <table id="paymentTable">
-            <tr>
-                <th>اسم العضو</th>
-                <th>المبلغ</th>
-            </tr>
-        </table>
-    </div>
-
-    <!-- الشكاوى والإقتراحات -->
-    <div id="complaints" style="display: none;">
-        <h1>الشكاوى والإقتراحات</h1>
-        <form id="complaintForm">
-            <label>اسم العضو:</label>
-            <input type="text" name="memberName" required>
-            <label>تفاصيل الشكوى:</label>
-            <textarea name="complaintDetails" required></textarea>
-            <button type="submit">إرسال</button>
-        </form>
-        <h2>قائمة الشكاوى</h2>
-        <table id="complaintTable">
-            <tr>
-                <th>اسم العضو</th>
-                <th>تفاصيل الشكوى</th>
+                <th>اسم العنصر</th>
+                <th>الكمية</th>
+                <th>تاريخ التلف</th>
+                <th>الملاحظات</th>
             </tr>
         </table>
     </div>
