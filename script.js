@@ -1,37 +1,38 @@
-// التبديل بين الأقسام
+// الحفظ التلقائي باستخدام LocalStorage
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('input', () => {
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+        localStorage.setItem(form.id, JSON.stringify(data));
+    });
+
+    // استعادة البيانات عند تحميل الصفحة
+    const savedData = localStorage.getItem(form.id);
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        for (const [key, value] of Object.entries(data)) {
+            const input = form.querySelector(`[name="${key}"]`);
+            if (input) {
+                input.value = value;
+            }
+        }
+    }
+});
+
+// عرض الأقسام
 document.querySelectorAll('.sidebar ul li a').forEach(link => {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
+    link.addEventListener('click', () => {
         document.querySelectorAll('.content > div').forEach(section => {
             section.style.display = 'none';
         });
-        document.querySelector(this.getAttribute('href')).style.display = 'block';
+
+        const target = link.getAttribute('href').substring(1);
+        document.getElementById(target).style.display = 'block';
     });
 });
 
-// إضافة بيانات الأعضاء
-document.getElementById('memberForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const name = this.fullName.value;
-    const age = this.age.value;
-    const phone = this.phone.value;
-    const address = this.address.value;
-
-    const table = document.getElementById('memberTable');
-    const row = table.insertRow();
-    row.innerHTML = `<td>${name}</td><td>${age}</td><td>${phone}</td><td>${address}</td>`;
-    this.reset();
-});
-
-// إضافة مستند
-document.getElementById('documentForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const name = this.memberName.value;
-    const file = this.documentFile.files[0].name;
-    const date = new Date().toLocaleDateString();
-
-    const table = document.getElementById('documentTable');
-    const row = table.insertRow();
-    row.innerHTML = `<td>${name}</td><td>${file}</td><td>${date}</td>`;
-    this.reset();
-});
+// تفعيل العرض الأول للقسم
+document.getElementById('dashboard').style.display = 'block';
