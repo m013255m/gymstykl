@@ -1,57 +1,53 @@
-// وظائف لحفظ وإدارة البيانات لكل قسم
-document.getElementById( memberForm ).addEventListener( submit , function (e) {
-    e.preventDefault();
-    saveData( memberTable , [ fullName ,  age ,  phone ,  address ]);
-});
+function addData(formId, tableId) {
+    const form = document.getElementById(formId);
+    const tableBody = document.getElementById(tableId).querySelector("tbody");
 
-document.getElementById( trainerForm ).addEventListener( submit , function (e) {
-    e.preventDefault();
-    saveData( trainerTable , [ trainerName ,  specialization ,  trainerPhone ]);
-});
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const row = document.createElement("tr");
 
-document.getElementById( subscriptionForm ).addEventListener( submit , function (e) {
-    e.preventDefault();
-    saveData( subscriptionTable , [ subscriberName ,  startDate ,  endDate ]);
-});
+        Array.from(form.elements).forEach((input) => {
+            if (input.tagName === "INPUT" || input.tagName === "TEXTAREA") {
+                const cell = document.createElement("td");
+                cell.textContent = input.value;
+                row.appendChild(cell);
+            }
+        });
 
-// وظيفة لإضافة البيانات للجداول
-function saveData(tableId, fields) {
-    const table = document.getElementById(tableId);
-    const row = document.createElement( tr );
+        // زر التعديل
+        const editCell = document.createElement("td");
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "تعديل";
+        editBtn.addEventListener("click", () => editRow(row, formId));
+        editCell.appendChild(editBtn);
+        row.appendChild(editCell);
 
-    fields.forEach(field => {
-        const value = document.getElementsByName(field)[0].value;
-        const cell = document.createElement( td );
-        cell.innerText = value;
-        row.appendChild(cell);
+        // زر الحذف
+        const deleteCell = document.createElement("td");
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "حذف";
+        deleteBtn.addEventListener("click", () => row.remove());
+        deleteCell.appendChild(deleteBtn);
+        row.appendChild(deleteCell);
+
+        tableBody.appendChild(row);
+        form.reset();
     });
-
-    const editCell = document.createElement( td );
-    const deleteCell = document.createElement( td );
-    editCell.innerHTML = `<button onclick="editRow(this)">تعديل</button>`;
-    deleteCell.innerHTML = `<button onclick="deleteRow(this)">حذف</button>`;
-    row.appendChild(editCell);
-    row.appendChild(deleteCell);
-
-    table.appendChild(row);
-
-    fields.forEach(field => (document.getElementsByName(field)[0].value =   ));
 }
 
-// حذف صف
-function deleteRow(button) {
-    const row = button.parentElement.parentElement;
+function editRow(row, formId) {
+    const form = document.getElementById(formId);
+    const cells = row.querySelectorAll("td");
+
+    Array.from(form.elements).forEach((input, index) => {
+        if (input.tagName === "INPUT" || input.tagName === "TEXTAREA") {
+            input.value = cells[index].textContent;
+        }
+    });
+
     row.remove();
 }
 
-// تعديل صف
-function editRow(button) {
-    const row = button.parentElement.parentElement;
-    const cells = row.querySelectorAll( td );
-    cells.forEach((cell, index) => {
-        if (index < cells.length - 2) {
-            const newValue = prompt( تعديل القيمة: , cell.innerText);
-            if (newValue) cell.innerText = newValue;
-        }
-    });
-}
+addData("memberForm", "memberTable");
+addData("trainerForm", "trainerTable");
+// أضف باقي الأقسام هنا بنفس الطريقة
