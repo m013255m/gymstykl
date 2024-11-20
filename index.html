@@ -59,7 +59,31 @@
             </table>
         </div>
 
-        <!-- باقي الأقسام الأخرى مثل المخزون، التمرينات، المكافآت، العقوبات -->
+        <!-- قسم المشتركين -->
+        <div id="subscriptions">
+            <h1>إدارة الاشتراكات</h1>
+            <form id="subscriptionForm">
+                <label>اسم المشترك:</label>
+                <input type="text" name="subscriberName" required>
+                <label>تاريخ البدء:</label>
+                <input type="date" name="startDate" required>
+                <label>تاريخ الانتهاء:</label>
+                <input type="date" name="endDate" required>
+                <button type="submit">إضافة اشتراك</button>
+            </form>
+            <h2>قائمة الاشتراكات</h2>
+            <table id="subscriptionTable">
+                <tr>
+                    <th>اسم المشترك</th>
+                    <th>تاريخ البدء</th>
+                    <th>تاريخ الانتهاء</th>
+                    <th>تعديل</th>
+                    <th>حذف</th>
+                </tr>
+            </table>
+        </div>
+
+        <!-- قسم المخزون -->
         <div id="inventory">
             <h1>إدارة المخزون</h1>
             <form id="inventoryForm">
@@ -80,10 +104,53 @@
             </table>
         </div>
 
-        <!-- باقي الأقسام مثل العقوبات، المكافآت والعروض الترويجية -->
+        <!-- قسم التمرين -->
+        <div id="workouts">
+            <h1>إدارة التمرينات</h1>
+            <form id="workoutForm">
+                <label>اسم التمرين:</label>
+                <input type="text" name="workoutName" required>
+                <label>المدة (دقائق):</label>
+                <input type="number" name="duration" required>
+                <label>التكرار:</label>
+                <input type="number" name="repetitions" required>
+                <button type="submit">إضافة تمرين</button>
+            </form>
+            <h2>قائمة التمرينات</h2>
+            <table id="workoutTable">
+                <tr>
+                    <th>اسم التمرين</th>
+                    <th>المدة</th>
+                    <th>التكرار</th>
+                    <th>تعديل</th>
+                    <th>حذف</th>
+                </tr>
+            </table>
+        </div>
 
-        <!-- إضافة البيانات إلى باقي الأقسام مشابهة للمثال أعلاه -->
-
+        <!-- قسم المكافآت -->
+        <div id="incentives">
+            <h1>إدارة المكافآت</h1>
+            <form id="incentiveForm">
+                <label>اسم العضو:</label>
+                <input type="text" name="incentiveMemberName" required>
+                <label>نوع المكافأة:</label>
+                <input type="text" name="incentiveType" required>
+                <label>المبلغ:</label>
+                <input type="number" name="incentiveAmount" required>
+                <button type="submit">إضافة مكافأة</button>
+            </form>
+            <h2>قائمة المكافآت</h2>
+            <table id="incentiveTable">
+                <tr>
+                    <th>اسم العضو</th>
+                    <th>نوع المكافأة</th>
+                    <th>المبلغ</th>
+                    <th>تعديل</th>
+                    <th>حذف</th>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <script src="script.js"></script>
