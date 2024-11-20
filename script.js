@@ -1,37 +1,37 @@
-// التبديل بين الأقسام
-document.querySelectorAll('.sidebar ul li a').forEach(link => {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelectorAll('.content > div').forEach(section => {
-            section.style.display = 'none';
-        });
-        document.querySelector(this.getAttribute('href')).style.display = 'block';
-    });
+// حفظ بيانات الأعضاء في المتصفح
+document.getElementById('memberForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const member = {
+        fullName: this.fullName.value,
+        age: this.age.value,
+        phone: this.phone.value,
+        address: this.address.value
+    };
+    let members = JSON.parse(localStorage.getItem('members')) || [];
+    members.push(member);
+    localStorage.setItem('members', JSON.stringify(members));
+    displayMembers();
 });
 
-// إضافة بيانات الأعضاء
-document.getElementById('memberForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const name = this.fullName.value;
-    const age = this.age.value;
-    const phone = this.phone.value;
-    const address = this.address.value;
-
+function displayMembers() {
+    const members = JSON.parse(localStorage.getItem('members')) || [];
     const table = document.getElementById('memberTable');
-    const row = table.insertRow();
-    row.innerHTML = `<td>${name}</td><td>${age}</td><td>${phone}</td><td>${address}</td>`;
-    this.reset();
-});
+    table.innerHTML = `<tr>
+        <th>الاسم</th>
+        <th>العمر</th>
+        <th>الهاتف</th>
+        <th>العنوان</th>
+    </tr>`;
+    members.forEach(member => {
+        const row = table.insertRow();
+        row.innerHTML = `<td>${member.fullName}</td>
+                         <td>${member.age}</td>
+                         <td>${member.phone}</td>
+                         <td>${member.address}</td>`;
+    });
+}
 
-// إضافة مستند
-document.getElementById('documentForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const name = this.memberName.value;
-    const file = this.documentFile.files[0].name;
-    const date = new Date().toLocaleDateString();
-
-    const table = document.getElementById('documentTable');
-    const row = table.insertRow();
-    row.innerHTML = `<td>${name}</td><td>${file}</td><td>${date}</td>`;
-    this.reset();
-});
+// استدعاء الوظيفة عند تحميل الصفحة
+window.onload = function () {
+    displayMembers();
+};
