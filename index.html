@@ -3,100 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الصالة الرياضية</title>
+    <title>إدارة النادي</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-
-<div class="sidebar">
-    <h2>Gym Management</h2>
-    <ul>
-        <li><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
-        <li><a href="#members"><i class="fas fa-users"></i> الأعضاء</a></li>
-        <li><a href="#inventory"><i class="fas fa-box"></i> المخزون</a></li>
-        <li><a href="#damaged"><i class="fas fa-trash-alt"></i> المخزون التالف</a></li>
-        <li><a href="#workouts"><i class="fas fa-dumbbell"></i> التمارين</a></li>
-        <li><a href="#nutrition"><i class="fas fa-apple-alt"></i> التغذية</a></li>
-    </ul>
-</div>
-
-<div class="content">
     <div id="dashboard">
-        <h1>لوحة التحكم</h1>
-        <p>هنا تفاصيل لوحة التحكم العامة للصالة الرياضية.</p>
+        <!-- قسم الأعضاء -->
+        <div id="members">
+            <h1>إدارة الأعضاء</h1>
+            <form id="memberForm">
+                <label>الاسم الكامل:</label>
+                <input type="text" name="fullName" required>
+                <label>العمر:</label>
+                <input type="number" name="age" required>
+                <label>رقم الهاتف:</label>
+                <input type="text" name="phone" required>
+                <label>العنوان:</label>
+                <input type="text" name="address" required>
+                <button type="submit">إضافة عضو</button>
+            </form>
+            <h2>قائمة الأعضاء</h2>
+            <table id="memberTable">
+                <tr>
+                    <th>الاسم الكامل</th>
+                    <th>العمر</th>
+                    <th>رقم الهاتف</th>
+                    <th>العنوان</th>
+                    <th>تعديل</th>
+                    <th>حذف</th>
+                </tr>
+            </table>
+        </div>
+
+        <!-- قسم المدربين -->
+        <div id="trainers">
+            <h1>إدارة المدربين</h1>
+            <form id="trainerForm">
+                <label>الاسم الكامل:</label>
+                <input type="text" name="trainerName" required>
+                <label>التخصص:</label>
+                <input type="text" name="specialization" required>
+                <label>رقم الهاتف:</label>
+                <input type="text" name="trainerPhone" required>
+                <button type="submit">إضافة مدرب</button>
+            </form>
+            <h2>قائمة المدربين</h2>
+            <table id="trainerTable">
+                <tr>
+                    <th>الاسم الكامل</th>
+                    <th>التخصص</th>
+                    <th>رقم الهاتف</th>
+                    <th>تعديل</th>
+                    <th>حذف</th>
+                </tr>
+            </table>
+        </div>
+
+        <!-- باقي الأقسام الأخرى مثل المخزون، التمرينات، المكافآت، العقوبات -->
+        <div id="inventory">
+            <h1>إدارة المخزون</h1>
+            <form id="inventoryForm">
+                <label>اسم المنتج:</label>
+                <input type="text" name="productName" required>
+                <label>الكمية:</label>
+                <input type="number" name="quantity" required>
+                <button type="submit">إضافة منتج</button>
+            </form>
+            <h2>قائمة المخزون</h2>
+            <table id="inventoryTable">
+                <tr>
+                    <th>اسم المنتج</th>
+                    <th>الكمية</th>
+                    <th>تعديل</th>
+                    <th>حذف</th>
+                </tr>
+            </table>
+        </div>
+
+        <!-- باقي الأقسام مثل العقوبات، المكافآت والعروض الترويجية -->
+
+        <!-- إضافة البيانات إلى باقي الأقسام مشابهة للمثال أعلاه -->
+
     </div>
 
-    <!-- قسم الأعضاء -->
-    <div id="members" style="display: none;">
-        <h1>الأعضاء</h1>
-        <form id="memberForm">
-            <label>الاسم الكامل:</label>
-            <input type="text" name="fullName" required>
-            <label>العمر:</label>
-            <input type="number" name="age" required>
-            <label>رقم الهاتف:</label>
-            <input type="tel" name="phone" required>
-            <label>العنوان:</label>
-            <input type="text" name="address" required>
-            <button type="submit">إضافة عضو</button>
-        </form>
-        <h2>قائمة الأعضاء</h2>
-        <table id="memberTable">
-            <tr>
-                <th>الاسم</th>
-                <th>العمر</th>
-                <th>الهاتف</th>
-                <th>العنوان</th>
-                <th>تعديل</th>
-                <th>حذف</th>
-            </tr>
-        </table>
-    </div>
-
-    <!-- قسم المخزون -->
-    <div id="inventory" style="display: none;">
-        <h1>إدارة المخزون</h1>
-        <form id="inventoryForm">
-            <label>اسم المنتج:</label>
-            <input type="text" name="productName" required>
-            <label>الكمية:</label>
-            <input type="number" name="quantity" required>
-            <button type="submit">إضافة للمخزون</button>
-        </form>
-        <h2>قائمة المخزون</h2>
-        <table id="inventoryTable">
-            <tr>
-                <th>اسم المنتج</th>
-                <th>الكمية</th>
-                <th>تعديل</th>
-                <th>حذف</th>
-            </tr>
-        </table>
-    </div>
-
-    <!-- قسم المخزون التالف -->
-    <div id="damaged" style="display: none;">
-        <h1>المخزون التالف</h1>
-        <form id="damagedForm">
-            <label>اسم المنتج:</label>
-            <input type="text" name="productName" required>
-            <label>الكمية التالفة:</label>
-            <input type="number" name="damagedQuantity" required>
-            <button type="submit">إضافة للتالف</button>
-        </form>
-        <h2>قائمة المخزون التالف</h2>
-        <table id="damagedTable">
-            <tr>
-                <th>اسم المنتج</th>
-                <th>الكمية التالفة</th>
-                <th>تعديل</th>
-                <th>حذف</th>
-            </tr>
-        </table>
-    </div>
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
