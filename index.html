@@ -1,68 +1,92 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الأعضاء - الجيم</title>
+    <title>إدارة الصالة الرياضية</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="sidebar">
-        <h2>إدارة الجيم</h2>
-        <ul>
-            <li><a href="#dashboard"><i class="fas fa-chart-line"></i> لوحة التحكم</a></li>
-            <li><a href="#members"><i class="fas fa-users"></i> إدارة الأعضاء</a></li>
-        </ul>
+
+<div class="sidebar">
+    <h2>Gym Management</h2>
+    <ul>
+        <li><a href="#dashboard">لوحة التحكم</a></li>
+        <li><a href="#members">الأعضاء</a></li>
+        <li><a href="#subscriptions">الإشتراكات</a></li>
+        <li><a href="#renewals">تجديد الإشتراكات</a></li>
+        <li><a href="#workouts">إدارة التمارين</a></li>
+        <li><a href="#meals">إدارة الوجبات</a></li>
+        <li><a href="#attendance">متابعة الحضور</a></li>
+        <li><a href="#payments">إدارة المدفوعات</a></li>
+        <li><a href="#complaints">الشكاوى والإقتراحات</a></li>
+        <li><a href="#analytics">الإحصائيات والتقارير</a></li>
+        <li><a href="#notifications">التنبيهات والتذكيرات</a></li>
+        <li><a href="#incentives">مكافآت المدربين</a></li>
+        <li><a href="#documents">إدارة المستندات</a></li>
+    </ul>
+</div>
+
+<div class="content">
+    <!-- لوحة التحكم -->
+    <div id="dashboard">
+        <h1>لوحة التحكم</h1>
+        <p>هنا تفاصيل لوحة التحكم العامة للصالة الرياضية.</p>
     </div>
 
-    <div class="content">
-        <div id="dashboard" class="section">
-            <h2>لوحة التحكم</h2>
-            <p>عرض شامل لكل الأنشطة والبيانات المهمة.</p>
-        </div>
-
-        <div id="members" class="section">
-            <h2>إدارة الأعضاء</h2>
-            <form class="member-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="member-name">اسم العضو</label>
-                        <input type="text" id="member-name" placeholder="أدخل اسم العضو">
-                    </div>
-                    <div class="form-group">
-                        <label for="member-phone">رقم الهاتف</label>
-                        <input type="text" id="member-phone" placeholder="أدخل رقم الهاتف">
-                    </div>
-                    <div class="form-group">
-                        <label for="member-age">السن</label>
-                        <input type="number" id="member-age" placeholder="أدخل السن">
-                    </div>
-                    <div class="form-group">
-                        <label for="member-address">العنوان</label>
-                        <input type="text" id="member-address" placeholder="أدخل العنوان">
-                    </div>
-                </div>
-                <button type="button" id="add-member" class="btn btn-primary">إضافة عضو</button>
-            </form>
-
-            <table class="member-table">
-                <thead>
-                    <tr>
-                        <th>الاسم</th>
-                        <th>رقم الهاتف</th>
-                        <th>السن</th>
-                        <th>العنوان</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody id="member-list">
-                    <!-- ستتم إضافة البيانات هنا ديناميكيًا -->
-                </tbody>
-            </table>
-        </div>
+    <!-- قسم الأعضاء -->
+    <div id="members" style="display: none;">
+        <h1>الأعضاء</h1>
+        <form id="memberForm">
+            <label>الاسم الكامل:</label>
+            <input type="text" name="fullName" required>
+            <label>العمر:</label>
+            <input type="number" name="age" required>
+            <label>رقم الهاتف:</label>
+            <input type="tel" name="phone" required>
+            <label>العنوان:</label>
+            <input type="text" name="address" required>
+            <button type="submit">إضافة عضو</button>
+        </form>
+        <h2>قائمة الأعضاء</h2>
+        <table id="memberTable">
+            <tr>
+                <th>الاسم</th>
+                <th>العمر</th>
+                <th>الهاتف</th>
+                <th>العنوان</th>
+            </tr>
+        </table>
     </div>
 
-    <script src="script.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- قسم الإحصائيات -->
+    <div id="analytics" style="display: none;">
+        <h1>الإحصائيات والتقارير</h1>
+        <p>عرض الرسومات البيانية والإحصائيات.</p>
+        <canvas id="analyticsChart" width="400" height="200"></canvas>
+    </div>
+
+    <!-- قسم المستندات -->
+    <div id="documents" style="display: none;">
+        <h1>إدارة المستندات</h1>
+        <form id="documentForm">
+            <label>اسم العضو:</label>
+            <input type="text" name="memberName" required>
+            <label>تحميل المستند:</label>
+            <input type="file" name="documentFile" required>
+            <button type="submit">إضافة مستند</button>
+        </form>
+        <h2>قائمة المستندات</h2>
+        <table id="documentTable">
+            <tr>
+                <th>اسم العضو</th>
+                <th>اسم الملف</th>
+                <th>تاريخ التحميل</th>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
