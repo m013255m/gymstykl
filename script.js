@@ -1,14 +1,5 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // حفظ البيانات من النماذج
-    document.getElementById("memberForm").addEventListener("submit", saveMember);
-    document.getElementById("trainerForm").addEventListener("submit", saveTrainer);
-    document.getElementById("subscriptionForm").addEventListener("submit", saveSubscription);
-    document.getElementById("inventoryForm").addEventListener("submit", saveInventory);
-    document.getElementById("workoutForm").addEventListener("submit", saveWorkout);
-    document.getElementById("incentiveForm").addEventListener("submit", saveIncentive);
-});
-
 // حفظ عضو جديد
+document.getElementById('memberForm').addEventListener('submit', saveMember);
 function saveMember(e) {
     e.preventDefault();
     const fullName = e.target.fullName.value;
@@ -30,6 +21,7 @@ function saveMember(e) {
 }
 
 // حفظ مدرب جديد
+document.getElementById('trainerForm').addEventListener('submit', saveTrainer);
 function saveTrainer(e) {
     e.preventDefault();
     const trainerName = e.target.trainerName.value;
@@ -49,6 +41,7 @@ function saveTrainer(e) {
 }
 
 // حفظ اشتراك جديد
+document.getElementById('subscriptionForm').addEventListener('submit', saveSubscription);
 function saveSubscription(e) {
     e.preventDefault();
     const subscriberName = e.target.subscriberName.value;
@@ -68,6 +61,7 @@ function saveSubscription(e) {
 }
 
 // حفظ منتج جديد في المخزون
+document.getElementById('inventoryForm').addEventListener('submit', saveInventory);
 function saveInventory(e) {
     e.preventDefault();
     const productName = e.target.productName.value;
@@ -85,6 +79,7 @@ function saveInventory(e) {
 }
 
 // حفظ تمرين جديد
+document.getElementById('workoutForm').addEventListener('submit', saveWorkout);
 function saveWorkout(e) {
     e.preventDefault();
     const workoutName = e.target.workoutName.value;
@@ -104,6 +99,7 @@ function saveWorkout(e) {
 }
 
 // حفظ مكافأة جديدة
+document.getElementById('incentiveForm').addEventListener('submit', saveIncentive);
 function saveIncentive(e) {
     e.preventDefault();
     const incentiveMemberName = e.target.incentiveMemberName.value;
