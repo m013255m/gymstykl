@@ -1,91 +1,77 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة النادي</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="dashboard">
-        <!-- قسم الأعضاء -->
-        <div id="members">
-            <h1>إدارة الأعضاء</h1>
-            <form id="memberForm">
-                <label>الاسم الكامل:</label>
-                <input type="text" name="fullName" required>
-                <label>العمر:</label>
-                <input type="number" name="age" required>
-                <label>رقم الهاتف:</label>
-                <input type="text" name="phone" required>
-                <label>العنوان:</label>
-                <input type="text" name="address" required>
-                <button type="submit">إضافة عضو</button>
-            </form>
-            <h2>قائمة الأعضاء</h2>
-            <table id="memberTable">
-                <tr>
-                    <th>الاسم الكامل</th>
-                    <th>العمر</th>
-                    <th>رقم الهاتف</th>
-                    <th>العنوان</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </table>
-        </div>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
 
-        <!-- قسم المدربين -->
-        <div id="trainers">
-            <h1>إدارة المدربين</h1>
-            <form id="trainerForm">
-                <label>الاسم الكامل:</label>
-                <input type="text" name="trainerName" required>
-                <label>التخصص:</label>
-                <input type="text" name="specialization" required>
-                <label>رقم الهاتف:</label>
-                <input type="text" name="trainerPhone" required>
-                <button type="submit">إضافة مدرب</button>
-            </form>
-            <h2>قائمة المدربين</h2>
-            <table id="trainerTable">
-                <tr>
-                    <th>الاسم الكامل</th>
-                    <th>التخصص</th>
-                    <th>رقم الهاتف</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </table>
-        </div>
+#dashboard {
+    width: 80%;
+    margin: 0 auto;
+}
 
-        <!-- باقي الأقسام الأخرى مثل المخزون، التمرينات، المكافآت، العقوبات -->
-        <div id="inventory">
-            <h1>إدارة المخزون</h1>
-            <form id="inventoryForm">
-                <label>اسم المنتج:</label>
-                <input type="text" name="productName" required>
-                <label>الكمية:</label>
-                <input type="number" name="quantity" required>
-                <button type="submit">إضافة منتج</button>
-            </form>
-            <h2>قائمة المخزون</h2>
-            <table id="inventoryTable">
-                <tr>
-                    <th>اسم المنتج</th>
-                    <th>الكمية</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </table>
-        </div>
+h1 {
+    color: #0066cc;
+}
 
-        <!-- باقي الأقسام مثل العقوبات، المكافآت والعروض الترويجية -->
+form {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-        <!-- إضافة البيانات إلى باقي الأقسام مشابهة للمثال أعلاه -->
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
 
-    </div>
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
 
-    <script src="script.js"></script>
-</body>
-</html>
+button {
+    background-color: #0066cc;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #004d99;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #0066cc;
+    color: white;
+}
+
+table td button {
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+table td button:hover {
+    background-color: #ff6347;
+    color: white;
+}
