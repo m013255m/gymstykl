@@ -15,9 +15,11 @@
         <li><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
         <li><a href="#members"><i class="fas fa-users"></i> الأعضاء</a></li>
         <li><a href="#subscriptions"><i class="fas fa-calendar-check"></i> الإشتراكات</a></li>
-        <li><a href="#classes"><i class="fas fa-chalkboard-teacher"></i> الحصص</a></li>
-        <li><a href="#trainers"><i class="fas fa-user-tie"></i> المدربين</a></li>
-        <li><a href="#reports"><i class="fas fa-file-alt"></i> التقارير</a></li>
+        <li><a href="#workouts"><i class="fas fa-dumbbell"></i> التمارين</a></li>
+        <li><a href="#nutrition"><i class="fas fa-apple-alt"></i> التغذية</a></li>
+        <li><a href="#attendance"><i class="fas fa-calendar-alt"></i> الحضور والانصراف</a></li>
+        <li><a href="#payments"><i class="fas fa-wallet"></i> المدفوعات</a></li>
+        <li><a href="#complaints"><i class="fas fa-comment-dots"></i> الشكاوى والاقتراحات</a></li>
     </ul>
 </div>
 
@@ -27,6 +29,7 @@
         <p>هنا تفاصيل لوحة التحكم العامة للصالة الرياضية.</p>
     </div>
 
+    <!-- قسم الأعضاء -->
     <div id="members" style="display: none;">
         <h1>الأعضاء</h1>
         <form id="memberForm">
@@ -51,30 +54,49 @@
         </table>
     </div>
 
-    <div id="subscriptions" style="display: none;">
-        <h1>الإشتراكات</h1>
-        <form id="subscriptionForm">
+    <!-- قسم التمارين -->
+    <div id="workouts" style="display: none;">
+        <h1>إدارة التمارين</h1>
+        <form id="workoutForm">
             <label>اسم العضو:</label>
             <input type="text" name="memberName" required>
-            <label>نوع الاشتراك:</label>
-            <select name="subscriptionType">
-                <option value="شهري">شهري</option>
-                <option value="ربع سنوي">ربع سنوي</option>
-                <option value="سنوي">سنوي</option>
-            </select>
-            <label>تاريخ البدء:</label>
-            <input type="date" name="startDate" required>
-            <label>تاريخ الانتهاء:</label>
-            <input type="date" name="endDate" required>
-            <button type="submit">إضافة اشتراك</button>
+            <label>نوع التمرين:</label>
+            <input type="text" name="workoutType" required>
+            <label>عدد التكرارات:</label>
+            <input type="number" name="reps" required>
+            <label>مدة التمرين (دقائق):</label>
+            <input type="number" name="duration" required>
+            <button type="submit">إضافة تمرين</button>
         </form>
-        <h2>قائمة الإشتراكات</h2>
-        <table id="subscriptionTable">
+        <h2>قائمة التمارين</h2>
+        <table id="workoutTable">
             <tr>
-                <th>العضو</th>
-                <th>نوع الاشتراك</th>
-                <th>تاريخ البدء</th>
-                <th>تاريخ الانتهاء</th>
+                <th>اسم العضو</th>
+                <th>نوع التمرين</th>
+                <th>عدد التكرارات</th>
+                <th>المدة</th>
+            </tr>
+        </table>
+    </div>
+
+    <!-- قسم التغذية -->
+    <div id="nutrition" style="display: none;">
+        <h1>إدارة التغذية</h1>
+        <form id="nutritionForm">
+            <label>اسم العضو:</label>
+            <input type="text" name="memberName" required>
+            <label>الوجبة:</label>
+            <input type="text" name="meal" required>
+            <label>السعرات الحرارية:</label>
+            <input type="number" name="calories" required>
+            <button type="submit">إضافة وجبة</button>
+        </form>
+        <h2>قائمة الوجبات</h2>
+        <table id="nutritionTable">
+            <tr>
+                <th>اسم العضو</th>
+                <th>الوجبة</th>
+                <th>السعرات الحرارية</th>
             </tr>
         </table>
     </div>
