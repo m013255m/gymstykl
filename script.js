@@ -1,9 +1,9 @@
 // إضافة عضو جديد
 document.getElementById("add-member").addEventListener("click", function () {
-    const name = document.getElementById("member-name").value;
-    const phone = document.getElementById("member-phone").value;
+    const name = document.getElementById("member-name").value.trim();
+    const phone = document.getElementById("member-phone").value.trim();
 
-    if (name.trim() === "" || phone.trim() === "") {
+    if (!name || !phone) {
         alert("يرجى إدخال جميع الحقول");
         return;
     }
@@ -14,7 +14,7 @@ document.getElementById("add-member").addEventListener("click", function () {
     row.innerHTML = `
         <td>${name}</td>
         <td>${phone}</td>
-        <td><button class="delete-btn">حذف</button></td>
+        <td><button class="btn btn-danger delete-btn">حذف</button></td>
     `;
 
     table.appendChild(row);
