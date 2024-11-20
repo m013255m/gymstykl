@@ -3,8 +3,8 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa;
-    color: #333;
+    background-color: #2c3e50;
+    color: #ecf0f1;
 }
 
 /* الشريط الجانبي */
@@ -15,12 +15,12 @@ body {
     top: 0;
     left: 0;
     background-color: #34495e;
-    color: #fff;
     padding: 20px;
 }
 
 .sidebar h2 {
     text-align: center;
+    color: #1abc9c;
     margin-bottom: 30px;
 }
 
@@ -35,7 +35,7 @@ body {
 
 .sidebar ul li a {
     text-decoration: none;
-    color: #fff;
+    color: #ecf0f1;
     font-size: 16px;
     display: flex;
     align-items: center;
@@ -52,54 +52,48 @@ body {
     padding: 20px;
 }
 
-.intro-text {
-    font-size: 18px;
-    color: #555;
-    margin-bottom: 20px;
-}
-
 .section {
-    background-color: #fff;
+    background-color: #34495e;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .section h2 {
     font-size: 24px;
-    color: #2c3e50;
+    color: #1abc9c;
 }
 
 .section-description {
     font-size: 16px;
-    color: #666;
     margin-bottom: 20px;
 }
 
 /* النماذج */
 .form-group {
-    margin-bottom: 15px;
+    display: inline-block;
+    width: calc(50% - 10px);
+    margin: 5px;
 }
 
 .form-group label {
     display: block;
-    font-size: 14px;
-    color: #444;
     margin-bottom: 5px;
 }
 
 .form-group input {
     width: 100%;
     padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
+    border: 1px solid #1abc9c;
     border-radius: 4px;
+    background-color: #2c3e50;
+    color: #ecf0f1;
     outline: none;
 }
 
 .form-group input:focus {
-    border-color: #1abc9c;
+    border-color: #16a085;
 }
 
 /* الأزرار */
@@ -130,14 +124,18 @@ body {
 .member-table th, .member-table td {
     padding: 10px;
     text-align: center;
-    border: 1px solid #ddd;
+    border: 1px solid #1abc9c;
 }
 
 .member-table th {
-    background-color: #2c3e50;
+    background-color: #1abc9c;
     color: #fff;
 }
 
 .member-table tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #34495e;
+}
+
+.member-table tr:hover {
+    background-color: #16a085;
 }
