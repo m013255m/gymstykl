@@ -2,12 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // حفظ البيانات من النماذج
     document.getElementById("memberForm").addEventListener("submit", saveMember);
     document.getElementById("trainerForm").addEventListener("submit", saveTrainer);
+    document.getElementById("subscriptionForm").addEventListener("submit", saveSubscription);
     document.getElementById("inventoryForm").addEventListener("submit", saveInventory);
     document.getElementById("workoutForm").addEventListener("submit", saveWorkout);
-    document.getElementById("nutritionForm").addEventListener("submit", saveNutrition);
-    document.getElementById("penaltyForm").addEventListener("submit", savePenalty);
     document.getElementById("incentiveForm").addEventListener("submit", saveIncentive);
-    document.getElementById("promotionForm").addEventListener("submit", savePromotion);
 });
 
 // حفظ عضو جديد
@@ -50,7 +48,26 @@ function saveTrainer(e) {
     e.target.reset();
 }
 
-// حفظ منتج للمخزون
+// حفظ اشتراك جديد
+function saveSubscription(e) {
+    e.preventDefault();
+    const subscriberName = e.target.subscriberName.value;
+    const startDate = e.target.startDate.value;
+    const endDate = e.target.endDate.value;
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${subscriberName}</td>
+        <td>${startDate}</td>
+        <td>${endDate}</td>
+        <td><button onclick="editRow(this)">تعديل</button></td>
+        <td><button onclick="deleteRow(this)">حذف</button></td>
+    `;
+    document.getElementById("subscriptionTable").appendChild(row);
+    e.target.reset();
+}
+
+// حفظ منتج جديد في المخزون
 function saveInventory(e) {
     e.preventDefault();
     const productName = e.target.productName.value;
@@ -67,7 +84,7 @@ function saveInventory(e) {
     e.target.reset();
 }
 
-// حفظ تمرين
+// حفظ تمرين جديد
 function saveWorkout(e) {
     e.preventDefault();
     const workoutName = e.target.workoutName.value;
@@ -86,45 +103,7 @@ function saveWorkout(e) {
     e.target.reset();
 }
 
-// حفظ وجبة
-function saveNutrition(e) {
-    e.preventDefault();
-    const mealName = e.target.mealName.value;
-    const calories = e.target.calories.value;
-    const ingredients = e.target.ingredients.value;
-
-    const row = document.createElement("tr");
-    row.innerHTML = `
-        <td>${mealName}</td>
-        <td>${calories}</td>
-        <td>${ingredients}</td>
-        <td><button onclick="editRow(this)">تعديل</button></td>
-        <td><button onclick="deleteRow(this)">حذف</button></td>
-    `;
-    document.getElementById("nutritionTable").appendChild(row);
-    e.target.reset();
-}
-
-// حفظ عقوبة
-function savePenalty(e) {
-    e.preventDefault();
-    const memberName = e.target.memberName.value;
-    const penaltyReason = e.target.penaltyReason.value;
-    const penaltyAmount = e.target.penaltyAmount.value;
-
-    const row = document.createElement("tr");
-    row.innerHTML = `
-        <td>${memberName}</td>
-        <td>${penaltyReason}</td>
-        <td>${penaltyAmount}</td>
-        <td><button onclick="editRow(this)">تعديل</button></td>
-        <td><button onclick="deleteRow(this)">حذف</button></td>
-    `;
-    document.getElementById("penaltyTable").appendChild(row);
-    e.target.reset();
-}
-
-// حفظ حافز
+// حفظ مكافأة جديدة
 function saveIncentive(e) {
     e.preventDefault();
     const incentiveMemberName = e.target.incentiveMemberName.value;
@@ -140,25 +119,6 @@ function saveIncentive(e) {
         <td><button onclick="deleteRow(this)">حذف</button></td>
     `;
     document.getElementById("incentiveTable").appendChild(row);
-    e.target.reset();
-}
-
-// حفظ عرض ترويجي
-function savePromotion(e) {
-    e.preventDefault();
-    const promotionName = e.target.promotionName.value;
-    const discountAmount = e.target.discountAmount.value;
-    const validUntil = e.target.validUntil.value;
-
-    const row = document.createElement("tr");
-    row.innerHTML = `
-        <td>${promotionName}</td>
-        <td>${discountAmount}</td>
-        <td>${validUntil}</td>
-        <td><button onclick="editRow(this)">تعديل</button></td>
-        <td><button onclick="deleteRow(this)">حذف</button></td>
-    `;
-    document.getElementById("promotionTable").appendChild(row);
     e.target.reset();
 }
 
