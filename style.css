@@ -1,102 +1,91 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة النادي</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="dashboard">
+        <!-- قسم الأعضاء -->
+        <div id="members">
+            <h1>إدارة الأعضاء</h1>
+            <form id="memberForm">
+                <label>الاسم الكامل:</label>
+                <input type="text" name="fullName" required>
+                <label>العمر:</label>
+                <input type="number" name="age" required>
+                <label>رقم الهاتف:</label>
+                <input type="text" name="phone" required>
+                <label>العنوان:</label>
+                <input type="text" name="address" required>
+                <button type="submit">إضافة عضو</button>
+            </form>
+            <h2>قائمة الأعضاء</h2>
+            <table id="memberTable">
+                <tr>
+                    <th>الاسم الكامل</th>
+                    <th>العمر</th>
+                    <th>رقم الهاتف</th>
+                    <th>العنوان</th>
+                    <th>تعديل</th>
+                    <th>حذف</th>
+                </tr>
+            </table>
+        </div>
 
-body {
-    display: flex;
-    background-color: #f5f5f5;
-    color: #333;
-    direction: rtl;
-}
+        <!-- قسم المدربين -->
+        <div id="trainers">
+            <h1>إدارة المدربين</h1>
+            <form id="trainerForm">
+                <label>الاسم الكامل:</label>
+                <input type="text" name="trainerName" required>
+                <label>التخصص:</label>
+                <input type="text" name="specialization" required>
+                <label>رقم الهاتف:</label>
+                <input type="text" name="trainerPhone" required>
+                <button type="submit">إضافة مدرب</button>
+            </form>
+            <h2>قائمة المدربين</h2>
+            <table id="trainerTable">
+                <tr>
+                    <th>الاسم الكامل</th>
+                    <th>التخصص</th>
+                    <th>رقم الهاتف</th>
+                    <th>تعديل</th>
+                    <th>حذف</th>
+                </tr>
+            </table>
+        </div>
 
-.sidebar {
-    width: 250px;
-    background-color: #333;
-    color: white;
-    min-height: 100vh;
-    padding: 20px;
-}
+        <!-- باقي الأقسام الأخرى مثل المخزون، التمرينات، المكافآت، العقوبات -->
+        <div id="inventory">
+            <h1>إدارة المخزون</h1>
+            <form id="inventoryForm">
+                <label>اسم المنتج:</label>
+                <input type="text" name="productName" required>
+                <label>الكمية:</label>
+                <input type="number" name="quantity" required>
+                <button type="submit">إضافة منتج</button>
+            </form>
+            <h2>قائمة المخزون</h2>
+            <table id="inventoryTable">
+                <tr>
+                    <th>اسم المنتج</th>
+                    <th>الكمية</th>
+                    <th>تعديل</th>
+                    <th>حذف</th>
+                </tr>
+            </table>
+        </div>
 
-.sidebar h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-}
+        <!-- باقي الأقسام مثل العقوبات، المكافآت والعروض الترويجية -->
 
-.sidebar ul {
-    list-style-type: none;
-}
+        <!-- إضافة البيانات إلى باقي الأقسام مشابهة للمثال أعلاه -->
 
-.sidebar ul li {
-    margin-bottom: 15px;
-}
+    </div>
 
-.sidebar ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 18px;
-    display: block;
-    padding: 10px;
-    transition: background 0.3s;
-}
-
-.sidebar ul li a:hover {
-    background-color: #555;
-}
-
-.content {
-    flex: 1;
-    padding: 20px;
-}
-
-h1 {
-    color: #333;
-}
-
-form {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 10px;
-    gap: 15px;
-}
-
-label, input, button {
-    width: 100%;
-    margin: 5px 0;
-    padding: 10px;
-}
-
-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #218838;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-table, th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-th {
-    background-color: #333;
-    color: white;
-    text-align: center;
-}
-
-td {
-    text-align: center;
-}
+    <script src="script.js"></script>
+</body>
+</html>
