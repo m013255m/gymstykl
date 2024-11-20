@@ -24,23 +24,28 @@
 
     <div class="content">
         <h1>مرحبًا بك في نظام إدارة الجيم</h1>
-        <p>اختر قسمًا من القائمة الجانبية لاستكشاف المزيد.</p>
+        <p class="intro-text">قم بإدارة الأعضاء والاشتراكات بسهولة واحترافية من خلال الأدوات المتاحة.</p>
 
         <div id="dashboard">
             <h2>لوحة التحكم</h2>
             <p>عرض شامل لكل الأنشطة والبيانات المهمة.</p>
         </div>
 
-        <div id="members">
+        <div id="members" class="section">
             <h2>إدارة الأعضاء</h2>
-            <form>
-                <label for="member-name">اسم العضو</label>
-                <input type="text" id="member-name" placeholder="أدخل اسم العضو">
-                <label for="member-phone">رقم الهاتف</label>
-                <input type="text" id="member-phone" placeholder="أدخل رقم الهاتف">
-                <button type="button" id="add-member">إضافة</button>
+            <p class="section-description">يمكنك إضافة الأعضاء الجدد وحفظ بياناتهم لمتابعة اشتراكاتهم وإدارتها بكل سهولة.</p>
+            <form class="member-form">
+                <div class="form-group">
+                    <label for="member-name">اسم العضو</label>
+                    <input type="text" id="member-name" placeholder="أدخل اسم العضو">
+                </div>
+                <div class="form-group">
+                    <label for="member-phone">رقم الهاتف</label>
+                    <input type="text" id="member-phone" placeholder="أدخل رقم الهاتف">
+                </div>
+                <button type="button" id="add-member" class="btn btn-primary">إضافة عضو</button>
             </form>
-            <table>
+            <table class="member-table">
                 <thead>
                     <tr>
                         <th>الاسم</th>
