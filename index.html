@@ -7,149 +7,167 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="dashboard">
-        <!-- قسم الأعضاء -->
-        <div id="members">
-            <h1>إدارة الأعضاء</h1>
-            <form id="memberForm">
-                <label>الاسم الكامل:</label>
-                <input type="text" name="fullName" required>
-                <label>العمر:</label>
-                <input type="number" name="age" required>
-                <label>رقم الهاتف:</label>
-                <input type="text" name="phone" required>
-                <label>العنوان:</label>
-                <input type="text" name="address" required>
-                <button type="submit">إضافة عضو</button>
-            </form>
-            <h2>قائمة الأعضاء</h2>
-            <table id="memberTable">
-                <tr>
-                    <th>الاسم الكامل</th>
-                    <th>العمر</th>
-                    <th>رقم الهاتف</th>
-                    <th>العنوان</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </table>
+    <div id="wrapper">
+        <!-- الشريط الجانبي -->
+        <div id="sidebar">
+            <h2>لوحة التحكم</h2>
+            <ul>
+                <li><a href="#members">إدارة الأعضاء</a></li>
+                <li><a href="#trainers">إدارة المدربين</a></li>
+                <li><a href="#subscriptions">إدارة الاشتراكات</a></li>
+                <li><a href="#inventory">إدارة المخزون</a></li>
+                <li><a href="#workouts">إدارة التمرين</a></li>
+                <li><a href="#incentives">إدارة المكافآت</a></li>
+            </ul>
         </div>
 
-        <!-- قسم المدربين -->
-        <div id="trainers">
-            <h1>إدارة المدربين</h1>
-            <form id="trainerForm">
-                <label>الاسم الكامل:</label>
-                <input type="text" name="trainerName" required>
-                <label>التخصص:</label>
-                <input type="text" name="specialization" required>
-                <label>رقم الهاتف:</label>
-                <input type="text" name="trainerPhone" required>
-                <button type="submit">إضافة مدرب</button>
-            </form>
-            <h2>قائمة المدربين</h2>
-            <table id="trainerTable">
-                <tr>
-                    <th>الاسم الكامل</th>
-                    <th>التخصص</th>
-                    <th>رقم الهاتف</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </table>
-        </div>
+        <!-- المحتوى الرئيسي -->
+        <div id="content">
+            <div id="dashboard">
+                <!-- قسم الأعضاء -->
+                <div id="members">
+                    <h1>إدارة الأعضاء</h1>
+                    <form id="memberForm">
+                        <label>الاسم الكامل:</label>
+                        <input type="text" name="fullName" required>
+                        <label>العمر:</label>
+                        <input type="number" name="age" required>
+                        <label>رقم الهاتف:</label>
+                        <input type="text" name="phone" required>
+                        <label>العنوان:</label>
+                        <input type="text" name="address" required>
+                        <button type="submit">إضافة عضو</button>
+                    </form>
+                    <h2>قائمة الأعضاء</h2>
+                    <table id="memberTable">
+                        <tr>
+                            <th>الاسم الكامل</th>
+                            <th>العمر</th>
+                            <th>رقم الهاتف</th>
+                            <th>العنوان</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </table>
+                </div>
 
-        <!-- قسم المشتركين -->
-        <div id="subscriptions">
-            <h1>إدارة الاشتراكات</h1>
-            <form id="subscriptionForm">
-                <label>اسم المشترك:</label>
-                <input type="text" name="subscriberName" required>
-                <label>تاريخ البدء:</label>
-                <input type="date" name="startDate" required>
-                <label>تاريخ الانتهاء:</label>
-                <input type="date" name="endDate" required>
-                <button type="submit">إضافة اشتراك</button>
-            </form>
-            <h2>قائمة الاشتراكات</h2>
-            <table id="subscriptionTable">
-                <tr>
-                    <th>اسم المشترك</th>
-                    <th>تاريخ البدء</th>
-                    <th>تاريخ الانتهاء</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </table>
-        </div>
+                <!-- قسم المدربين -->
+                <div id="trainers">
+                    <h1>إدارة المدربين</h1>
+                    <form id="trainerForm">
+                        <label>الاسم الكامل:</label>
+                        <input type="text" name="trainerName" required>
+                        <label>التخصص:</label>
+                        <input type="text" name="specialization" required>
+                        <label>رقم الهاتف:</label>
+                        <input type="text" name="trainerPhone" required>
+                        <button type="submit">إضافة مدرب</button>
+                    </form>
+                    <h2>قائمة المدربين</h2>
+                    <table id="trainerTable">
+                        <tr>
+                            <th>الاسم الكامل</th>
+                            <th>التخصص</th>
+                            <th>رقم الهاتف</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </table>
+                </div>
 
-        <!-- قسم المخزون -->
-        <div id="inventory">
-            <h1>إدارة المخزون</h1>
-            <form id="inventoryForm">
-                <label>اسم المنتج:</label>
-                <input type="text" name="productName" required>
-                <label>الكمية:</label>
-                <input type="number" name="quantity" required>
-                <button type="submit">إضافة منتج</button>
-            </form>
-            <h2>قائمة المخزون</h2>
-            <table id="inventoryTable">
-                <tr>
-                    <th>اسم المنتج</th>
-                    <th>الكمية</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </table>
-        </div>
+                <!-- قسم الاشتراكات -->
+                <div id="subscriptions">
+                    <h1>إدارة الاشتراكات</h1>
+                    <form id="subscriptionForm">
+                        <label>اسم المشترك:</label>
+                        <input type="text" name="subscriberName" required>
+                        <label>تاريخ البدء:</label>
+                        <input type="date" name="startDate" required>
+                        <label>تاريخ الانتهاء:</label>
+                        <input type="date" name="endDate" required>
+                        <button type="submit">إضافة اشتراك</button>
+                    </form>
+                    <h2>قائمة الاشتراكات</h2>
+                    <table id="subscriptionTable">
+                        <tr>
+                            <th>اسم المشترك</th>
+                            <th>تاريخ البدء</th>
+                            <th>تاريخ الانتهاء</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </table>
+                </div>
 
-        <!-- قسم التمرين -->
-        <div id="workouts">
-            <h1>إدارة التمرينات</h1>
-            <form id="workoutForm">
-                <label>اسم التمرين:</label>
-                <input type="text" name="workoutName" required>
-                <label>المدة (دقائق):</label>
-                <input type="number" name="duration" required>
-                <label>التكرار:</label>
-                <input type="number" name="repetitions" required>
-                <button type="submit">إضافة تمرين</button>
-            </form>
-            <h2>قائمة التمرينات</h2>
-            <table id="workoutTable">
-                <tr>
-                    <th>اسم التمرين</th>
-                    <th>المدة</th>
-                    <th>التكرار</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </table>
-        </div>
+                <!-- قسم المخزون -->
+                <div id="inventory">
+                    <h1>إدارة المخزون</h1>
+                    <form id="inventoryForm">
+                        <label>اسم المنتج:</label>
+                        <input type="text" name="productName" required>
+                        <label>الكمية:</label>
+                        <input type="number" name="quantity" required>
+                        <button type="submit">إضافة منتج</button>
+                    </form>
+                    <h2>قائمة المخزون</h2>
+                    <table id="inventoryTable">
+                        <tr>
+                            <th>اسم المنتج</th>
+                            <th>الكمية</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </table>
+                </div>
 
-        <!-- قسم المكافآت -->
-        <div id="incentives">
-            <h1>إدارة المكافآت</h1>
-            <form id="incentiveForm">
-                <label>اسم العضو:</label>
-                <input type="text" name="incentiveMemberName" required>
-                <label>نوع المكافأة:</label>
-                <input type="text" name="incentiveType" required>
-                <label>المبلغ:</label>
-                <input type="number" name="incentiveAmount" required>
-                <button type="submit">إضافة مكافأة</button>
-            </form>
-            <h2>قائمة المكافآت</h2>
-            <table id="incentiveTable">
-                <tr>
-                    <th>اسم العضو</th>
-                    <th>نوع المكافأة</th>
-                    <th>المبلغ</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </table>
+                <!-- قسم التمرين -->
+                <div id="workouts">
+                    <h1>إدارة التمرين</h1>
+                    <form id="workoutForm">
+                        <label>اسم التمرين:</label>
+                        <input type="text" name="workoutName" required>
+                        <label>المدة (دقائق):</label>
+                        <input type="number" name="duration" required>
+                        <label>التكرار:</label>
+                        <input type="number" name="repetitions" required>
+                        <button type="submit">إضافة تمرين</button>
+                    </form>
+                    <h2>قائمة التمرين</h2>
+                    <table id="workoutTable">
+                        <tr>
+                            <th>اسم التمرين</th>
+                            <th>المدة</th>
+                            <th>التكرار</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- قسم المكافآت -->
+                <div id="incentives">
+                    <h1>إدارة المكافآت</h1>
+                    <form id="incentiveForm">
+                        <label>اسم العضو:</label>
+                        <input type="text" name="incentiveMemberName" required>
+                        <label>نوع المكافأة:</label>
+                        <input type="text" name="incentiveType" required>
+                        <label>المبلغ:</label>
+                        <input type="number" name="incentiveAmount" required>
+                        <button type="submit">إضافة مكافأة</button>
+                    </form>
+                    <h2>قائمة المكافآت</h2>
+                    <table id="incentiveTable">
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>نوع المكافأة</th>
+                            <th>المبلغ</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
