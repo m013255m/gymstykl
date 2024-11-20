@@ -14,12 +14,10 @@
     <ul>
         <li><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
         <li><a href="#members"><i class="fas fa-users"></i> الأعضاء</a></li>
-        <li><a href="#subscriptions"><i class="fas fa-calendar-check"></i> الإشتراكات</a></li>
+        <li><a href="#inventory"><i class="fas fa-box"></i> المخزون</a></li>
+        <li><a href="#damaged"><i class="fas fa-trash-alt"></i> المخزون التالف</a></li>
         <li><a href="#workouts"><i class="fas fa-dumbbell"></i> التمارين</a></li>
         <li><a href="#nutrition"><i class="fas fa-apple-alt"></i> التغذية</a></li>
-        <li><a href="#attendance"><i class="fas fa-calendar-alt"></i> الحضور والانصراف</a></li>
-        <li><a href="#payments"><i class="fas fa-wallet"></i> المدفوعات</a></li>
-        <li><a href="#complaints"><i class="fas fa-comment-dots"></i> الشكاوى والاقتراحات</a></li>
     </ul>
 </div>
 
@@ -50,53 +48,50 @@
                 <th>العمر</th>
                 <th>الهاتف</th>
                 <th>العنوان</th>
+                <th>تعديل</th>
+                <th>حذف</th>
             </tr>
         </table>
     </div>
 
-    <!-- قسم التمارين -->
-    <div id="workouts" style="display: none;">
-        <h1>إدارة التمارين</h1>
-        <form id="workoutForm">
-            <label>اسم العضو:</label>
-            <input type="text" name="memberName" required>
-            <label>نوع التمرين:</label>
-            <input type="text" name="workoutType" required>
-            <label>عدد التكرارات:</label>
-            <input type="number" name="reps" required>
-            <label>مدة التمرين (دقائق):</label>
-            <input type="number" name="duration" required>
-            <button type="submit">إضافة تمرين</button>
+    <!-- قسم المخزون -->
+    <div id="inventory" style="display: none;">
+        <h1>إدارة المخزون</h1>
+        <form id="inventoryForm">
+            <label>اسم المنتج:</label>
+            <input type="text" name="productName" required>
+            <label>الكمية:</label>
+            <input type="number" name="quantity" required>
+            <button type="submit">إضافة للمخزون</button>
         </form>
-        <h2>قائمة التمارين</h2>
-        <table id="workoutTable">
+        <h2>قائمة المخزون</h2>
+        <table id="inventoryTable">
             <tr>
-                <th>اسم العضو</th>
-                <th>نوع التمرين</th>
-                <th>عدد التكرارات</th>
-                <th>المدة</th>
+                <th>اسم المنتج</th>
+                <th>الكمية</th>
+                <th>تعديل</th>
+                <th>حذف</th>
             </tr>
         </table>
     </div>
 
-    <!-- قسم التغذية -->
-    <div id="nutrition" style="display: none;">
-        <h1>إدارة التغذية</h1>
-        <form id="nutritionForm">
-            <label>اسم العضو:</label>
-            <input type="text" name="memberName" required>
-            <label>الوجبة:</label>
-            <input type="text" name="meal" required>
-            <label>السعرات الحرارية:</label>
-            <input type="number" name="calories" required>
-            <button type="submit">إضافة وجبة</button>
+    <!-- قسم المخزون التالف -->
+    <div id="damaged" style="display: none;">
+        <h1>المخزون التالف</h1>
+        <form id="damagedForm">
+            <label>اسم المنتج:</label>
+            <input type="text" name="productName" required>
+            <label>الكمية التالفة:</label>
+            <input type="number" name="damagedQuantity" required>
+            <button type="submit">إضافة للتالف</button>
         </form>
-        <h2>قائمة الوجبات</h2>
-        <table id="nutritionTable">
+        <h2>قائمة المخزون التالف</h2>
+        <table id="damagedTable">
             <tr>
-                <th>اسم العضو</th>
-                <th>الوجبة</th>
-                <th>السعرات الحرارية</th>
+                <th>اسم المنتج</th>
+                <th>الكمية التالفة</th>
+                <th>تعديل</th>
+                <th>حذف</th>
             </tr>
         </table>
     </div>
