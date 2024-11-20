@@ -3,7 +3,7 @@ document.querySelectorAll('.sidebar ul li a').forEach(link => {
         document.querySelectorAll('.content > div').forEach(section => {
             section.style.display = 'none';
         });
-        
+
         const target = link.getAttribute('href').substring(1);
         document.getElementById(target).style.display = 'block';
     });
@@ -25,16 +25,29 @@ document.getElementById('memberForm').addEventListener('submit', function(e) {
     e.target.reset();
 });
 
-document.getElementById('subscriptionForm').addEventListener('submit', function(e) {
+document.getElementById('workoutForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const memberName = e.target.memberName.value;
-    const subscriptionType = e.target.subscriptionType.value;
-    const startDate = e.target.startDate.value;
-    const endDate = e.target.endDate.value;
+    const workoutType = e.target.workoutType.value;
+    const reps = e.target.reps.value;
+    const duration = e.target.duration.value;
 
     const row = document.createElement('tr');
-    row.innerHTML = `<td>${memberName}</td><td>${subscriptionType}</td><td>${startDate}</td><td>${endDate}</td>`;
-    document.getElementById('subscriptionTable').appendChild(row);
+    row.innerHTML = `<td>${memberName}</td><td>${workoutType}</td><td>${reps}</td><td>${duration}</td>`;
+    document.getElementById('workoutTable').appendChild(row);
+
+    e.target.reset();
+});
+
+document.getElementById('nutritionForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const memberName = e.target.memberName.value;
+    const meal = e.target.meal.value;
+    const calories = e.target.calories.value;
+
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${memberName}</td><td>${meal}</td><td>${calories}</td>`;
+    document.getElementById('nutritionTable').appendChild(row);
 
     e.target.reset();
 });
