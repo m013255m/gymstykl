@@ -16,17 +16,19 @@
                 <li><a href="#trainers">إدارة المدربين</a></li>
                 <li><a href="#subscriptions">إدارة الاشتراكات</a></li>
                 <li><a href="#inventory">إدارة المخزون</a></li>
-                <li><a href="#workouts">إدارة التمارين</a></li>
-                <li><a href="#incentives">إدارة المكافآت</a></li>
-                <li><a href="#marketing">إدارة الحملات التسويقية</a></li>
-                <li><a href="#custom-meals">إدارة الوجبات المخصصة</a></li>
-                <li><a href="#penalties">إدارة العقوبات</a></li>
-                <li><a href="#rewards">إدارة التحفيز والمكافآت</a></li>
+                <li><a href="#damaged-inventory">المخزون التالف</a></li>
+                <li><a href="#meals">إدارة الوجبات الغذائية</a></li>
+                <li><a href="#ratings">التقييمات والملاحظات</a></li>
+                <li><a href="#rewards">المكافآت والحوافز</a></li>
+                <li><a href="#special-requests">الطلبات الخاصة</a></li>
+                <li><a href="#marketing">حملات التسويق</a></li>
+                <li><a href="#advanced-scheduling">الجدولة المتقدمة</a></li>
             </ul>
         </aside>
 
         <!-- محتوى الأقسام -->
         <main class="content">
+            <!-- إدارة الأعضاء -->
             <section id="members">
                 <h3>إدارة الأعضاء</h3>
                 <form id="memberForm">
@@ -37,17 +39,21 @@
                     <button type="submit">إضافة عضو</button>
                 </form>
                 <table id="memberTable">
-                    <tr>
-                        <th>الاسم</th>
-                        <th>العمر</th>
-                        <th>رقم الهاتف</th>
-                        <th>العنوان</th>
-                        <th>تعديل</th>
-                        <th>حذف</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>العمر</th>
+                            <th>رقم الهاتف</th>
+                            <th>العنوان</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
                 </table>
             </section>
 
+            <!-- إدارة المدربين -->
             <section id="trainers">
                 <h3>إدارة المدربين</h3>
                 <form id="trainerForm">
@@ -57,36 +63,44 @@
                     <button type="submit">إضافة مدرب</button>
                 </form>
                 <table id="trainerTable">
-                    <tr>
-                        <th>اسم المدرب</th>
-                        <th>التخصص</th>
-                        <th>رقم الهاتف</th>
-                        <th>تعديل</th>
-                        <th>حذف</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>اسم المدرب</th>
+                            <th>التخصص</th>
+                            <th>رقم الهاتف</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
                 </table>
             </section>
 
-            <section id="subscriptions">
-                <h3>إدارة الاشتراكات</h3>
-                <form id="subscriptionForm">
-                    <input type="text" name="subscriberName" placeholder="اسم المشترك" required>
-                    <input type="date" name="startDate" placeholder="تاريخ البداية" required>
-                    <input type="date" name="endDate" placeholder="تاريخ النهاية" required>
-                    <button type="submit">إضافة اشتراك</button>
+            <!-- إضافة المزيد من الأقسام بنفس النمط -->
+            <!-- مثال لإدارة المخزون التالف -->
+            <section id="damaged-inventory">
+                <h3>إدارة المخزون التالف</h3>
+                <form id="damagedInventoryForm">
+                    <input type="text" name="damagedItemName" placeholder="اسم العنصر التالف" required>
+                    <input type="number" name="damagedQuantity" placeholder="الكمية التالفة" required>
+                    <textarea name="reason" placeholder="سبب التلف" required></textarea>
+                    <button type="submit">إضافة عنصر تالف</button>
                 </form>
-                <table id="subscriptionTable">
-                    <tr>
-                        <th>اسم المشترك</th>
-                        <th>تاريخ البداية</th>
-                        <th>تاريخ النهاية</th>
-                        <th>تعديل</th>
-                        <th>حذف</th>
-                    </tr>
+                <table id="damagedInventoryTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العنصر</th>
+                            <th>الكمية</th>
+                            <th>سبب التلف</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
                 </table>
             </section>
 
-            <!-- أضف المزيد من الأقسام مثل المخزون، التمارين، إلخ -->
+            <!-- يمكنك إضافة بقية الأقسام هنا -->
         </main>
     </div>
     <script src="script.js"></script>
