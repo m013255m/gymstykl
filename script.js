@@ -1,32 +1,37 @@
-document.getElementById("add-member").addEventListener("click", function () {
-    const name = document.getElementById("member-name").value.trim();
-    const phone = document.getElementById("member-phone").value.trim();
-    const age = document.getElementById("member-age").value.trim();
-    const address = document.getElementById("member-address").value.trim();
+// التبديل بين الأقسام
+document.querySelectorAll('.sidebar ul li a').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelectorAll('.content > div').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.querySelector(this.getAttribute('href')).style.display = 'block';
+    });
+});
 
-    if (!name || !phone || !age || !address) {
-        alert("يرجى إدخال جميع الحقول");
-        return;
-    }
+// إضافة بيانات الأعضاء
+document.getElementById('memberForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = this.fullName.value;
+    const age = this.age.value;
+    const phone = this.phone.value;
+    const address = this.address.value;
 
-    const table = document.getElementById("member-list");
-    const row = document.createElement("tr");
+    const table = document.getElementById('memberTable');
+    const row = table.insertRow();
+    row.innerHTML = `<td>${name}</td><td>${age}</td><td>${phone}</td><td>${address}</td>`;
+    this.reset();
+});
 
-    row.innerHTML = `
-        <td>${name}</td>
-        <td>${phone}</td>
-        <td>${age}</td>
-        <td>${address}</td>
-        <td>
-            <button class="btn btn-primary">تعديل</button>
-            <button class="btn btn-danger">حذف</button>
-        </td>
-    `;
+// إضافة مستند
+document.getElementById('documentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = this.memberName.value;
+    const file = this.documentFile.files[0].name;
+    const date = new Date().toLocaleDateString();
 
-    table.appendChild(row);
-
-    document.getElementById("member-name").value = "";
-    document.getElementById("member-phone").value = "";
-    document.getElementById("member-age").value = "";
-    document.getElementById("member-address").value = "";
+    const table = document.getElementById('documentTable');
+    const row = table.insertRow();
+    row.innerHTML = `<td>${name}</td><td>${file}</td><td>${date}</td>`;
+    this.reset();
 });
