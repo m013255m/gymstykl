@@ -1,37 +1,47 @@
-// حفظ بيانات الأعضاء في المتصفح
-document.getElementById('memberForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const member = {
-        fullName: this.fullName.value,
-        age: this.age.value,
-        phone: this.phone.value,
-        address: this.address.value
-    };
-    let members = JSON.parse(localStorage.getItem('members')) || [];
-    members.push(member);
-    localStorage.setItem('members', JSON.stringify(members));
-    displayMembers();
-});
+document.addEventListener("DOMContentLoaded", () => {
+    const forms = document.querySelectorAll("form");
 
-function displayMembers() {
-    const members = JSON.parse(localStorage.getItem('members')) || [];
-    const table = document.getElementById('memberTable');
-    table.innerHTML = `<tr>
-        <th>الاسم</th>
-        <th>العمر</th>
-        <th>الهاتف</th>
-        <th>العنوان</th>
-    </tr>`;
-    members.forEach(member => {
-        const row = table.insertRow();
-        row.innerHTML = `<td>${member.fullName}</td>
-                         <td>${member.age}</td>
-                         <td>${member.phone}</td>
-                         <td>${member.address}</td>`;
+    forms.forEach(form => {
+        form.addEventListener("submit", event => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const dataObject = {};
+
+            formData.forEach((value, key) => {
+                dataObject[key] = value;
+            });
+
+            const table = document.querySelector(`#${form.id.replace("Form", "Table")}`);
+            const row = table.insertRow();
+
+            Object.values(dataObject).forEach(value => {
+                const cell = row.insertCell();
+                cell.textContent = value;
+            });
+
+            // حفظ البيانات
+            const storageKey = form.id.replace("Form", "");
+            let storedData = JSON.parse(localStorage.getItem(storageKey)) || [];
+            storedData.push(dataObject);
+            localStorage.setItem(storageKey, JSON.stringify(storedData));
+
+            form.reset();
+        });
     });
-}
 
-// استدعاء الوظيفة عند تحميل الصفحة
-window.onload = function () {
-    displayMembers();
-};
+    // تحميل البيانات المحفوظة
+    forms.forEach(form => {
+        const storageKey = form.id.replace("Form", "");
+        const storedData = JSON.parse(localStorage.getItem(storageKey)) || [];
+        const table = document.querySelector(`#${form.id.replace("Form", "Table")}`);
+
+        storedData.forEach(data => {
+            const row = table.insertRow();
+            Object.values(data).forEach(value => {
+                const cell = row.insertCell();
+                cell.textContent = value;
+            });
+        });
+    });
+});
