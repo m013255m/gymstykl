@@ -46,8 +46,10 @@ function editRow(row, formId) {
     row.remove();
 }
 
-// قم بإضافة الاستدعاء لكل قسم
+// استدعاء للأقسام
 addData("memberForm", "memberTable");
 addData("trainerForm", "trainerTable");
 addData("subscriptionForm", "subscriptionTable");
-// أضف باقي الأقسام بنفس الطريقة
+addData("inventoryForm", "inventoryTable");
+addData("damagedInventoryForm", "damagedInventoryTable");
+// يمكنك إضافة المزيد من استدعاءات الأقسام بنفس الطريقة.
