@@ -1,61 +1,186 @@
-function addData(formId, tableId) {
-    const form = document.getElementById(formId);
-    const tableBody = document.getElementById(tableId).querySelector("tbody");
 
-    form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const row = document.createElement("tr");
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الجيم</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>إدارة الجيم</h2>
+            <ul>
+                <li><a href="#members" onclick="showSection('members')">إدارة الأعضاء</a></li>
+                <li><a href="#trainers" onclick="showSection('trainers')">إدارة المدربين</a></li>
+                <li><a href="#subscriptions" onclick="showSection('subscriptions')">إدارة الاشتراكات</a></li>
+                <li><a href="#inventory" onclick="showSection('inventory')">إدارة المخزون</a></li>
+                <li><a href="#damaged-inventory" onclick="showSection('damaged-inventory')">المخزون التالف</a></li>
+                <li><a href="#meals" onclick="showSection('meals')">إدارة الوجبات الغذائية</a></li>
+                <li><a href="#ratings" onclick="showSection('ratings')">التقييمات والملاحظات</a></li>
+                <li><a href="#rewards" onclick="showSection('rewards')">المكافآت والحوافز</a></li>
+                <li><a href="#special-requests" onclick="showSection('special-requests')">الطلبات الخاصة</a></li>
+                <li><a href="#marketing" onclick="showSection('marketing')">حملات التسويق</a></li>
+                <li><a href="#advanced-scheduling" onclick="showSection('advanced-scheduling')">الجدولة المتقدمة</a></li>
+                <li><a href="#complaints" onclick="showSection('complaints')">الشكاوي</a></li>
+            </ul>
+        </aside>
 
-        Array.from(form.elements).forEach((input) => {
-            if (input.tagName === "INPUT" || input.tagName === "TEXTAREA") {
-                const cell = document.createElement("td");
-                cell.textContent = input.value;
-                row.appendChild(cell);
-            }
-        });
+        <main class="content">
+            <!-- إدارة الأعضاء -->
+            <section id="members" class="hidden">
+                <h3>إدارة الأعضاء</h3>
+                <form id="memberForm">
+                    <input type="text" name="fullName" placeholder="اسم العضو بالكامل" required>
+                    <input type="number" name="age" placeholder="العمر" required>
+                    <input type="tel" name="phone" placeholder="رقم الهاتف" required>
+                    <input type="text" name="address" placeholder="العنوان" required>
+                    <button type="submit">إضافة عضو</button>
+                </form>
+                <table id="memberTable">
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>العمر</th>
+                            <th>رقم الهاتف</th>
+                            <th>العنوان</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
 
-        const editCell = document.createElement("td");
-        const editBtn = document.createElement("button");
-        editBtn.textContent = "تعديل";
-        editBtn.addEventListener("click", () => editRow(row, formId));
-        editCell.appendChild(editBtn);
-        row.appendChild(editCell);
+            <!-- إدارة المدربين -->
+            <section id="trainers" class="hidden">
+                <h3>إدارة المدربين</h3>
+                <form id="trainerForm">
+                    <input type="text" name="trainerName" placeholder="اسم المدرب" required>
+                    <input type="text" name="specialization" placeholder="التخصص" required>
+                    <input type="tel" name="trainerPhone" placeholder="رقم الهاتف" required>
+                    <button type="submit">إضافة مدرب</button>
+                </form>
+                <table id="trainerTable">
+                    <thead>
+                        <tr>
+                            <th>اسم المدرب</th>
+                            <th>التخصص</th>
+                            <th>رقم الهاتف</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
 
-        const deleteCell = document.createElement("td");
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "حذف";
-        deleteBtn.addEventListener("click", () => row.remove());
-        deleteCell.appendChild(deleteBtn);
-        row.appendChild(deleteCell);
+            <!-- إدارة الاشتراكات -->
+            <section id="subscriptions" class="hidden">
+                <h3>إدارة الاشتراكات</h3>
+                <form id="subscriptionForm">
+                    <input type="text" name="subscriberName" placeholder="اسم المشترك" required>
+                    <input type="date" name="startDate" required>
+                    <input type="date" name="endDate" required>
+                    <button type="submit">إضافة اشتراك</button>
+                </form>
+                <table id="subscriptionTable">
+                    <thead>
+                        <tr>
+                            <th>اسم المشترك</th>
+                            <th>تاريخ البداية</th>
+                            <th>تاريخ النهاية</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
 
-        tableBody.appendChild(row);
-        form.reset();
-    });
-}
+            <!-- إدارة المخزون -->
+            <section id="inventory" class="hidden">
+                <h3>إدارة المخزون</h3>
+                <form id="inventoryForm">
+                    <input type="text" name="itemName" placeholder="اسم العنصر" required>
+                    <input type="number" name="quantity" placeholder="الكمية" required>
+                    <input type="text" name="category" placeholder="الفئة" required>
+                    <button type="submit">إضافة عنصر</button>
+                </form>
+                <table id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العنصر</th>
+                            <th>الكمية</th>
+                            <th>الفئة</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
 
-function editRow(row, formId) {
-    const form = document.getElementById(formId);
-    const cells = row.querySelectorAll("td");
+            <!-- باقي الأقسام بنفس الشكل -->
+            <section id="damaged-inventory" class="hidden">
+                <h3>المخزون التالف</h3>
+                <form id="damagedInventoryForm">
+                    <input type="text" name="damagedItemName" placeholder="اسم العنصر التالف" required>
+                    <input type="number" name="damagedQuantity" placeholder="الكمية" required>
+                    <button type="submit">إضافة</button>
+                </form>
+                <table id="damagedInventoryTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العنصر</th>
+                            <th>الكمية</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
 
-    Array.from(form.elements).forEach((input, index) => {
-        if (input.tagName === "INPUT" || input.tagName === "TEXTAREA") {
-            input.value = cells[index].textContent;
-        }
-    });
+            <section id="meals" class="hidden">
+                <h3>إدارة الوجبات الغذائية</h3>
+                <form id="mealForm">
+                    <input type="text" name="mealName" placeholder="اسم الوجبة" required>
+                    <input type="text" name="mealDescription" placeholder="الوصف" required>
+                    <button type="submit">إضافة وجبة</button>
+                </form>
+                <table id="mealTable">
+                    <thead>
+                        <tr>
+                            <th>اسم الوجبة</th>
+                            <th>الوصف</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
 
-    row.remove();
-}
-
-function showSection(sectionId) {
-    document.querySelectorAll("main .content section").forEach((section) => {
-        section.classList.add("hidden");
-    });
-    document.getElementById(sectionId).classList.remove("hidden");
-}
-
-// استدعاء الوظائف
-addData("memberForm", "memberTable");
-addData("trainerForm", "trainerTable");
-addData("subscriptionForm", "subscriptionTable");
-addData("inventoryForm", "inventoryTable");
-// كرر نفس الاستدعاء لباقي الأقسام.
+            <section id="ratings" class="hidden">
+                <h3>التقييمات والملاحظات</h3>
+                <form id="ratingForm">
+                    <input type="text" name="memberName" placeholder="اسم العضو" required>
+                    <textarea name="ratingNote" placeholder="التقييم أو الملاحظات" required></textarea>
+                    <button type="submit">إضافة</button>
+                </form>
+                <table id="ratingTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>التقييم</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
