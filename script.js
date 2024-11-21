@@ -1,14 +1,3 @@
-// عرض القسم المطلوب فقط
-function showSection(sectionId) {
-    const sections = document.querySelectorAll(".section");
-    sections.forEach((section) => {
-        section.classList.add("hidden");
-    });
-
-    document.getElementById(sectionId).classList.remove("hidden");
-}
-
-// إضافة بيانات ديناميكية
 function addData(formId, tableId) {
     const form = document.getElementById(formId);
     const tableBody = document.getElementById(tableId).querySelector("tbody");
@@ -57,5 +46,16 @@ function editRow(row, formId) {
     row.remove();
 }
 
-// استدعاء للأقسام
+function showSection(sectionId) {
+    document.querySelectorAll("main .content section").forEach((section) => {
+        section.classList.add("hidden");
+    });
+    document.getElementById(sectionId).classList.remove("hidden");
+}
+
+// استدعاء الوظائف
 addData("memberForm", "memberTable");
+addData("trainerForm", "trainerTable");
+addData("subscriptionForm", "subscriptionTable");
+addData("inventoryForm", "inventoryTable");
+// كرر نفس الاستدعاء لباقي الأقسام.
