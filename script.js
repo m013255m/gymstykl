@@ -1,3 +1,14 @@
+// عرض القسم المطلوب فقط
+function showSection(sectionId) {
+    const sections = document.querySelectorAll(".section");
+    sections.forEach((section) => {
+        section.classList.add("hidden");
+    });
+
+    document.getElementById(sectionId).classList.remove("hidden");
+}
+
+// إضافة بيانات ديناميكية
 function addData(formId, tableId) {
     const form = document.getElementById(formId);
     const tableBody = document.getElementById(tableId).querySelector("tbody");
@@ -48,8 +59,3 @@ function editRow(row, formId) {
 
 // استدعاء للأقسام
 addData("memberForm", "memberTable");
-addData("trainerForm", "trainerTable");
-addData("subscriptionForm", "subscriptionTable");
-addData("inventoryForm", "inventoryTable");
-addData("damagedInventoryForm", "damagedInventoryTable");
-// يمكنك إضافة المزيد من استدعاءات الأقسام بنفس الطريقة.
