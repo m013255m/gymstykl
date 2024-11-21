@@ -1,117 +1,61 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الجيم</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <!-- الشريط الجانبي -->
-        <aside class="sidebar">
-            <h2>إدارة الجيم</h2>
-            <ul>
-                <li onclick="showSection('members')">إدارة الأعضاء</li>
-                <li onclick="showSection('trainers')">إدارة المدربين</li>
-                <li onclick="showSection('subscriptions')">إدارة الاشتراكات</li>
-                <li onclick="showSection('inventory')">إدارة المخزون</li>
-                <li onclick="showSection('damaged-inventory')">المخزون التالف</li>
-                <li onclick="showSection('meals')">إدارة الوجبات الغذائية</li>
-                <li onclick="showSection('ratings')">التقييمات والملاحظات</li>
-                <li onclick="showSection('rewards')">المكافآت والحوافز</li>
-                <li onclick="showSection('special-requests')">الطلبات الخاصة</li>
-                <li onclick="showSection('marketing')">حملات التسويق</li>
-                <li onclick="showSection('advanced-scheduling')">الجدولة المتقدمة</li>
-                <li onclick="showSection('complaints')">الشكاوي</li>
-            </ul>
-        </aside>
+function addData(formId, tableId) {
+    const form = document.getElementById(formId);
+    const tableBody = document.getElementById(tableId).querySelector("tbody");
 
-        <!-- محتوى الأقسام -->
-        <main class="content">
-            <!-- إدارة الأعضاء -->
-            <section id="members" class="section">
-                <h3>إدارة الأعضاء</h3>
-                <form id="memberForm">
-                    <input type="text" name="fullName" placeholder="اسم العضو بالكامل" required>
-                    <input type="number" name="age" placeholder="العمر" required>
-                    <input type="tel" name="phone" placeholder="رقم الهاتف" required>
-                    <input type="text" name="address" placeholder="العنوان" required>
-                    <button type="submit">إضافة عضو</button>
-                </form>
-                <table id="memberTable">
-                    <thead>
-                        <tr>
-                            <th>الاسم</th>
-                            <th>العمر</th>
-                            <th>رقم الهاتف</th>
-                            <th>العنوان</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </section>
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const row = document.createElement("tr");
 
-            <!-- باقي الأقسام -->
-            <section id="trainers" class="section hidden">
-                <h3>إدارة المدربين</h3>
-                <!-- الحقول وجداول البيانات -->
-            </section>
+        Array.from(form.elements).forEach((input) => {
+            if (input.tagName === "INPUT" || input.tagName === "TEXTAREA") {
+                const cell = document.createElement("td");
+                cell.textContent = input.value;
+                row.appendChild(cell);
+            }
+        });
 
-            <section id="subscriptions" class="section hidden">
-                <h3>إدارة الاشتراكات</h3>
-                <!-- الحقول وجداول البيانات -->
-            </section>
+        const editCell = document.createElement("td");
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "تعديل";
+        editBtn.addEventListener("click", () => editRow(row, formId));
+        editCell.appendChild(editBtn);
+        row.appendChild(editCell);
 
-            <section id="inventory" class="section hidden">
-                <h3>إدارة المخزون</h3>
-                <!-- الحقول وجداول البيانات -->
-            </section>
+        const deleteCell = document.createElement("td");
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "حذف";
+        deleteBtn.addEventListener("click", () => row.remove());
+        deleteCell.appendChild(deleteBtn);
+        row.appendChild(deleteCell);
 
-            <section id="damaged-inventory" class="section hidden">
-                <h3>المخزون التالف</h3>
-                <!-- الحقول وجداول البيانات -->
-            </section>
+        tableBody.appendChild(row);
+        form.reset();
+    });
+}
 
-            <section id="meals" class="section hidden">
-                <h3>إدارة الوجبات الغذائية</h3>
-                <!-- الحقول وجداول البيانات -->
-            </section>
+function editRow(row, formId) {
+    const form = document.getElementById(formId);
+    const cells = row.querySelectorAll("td");
 
-            <section id="ratings" class="section hidden">
-                <h3>التقييمات والملاحظات</h3>
-                <!-- الحقول وجداول البيانات -->
-            </section>
+    Array.from(form.elements).forEach((input, index) => {
+        if (input.tagName === "INPUT" || input.tagName === "TEXTAREA") {
+            input.value = cells[index].textContent;
+        }
+    });
 
-            <section id="rewards" class="section hidden">
-                <h3>المكافآت والحوافز</h3>
-                <!-- الحقول وجداول البيانات -->
-            </section>
+    row.remove();
+}
 
-            <section id="special-requests" class="section hidden">
-                <h3>الطلبات الخاصة</h3>
-                <!-- الحقول وجداول البيانات -->
-            </section>
+function showSection(sectionId) {
+    document.querySelectorAll("main .content section").forEach((section) => {
+        section.classList.add("hidden");
+    });
+    document.getElementById(sectionId).classList.remove("hidden");
+}
 
-            <section id="marketing" class="section hidden">
-                <h3>حملات التسويق</h3>
-                <!-- الحقول وجداول البيانات -->
-            </section>
-
-            <section id="advanced-scheduling" class="section hidden">
-                <h3>الجدولة المتقدمة</h3>
-                <!-- الحقول وجداول البيانات -->
-            </section>
-
-            <section id="complaints" class="section hidden">
-                <h3>الشكاوي</h3>
-                <!-- الحقول وجداول البيانات -->
-            </section>
-        </main>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+// استدعاء الوظائف
+addData("memberForm", "memberTable");
+addData("trainerForm", "trainerTable");
+addData("subscriptionForm", "subscriptionTable");
+addData("inventoryForm", "inventoryTable");
+// كرر نفس الاستدعاء لباقي الأقسام.
