@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -28,6 +27,7 @@
         </aside>
 
         <main class="content">
+            <!-- قسم الأعضاء -->
             <section id="members">
                 <h3>إدارة الأعضاء</h3>
                 <form id="memberForm">
@@ -52,7 +52,7 @@
                 </table>
             </section>
 
-            <!-- إدارة المدربين -->
+            <!-- باقي الأقسام بنفس التنسيق -->
             <section id="trainers">
                 <h3>إدارة المدربين</h3>
                 <form id="trainerForm">
@@ -75,22 +75,21 @@
                 </table>
             </section>
 
-            <!-- إضافة المزيد من الأقسام بنفس النمط -->
-            <!-- مثال لإدارة المخزون التالف -->
-            <section id="damaged-inventory">
-                <h3>إدارة المخزون التالف</h3>
-                <form id="damagedInventoryForm">
-                    <input type="text" name="damagedItemName" placeholder="اسم العنصر التالف" required>
-                    <input type="number" name="damagedQuantity" placeholder="الكمية التالفة" required>
-                    <textarea name="reason" placeholder="سبب التلف" required></textarea>
-                    <button type="submit">إضافة عنصر تالف</button>
+            <!-- الأقسام الأخرى -->
+            <section id="subscriptions">
+                <h3>إدارة الاشتراكات</h3>
+                <form id="subscriptionForm">
+                    <input type="text" name="subscriberName" placeholder="اسم المشترك" required>
+                    <input type="date" name="startDate" placeholder="تاريخ البداية" required>
+                    <input type="date" name="endDate" placeholder="تاريخ النهاية" required>
+                    <button type="submit">إضافة اشتراك</button>
                 </form>
-                <table id="damagedInventoryTable">
+                <table id="subscriptionTable">
                     <thead>
                         <tr>
-                            <th>اسم العنصر</th>
-                            <th>الكمية</th>
-                            <th>سبب التلف</th>
+                            <th>اسم المشترك</th>
+                            <th>تاريخ البداية</th>
+                            <th>تاريخ النهاية</th>
                             <th>تعديل</th>
                             <th>حذف</th>
                         </tr>
@@ -98,8 +97,9 @@
                     <tbody></tbody>
                 </table>
             </section>
+            
+            <!-- أضف باقي الأقسام بشكل مشابه -->
 
-            <!-- باقي الأقسام -->
         </main>
     </div>
     <script src="script.js"></script>
