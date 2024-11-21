@@ -1,4 +1,3 @@
-
 function addData(formId, tableId) {
     const form = document.getElementById(formId);
     const tableBody = document.getElementById(tableId).querySelector("tbody");
@@ -47,7 +46,8 @@ function editRow(row, formId) {
     row.remove();
 }
 
+// قم بإضافة الاستدعاء لكل قسم
 addData("memberForm", "memberTable");
 addData("trainerForm", "trainerTable");
-addData("damagedInventoryForm", "damagedInventoryTable");
-// أضف المزيد من الأقسام هنا بنفس الطريقة
+addData("subscriptionForm", "subscriptionTable");
+// أضف باقي الأقسام بنفس الطريقة
