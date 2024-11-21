@@ -27,7 +27,7 @@
         </aside>
 
         <main class="content">
-            <!-- قسم الأعضاء -->
+            <!-- إدارة الأعضاء -->
             <section id="members">
                 <h3>إدارة الأعضاء</h3>
                 <form id="memberForm">
@@ -52,7 +52,7 @@
                 </table>
             </section>
 
-            <!-- باقي الأقسام بنفس التنسيق -->
+            <!-- إدارة المدربين -->
             <section id="trainers">
                 <h3>إدارة المدربين</h3>
                 <form id="trainerForm">
@@ -75,7 +75,7 @@
                 </table>
             </section>
 
-            <!-- الأقسام الأخرى -->
+            <!-- إدارة الاشتراكات -->
             <section id="subscriptions">
                 <h3>إدارة الاشتراكات</h3>
                 <form id="subscriptionForm">
@@ -97,9 +97,54 @@
                     <tbody></tbody>
                 </table>
             </section>
-            
-            <!-- أضف باقي الأقسام بشكل مشابه -->
 
+            <!-- إدارة المخزون -->
+            <section id="inventory">
+                <h3>إدارة المخزون</h3>
+                <form id="inventoryForm">
+                    <input type="text" name="itemName" placeholder="اسم العنصر" required>
+                    <input type="number" name="quantity" placeholder="الكمية" required>
+                    <input type="text" name="category" placeholder="الفئة" required>
+                    <button type="submit">إضافة عنصر</button>
+                </form>
+                <table id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العنصر</th>
+                            <th>الكمية</th>
+                            <th>الفئة</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- إدارة المخزون التالف -->
+            <section id="damaged-inventory">
+                <h3>إدارة المخزون التالف</h3>
+                <form id="damagedInventoryForm">
+                    <input type="text" name="damagedItemName" placeholder="اسم العنصر التالف" required>
+                    <input type="number" name="damagedQuantity" placeholder="الكمية التالفة" required>
+                    <textarea name="reason" placeholder="سبب التلف" required></textarea>
+                    <button type="submit">إضافة عنصر تالف</button>
+                </form>
+                <table id="damagedInventoryTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العنصر</th>
+                            <th>الكمية</th>
+                            <th>سبب التلف</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- باقي الأقسام سيتم تكرارها بنفس التنسيق -->
         </main>
     </div>
     <script src="script.js"></script>
