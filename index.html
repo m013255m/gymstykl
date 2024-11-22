@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -81,8 +80,8 @@
                 <h3>إدارة الاشتراكات</h3>
                 <form id="subscriptionForm">
                     <input type="text" name="subscriberName" placeholder="اسم المشترك" required>
-                    <input type="date" name="startDate" required>
-                    <input type="date" name="endDate" required>
+                    <input type="date" name="startDate" placeholder="تاريخ البداية" required>
+                    <input type="date" name="endDate" placeholder="تاريخ النهاية" required>
                     <button type="submit">إضافة اشتراك</button>
                 </form>
                 <table id="subscriptionTable">
@@ -122,19 +121,20 @@
                 </table>
             </section>
 
-            <!-- باقي الأقسام بنفس الشكل -->
+            <!-- إدارة المخزون التالف -->
             <section id="damaged-inventory" class="hidden">
-                <h3>المخزون التالف</h3>
+                <h3>إدارة المخزون التالف</h3>
                 <form id="damagedInventoryForm">
-                    <input type="text" name="damagedItemName" placeholder="اسم العنصر التالف" required>
-                    <input type="number" name="damagedQuantity" placeholder="الكمية" required>
-                    <button type="submit">إضافة</button>
+                    <input type="text" name="damagedItem" placeholder="اسم العنصر التالف" required>
+                    <input type="number" name="damagedQuantity" placeholder="الكمية التالفة" required>
+                    <button type="submit">إضافة عنصر تالف</button>
                 </form>
                 <table id="damagedInventoryTable">
                     <thead>
                         <tr>
-                            <th>اسم العنصر</th>
-                            <th>الكمية</th>
+                            <th>اسم العنصر التالف</th>
+                            <th>الكمية التالفة</th>
+                            <th>تعديل</th>
                             <th>حذف</th>
                         </tr>
                     </thead>
@@ -142,18 +142,22 @@
                 </table>
             </section>
 
+            <!-- إدارة الوجبات الغذائية -->
             <section id="meals" class="hidden">
                 <h3>إدارة الوجبات الغذائية</h3>
                 <form id="mealForm">
                     <input type="text" name="mealName" placeholder="اسم الوجبة" required>
-                    <input type="text" name="mealDescription" placeholder="الوصف" required>
+                    <input type="number" name="calories" placeholder="السعرات الحرارية" required>
+                    <input type="text" name="mealType" placeholder="نوع الوجبة" required>
                     <button type="submit">إضافة وجبة</button>
                 </form>
                 <table id="mealTable">
                     <thead>
                         <tr>
                             <th>اسم الوجبة</th>
-                            <th>الوصف</th>
+                            <th>السعرات الحرارية</th>
+                            <th>نوع الوجبة</th>
+                            <th>تعديل</th>
                             <th>حذف</th>
                         </tr>
                     </thead>
@@ -161,18 +165,125 @@
                 </table>
             </section>
 
+            <!-- التقييمات والملاحظات -->
             <section id="ratings" class="hidden">
                 <h3>التقييمات والملاحظات</h3>
                 <form id="ratingForm">
                     <input type="text" name="memberName" placeholder="اسم العضو" required>
-                    <textarea name="ratingNote" placeholder="التقييم أو الملاحظات" required></textarea>
-                    <button type="submit">إضافة</button>
+                    <textarea name="feedback" placeholder="التعليق" required></textarea>
+                    <button type="submit">إضافة ملاحظة</button>
                 </form>
                 <table id="ratingTable">
                     <thead>
                         <tr>
                             <th>اسم العضو</th>
-                            <th>التقييم</th>
+                            <th>التعليق</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- المكافآت والحوافز -->
+            <section id="rewards" class="hidden">
+                <h3>المكافآت والحوافز</h3>
+                <form id="rewardForm">
+                    <input type="text" name="memberName" placeholder="اسم العضو" required>
+                    <input type="text" name="reward" placeholder="المكافأة" required>
+                    <button type="submit">إضافة مكافأة</button>
+                </form>
+                <table id="rewardTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>المكافأة</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- الطلبات الخاصة -->
+            <section id="special-requests" class="hidden">
+                <h3>الطلبات الخاصة</h3>
+                <form id="specialRequestForm">
+                    <input type="text" name="memberName" placeholder="اسم العضو" required>
+                    <textarea name="request" placeholder="الطلب الخاص" required></textarea>
+                    <button type="submit">إضافة طلب خاص</button>
+                </form>
+                <table id="specialRequestTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>الطلب</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- حملات التسويق -->
+            <section id="marketing" class="hidden">
+                <h3>حملات التسويق</h3>
+                <form id="marketingForm">
+                    <input type="text" name="campaignName" placeholder="اسم الحملة" required>
+                    <textarea name="details" placeholder="تفاصيل الحملة" required></textarea>
+                    <button type="submit">إضافة حملة تسويقية</button>
+                </form>
+                <table id="marketingTable">
+                    <thead>
+                        <tr>
+                            <th>اسم الحملة</th>
+                            <th>التفاصيل</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- الجدولة المتقدمة -->
+            <section id="advanced-scheduling" class="hidden">
+                <h3>الجدولة المتقدمة</h3>
+                <form id="scheduleForm">
+                    <input type="text" name="eventName" placeholder="اسم الحدث" required>
+                    <input type="datetime-local" name="eventTime" required>
+                    <button type="submit">إضافة حدث</button>
+                </form>
+                <table id="scheduleTable">
+                    <thead>
+                        <tr>
+                            <th>اسم الحدث</th>
+                            <th>الوقت</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- الشكاوي -->
+            <section id="complaints" class="hidden">
+                <h3>الشكاوي</h3>
+                <form id="complaintForm">
+                    <input type="text" name="complainantName" placeholder="اسم المشتكي" required>
+                    <textarea name="complaintDetails" placeholder="تفاصيل الشكوى" required></textarea>
+                    <button type="submit">إضافة شكوى</button>
+                </form>
+                <table id="complaintTable">
+                    <thead>
+                        <tr>
+                            <th>اسم المشتكي</th>
+                            <th>تفاصيل الشكوى</th>
+                            <th>تعديل</th>
                             <th>حذف</th>
                         </tr>
                     </thead>
@@ -181,6 +292,16 @@
             </section>
         </main>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        // Show the relevant section when clicked
+        function showSection(sectionId) {
+            let sections = document.querySelectorAll('.content > section');
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+    </script>
 </body>
 </html>
