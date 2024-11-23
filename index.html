@@ -32,6 +32,10 @@
             background-color: #2980b9;
         }
 
+        /* تأثيرات لظهور الأقسام */
+        section.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -189,8 +193,126 @@
                 </table>
             </section>
 
-            <!-- باقي الأقسام -->
-            <!-- تم إضافة جميع الأقسام الأخرى بنفس الطريقة -->
+            <!-- التقييمات والملاحظات -->
+            <section id="ratings" class="hidden">
+                <h3>التقييمات والملاحظات</h3>
+                <form id="ratingsForm">
+                    <input type="text" name="rating" placeholder="التقييم" required>
+                    <textarea name="comments" placeholder="الملاحظات" required></textarea>
+                    <button type="submit">إضافة تقييم</button>
+                </form>
+                <table id="ratingsTable">
+                    <thead>
+                        <tr>
+                            <th>التقييم</th>
+                            <th>الملاحظات</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ratingsTableBody"></tbody>
+                </table>
+            </section>
+
+            <!-- المكافآت والحوافز -->
+            <section id="rewards" class="hidden">
+                <h3>المكافآت والحوافز</h3>
+                <form id="rewardsForm">
+                    <input type="text" name="reward" placeholder="المكافأة" required>
+                    <textarea name="criteria" placeholder="معايير الحوافز" required></textarea>
+                    <button type="submit">إضافة مكافأة</button>
+                </form>
+                <table id="rewardsTable">
+                    <thead>
+                        <tr>
+                            <th>المكافأة</th>
+                            <th>معايير الحوافز</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rewardsTableBody"></tbody>
+                </table>
+            </section>
+
+            <!-- الطلبات الخاصة -->
+            <section id="special-requests" class="hidden">
+                <h3>الطلبات الخاصة</h3>
+                <form id="specialRequestsForm">
+                    <input type="text" name="request" placeholder="الطلب الخاص" required>
+                    <button type="submit">إضافة طلب خاص</button>
+                </form>
+                <table id="specialRequestsTable">
+                    <thead>
+                        <tr>
+                            <th>الطلب الخاص</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="specialRequestsTableBody"></tbody>
+                </table>
+            </section>
+
+            <!-- حملات التسويق -->
+            <section id="marketing" class="hidden">
+                <h3>حملات التسويق</h3>
+                <form id="marketingForm">
+                    <input type="text" name="campaignName" placeholder="اسم الحملة" required>
+                    <input type="date" name="campaignDate" required>
+                    <button type="submit">إضافة حملة</button>
+                </form>
+                <table id="marketingTable">
+                    <thead>
+                        <tr>
+                            <th>اسم الحملة</th>
+                            <th>تاريخ الحملة</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="marketingTableBody"></tbody>
+                </table>
+            </section>
+
+            <!-- الجدولة المتقدمة -->
+            <section id="advanced-scheduling" class="hidden">
+                <h3>الجدولة المتقدمة</h3>
+                <form id="advancedSchedulingForm">
+                    <input type="text" name="schedule" placeholder="جدول التوقيت" required>
+                    <button type="submit">إضافة جدول</button>
+                </form>
+                <table id="advancedSchedulingTable">
+                    <thead>
+                        <tr>
+                            <th>جدول التوقيت</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="advancedSchedulingTableBody"></tbody>
+                </table>
+            </section>
+
+            <!-- الشكاوي -->
+            <section id="complaints" class="hidden">
+                <h3>الشكاوي</h3>
+                <form id="complaintsForm">
+                    <input type="text" name="complaint" placeholder="الشكاوي" required>
+                    <button type="submit">إضافة شكوى</button>
+                </form>
+                <table id="complaintsTable">
+                    <thead>
+                        <tr>
+                            <th>الشكاوى</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="complaintsTableBody"></tbody>
+                </table>
+            </section>
+
         </main>
     </div>
 
@@ -228,37 +350,10 @@
                 tableBody.appendChild(row);
                 this.reset();
 
-                // For members, also add them to the renewal list if their subscription is close to expiry
-                if (form.id === 'subscriptionForm') {
-                    addRenewalMember(formData);
-                }
-
                 // Save data to localStorage
                 saveData();
             });
         });
-
-        // Add members who need renewal based on subscription dates
-        function addRenewalMember(formData) {
-            const renewalTableBody = document.getElementById('renewalTableBody');
-            const row = document.createElement('tr');
-            const nameCell = document.createElement('td');
-            const endDateCell = document.createElement('td');
-            const statusCell = document.createElement('td');
-            const renewCell = document.createElement('td');
-
-            nameCell.textContent = formData.get('subscriberName');
-            endDateCell.textContent = formData.get('endDate');
-            statusCell.textContent = 'مطلوب تجديد';
-            renewCell.textContent = 'تجديد';
-
-            row.appendChild(nameCell);
-            row.appendChild(endDateCell);
-            row.appendChild(statusCell);
-            row.appendChild(renewCell);
-
-            renewalTableBody.appendChild(row);
-        }
 
         // Save data in localStorage for all sections
         function saveData() {
