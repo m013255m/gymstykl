@@ -48,7 +48,7 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="memberTableBody"></tbody>
                 </table>
             </section>
 
@@ -71,7 +71,7 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="trainerTableBody"></tbody>
                 </table>
             </section>
 
@@ -94,7 +94,7 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="subscriptionTableBody"></tbody>
                 </table>
             </section>
 
@@ -117,7 +117,7 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="inventoryTableBody"></tbody>
                 </table>
             </section>
 
@@ -140,7 +140,7 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="damagedInventoryTableBody"></tbody>
                 </table>
             </section>
 
@@ -163,7 +163,7 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="mealsTableBody"></tbody>
                 </table>
             </section>
 
@@ -184,7 +184,7 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="ratingsTableBody"></tbody>
                 </table>
             </section>
 
@@ -205,7 +205,7 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="rewardsTableBody"></tbody>
                 </table>
             </section>
 
@@ -226,7 +226,7 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="specialRequestsTableBody"></tbody>
                 </table>
             </section>
 
@@ -247,7 +247,7 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="marketingTableBody"></tbody>
                 </table>
             </section>
 
@@ -268,7 +268,7 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="advancedSchedulingTableBody"></tbody>
                 </table>
             </section>
 
@@ -289,11 +289,46 @@
                             <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="complaintsTableBody"></tbody>
                 </table>
             </section>
         </main>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        // Show the section corresponding to the clicked link
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => section.classList.add('hidden'));
+            const section = document.getElementById(sectionId);
+            section.classList.remove('hidden');
+        }
+
+        // Add data to the table on form submission
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const tableBody = document.getElementById(`${this.id.replace('Form', 'Table')}Body`);
+                const row = document.createElement('tr');
+
+                formData.forEach((value, key) => {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    row.appendChild(cell);
+                });
+
+                const editCell = document.createElement('td');
+                const deleteCell = document.createElement('td');
+                editCell.textContent = 'تعديل';
+                deleteCell.textContent = 'حذف';
+                row.appendChild(editCell);
+                row.appendChild(deleteCell);
+
+                tableBody.appendChild(row);
+                this.reset();
+            });
+        });
+    </script>
 </body>
 </html>
