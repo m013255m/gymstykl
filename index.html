@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الجيم</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>إدارة الجيم</h2>
+            <ul>
+                <li><a href="#members">إدارة الأعضاء</a></li>
+                <li><a href="#trainers">إدارة المدربين</a></li>
+                <li><a href="#subscriptions">إدارة الاشتراكات</a></li>
+                <li><a href="#inventory">إدارة المخزون</a></li>
+                <li><a href="#damaged-inventory">المخزون التالف</a></li>
+                <li><a href="#meals">إدارة الوجبات الغذائية</a></li>
+                <li><a href="#ratings">التقييمات والملاحظات</a></li>
+                <li><a href="#rewards">المكافآت والحوافز</a></li>
+                <li><a href="#special-requests">الطلبات الخاصة</a></li>
+                <li><a href="#marketing">حملات التسويق</a></li>
+                <li><a href="#advanced-scheduling">الجدولة المتقدمة</a></li>
+                <li><a href="#complaints">الشكاوي</a></li>
+            </ul>
+        </aside>
+
+        <main class="content">
+            <section id="members">
+                <h3>إدارة الأعضاء</h3>
+                <form id="memberForm">
+                    <input type="text" name="fullName" placeholder="اسم العضو بالكامل" required>
+                    <input type="number" name="age" placeholder="العمر" required>
+                    <input type="tel" name="phone" placeholder="رقم الهاتف" required>
+                    <input type="text" name="address" placeholder="العنوان" required>
+                    <button type="submit">إضافة عضو</button>
+                </form>
+                <table id="memberTable">
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>العمر</th>
+                            <th>رقم الهاتف</th>
+                            <th>العنوان</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- إدارة المدربين -->
+            <section id="trainers">
+                <h3>إدارة المدربين</h3>
+                <form id="trainerForm">
+                    <input type="text" name="trainerName" placeholder="اسم المدرب" required>
+                    <input type="text" name="specialization" placeholder="التخصص" required>
+                    <input type="tel" name="trainerPhone" placeholder="رقم الهاتف" required>
+                    <button type="submit">إضافة مدرب</button>
+                </form>
+                <table id="trainerTable">
+                    <thead>
+                        <tr>
+                            <th>اسم المدرب</th>
+                            <th>التخصص</th>
+                            <th>رقم الهاتف</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- إضافة المزيد من الأقسام بنفس النمط -->
+            <!-- مثال لإدارة المخزون التالف -->
+            <section id="damaged-inventory">
+                <h3>إدارة المخزون التالف</h3>
+                <form id="damagedInventoryForm">
+                    <input type="text" name="damagedItemName" placeholder="اسم العنصر التالف" required>
+                    <input type="number" name="damagedQuantity" placeholder="الكمية التالفة" required>
+                    <textarea name="reason" placeholder="سبب التلف" required></textarea>
+                    <button type="submit">إضافة عنصر تالف</button>
+                </form>
+                <table id="damagedInventoryTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العنصر</th>
+                            <th>الكمية</th>
+                            <th>سبب التلف</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- باقي الأقسام -->
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
