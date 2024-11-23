@@ -6,9 +6,38 @@
     <title>إدارة الجيم</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* إخفاء الأقسام التي لا يتم تحديدها */
         .hidden {
             display: none;
+        }
+
+        /* تأثيرات عند الانتقال بين الأقسام */
+        section {
+            transition: opacity 0.5s ease;
+        }
+
+        .fade-in {
+            opacity: 1;
+        }
+
+        .fade-out {
+            opacity: 0;
+        }
+
+        .active {
+            display: block;
+        }
+
+        td button {
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        td button:hover {
+            background-color: #2980b9;
         }
     </style>
 </head>
@@ -29,6 +58,7 @@
                 <li><a href="#marketing" onclick="showSection('marketing')">حملات التسويق</a></li>
                 <li><a href="#advanced-scheduling" onclick="showSection('advanced-scheduling')">الجدولة المتقدمة</a></li>
                 <li><a href="#complaints" onclick="showSection('complaints')">الشكاوي</a></li>
+                <li><a href="#renewal" onclick="showSection('renewal')">تجديد الأعضاء</a></li>
             </ul>
         </aside>
 
@@ -173,17 +203,34 @@
                 </table>
             </section>
 
-            <!-- باقي الأقسام بشكل مشابه -->
+            <!-- تجديد الأعضاء -->
+            <section id="renewal" class="hidden">
+                <h3>تجديد الأعضاء</h3>
+                <table id="renewalTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>تاريخ نهاية الاشتراك</th>
+                            <th>حالة التجديد</th>
+                            <th>تجديد الاشتراك</th>
+                        </tr>
+                    </thead>
+                    <tbody id="renewalTableBody"></tbody>
+                </table>
+            </section>
+
+            <!-- باقي الأقسام بنفس النمط -->
         </main>
     </div>
 
     <script>
-        // Show the section corresponding to the clicked link
+        // Function to show a specific section
         function showSection(sectionId) {
             const sections = document.querySelectorAll('section');
-            sections.forEach(section => section.classList.add('hidden')); // Hide all sections
+            sections.forEach(section => section.classList.add('hidden'));
             const section = document.getElementById(sectionId);
-            section.classList.remove('hidden'); // Show the selected section
+            section.classList.remove('hidden');
+            section.classList.add('fade-in');
         }
 
         // Add data to the table on form submission
@@ -209,8 +256,78 @@
 
                 tableBody.appendChild(row);
                 this.reset();
+
+                // For members, also add them to the renewal list if their subscription is close to expiry
+                if (form.id === 'subscriptionForm') {
+                    addRenewalMember(formData);
+                }
+
+                // Save data to localStorage
+                saveData();
             });
         });
+
+        // Add members who need renewal based on subscription dates
+        function addRenewalMember(formData) {
+            const renewalTableBody = document.getElementById('renewalTableBody');
+            const row = document.createElement('tr');
+            const nameCell = document.createElement('td');
+            const endDateCell = document.createElement('td');
+            const statusCell = document.createElement('td');
+            const renewCell = document.createElement('td');
+
+            nameCell.textContent = formData.get('subscriberName');
+            endDateCell.textContent = formData.get('endDate');
+            statusCell.textContent = 'مطلوب تجديد';
+            renewCell.textContent = 'تجديد';
+
+            row.appendChild(nameCell);
+            row.appendChild(endDateCell);
+            row.appendChild(statusCell);
+            row.appendChild(renewCell);
+
+            renewalTableBody.appendChild(row);
+        }
+
+        // Save data in localStorage for all sections
+        function saveData() {
+            const sections = ['memberTable', 'trainerTable', 'subscriptionTable', 'inventoryTable', 'damagedInventoryTable', 'mealsTable', 'ratingsTable', 'rewardsTable', 'specialRequestsTable', 'marketingTable', 'advancedSchedulingTable', 'complaintsTable', 'renewalTable'];
+
+            sections.forEach(sectionId => {
+                const rows = [];
+                const tableBody = document.getElementById(`${sectionId}Body`);
+                tableBody.querySelectorAll('tr').forEach(row => {
+                    const rowData = [];
+                    row.querySelectorAll('td').forEach(cell => {
+                        rowData.push(cell.textContent);
+                    });
+                    rows.push(rowData);
+                });
+
+                localStorage.setItem(sectionId, JSON.stringify(rows));
+            });
+        }
+
+        // Load data from localStorage on page load
+        window.onload = function() {
+            const sections = ['memberTable', 'trainerTable', 'subscriptionTable', 'inventoryTable', 'damagedInventoryTable', 'mealsTable', 'ratingsTable', 'rewardsTable', 'specialRequestsTable', 'marketingTable', 'advancedSchedulingTable', 'complaintsTable', 'renewalTable'];
+
+            sections.forEach(sectionId => {
+                const savedData = JSON.parse(localStorage.getItem(sectionId));
+                if (savedData) {
+                    const tableBody = document.getElementById(`${sectionId}Body`);
+                    savedData.forEach(data => {
+                        const row = document.createElement('tr');
+                        data.forEach(cellData => {
+                            const cell = document.createElement('td');
+                            cell.textContent = cellData;
+                            row.appendChild(cell);
+                        });
+                        tableBody.appendChild(row);
+                    });
+                }
+            });
+        };
     </script>
 </body>
 </html>
