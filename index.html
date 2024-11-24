@@ -1,116 +1,153 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الجيم</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* إضافة الأنماط للواجهة */
-        body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            background-color: #f0f0f0;
+        .hidden {
+            display: none;
         }
-        nav {
+
+        section {
+            transition: opacity 0.5s ease;
+            opacity: 0;
+            display: none;
+        }
+
+        .fade-in {
+            opacity: 1;
+            display: block;
+        }
+
+        td button {
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        td button:hover {
+            background-color: #2980b9;
+        }
+
+        /* التأثيرات عند الانتقال بين الأقسام */
+        section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .sidebar {
             width: 250px;
-            background-color: #2d3436;
-            height: 100vh;
-            padding-top: 20px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
             position: fixed;
+            height: 100%;
         }
-        nav ul {
+
+        .sidebar h2 {
+            text-align: center;
+        }
+
+        .sidebar ul {
             list-style: none;
             padding: 0;
         }
-        nav ul li {
-            padding: 15px;
+
+        .sidebar ul li a {
             color: white;
-            text-align: center;
-            cursor: pointer;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+            margin: 5px 0;
+            border-radius: 5px;
         }
-        nav ul li:hover {
-            background-color: #636e72;
+
+        .sidebar ul li a:hover {
+            background-color: #34495e;
         }
-        main {
-            margin-left: 270px;
+
+        .content {
+            margin-left: 260px;
             padding: 20px;
         }
-        section {
-            display: none;
+
+        .content section h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
         }
-        section.active {
-            display: block;
-        }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        table th, table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-        button {
-            background-color: #00b894;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #00cec9;
-        }
-        input, textarea {
+
+        form input, form textarea, form button {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
         }
-        input[type="color"] {
-            width: 50px;
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #2980b9;
+            color: white;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>إدارة الجيم</h2>
+            <ul>
+                <li><a href="#members" onclick="showSection('members')">إدارة الأعضاء</a></li>
+                <li><a href="#trainers" onclick="showSection('trainers')">إدارة المدربين</a></li>
+                <li><a href="#subscriptions" onclick="showSection('subscriptions')">إدارة الاشتراكات</a></li>
+                <li><a href="#inventory" onclick="showSection('inventory')">إدارة المخزون</a></li>
+                <li><a href="#damaged-inventory" onclick="showSection('damaged-inventory')">المخزون التالف</a></li>
+                <li><a href="#meals" onclick="showSection('meals')">إدارة الوجبات الغذائية</a></li>
+                <li><a href="#ratings" onclick="showSection('ratings')">التقييمات والملاحظات</a></li>
+                <li><a href="#rewards" onclick="showSection('rewards')">المكافآت والحوافز</a></li>
+                <li><a href="#special-requests" onclick="showSection('special-requests')">الطلبات الخاصة</a></li>
+                <li><a href="#marketing" onclick="showSection('marketing')">حملات التسويق</a></li>
+                <li><a href="#advanced-scheduling" onclick="showSection('advanced-scheduling')">الجدولة المتقدمة</a></li>
+                <li><a href="#complaints" onclick="showSection('complaints')">الشكاوي</a></li>
+                <li><a href="#renewal" onclick="showSection('renewal')">تجديد الأعضاء</a></li>
+            </ul>
+        </aside>
 
-    <!-- الشريط الجانبي للتنقل -->
-    <nav>
-        <ul>
-            <li onclick="showSection('members')">إدارة الأعضاء</li>
-            <li onclick="showSection('trainers')">إدارة المدربين</li>
-            <li onclick="showSection('subscriptions')">إدارة الاشتراكات</li>
-            <li onclick="showSection('rewards')">إدارة المكافآت والتحفيز</li>
-            <li onclick="showSection('trainer_incentives')">حوافز المدربين</li>
-            <li onclick="showSection('special_requests')">الطلبات الخاصة</li>
-            <li onclick="showSection('marketing_campaigns')">الحملات التسويقية</li>
-            <li onclick="showSection('scheduling')">إدارة الجداول</li>
-            <li onclick="showSection('customization')">إعدادات واجهة المستخدم</li>
-            <li onclick="showSection('penalties')">إدارة الغرامات</li>
-            <li onclick="showSection('meal_plans')">إدارة الوجبات</li>
-            <li onclick="showSection('feedback')">إدارة الملاحظات والتقييمات</li>
-            <li onclick="showSection('member_goals')">إدارة أهداف الأعضاء</li>
-        </ul>
-    </nav>
-
-    <!-- المحتوى الرئيسي -->
-    <div id="main-content">
-        <main>
+        <main class="content">
             <!-- إدارة الأعضاء -->
-            <section id="members" class="active">
+            <section id="members" class="hidden">
                 <h3>إدارة الأعضاء</h3>
                 <form id="memberForm">
-                    <input type="text" id="memberName" placeholder="اسم العضو" required>
-                    <input type="number" id="memberAge" placeholder="عمر العضو" required>
-                    <input type="text" id="memberPhone" placeholder="رقم الهاتف" required>
-                    <button type="button" onclick="addMember()">إضافة عضو</button>
+                    <input type="text" name="fullName" placeholder="اسم العضو بالكامل" required>
+                    <input type="number" name="age" placeholder="العمر" required>
+                    <input type="tel" name="phone" placeholder="رقم الهاتف" required>
+                    <input type="text" name="address" placeholder="العنوان" required>
+                    <button type="submit">إضافة عضو</button>
                 </form>
-                <table>
+                <table id="memberTable">
                     <thead>
                         <tr>
-                            <th>اسم العضو</th>
+                            <th>الاسم</th>
                             <th>العمر</th>
                             <th>رقم الهاتف</th>
-                            <th>الإجراءات</th>
+                            <th>العنوان</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
                         </tr>
                     </thead>
                     <tbody id="memberTableBody"></tbody>
@@ -118,21 +155,22 @@
             </section>
 
             <!-- إدارة المدربين -->
-            <section id="trainers">
+            <section id="trainers" class="hidden">
                 <h3>إدارة المدربين</h3>
                 <form id="trainerForm">
-                    <input type="text" id="trainerName" placeholder="اسم المدرب" required>
-                    <input type="number" id="trainerAge" placeholder="عمر المدرب" required>
-                    <input type="text" id="trainerPhone" placeholder="رقم الهاتف" required>
-                    <button type="button" onclick="addTrainer()">إضافة مدرب</button>
+                    <input type="text" name="trainerName" placeholder="اسم المدرب" required>
+                    <input type="number" name="experience" placeholder="عدد سنوات الخبرة" required>
+                    <input type="text" name="specialty" placeholder="التخصص" required>
+                    <button type="submit">إضافة مدرب</button>
                 </form>
-                <table>
+                <table id="trainerTable">
                     <thead>
                         <tr>
                             <th>اسم المدرب</th>
-                            <th>العمر</th>
-                            <th>رقم الهاتف</th>
-                            <th>الإجراءات</th>
+                            <th>عدد سنوات الخبرة</th>
+                            <th>التخصص</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
                         </tr>
                     </thead>
                     <tbody id="trainerTableBody"></tbody>
@@ -140,353 +178,248 @@
             </section>
 
             <!-- إدارة الاشتراكات -->
-            <section id="subscriptions">
+            <section id="subscriptions" class="hidden">
                 <h3>إدارة الاشتراكات</h3>
                 <form id="subscriptionForm">
-                    <input type="text" id="subscriptionType" placeholder="نوع الاشتراك" required>
-                    <input type="number" id="subscriptionDuration" placeholder="مدة الاشتراك" required>
-                    <button type="button" onclick="addSubscription()">إضافة اشتراك</button>
+                    <input type="text" name="memberName" placeholder="اسم العضو" required>
+                    <input type="date" name="startDate" placeholder="تاريخ البداية" required>
+                    <input type="date" name="endDate" placeholder="تاريخ الانتهاء" required>
+                    <button type="submit">إضافة اشتراك</button>
                 </form>
-                <table>
+                <table id="subscriptionTable">
                     <thead>
                         <tr>
-                            <th>نوع الاشتراك</th>
-                            <th>مدة الاشتراك</th>
-                            <th>تاريخ التجديد</th>
-                            <th>الإجراءات</th>
+                            <th>اسم العضو</th>
+                            <th>تاريخ البداية</th>
+                            <th>تاريخ الانتهاء</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
                         </tr>
                     </thead>
                     <tbody id="subscriptionTableBody"></tbody>
                 </table>
             </section>
 
-            <!-- إضافة زر لتجديد الاشتراك -->
-            <section id="renewal">
-                <h3>تجديد الاشتراك</h3>
-                <form id="renewalForm">
-                    <input type="number" id="renewalMemberId" placeholder="معرف العضو" required>
-                    <input type="date" id="renewalDate" placeholder="تاريخ التجديد" required>
-                    <button type="button" onclick="renewSubscription()">تجديد الاشتراك</button>
+            <!-- إدارة المخزون -->
+            <section id="inventory" class="hidden">
+                <h3>إدارة المخزون</h3>
+                <form id="inventoryForm">
+                    <input type="text" name="itemName" placeholder="اسم العنصر" required>
+                    <input type="number" name="quantity" placeholder="الكمية" required>
+                    <button type="submit">إضافة عنصر</button>
                 </form>
-            </section>
-
-            <!-- إدارة المكافآت والتحفيز -->
-            <section id="rewards">
-                <h3>إدارة المكافآت والتحفيز</h3>
-                <form id="rewardForm">
-                    <input type="text" id="rewardName" placeholder="اسم المكافأة" required>
-                    <input type="number" id="rewardPoints" placeholder="عدد النقاط" required>
-                    <button type="button" onclick="addReward()">إضافة مكافأة</button>
-                </form>
-                <table>
+                <table id="inventoryTable">
                     <thead>
                         <tr>
-                            <th>اسم المكافأة</th>
-                            <th>عدد النقاط</th>
-                            <th>الإجراءات</th>
+                            <th>اسم العنصر</th>
+                            <th>الكمية</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody id="rewardTableBody"></tbody>
+                    <tbody id="inventoryTableBody"></tbody>
                 </table>
             </section>
 
-            <!-- إدارة حوافز المدربين -->
-            <section id="trainer_incentives">
-                <h3>حوافز المدربين</h3>
-                <form id="trainerIncentiveForm">
-                    <input type="text" id="incentiveName" placeholder="اسم الحافز" required>
-                    <input type="number" id="incentiveAmount" placeholder="مقدار الحافز" required>
-                    <button type="button" onclick="addTrainerIncentive()">إضافة حافز</button>
+            <!-- المخزون التالف -->
+            <section id="damaged-inventory" class="hidden">
+                <h3>المخزون التالف</h3>
+                <form id="damagedInventoryForm">
+                    <input type="text" name="damagedItemName" placeholder="اسم العنصر التالف" required>
+                    <input type="number" name="damagedQuantity" placeholder="الكمية التالفة" required>
+                    <button type="submit">إضافة عنصر تالف</button>
                 </form>
-                <table>
+                <table id="damagedInventoryTable">
                     <thead>
                         <tr>
-                            <th>اسم الحافز</th>
-                            <th>مقدار الحافز</th>
-                            <th>الإجراءات</th>
+                            <th>اسم العنصر التالف</th>
+                            <th>الكمية التالفة</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody id="trainerIncentiveTableBody"></tbody>
+                    <tbody id="damagedInventoryTableBody"></tbody>
                 </table>
             </section>
 
-            <!-- إدارة الطلبات الخاصة -->
-            <section id="special_requests">
-                <h3>الطلبات الخاصة</h3>
-                <form id="specialRequestForm">
-                    <input type="text" id="specialRequestDescription" placeholder="وصف الطلب" required>
-                    <button type="button" onclick="addSpecialRequest()">إضافة طلب</button>
-                </form>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>وصف الطلب</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="specialRequestTableBody"></tbody>
-                </table>
-            </section>
-
-            <!-- إدارة الحملات التسويقية -->
-            <section id="marketing_campaigns">
-                <h3>إدارة الحملات التسويقية</h3>
-                <form id="marketingCampaignForm">
-                    <input type="text" id="campaignName" placeholder="اسم الحملة" required>
-                    <input type="text" id="campaignDetails" placeholder="تفاصيل الحملة" required>
-                    <button type="button" onclick="addMarketingCampaign()">إضافة حملة</button>
-                </form>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>اسم الحملة</th>
-                            <th>تفاصيل الحملة</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="marketingCampaignTableBody"></tbody>
-                </table>
-            </section>
-
-            <!-- إدارة الجداول -->
-            <section id="scheduling">
-                <h3>إدارة الجداول</h3>
-                <form id="schedulingForm">
-                    <input type="text" id="scheduleName" placeholder="اسم الجدول" required>
-                    <input type="datetime-local" id="scheduleTime" required>
-                    <button type="button" onclick="addSchedule()">إضافة جدول</button>
-                </form>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>اسم الجدول</th>
-                            <th>التوقيت</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="scheduleTableBody"></tbody>
-                </table>
-            </section>
-
-            <!-- إعدادات واجهة المستخدم -->
-            <section id="customization">
-                <h3>إعدادات واجهة المستخدم</h3>
-                <form id="customizationForm">
-                    <label>لون الخلفية:</label>
-                    <input type="color" id="backgroundColor">
-                    <label>لون النص:</label>
-                    <input type="color" id="textColor">
-                    <button type="button" onclick="applyCustomization()">تطبيق التخصيصات</button>
-                </form>
-            </section>
-
-            <!-- إدارة الغرامات -->
-            <section id="penalties">
-                <h3>إدارة الغرامات</h3>
-                <form id="penaltyForm">
-                    <input type="text" id="penaltyDescription" placeholder="وصف الغرامة" required>
-                    <input type="number" id="penaltyAmount" placeholder="مقدار الغرامة" required>
-                    <button type="button" onclick="addPenalty()">إضافة غرامة</button>
-                </form>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>وصف الغرامة</th>
-                            <th>مقدار الغرامة</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="penaltyTableBody"></tbody>
-                </table>
-            </section>
-
-            <!-- إدارة الوجبات -->
-            <section id="meal_plans">
-                <h3>إدارة الوجبات</h3>
+            <!-- إدارة الوجبات الغذائية -->
+            <section id="meals" class="hidden">
+                <h3>إدارة الوجبات الغذائية</h3>
                 <form id="mealForm">
-                    <input type="text" id="mealName" placeholder="اسم الوجبة" required>
-                    <input type="text" id="mealDetails" placeholder="تفاصيل الوجبة" required>
-                    <button type="button" onclick="addMeal()">إضافة وجبة</button>
+                    <input type="text" name="mealName" placeholder="اسم الوجبة" required>
+                    <input type="text" name="mealDescription" placeholder="وصف الوجبة" required>
+                    <input type="number" name="mealPrice" placeholder="السعر" required>
+                    <button type="submit">إضافة وجبة</button>
                 </form>
-                <table>
+                <table id="mealTable">
                     <thead>
                         <tr>
                             <th>اسم الوجبة</th>
-                            <th>تفاصيل الوجبة</th>
-                            <th>الإجراءات</th>
+                            <th>وصف الوجبة</th>
+                            <th>السعر</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
                         </tr>
                     </thead>
                     <tbody id="mealTableBody"></tbody>
                 </table>
             </section>
 
-            <!-- إدارة الملاحظات والتقييمات -->
-            <section id="feedback">
-                <h3>إدارة الملاحظات والتقييمات</h3>
-                <form id="feedbackForm">
-                    <input type="text" id="feedbackTitle" placeholder="عنوان التقييم" required>
-                    <textarea id="feedbackComments" placeholder="التعليقات" required></textarea>
-                    <button type="button" onclick="addFeedback()">إضافة تقييم</button>
+            <!-- التقييمات والملاحظات -->
+            <section id="ratings" class="hidden">
+                <h3>التقييمات والملاحظات</h3>
+                <form id="ratingForm">
+                    <input type="text" name="memberName" placeholder="اسم العضو" required>
+                    <textarea name="ratingText" placeholder="التقييم والملاحظات" required></textarea>
+                    <button type="submit">إضافة ملاحظات</button>
                 </form>
-                <table>
+                <table id="ratingTable">
                     <thead>
                         <tr>
-                            <th>عنوان التقييم</th>
-                            <th>التعليقات</th>
-                            <th>الإجراءات</th>
+                            <th>اسم العضو</th>
+                            <th>التقييم</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody id="feedbackTableBody"></tbody>
+                    <tbody id="ratingTableBody"></tbody>
                 </table>
             </section>
 
-            <!-- إدارة أهداف الأعضاء -->
-            <section id="member_goals">
-                <h3>إدارة أهداف الأعضاء</h3>
-                <form id="memberGoalForm">
-                    <input type="text" id="goalName" placeholder="اسم الهدف" required>
-                    <input type="number" id="goalProgress" placeholder="نسبة التقدم" required>
-                    <button type="button" onclick="addMemberGoal()">إضافة هدف</button>
+            <!-- المكافآت والحوافز -->
+            <section id="rewards" class="hidden">
+                <h3>المكافآت والحوافز</h3>
+                <form id="rewardForm">
+                    <input type="text" name="rewardName" placeholder="اسم المكافأة" required>
+                    <input type="number" name="rewardAmount" placeholder="قيمة المكافأة" required>
+                    <button type="submit">إضافة مكافأة</button>
                 </form>
-                <table>
+                <table id="rewardTable">
                     <thead>
                         <tr>
-                            <th>اسم الهدف</th>
-                            <th>نسبة التقدم</th>
-                            <th>الإجراءات</th>
+                            <th>اسم المكافأة</th>
+                            <th>قيمة المكافأة</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
                         </tr>
                     </thead>
-                    <tbody id="memberGoalTableBody"></tbody>
+                    <tbody id="rewardTableBody"></tbody>
+                </table>
+            </section>
+
+            <!-- الطلبات الخاصة -->
+            <section id="special-requests" class="hidden">
+                <h3>الطلبات الخاصة</h3>
+                <form id="specialRequestForm">
+                    <input type="text" name="requestorName" placeholder="اسم الطالب" required>
+                    <textarea name="specialRequest" placeholder="الطلب الخاص" required></textarea>
+                    <button type="submit">إضافة طلب</button>
+                </form>
+                <table id="specialRequestTable">
+                    <thead>
+                        <tr>
+                            <th>اسم الطالب</th>
+                            <th>الطلب</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="specialRequestTableBody"></tbody>
+                </table>
+            </section>
+
+            <!-- حملات التسويق -->
+            <section id="marketing" class="hidden">
+                <h3>حملات التسويق</h3>
+                <form id="marketingForm">
+                    <input type="text" name="campaignName" placeholder="اسم الحملة" required>
+                    <textarea name="campaignDetails" placeholder="تفاصيل الحملة" required></textarea>
+                    <button type="submit">إضافة حملة</button>
+                </form>
+                <table id="marketingTable">
+                    <thead>
+                        <tr>
+                            <th>اسم الحملة</th>
+                            <th>تفاصيل الحملة</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="marketingTableBody"></tbody>
+                </table>
+            </section>
+
+            <!-- الجدولة المتقدمة -->
+            <section id="advanced-scheduling" class="hidden">
+                <h3>الجدولة المتقدمة</h3>
+                <form id="schedulingForm">
+                    <input type="text" name="trainerName" placeholder="اسم المدرب" required>
+                    <input type="text" name="scheduleDetails" placeholder="تفاصيل الجدول" required>
+                    <button type="submit">إضافة جدول</button>
+                </form>
+                <table id="schedulingTable">
+                    <thead>
+                        <tr>
+                            <th>اسم المدرب</th>
+                            <th>تفاصيل الجدول</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schedulingTableBody"></tbody>
+                </table>
+            </section>
+
+            <!-- الشكاوي -->
+            <section id="complaints" class="hidden">
+                <h3>الشكاوي</h3>
+                <form id="complaintForm">
+                    <input type="text" name="complainantName" placeholder="اسم الشاكي" required>
+                    <textarea name="complaintDetails" placeholder="تفاصيل الشكوى" required></textarea>
+                    <button type="submit">إضافة شكوى</button>
+                </form>
+                <table id="complaintTable">
+                    <thead>
+                        <tr>
+                            <th>اسم الشاكي</th>
+                            <th>تفاصيل الشكوى</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="complaintTableBody"></tbody>
+                </table>
+            </section>
+
+            <!-- تجديد الأعضاء -->
+            <section id="renewal" class="hidden">
+                <h3>تجديد الأعضاء</h3>
+                <form id="renewalForm">
+                    <input type="text" name="memberName" placeholder="اسم العضو" required>
+                    <input type="date" name="renewalDate" placeholder="تاريخ التجديد" required>
+                    <button type="submit">تجديد الاشتراك</button>
+                </form>
+                <table id="renewalTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>تاريخ التجديد</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="renewalTableBody"></tbody>
                 </table>
             </section>
         </main>
     </div>
 
     <script>
-        // عرض القسم المحدد
-        function showSection(id) {
-            const sections = document.querySelectorAll('section');
-            sections.forEach(section => section.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
-
-        // إضافة عضو
-        function addMember() {
-            const name = document.getElementById('memberName').value;
-            const age = document.getElementById('memberAge').value;
-            const phone = document.getElementById('memberPhone').value;
-
-            const tableBody = document.getElementById('memberTableBody');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${name}</td>
-                <td>${age}</td>
-                <td>${phone}</td>
-                <td>
-                    <button onclick="editRow(this)">تعديل</button>
-                    <button onclick="removeRow(this)">حذف</button>
-                </td>
-            `;
-            tableBody.appendChild(row);
-
-            document.getElementById('memberForm').reset();
-        }
-
-        // إضافة مدرب
-        function addTrainer() {
-            const name = document.getElementById('trainerName').value;
-            const age = document.getElementById('trainerAge').value;
-            const phone = document.getElementById('trainerPhone').value;
-
-            const tableBody = document.getElementById('trainerTableBody');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${name}</td>
-                <td>${age}</td>
-                <td>${phone}</td>
-                <td>
-                    <button onclick="editRow(this)">تعديل</button>
-                    <button onclick="removeRow(this)">حذف</button>
-                </td>
-            `;
-            tableBody.appendChild(row);
-
-            document.getElementById('trainerForm').reset();
-        }
-
-        // إضافة اشتراك
-        function addSubscription() {
-            const type = document.getElementById('subscriptionType').value;
-            const duration = document.getElementById('subscriptionDuration').value;
-
-            const tableBody = document.getElementById('subscriptionTableBody');
-            const row = document.createElement('tr');
-            const renewalDate = new Date();
-            renewalDate.setMonth(renewalDate.getMonth() + parseInt(duration));
-            row.innerHTML = `
-                <td>${type}</td>
-                <td>${duration}</td>
-                <td>${renewalDate.toLocaleDateString()}</td>
-                <td>
-                    <button onclick="editRow(this)">تعديل</button>
-                    <button onclick="removeRow(this)">حذف</button>
-                </td>
-            `;
-            tableBody.appendChild(row);
-
-            document.getElementById('subscriptionForm').reset();
-        }
-
-        // تجديد الاشتراك
-        function renewSubscription() {
-            const memberId = document.getElementById('renewalMemberId').value;
-            const renewalDate = document.getElementById('renewalDate').value;
-
-            alert(`تم تجديد الاشتراك للعضو ${memberId} حتى تاريخ ${renewalDate}`);
-        }
-
-        // إضافة مكافأة
-        function addReward() {
-            const name = document.getElementById('rewardName').value;
-            const points = document.getElementById('rewardPoints').value;
-
-            const tableBody = document.getElementById('rewardTableBody');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${name}</td>
-                <td>${points}</td>
-                <td>
-                    <button onclick="editRow(this)">تعديل</button>
-                    <button onclick="removeRow(this)">حذف</button>
-                </td>
-            `;
-            tableBody.appendChild(row);
-
-            document.getElementById('rewardForm').reset();
-        }
-
-        // تعديل البيانات
-        function editRow(button) {
-            const row = button.closest('tr');
-            const cells = row.querySelectorAll('td');
-            cells.forEach(function(cell) {
-                cell.setAttribute('contenteditable', 'true');
+        function showSection(sectionId) {
+            document.querySelectorAll("section").forEach(function(section) {
+                section.classList.remove("active");
             });
-        }
-
-        // حذف البيانات
-        function removeRow(button) {
-            const row = button.closest('tr');
-            row.remove();
-        }
-
-        // تطبيق إعدادات واجهة المستخدم
-        function applyCustomization() {
-            const bgColor = document.getElementById('backgroundColor').value;
-            const textColor = document.getElementById('textColor').value;
-
-            document.body.style.backgroundColor = bgColor;
-            document.body.style.color = textColor;
+            document.getElementById(sectionId).classList.add("active");
         }
     </script>
 </body>
