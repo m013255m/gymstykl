@@ -260,7 +260,7 @@
             <h3>الطلبات الخاصة</h3>
             <form id="specialRequestForm" onsubmit="addSpecialRequest(event)">
                 <input type="text" name="memberName" placeholder="اسم العضو" required>
-                <textarea name="requestDetails" placeholder="تفاصيل الطلب" required></textarea>
+                <input type="text" name="requestDetails" placeholder="تفاصيل الطلب" required>
                 <button type="submit">إضافة طلب</button>
             </form>
             <table id="specialRequestTable">
@@ -281,16 +281,14 @@
             <h3>حملات التسويق</h3>
             <form id="marketingForm" onsubmit="addMarketingCampaign(event)">
                 <input type="text" name="campaignName" placeholder="اسم الحملة" required>
-                <input type="date" name="startDate" required>
-                <input type="date" name="endDate" required>
+                <input type="text" name="campaignDetails" placeholder="تفاصيل الحملة" required>
                 <button type="submit">إضافة حملة</button>
             </form>
             <table id="marketingTable">
                 <thead>
                     <tr>
                         <th>اسم الحملة</th>
-                        <th>تاريخ البدء</th>
-                        <th>تاريخ الانتهاء</th>
+                        <th>تفاصيل الحملة</th>
                         <th>تعديل</th>
                         <th>حذف</th>
                     </tr>
@@ -302,18 +300,16 @@
         <!-- الجدولة المتقدمة -->
         <div id="advancedSchedulingTab" class="tab">
             <h3>الجدولة المتقدمة</h3>
-            <form id="advancedScheduleForm" onsubmit="addSchedule(event)">
+            <form id="scheduleForm" onsubmit="addSchedule(event)">
+                <input type="text" name="scheduleTitle" placeholder="عنوان الجدول الزمني" required>
                 <input type="date" name="scheduleDate" required>
-                <input type="time" name="scheduleTime" required>
-                <input type="text" name="trainerName" placeholder="اسم المدرب" required>
-                <button type="submit">إضافة جدولة</button>
+                <button type="submit">إضافة جدول</button>
             </form>
-            <table id="advancedScheduleTable">
+            <table id="scheduleTable">
                 <thead>
                     <tr>
-                        <th>التاريخ</th>
-                        <th>الوقت</th>
-                        <th>اسم المدرب</th>
+                        <th>عنوان الجدول الزمني</th>
+                        <th>تاريخ الجدول الزمني</th>
                         <th>تعديل</th>
                         <th>حذف</th>
                     </tr>
@@ -321,29 +317,42 @@
                 <tbody></tbody>
             </table>
         </div>
+
+        <!-- الشكاوي -->
+        <div id="complaintsTab" class="tab">
+            <h3>الشكاوي</h3>
+            <form id="complaintForm" onsubmit="addComplaint(event)">
+                <input type="text" name="memberName" placeholder="اسم العضو" required>
+                <textarea name="complaintDetails" placeholder="تفاصيل الشكوى" required></textarea>
+                <button type="submit">إضافة شكوى</button>
+            </form>
+            <table id="complaintTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>تفاصيل الشكوى</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
     </main>
 </div>
 
 <script>
-    let inventoryItems = [];
+    let inventory = [];
     let meals = [];
     let ratings = [];
     let rewards = [];
     let specialRequests = [];
     let marketingCampaigns = [];
     let schedules = [];
+    let complaints = [];
 
-    function showTab(tabId) {
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(tab => tab.style.display = 'none');
-        document.getElementById(tabId).style.display = 'block';
-
-        const buttons = document.querySelectorAll('.tab-buttons button');
-        buttons.forEach(button => button.classList.remove('active'));
-        const activeButton = [...buttons].find(button => button.textContent === tabId.replace('Tab', ''));
-        if (activeButton) activeButton.classList.add('active');
-    }
-
+    // الأقسام المختلفة - إضافة البيانات وعرضها
     function addInventoryItem(event) {
         event.preventDefault();
         const form = event.target;
@@ -352,15 +361,15 @@
             quantity: form.itemQuantity.value,
             price: form.itemPrice.value
         };
-        inventoryItems.push(newItem);
-        displayInventoryItems();
+        inventory.push(newItem);
+        displayInventory();
         form.reset();
     }
 
-    function displayInventoryItems() {
+    function displayInventory() {
         const tableBody = document.getElementById('inventoryTable').querySelector('tbody');
         tableBody.innerHTML = '';
-        inventoryItems.forEach((item, index) => {
+        inventory.forEach((item, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${item.name}</td>
@@ -374,7 +383,7 @@
     }
 
     function editInventoryItem(index) {
-        const item = inventoryItems[index];
+        const item = inventory[index];
         const form = document.getElementById('inventoryForm');
         form.itemName.value = item.name;
         form.itemQuantity.value = item.quantity;
@@ -384,11 +393,56 @@
     }
 
     function deleteInventoryItem(index) {
-        inventoryItems.splice(index, 1);
-        displayInventoryItems();
+        inventory.splice(index, 1);
+        displayInventory();
     }
 
-    // نفس الفكرة مع الوجبات، التقييمات، المكافآت، الطلبات الخاصة، حملات التسويق، والجدولة المتقدمة
+    // نفس الفكرة مع باقي الأقسام (الوجبات الغذائية، التقييمات، المكافآت، الخ.)
+    function addMeal(event) {
+        event.preventDefault();
+        const form = event.target;
+        const newMeal = {
+            name: form.mealName.value,
+            calories: form.mealCalories.value,
+            price: form.mealPrice.value
+        };
+        meals.push(newMeal);
+        displayMeals();
+        form.reset();
+    }
+
+    function displayMeals() {
+        const tableBody = document.getElementById('mealTable').querySelector('tbody');
+        tableBody.innerHTML = '';
+        meals.forEach((meal, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${meal.name}</td>
+                <td>${meal.calories}</td>
+                <td>${meal.price}</td>
+                <td><button onclick="editMeal(${index})">تعديل</button></td>
+                <td><button onclick="deleteMeal(${index})">حذف</button></td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function editMeal(index) {
+        const meal = meals[index];
+        const form = document.getElementById('mealForm');
+        form.mealName.value = meal.name;
+        form.mealCalories.value = meal.calories;
+        form.mealPrice.value = meal.price;
+
+        deleteMeal(index);
+    }
+
+    function deleteMeal(index) {
+        meals.splice(index, 1);
+        displayMeals();
+    }
+
+    // نفس الفكرة لباقي الأقسام: التقييمات، المكافآت، الطلبات الخاصة، الحملات التسويقية، الخ.
 </script>
 
 </body>
