@@ -41,20 +41,22 @@
     <div class="container">
         <aside class="sidebar">
             <h2>إدارة الجيم</h2>
-            <div class="tab-buttons">
-                <button onclick="showTab('membersTab')">إدارة الأعضاء</button>
-                <button onclick="showTab('trainersTab')">إدارة المدربين</button>
-                <button onclick="showTab('subscriptionsTab')">إدارة الاشتراكات</button>
-                <button onclick="showTab('inventoryTab')">إدارة المخزون</button>
-                <button onclick="showTab('damagedInventoryTab')">المخزون التالف</button>
-                <button onclick="showTab('mealsTab')">إدارة الوجبات الغذائية</button>
-                <button onclick="showTab('ratingsTab')">التقييمات والملاحظات</button>
-                <button onclick="showTab('rewardsTab')">المكافآت والحوافز</button>
-                <button onclick="showTab('specialRequestsTab')">الطلبات الخاصة</button>
-                <button onclick="showTab('marketingTab')">حملات التسويق</button>
-                <button onclick="showTab('advancedSchedulingTab')">الجدولة المتقدمة</button>
-                <button onclick="showTab('complaintsTab')">الشكاوي</button>
-            </div>
+            <nav>
+                <ul>
+                    <li><a href="javascript:void(0);" onclick="showTab('membersTab')">إدارة الأعضاء</a></li>
+                    <li><a href="javascript:void(0);" onclick="showTab('trainersTab')">إدارة المدربين</a></li>
+                    <li><a href="javascript:void(0);" onclick="showTab('subscriptionsTab')">إدارة الاشتراكات</a></li>
+                    <li><a href="javascript:void(0);" onclick="showTab('inventoryTab')">إدارة المخزون</a></li>
+                    <li><a href="javascript:void(0);" onclick="showTab('damagedInventoryTab')">المخزون التالف</a></li>
+                    <li><a href="javascript:void(0);" onclick="showTab('mealsTab')">إدارة الوجبات الغذائية</a></li>
+                    <li><a href="javascript:void(0);" onclick="showTab('ratingsTab')">التقييمات والملاحظات</a></li>
+                    <li><a href="javascript:void(0);" onclick="showTab('rewardsTab')">المكافآت والحوافز</a></li>
+                    <li><a href="javascript:void(0);" onclick="showTab('specialRequestsTab')">الطلبات الخاصة</a></li>
+                    <li><a href="javascript:void(0);" onclick="showTab('marketingTab')">حملات التسويق</a></li>
+                    <li><a href="javascript:void(0);" onclick="showTab('advancedSchedulingTab')">الجدولة المتقدمة</a></li>
+                    <li><a href="javascript:void(0);" onclick="showTab('complaintsTab')">الشكاوي</a></li>
+                </ul>
+            </nav>
         </aside>
 
         <main class="content">
@@ -106,8 +108,6 @@
                 </table>
             </div>
 
-            <!-- بقية الأقسام ... -->
-
             <!-- إدارة الاشتراكات -->
             <div id="subscriptionsTab" class="tab">
                 <h3>إدارة الاشتراكات</h3>
@@ -144,13 +144,6 @@
             // إظهار القسم المحدد
             const activeTab = document.getElementById(tabId);
             activeTab.style.display = 'block';
-
-            // تحديث الأزرار لتكون نشطة
-            const buttons = document.querySelectorAll('.tab-buttons button');
-            buttons.forEach(button => button.classList.remove('active'));
-
-            const activeButton = document.querySelector(`button[onclick="showTab('${tabId}')"]`);
-            activeButton.classList.add('active');
         }
 
         // إظهار القسم الأول بشكل افتراضي عند تحميل الصفحة
