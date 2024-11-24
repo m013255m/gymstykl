@@ -1,20 +1,31 @@
-// script.js
-document.addEventListener('DOMContentLoaded', () => {
-    // اضافة الأعضاء
-    const memberForm = document.getElementById('memberForm');
-    memberForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-            <td>${memberForm.fullName.value}</td>
-            <td>${memberForm.age.value}</td>
-            <td>${memberForm.phone.value}</td>
-            <td>${memberForm.address.value}</td>
-            <td><button class="edit">تعديل</button></td>
-            <td><button class="delete">حذف</button></td>
-        `;
-        document.getElementById('memberTable').querySelector('tbody').appendChild(newRow);
+// إخفاء جميع الأقسام
+function hideSections() {
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => {
+        section.style.display = 'none';
     });
+}
 
-    // عمليات مشابهة لبقية النماذج...
+// عرض القسم المحدد
+function showSection(sectionId) {
+    hideSections();
+    const section = document.querySelector(sectionId);
+    if (section) {
+        section.style.display = 'block';
+    }
+}
+
+// إضافة مستمعين للأحداث على الروابط
+const links = document.querySelectorAll('.sidebar-link');
+links.forEach(link => {
+    link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const targetSection = link.getAttribute('href');
+        showSection(targetSection);
+    });
+});
+
+// عرض القسم الأول بشكل افتراضي عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    showSection('#members'); // يتم عرض قسم "إدارة الأعضاء" بشكل افتراضي
 });
