@@ -1,341 +1,394 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة النادي</title>
+    <title>إدارة الجيم</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        /* تنسيق الشريط الجانبي */
         body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
             margin: 0;
             padding: 0;
+        }
+
+        .container {
             display: flex;
         }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            width: 100%;
-            text-align: center;
-        }
+
         .sidebar {
             width: 250px;
             background-color: #333;
-            padding-top: 20px;
-            position: fixed;
-            height: 100%;
             color: white;
+            padding: 20px;
+            height: 100vh;
         }
-        .sidebar a {
-            padding: 10px 15px;
+
+        .sidebar h2 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar nav ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar nav ul li a {
+            color: white;
             text-decoration: none;
-            color: white;
+            font-size: 18px;
             display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
-        .sidebar a:hover {
+
+        .sidebar nav ul li a:hover {
             background-color: #575757;
         }
-        .main-content {
-            margin-left: 250px;
+
+        .content {
+            flex: 1;
             padding: 20px;
-            width: 100%;
+            background-color: white;
         }
-        .tab-content {
+
+        .tab {
             display: none;
         }
-        .active {
-            display: block;
-        }
-        .tabs {
+
+        .tab-buttons {
             display: flex;
-            justify-content: space-around;
-            background-color: #444;
-            padding: 10px 0;
+            background-color: #f1f1f1;
+            padding: 10px;
         }
-        .tabs button {
-            background-color: #333;
+
+        .tab-buttons button {
+            background-color: #ddd;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .tab-buttons button.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"], input[type="number"], input[type="date"], input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
         }
-        .tabs button.active {
-            background-color: #ddd;
-            color: black;
+
+        button:hover {
+            background-color: #45a049;
         }
-        .tab form, .tab table {
-            width: 100%;
-            margin-top: 20px;
-        }
-        .tab input, .tab button {
-            padding: 10px;
-            margin: 5px;
-            width: 100%;
-        }
-        .tab table {
-            border-collapse: collapse;
-        }
-        .tab table th, .tab table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
-        .tab table th {
-            background-color: #f4f4f4;
+
+        .warning {
+            color: red;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>إدارة النادي</h1>
-</header>
+<div class="container">
+    <!-- الشريط الجانبي -->
+    <aside class="sidebar">
+        <h2>إدارة الجيم</h2>
+        <nav>
+            <ul>
+                <li><a href="javascript:void(0);" onclick="showTab('membersTab')">إدارة الأعضاء</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('trainersTab')">إدارة المدربين</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('subscriptionsTab')">إدارة الاشتراكات</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('inventoryTab')">إدارة المخزون</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('damagedInventoryTab')">المخزون التالف</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('mealsTab')">إدارة الوجبات الغذائية</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('ratingsTab')">التقييمات والملاحظات</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('rewardsTab')">المكافآت والحوافز</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('specialRequestsTab')">الطلبات الخاصة</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('marketingTab')">حملات التسويق</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('advancedSchedulingTab')">الجدولة المتقدمة</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('complaintsTab')">الشكاوي</a></li>
+            </ul>
+        </nav>
+    </aside>
 
-<div class="sidebar">
-    <a href="javascript:void(0)" onclick="showTab('inventory')">إدارة المخزون</a>
-    <a href="javascript:void(0)" onclick="showTab('meals')">إدارة الوجبات</a>
-    <a href="javascript:void(0)" onclick="showTab('ratings')">إدارة التقييمات</a>
-    <a href="javascript:void(0)" onclick="showTab('rewards')">إدارة المكافآت</a>
-    <a href="javascript:void(0)" onclick="showTab('specialRequests')">الطلبات الخاصة</a>
-    <a href="javascript:void(0)" onclick="showTab('marketing')">حملات التسويق</a>
-    <a href="javascript:void(0)" onclick="showTab('advancedScheduling')">الجدولة المتقدمة</a>
-    <a href="javascript:void(0)" onclick="showTab('complaints')">الشكاوي</a>
-    <a href="javascript:void(0)" onclick="showTab('subscriptions')">إدارة الاشتراكات</a>
-    <a href="javascript:void(0)" onclick="showTab('renewals')">تجديد الاشتراك</a>
-</div>
+    <!-- المحتوى -->
+    <main class="content">
+        <!-- إدارة المخزون -->
+        <div id="inventoryTab" class="tab">
+            <h3>إدارة المخزون</h3>
+            <form id="inventoryForm" onsubmit="addInventoryItem(event)">
+                <input type="text" name="itemName" placeholder="اسم العنصر" required>
+                <input type="number" name="itemQuantity" placeholder="الكمية" required>
+                <input type="number" name="itemPrice" placeholder="السعر" required>
+                <button type="submit">إضافة عنصر</button>
+            </form>
+            <table id="inventoryTable">
+                <thead>
+                    <tr>
+                        <th>اسم العنصر</th>
+                        <th>الكمية</th>
+                        <th>السعر</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-<div class="main-content">
-    <div class="tabs">
-        <button onclick="showTab('inventory')">إدارة المخزون</button>
-        <button onclick="showTab('meals')">إدارة الوجبات</button>
-        <button onclick="showTab('ratings')">إدارة التقييمات</button>
-        <button onclick="showTab('rewards')">إدارة المكافآت</button>
-        <button onclick="showTab('specialRequests')">الطلبات الخاصة</button>
-        <button onclick="showTab('marketing')">حملات التسويق</button>
-        <button onclick="showTab('advancedScheduling')">الجدولة المتقدمة</button>
-        <button onclick="showTab('complaints')">الشكاوي</button>
-        <button onclick="showTab('subscriptions')">إدارة الاشتراكات</button>
-        <button onclick="showTab('renewals')">تجديد الاشتراك</button>
-    </div>
+        <!-- إدارة الوجبات الغذائية -->
+        <div id="mealsTab" class="tab">
+            <h3>إدارة الوجبات الغذائية</h3>
+            <form id="mealForm" onsubmit="addMeal(event)">
+                <input type="text" name="mealName" placeholder="اسم الوجبة" required>
+                <input type="number" name="mealCalories" placeholder="السعرات الحرارية" required>
+                <input type="number" name="mealPrice" placeholder="السعر" required>
+                <button type="submit">إضافة وجبة</button>
+            </form>
+            <table id="mealTable">
+                <thead>
+                    <tr>
+                        <th>اسم الوجبة</th>
+                        <th>السعرات الحرارية</th>
+                        <th>السعر</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-    <div id="inventory" class="tab-content">
-        <h3>إدارة المخزون</h3>
-        <form id="inventoryForm" onsubmit="addInventoryItem(event)">
-            <input type="text" name="itemName" placeholder="اسم العنصر" required>
-            <input type="number" name="itemQuantity" placeholder="الكمية" required>
-            <input type="number" name="itemPrice" placeholder="السعر" required>
-            <button type="submit">إضافة عنصر</button>
-        </form>
-        <table id="inventoryTable">
-            <thead>
-                <tr>
-                    <th>اسم العنصر</th>
-                    <th>الكمية</th>
-                    <th>السعر</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
+        <!-- التقييمات والملاحظات -->
+        <div id="ratingsTab" class="tab">
+            <h3>التقييمات والملاحظات</h3>
+            <form id="ratingForm" onsubmit="addRating(event)">
+                <input type="text" name="memberName" placeholder="اسم العضو" required>
+                <input type="text" name="trainerName" placeholder="اسم المدرب" required>
+                <input type="number" name="rating" placeholder="التقييم" required>
+                <textarea name="feedback" placeholder="الملاحظات" required></textarea>
+                <button type="submit">إضافة تقييم</button>
+            </form>
+            <table id="ratingTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>اسم المدرب</th>
+                        <th>التقييم</th>
+                        <th>الملاحظات</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-    <div id="meals" class="tab-content">
-        <h3>إدارة الوجبات</h3>
-        <form id="mealForm" onsubmit="addMeal(event)">
-            <input type="text" name="mealName" placeholder="اسم الوجبة" required>
-            <input type="number" name="mealPrice" placeholder="السعر" required>
-            <button type="submit">إضافة وجبة</button>
-        </form>
-        <table id="mealTable">
-            <thead>
-                <tr>
-                    <th>اسم الوجبة</th>
-                    <th>السعر</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
+        <!-- المكافآت والحوافز -->
+        <div id="rewardsTab" class="tab">
+            <h3>المكافآت والحوافز</h3>
+            <form id="rewardForm" onsubmit="addReward(event)">
+                <input type="text" name="memberName" placeholder="اسم العضو" required>
+                <input type="text" name="rewardType" placeholder="نوع المكافأة" required>
+                <input type="number" name="rewardAmount" placeholder="مقدار المكافأة" required>
+                <button type="submit">إضافة مكافأة</button>
+            </form>
+            <table id="rewardTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>نوع المكافأة</th>
+                        <th>مقدار المكافأة</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-    <div id="ratings" class="tab-content">
-        <h3>إدارة التقييمات</h3>
-        <form id="ratingForm" onsubmit="addRating(event)">
-            <input type="text" name="memberName" placeholder="اسم العضو" required>
-            <input type="number" name="ratingValue" placeholder="التقييم" min="1" max="5" required>
-            <button type="submit">إضافة تقييم</button>
-        </form>
-        <table id="ratingTable">
-            <thead>
-                <tr>
-                    <th>اسم العضو</th>
-                    <th>التقييم</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
+        <!-- الطلبات الخاصة -->
+        <div id="specialRequestsTab" class="tab">
+            <h3>الطلبات الخاصة</h3>
+            <form id="specialRequestForm" onsubmit="addSpecialRequest(event)">
+                <input type="text" name="memberName" placeholder="اسم العضو" required>
+                <textarea name="requestDetails" placeholder="تفاصيل الطلب" required></textarea>
+                <button type="submit">إضافة طلب</button>
+            </form>
+            <table id="specialRequestTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>تفاصيل الطلب</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-    <div id="rewards" class="tab-content">
-        <h3>إدارة المكافآت</h3>
-        <form id="rewardForm" onsubmit="addReward(event)">
-            <input type="text" name="memberName" placeholder="اسم العضو" required>
-            <input type="text" name="rewardType" placeholder="نوع المكافأة" required>
-            <input type="number" name="rewardAmount" placeholder="مقدار المكافأة" required>
-            <button type="submit">إضافة مكافأة</button>
-        </form>
-        <table id="rewardTable">
-            <thead>
-                <tr>
-                    <th>اسم العضو</th>
-                    <th>نوع المكافأة</th>
-                    <th>مقدار المكافأة</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
+        <!-- حملات التسويق -->
+        <div id="marketingTab" class="tab">
+            <h3>حملات التسويق</h3>
+            <form id="marketingForm" onsubmit="addMarketingCampaign(event)">
+                <input type="text" name="campaignName" placeholder="اسم الحملة" required>
+                <input type="date" name="startDate" required>
+                <input type="date" name="endDate" required>
+                <button type="submit">إضافة حملة</button>
+            </form>
+            <table id="marketingTable">
+                <thead>
+                    <tr>
+                        <th>اسم الحملة</th>
+                        <th>تاريخ البدء</th>
+                        <th>تاريخ الانتهاء</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-    <div id="specialRequests" class="tab-content">
-        <h3>الطلبات الخاصة</h3>
-        <form id="specialRequestForm" onsubmit="addSpecialRequest(event)">
-            <input type="text" name="memberName" placeholder="اسم العضو" required>
-            <textarea name="specialRequest" placeholder="الطلب الخاص" required></textarea>
-            <button type="submit">إضافة طلب</button>
-        </form>
-        <table id="specialRequestTable">
-            <thead>
-                <tr>
-                    <th>اسم العضو</th>
-                    <th>الطلب الخاص</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-    <div id="marketing" class="tab-content">
-        <h3>حملات التسويق</h3>
-        <form id="marketingForm" onsubmit="addMarketingCampaign(event)">
-            <input type="text" name="campaignName" placeholder="اسم الحملة" required>
-            <input type="date" name="campaignStartDate" required>
-            <input type="date" name="campaignEndDate" required>
-            <button type="submit">إضافة حملة</button>
-        </form>
-        <table id="marketingTable">
-            <thead>
-                <tr>
-                    <th>اسم الحملة</th>
-                    <th>تاريخ البدء</th>
-                    <th>تاريخ الانتهاء</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-    <div id="advancedScheduling" class="tab-content">
-        <h3>الجدولة المتقدمة</h3>
-        <form id="advancedScheduleForm" onsubmit="addAdvancedSchedule(event)">
-            <input type="text" name="scheduleName" placeholder="اسم الجدولة" required>
-            <input type="date" name="scheduleDate" required>
-            <input type="text" name="trainerName" placeholder="اسم المدرب" required>
-            <button type="submit">إضافة جدول</button>
-        </form>
-        <table id="advancedScheduleTable">
-            <thead>
-                <tr>
-                    <th>اسم الجدولة</th>
-                    <th>التاريخ</th>
-                    <th>اسم المدرب</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-    <div id="complaints" class="tab-content">
-        <h3>الشكاوي</h3>
-        <form id="complaintForm" onsubmit="addComplaint(event)">
-            <input type="text" name="complainantName" placeholder="اسم المشتكي" required>
-            <textarea name="complaint" placeholder="نص الشكوى" required></textarea>
-            <button type="submit">إضافة شكوى</button>
-        </form>
-        <table id="complaintTable">
-            <thead>
-                <tr>
-                    <th>اسم المشتكي</th>
-                    <th>نص الشكوى</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-    <div id="subscriptions" class="tab-content">
-        <h3>إدارة الاشتراكات</h3>
-        <form id="subscriptionForm" onsubmit="addSubscription(event)">
-            <input type="text" name="memberName" placeholder="اسم العضو" required>
-            <input type="date" name="subscriptionDate" required>
-            <input type="date" name="expiryDate" required>
-            <button type="submit">إضافة اشتراك</button>
-        </form>
-        <table id="subscriptionTable">
-            <thead>
-                <tr>
-                    <th>اسم العضو</th>
-                    <th>تاريخ الاشتراك</th>
-                    <th>تاريخ انتهاء الاشتراك</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-    <div id="renewals" class="tab-content">
-        <h3>تجديد الاشتراك</h3>
-        <table id="renewalsTable">
-            <thead>
-                <tr>
-                    <th>اسم العضو</th>
-                    <th>تاريخ انتهاء الاشتراك</th>
-                    <th>تاريخ التجديد</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- سيتم ملء البيانات هنا باستخدام JavaScript -->
-            </tbody>
-        </table>
-    </div>
-
+        <!-- الجدولة المتقدمة -->
+        <div id="advancedSchedulingTab" class="tab">
+            <h3>الجدولة المتقدمة</h3>
+            <form id="advancedScheduleForm" onsubmit="addSchedule(event)">
+                <input type="date" name="scheduleDate" required>
+                <input type="time" name="scheduleTime" required>
+                <input type="text" name="trainerName" placeholder="اسم المدرب" required>
+                <button type="submit">إضافة جدولة</button>
+            </form>
+            <table id="advancedScheduleTable">
+                <thead>
+                    <tr>
+                        <th>التاريخ</th>
+                        <th>الوقت</th>
+                        <th>اسم المدرب</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </main>
 </div>
 
 <script>
+    let inventoryItems = [];
+    let meals = [];
+    let ratings = [];
+    let rewards = [];
+    let specialRequests = [];
+    let marketingCampaigns = [];
+    let schedules = [];
+
     function showTab(tabId) {
-        let tabs = document.querySelectorAll('.tab-content');
-        let buttons = document.querySelectorAll('.tabs button');
-        tabs.forEach(tab => tab.classList.remove('active'));
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => tab.style.display = 'none');
+        document.getElementById(tabId).style.display = 'block';
+
+        const buttons = document.querySelectorAll('.tab-buttons button');
         buttons.forEach(button => button.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        event.target.classList.add('active');
+        const activeButton = [...buttons].find(button => button.textContent === tabId.replace('Tab', ''));
+        if (activeButton) activeButton.classList.add('active');
     }
+
+    function addInventoryItem(event) {
+        event.preventDefault();
+        const form = event.target;
+        const newItem = {
+            name: form.itemName.value,
+            quantity: form.itemQuantity.value,
+            price: form.itemPrice.value
+        };
+        inventoryItems.push(newItem);
+        displayInventoryItems();
+        form.reset();
+    }
+
+    function displayInventoryItems() {
+        const tableBody = document.getElementById('inventoryTable').querySelector('tbody');
+        tableBody.innerHTML = '';
+        inventoryItems.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.name}</td>
+                <td>${item.quantity}</td>
+                <td>${item.price}</td>
+                <td><button onclick="editInventoryItem(${index})">تعديل</button></td>
+                <td><button onclick="deleteInventoryItem(${index})">حذف</button></td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function editInventoryItem(index) {
+        const item = inventoryItems[index];
+        const form = document.getElementById('inventoryForm');
+        form.itemName.value = item.name;
+        form.itemQuantity.value = item.quantity;
+        form.itemPrice.value = item.price;
+
+        deleteInventoryItem(index);
+    }
+
+    function deleteInventoryItem(index) {
+        inventoryItems.splice(index, 1);
+        displayInventoryItems();
+    }
+
+    // نفس الفكرة مع الوجبات، التقييمات، المكافآت، الطلبات الخاصة، حملات التسويق، والجدولة المتقدمة
 </script>
 
 </body>
