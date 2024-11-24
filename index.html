@@ -31,244 +31,288 @@
             <!-- إدارة الأعضاء -->
             <section id="members">
                 <h3>إدارة الأعضاء</h3>
-                <form id="memberForm">
-                    <input type="text" name="fullName" placeholder="اسم العضو بالكامل" required>
-                    <input type="number" name="age" placeholder="العمر" required>
-                    <input type="tel" name="phone" placeholder="رقم الهاتف" required>
-                    <input type="text" name="address" placeholder="العنوان" required>
-                    <button type="submit">إضافة عضو</button>
-                </form>
-                <table id="memberTable">
-                    <thead>
-                        <tr>
-                            <th>الاسم</th>
-                            <th>العمر</th>
-                            <th>رقم الهاتف</th>
-                            <th>العنوان</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="form-container">
+                    <form id="memberForm">
+                        <input type="text" name="fullName" placeholder="اسم العضو بالكامل" required>
+                        <input type="number" name="age" placeholder="العمر" required>
+                        <input type="tel" name="phone" placeholder="رقم الهاتف" required>
+                        <input type="text" name="address" placeholder="العنوان" required>
+                        <button type="submit">إضافة عضو</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <table id="memberTable">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>العمر</th>
+                                <th>رقم الهاتف</th>
+                                <th>العنوان</th>
+                                <th>تعديل</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- إدارة المدربين -->
             <section id="trainers">
                 <h3>إدارة المدربين</h3>
-                <form id="trainerForm">
-                    <input type="text" name="trainerName" placeholder="اسم المدرب" required>
-                    <input type="text" name="specialization" placeholder="التخصص" required>
-                    <input type="tel" name="trainerPhone" placeholder="رقم الهاتف" required>
-                    <button type="submit">إضافة مدرب</button>
-                </form>
-                <table id="trainerTable">
-                    <thead>
-                        <tr>
-                            <th>اسم المدرب</th>
-                            <th>التخصص</th>
-                            <th>رقم الهاتف</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="form-container">
+                    <form id="trainerForm">
+                        <input type="text" name="trainerName" placeholder="اسم المدرب" required>
+                        <input type="text" name="specialization" placeholder="التخصص" required>
+                        <input type="tel" name="trainerPhone" placeholder="رقم الهاتف" required>
+                        <button type="submit">إضافة مدرب</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <table id="trainerTable">
+                        <thead>
+                            <tr>
+                                <th>اسم المدرب</th>
+                                <th>التخصص</th>
+                                <th>رقم الهاتف</th>
+                                <th>تعديل</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- إدارة الاشتراكات -->
             <section id="subscriptions">
                 <h3>إدارة الاشتراكات</h3>
-                <form id="subscriptionForm">
-                    <input type="text" name="subscriptionName" placeholder="اسم الاشتراك" required>
-                    <input type="number" name="price" placeholder="السعر" required>
-                    <input type="number" name="duration" placeholder="مدة الاشتراك (بالأيام)" required>
-                    <button type="submit">إضافة اشتراك</button>
-                </form>
-                <table id="subscriptionTable">
-                    <thead>
-                        <tr>
-                            <th>اسم الاشتراك</th>
-                            <th>السعر</th>
-                            <th>مدة الاشتراك</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="form-container">
+                    <form id="subscriptionForm">
+                        <input type="text" name="subscriptionName" placeholder="اسم الاشتراك" required>
+                        <input type="number" name="price" placeholder="السعر" required>
+                        <input type="number" name="duration" placeholder="مدة الاشتراك (بالأيام)" required>
+                        <button type="submit">إضافة اشتراك</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <table id="subscriptionTable">
+                        <thead>
+                            <tr>
+                                <th>اسم الاشتراك</th>
+                                <th>السعر</th>
+                                <th>مدة الاشتراك</th>
+                                <th>تعديل</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- تجديد الاشتراكات -->
             <section id="renewals">
                 <h3>تجديد الاشتراكات</h3>
-                <form id="renewalForm">
-                    <input type="text" name="memberName" placeholder="اسم العضو" required>
-                    <input type="date" name="expiryDate" placeholder="تاريخ الانتهاء" required>
-                    <button type="submit">تجديد الاشتراك</button>
-                </form>
-                <table id="renewalTable">
-                    <thead>
-                        <tr>
-                            <th>اسم العضو</th>
-                            <th>تاريخ الانتهاء</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="form-container">
+                    <form id="renewalForm">
+                        <input type="text" name="memberName" placeholder="اسم العضو" required>
+                        <input type="date" name="expiryDate" placeholder="تاريخ الانتهاء" required>
+                        <button type="submit">تجديد الاشتراك</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <table id="renewalTable">
+                        <thead>
+                            <tr>
+                                <th>اسم العضو</th>
+                                <th>تاريخ الانتهاء</th>
+                                <th>تعديل</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- إدارة الوجبات الغذائية -->
             <section id="meals">
                 <h3>إدارة الوجبات الغذائية</h3>
-                <form id="mealForm">
-                    <input type="text" name="mealName" placeholder="اسم الوجبة" required>
-                    <input type="number" name="calories" placeholder="السعرات الحرارية" required>
-                    <textarea name="description" placeholder="وصف الوجبة" required></textarea>
-                    <button type="submit">إضافة وجبة</button>
-                </form>
-                <table id="mealTable">
-                    <thead>
-                        <tr>
-                            <th>اسم الوجبة</th>
-                            <th>السعرات الحرارية</th>
-                            <th>الوصف</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="form-container">
+                    <form id="mealForm">
+                        <input type="text" name="mealName" placeholder="اسم الوجبة" required>
+                        <input type="number" name="calories" placeholder="السعرات الحرارية" required>
+                        <textarea name="description" placeholder="وصف الوجبة" required></textarea>
+                        <button type="submit">إضافة وجبة</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <table id="mealTable">
+                        <thead>
+                            <tr>
+                                <th>اسم الوجبة</th>
+                                <th>السعرات الحرارية</th>
+                                <th>الوصف</th>
+                                <th>تعديل</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- التقييمات والملاحظات -->
             <section id="ratings">
                 <h3>التقييمات والملاحظات</h3>
-                <form id="ratingForm">
-                    <input type="text" name="memberName" placeholder="اسم العضو" required>
-                    <textarea name="feedback" placeholder="ملاحظات العضو" required></textarea>
-                    <button type="submit">إضافة ملاحظة</button>
-                </form>
-                <table id="ratingTable">
-                    <thead>
-                        <tr>
-                            <th>اسم العضو</th>
-                            <th>الملاحظات</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="form-container">
+                    <form id="ratingForm">
+                        <input type="text" name="memberName" placeholder="اسم العضو" required>
+                        <textarea name="feedback" placeholder="ملاحظات العضو" required></textarea>
+                        <button type="submit">إضافة ملاحظة</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <table id="ratingTable">
+                        <thead>
+                            <tr>
+                                <th>اسم العضو</th>
+                                <th>الملاحظات</th>
+                                <th>تعديل</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- المكافآت والحوافز -->
             <section id="rewards">
                 <h3>المكافآت والحوافز</h3>
-                <form id="rewardForm">
-                    <input type="text" name="rewardName" placeholder="اسم المكافأة" required>
-                    <input type="number" name="pointsRequired" placeholder="النقاط المطلوبة" required>
-                    <textarea name="rewardDescription" placeholder="وصف المكافأة" required></textarea>
-                    <button type="submit">إضافة مكافأة</button>
-                </form>
-                <table id="rewardTable">
-                    <thead>
-                        <tr>
-                            <th>اسم المكافأة</th>
-                            <th>النقاط المطلوبة</th>
-                            <th>الوصف</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="form-container">
+                    <form id="rewardForm">
+                        <input type="text" name="rewardName" placeholder="اسم المكافأة" required>
+                        <input type="number" name="pointsRequired" placeholder="النقاط المطلوبة" required>
+                        <textarea name="rewardDescription" placeholder="وصف المكافأة" required></textarea>
+                        <button type="submit">إضافة مكافأة</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <table id="rewardTable">
+                        <thead>
+                            <tr>
+                                <th>اسم المكافأة</th>
+                                <th>النقاط المطلوبة</th>
+                                <th>الوصف</th>
+                                <th>تعديل</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- الطلبات الخاصة -->
             <section id="special-requests">
                 <h3>الطلبات الخاصة</h3>
-                <form id="specialRequestForm">
-                    <input type="text" name="requestName" placeholder="اسم الطلب" required>
-                    <textarea name="requestDetails" placeholder="تفاصيل الطلب" required></textarea>
-                    <button type="submit">إضافة طلب</button>
-                </form>
-                <table id="specialRequestTable">
-                    <thead>
-                        <tr>
-                            <th>اسم الطلب</th>
-                            <th>التفاصيل</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="form-container">
+                    <form id="specialRequestForm">
+                        <input type="text" name="memberName" placeholder="اسم العضو" required>
+                        <textarea name="requestDetails" placeholder="تفاصيل الطلب" required></textarea>
+                        <button type="submit">إضافة طلب</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <table id="specialRequestTable">
+                        <thead>
+                            <tr>
+                                <th>اسم العضو</th>
+                                <th>تفاصيل الطلب</th>
+                                <th>تعديل</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- حملات التسويق -->
             <section id="marketing">
                 <h3>حملات التسويق</h3>
-                <form id="marketingForm">
-                    <input type="text" name="campaignName" placeholder="اسم الحملة" required>
-                    <textarea name="campaignDetails" placeholder="تفاصيل الحملة" required></textarea>
-                    <button type="submit">إضافة حملة</button>
-                </form>
-                <table id="marketingTable">
-                    <thead>
-                        <tr>
-                            <th>اسم الحملة</th>
-                            <th>التفاصيل</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="form-container">
+                    <form id="campaignForm">
+                        <input type="text" name="campaignName" placeholder="اسم الحملة" required>
+                        <textarea name="campaignDetails" placeholder="تفاصيل الحملة" required></textarea>
+                        <button type="submit">إضافة حملة</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <table id="marketingTable">
+                        <thead>
+                            <tr>
+                                <th>اسم الحملة</th>
+                                <th>التفاصيل</th>
+                                <th>تعديل</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- الجدولة المتقدمة -->
             <section id="advanced-scheduling">
                 <h3>الجدولة المتقدمة</h3>
-                <form id="scheduleForm">
-                    <input type="text" name="scheduleName" placeholder="اسم الجدولة" required>
-                    <input type="datetime-local" name="scheduleTime" required>
-                    <button type="submit">إضافة جدولة</button>
-                </form>
-                <table id="scheduleTable">
-                    <thead>
-                        <tr>
-                            <th>اسم الجدولة</th>
-                            <th>الوقت</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="form-container">
+                    <form id="scheduleForm">
+                        <input type="text" name="scheduleName" placeholder="اسم الجدولة" required>
+                        <input type="datetime-local" name="scheduleTime" required>
+                        <button type="submit">إضافة جدولة</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <table id="scheduleTable">
+                        <thead>
+                            <tr>
+                                <th>اسم الجدولة</th>
+                                <th>الوقت</th>
+                                <th>تعديل</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- الشكاوي -->
             <section id="complaints">
                 <h3>الشكاوي</h3>
-                <form id="complaintForm">
-                    <input type="text" name="complaintMember" placeholder="اسم العضو المشتكي" required>
-                    <textarea name="complaintDetails" placeholder="تفاصيل الشكوى" required></textarea>
-                    <button type="submit">إضافة شكوى</button>
-                </form>
-                <table id="complaintTable">
-                    <thead>
-                        <tr>
-                            <th>اسم العضو المشتكي</th>
-                            <th>تفاصيل الشكوى</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="form-container">
+                    <form id="complaintForm">
+                        <input type="text" name="complaintMember" placeholder="اسم العضو المشتكي" required>
+                        <textarea name="complaintDetails" placeholder="تفاصيل الشكوى" required></textarea>
+                        <button type="submit">إضافة شكوى</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <table id="complaintTable">
+                        <thead>
+                            <tr>
+                                <th>اسم العضو المشتكي</th>
+                                <th>تفاصيل الشكوى</th>
+                                <th>تعديل</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
         </main>
     </div>
