@@ -5,23 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة النادي</title>
     <style>
-        /* تنسيق العناصر والواجهة */
+        /* تنسيق الشريط الجانبي */
         body {
             font-family: Arial, sans-serif;
             direction: rtl;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            display: flex;
         }
         header {
             background-color: #333;
             color: white;
             padding: 10px;
+            width: 100%;
             text-align: center;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            padding-top: 20px;
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: 100%;
+        }
+        .tab-content {
+            display: none;
+        }
+        .active {
+            display: block;
         }
         .tabs {
             display: flex;
-            justify-content: space-evenly;
+            justify-content: space-around;
             background-color: #444;
             padding: 10px 0;
         }
@@ -36,25 +65,24 @@
             background-color: #ddd;
             color: black;
         }
-        .tab {
-            display: none;
-            padding: 20px;
-            background-color: white;
+        .tab form, .tab table {
+            width: 100%;
+            margin-top: 20px;
         }
-        .tab-buttons {
-            margin-bottom: 10px;
+        .tab input, .tab button {
+            padding: 10px;
+            margin: 5px;
+            width: 100%;
         }
         .tab table {
-            width: 100%;
             border-collapse: collapse;
         }
         .tab table th, .tab table td {
             border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
+            padding: 10px;
         }
         .tab table th {
-            background-color: #f2f2f2;
+            background-color: #f4f4f4;
         }
     </style>
 </head>
@@ -64,22 +92,34 @@
     <h1>إدارة النادي</h1>
 </header>
 
-<div class="tabs">
-    <button onclick="showTab('inventoryTab')">إدارة المخزون</button>
-    <button onclick="showTab('mealsTab')">إدارة الوجبات</button>
-    <button onclick="showTab('ratingsTab')">إدارة التقييمات</button>
-    <button onclick="showTab('rewardsTab')">إدارة المكافآت</button>
-    <button onclick="showTab('specialRequestsTab')">الطلبات الخاصة</button>
-    <button onclick="showTab('marketingTab')">حملات التسويق</button>
-    <button onclick="showTab('advancedSchedulingTab')">الجدولة المتقدمة</button>
-    <button onclick="showTab('complaintsTab')">الشكاوي</button>
-    <button onclick="showTab('subscriptionTab')">إدارة الاشتراكات</button>
-    <button onclick="showTab('renewalsTab')">تجديد الاشتراك</button>
+<div class="sidebar">
+    <a href="javascript:void(0)" onclick="showTab('inventory')">إدارة المخزون</a>
+    <a href="javascript:void(0)" onclick="showTab('meals')">إدارة الوجبات</a>
+    <a href="javascript:void(0)" onclick="showTab('ratings')">إدارة التقييمات</a>
+    <a href="javascript:void(0)" onclick="showTab('rewards')">إدارة المكافآت</a>
+    <a href="javascript:void(0)" onclick="showTab('specialRequests')">الطلبات الخاصة</a>
+    <a href="javascript:void(0)" onclick="showTab('marketing')">حملات التسويق</a>
+    <a href="javascript:void(0)" onclick="showTab('advancedScheduling')">الجدولة المتقدمة</a>
+    <a href="javascript:void(0)" onclick="showTab('complaints')">الشكاوي</a>
+    <a href="javascript:void(0)" onclick="showTab('subscriptions')">إدارة الاشتراكات</a>
+    <a href="javascript:void(0)" onclick="showTab('renewals')">تجديد الاشتراك</a>
 </div>
 
-<main>
-    <!-- قسم إدارة المخزون -->
-    <div id="inventoryTab" class="tab">
+<div class="main-content">
+    <div class="tabs">
+        <button onclick="showTab('inventory')">إدارة المخزون</button>
+        <button onclick="showTab('meals')">إدارة الوجبات</button>
+        <button onclick="showTab('ratings')">إدارة التقييمات</button>
+        <button onclick="showTab('rewards')">إدارة المكافآت</button>
+        <button onclick="showTab('specialRequests')">الطلبات الخاصة</button>
+        <button onclick="showTab('marketing')">حملات التسويق</button>
+        <button onclick="showTab('advancedScheduling')">الجدولة المتقدمة</button>
+        <button onclick="showTab('complaints')">الشكاوي</button>
+        <button onclick="showTab('subscriptions')">إدارة الاشتراكات</button>
+        <button onclick="showTab('renewals')">تجديد الاشتراك</button>
+    </div>
+
+    <div id="inventory" class="tab-content">
         <h3>إدارة المخزون</h3>
         <form id="inventoryForm" onsubmit="addInventoryItem(event)">
             <input type="text" name="itemName" placeholder="اسم العنصر" required>
@@ -101,8 +141,7 @@
         </table>
     </div>
 
-    <!-- قسم إدارة الوجبات -->
-    <div id="mealsTab" class="tab">
+    <div id="meals" class="tab-content">
         <h3>إدارة الوجبات</h3>
         <form id="mealForm" onsubmit="addMeal(event)">
             <input type="text" name="mealName" placeholder="اسم الوجبة" required>
@@ -122,8 +161,7 @@
         </table>
     </div>
 
-    <!-- قسم إدارة التقييمات -->
-    <div id="ratingsTab" class="tab">
+    <div id="ratings" class="tab-content">
         <h3>إدارة التقييمات</h3>
         <form id="ratingForm" onsubmit="addRating(event)">
             <input type="text" name="memberName" placeholder="اسم العضو" required>
@@ -143,8 +181,7 @@
         </table>
     </div>
 
-    <!-- قسم إدارة المكافآت -->
-    <div id="rewardsTab" class="tab">
+    <div id="rewards" class="tab-content">
         <h3>إدارة المكافآت</h3>
         <form id="rewardForm" onsubmit="addReward(event)">
             <input type="text" name="memberName" placeholder="اسم العضو" required>
@@ -166,8 +203,7 @@
         </table>
     </div>
 
-    <!-- قسم الطلبات الخاصة -->
-    <div id="specialRequestsTab" class="tab">
+    <div id="specialRequests" class="tab-content">
         <h3>الطلبات الخاصة</h3>
         <form id="specialRequestForm" onsubmit="addSpecialRequest(event)">
             <input type="text" name="memberName" placeholder="اسم العضو" required>
@@ -187,21 +223,20 @@
         </table>
     </div>
 
-    <!-- قسم حملات التسويق -->
-    <div id="marketingTab" class="tab">
+    <div id="marketing" class="tab-content">
         <h3>حملات التسويق</h3>
         <form id="marketingForm" onsubmit="addMarketingCampaign(event)">
             <input type="text" name="campaignName" placeholder="اسم الحملة" required>
-            <input type="date" name="startDate" required>
-            <input type="date" name="endDate" required>
+            <input type="date" name="campaignStartDate" required>
+            <input type="date" name="campaignEndDate" required>
             <button type="submit">إضافة حملة</button>
         </form>
         <table id="marketingTable">
             <thead>
                 <tr>
                     <th>اسم الحملة</th>
-                    <th>تاريخ البداية</th>
-                    <th>تاريخ النهاية</th>
+                    <th>تاريخ البدء</th>
+                    <th>تاريخ الانتهاء</th>
                     <th>تعديل</th>
                     <th>حذف</th>
                 </tr>
@@ -210,14 +245,13 @@
         </table>
     </div>
 
-    <!-- قسم الجدولة المتقدمة -->
-    <div id="advancedSchedulingTab" class="tab">
+    <div id="advancedScheduling" class="tab-content">
         <h3>الجدولة المتقدمة</h3>
         <form id="advancedScheduleForm" onsubmit="addAdvancedSchedule(event)">
             <input type="text" name="scheduleName" placeholder="اسم الجدولة" required>
             <input type="date" name="scheduleDate" required>
             <input type="text" name="trainerName" placeholder="اسم المدرب" required>
-            <button type="submit">إضافة جدولة</button>
+            <button type="submit">إضافة جدول</button>
         </form>
         <table id="advancedScheduleTable">
             <thead>
@@ -233,8 +267,7 @@
         </table>
     </div>
 
-    <!-- قسم الشكاوي -->
-    <div id="complaintsTab" class="tab">
+    <div id="complaints" class="tab-content">
         <h3>الشكاوي</h3>
         <form id="complaintForm" onsubmit="addComplaint(event)">
             <input type="text" name="complainantName" placeholder="اسم المشتكي" required>
@@ -254,8 +287,7 @@
         </table>
     </div>
 
-    <!-- قسم إدارة الاشتراكات -->
-    <div id="subscriptionTab" class="tab">
+    <div id="subscriptions" class="tab-content">
         <h3>إدارة الاشتراكات</h3>
         <form id="subscriptionForm" onsubmit="addSubscription(event)">
             <input type="text" name="memberName" placeholder="اسم العضو" required>
@@ -277,8 +309,7 @@
         </table>
     </div>
 
-    <!-- قسم تجديد الاشتراك -->
-    <div id="renewalsTab" class="tab">
+    <div id="renewals" class="tab-content">
         <h3>تجديد الاشتراك</h3>
         <table id="renewalsTable">
             <thead>
@@ -293,27 +324,18 @@
             </tbody>
         </table>
     </div>
-</main>
+
+</div>
 
 <script>
-    // التبديل بين الأقسام
     function showTab(tabId) {
-        let tabs = document.querySelectorAll('.tab');
+        let tabs = document.querySelectorAll('.tab-content');
         let buttons = document.querySelectorAll('.tabs button');
-
-        tabs.forEach(tab => {
-            tab.style.display = 'none';
-        });
-        buttons.forEach(button => {
-            button.classList.remove('active');
-        });
-
-        document.getElementById(tabId).style.display = 'block';
+        tabs.forEach(tab => tab.classList.remove('active'));
+        buttons.forEach(button => button.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
         event.target.classList.add('active');
     }
-
-    // يمكنك إضافة الوظائف الخاصة بإضافة العناصر، التعديل والحذف هنا 
-    // بالإضافة إلى منطق مراقبة تواريخ انتهاء الاشتراكات
 </script>
 
 </body>
