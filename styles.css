@@ -1,73 +1,58 @@
-/* styles.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    direction: rtl;
+    margin: 0;
+    background: linear-gradient(120deg, #f6d365, #fda085);
+    color: #333;
 }
 
 .container {
     display: flex;
+    flex-direction: row-reverse;
 }
 
 .sidebar {
-    width: 200px;
-    background-color: #333;
+    width: 250px;
+    background: #2c3e50;
     color: white;
     padding: 20px;
 }
 
 .sidebar h2 {
     text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 .sidebar ul {
-    list-style-type: none;
     padding: 0;
+    list-style: none;
 }
 
 .sidebar ul li {
-    margin: 10px 0;
+    margin-bottom: 15px;
 }
 
 .sidebar ul li a {
     color: white;
     text-decoration: none;
-    font-size: 18px;
+    background: #34495e;
+    padding: 10px;
+    border-radius: 5px;
+    display: block;
+    text-align: center;
 }
 
 .sidebar ul li a:hover {
-    color: #f0f0f0;
+    background: #1abc9c;
 }
 
 .content {
-    margin-left: 220px;
+    flex-grow: 1;
     padding: 20px;
-    width: calc(100% - 240px);
-}
-
-.section {
-    margin-bottom: 40px;
-}
-
-form input, form textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-form button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-form button:hover {
-    background-color: #45a049;
+    background: white;
+    border-left: 2px solid #ddd;
+    border-radius: 10px;
+    margin: 10px;
 }
 
 table {
@@ -82,10 +67,24 @@ table th, table td {
     border: 1px solid #ddd;
 }
 
-table th {
-    background-color: #f4f4f4;
+form input, form textarea, form button {
+    display: block;
+    width: calc(100% - 20px);
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+form button {
+    background: #1abc9c;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* إخفاء الأقسام بشكل افتراضي */
+.section {
+    display: none;
 }
