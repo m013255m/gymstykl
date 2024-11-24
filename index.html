@@ -11,23 +11,22 @@
         <aside class="sidebar">
             <h2>إدارة الجيم</h2>
             <ul>
-                <li><a href="#members">إدارة الأعضاء</a></li>
-                <li><a href="#trainers">إدارة المدربين</a></li>
-                <li><a href="#subscriptions">إدارة الاشتراكات</a></li>
-                <li><a href="#inventory">إدارة المخزون</a></li>
-                <li><a href="#damaged-inventory">المخزون التالف</a></li>
-                <li><a href="#meals">إدارة الوجبات الغذائية</a></li>
-                <li><a href="#ratings">التقييمات والملاحظات</a></li>
-                <li><a href="#rewards">المكافآت والحوافز</a></li>
-                <li><a href="#special-requests">الطلبات الخاصة</a></li>
-                <li><a href="#marketing">حملات التسويق</a></li>
-                <li><a href="#advanced-scheduling">الجدولة المتقدمة</a></li>
-                <li><a href="#complaints">الشكاوي</a></li>
+                <li><a href="#members" class="sidebar-link">إدارة الأعضاء</a></li>
+                <li><a href="#trainers" class="sidebar-link">إدارة المدربين</a></li>
+                <li><a href="#subscriptions" class="sidebar-link">إدارة الاشتراكات</a></li>
+                <li><a href="#inventory" class="sidebar-link">إدارة المخزون</a></li>
+                <li><a href="#damaged-inventory" class="sidebar-link">المخزون التالف</a></li>
+                <li><a href="#meals" class="sidebar-link">إدارة الوجبات الغذائية</a></li>
+                <li><a href="#ratings" class="sidebar-link">التقييمات والملاحظات</a></li>
+                <li><a href="#rewards" class="sidebar-link">المكافآت والحوافز</a></li>
+                <li><a href="#special-requests" class="sidebar-link">الطلبات الخاصة</a></li>
+                <li><a href="#marketing" class="sidebar-link">حملات التسويق</a></li>
+                <li><a href="#advanced-scheduling" class="sidebar-link">الجدولة المتقدمة</a></li>
+                <li><a href="#complaints" class="sidebar-link">الشكاوي</a></li>
             </ul>
         </aside>
 
         <main class="content">
-            <!-- إدارة الأعضاء -->
             <section id="members" class="section">
                 <h3>إدارة الأعضاء</h3>
                 <form id="memberForm">
@@ -52,57 +51,10 @@
                 </table>
             </section>
 
-            <!-- إدارة المدربين -->
-            <section id="trainers" class="section">
-                <h3>إدارة المدربين</h3>
-                <form id="trainerForm">
-                    <input type="text" name="trainerName" placeholder="اسم المدرب" required>
-                    <input type="text" name="specialization" placeholder="التخصص" required>
-                    <input type="tel" name="trainerPhone" placeholder="رقم الهاتف" required>
-                    <button type="submit">إضافة مدرب</button>
-                </form>
-                <table id="trainerTable">
-                    <thead>
-                        <tr>
-                            <th>اسم المدرب</th>
-                            <th>التخصص</th>
-                            <th>رقم الهاتف</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </section>
-
-            <!-- باقي الأقسام -->
-            <!-- إدارة الاشتراكات -->
-            <section id="subscriptions" class="section">
-                <h3>إدارة الاشتراكات</h3>
-                <form id="subscriptionForm">
-                    <input type="text" name="memberName" placeholder="اسم العضو" required>
-                    <input type="date" name="subscriptionStart" placeholder="تاريخ بدء الاشتراك" required>
-                    <input type="date" name="subscriptionEnd" placeholder="تاريخ انتهاء الاشتراك" required>
-                    <button type="submit">إضافة اشتراك</button>
-                </form>
-                <table id="subscriptionTable">
-                    <thead>
-                        <tr>
-                            <th>اسم العضو</th>
-                            <th>تاريخ بدء الاشتراك</th>
-                            <th>تاريخ انتهاء الاشتراك</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </section>
-
-            <!-- إضافة باقي الأقسام مثل إدارة الوجبات، المخزون، الخ -->
+            <!-- باقي الأقسام يتم إضافتها هنا بنفس الطريقة -->
+            
         </main>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
