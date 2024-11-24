@@ -28,7 +28,7 @@
 
         <main class="content">
             <!-- إدارة الأعضاء -->
-            <section id="members">
+            <section id="members" class="section">
                 <h3>إدارة الأعضاء</h3>
                 <form id="memberForm">
                     <input type="text" name="fullName" placeholder="اسم العضو بالكامل" required>
@@ -53,7 +53,7 @@
             </section>
 
             <!-- إدارة المدربين -->
-            <section id="trainers">
+            <section id="trainers" class="section">
                 <h3>إدارة المدربين</h3>
                 <form id="trainerForm">
                     <input type="text" name="trainerName" placeholder="اسم المدرب" required>
@@ -75,8 +75,9 @@
                 </table>
             </section>
 
+            <!-- باقي الأقسام -->
             <!-- إدارة الاشتراكات -->
-            <section id="subscriptions">
+            <section id="subscriptions" class="section">
                 <h3>إدارة الاشتراكات</h3>
                 <form id="subscriptionForm">
                     <input type="text" name="memberName" placeholder="اسم العضو" required>
@@ -98,75 +99,10 @@
                 </table>
             </section>
 
-            <!-- إدارة المخزون -->
-            <section id="inventory">
-                <h3>إدارة المخزون</h3>
-                <form id="inventoryForm">
-                    <input type="text" name="itemName" placeholder="اسم العنصر" required>
-                    <input type="number" name="quantity" placeholder="الكمية" required>
-                    <button type="submit">إضافة عنصر للمخزون</button>
-                </form>
-                <table id="inventoryTable">
-                    <thead>
-                        <tr>
-                            <th>اسم العنصر</th>
-                            <th>الكمية</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </section>
-
-            <!-- إدارة المخزون التالف -->
-            <section id="damaged-inventory">
-                <h3>إدارة المخزون التالف</h3>
-                <form id="damagedInventoryForm">
-                    <input type="text" name="damagedItemName" placeholder="اسم العنصر التالف" required>
-                    <input type="number" name="damagedQuantity" placeholder="الكمية التالفة" required>
-                    <textarea name="reason" placeholder="سبب التلف" required></textarea>
-                    <button type="submit">إضافة عنصر تالف</button>
-                </form>
-                <table id="damagedInventoryTable">
-                    <thead>
-                        <tr>
-                            <th>اسم العنصر</th>
-                            <th>الكمية</th>
-                            <th>سبب التلف</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </section>
-
-            <!-- إضافة المزيد من الأقسام بنفس النمط -->
-            <!-- قسم إدارة الوجبات الغذائية -->
-            <section id="meals">
-                <h3>إدارة الوجبات الغذائية</h3>
-                <form id="mealForm">
-                    <input type="text" name="mealName" placeholder="اسم الوجبة" required>
-                    <textarea name="mealDescription" placeholder="وصف الوجبة" required></textarea>
-                    <button type="submit">إضافة وجبة</button>
-                </form>
-                <table id="mealTable">
-                    <thead>
-                        <tr>
-                            <th>اسم الوجبة</th>
-                            <th>الوصف</th>
-                            <th>تعديل</th>
-                            <th>حذف</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </section>
-
-            <!-- باقي الأقسام حسب المطلوب -->
+            <!-- إضافة باقي الأقسام مثل إدارة الوجبات، المخزون، الخ -->
         </main>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
