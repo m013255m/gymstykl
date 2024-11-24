@@ -11,23 +11,24 @@
         <aside class="sidebar">
             <h2>إدارة الجيم</h2>
             <ul>
-                <li><a href="#members" class="sidebar-link">إدارة الأعضاء</a></li>
-                <li><a href="#trainers" class="sidebar-link">إدارة المدربين</a></li>
-                <li><a href="#subscriptions" class="sidebar-link">إدارة الاشتراكات</a></li>
-                <li><a href="#inventory" class="sidebar-link">إدارة المخزون</a></li>
-                <li><a href="#damaged-inventory" class="sidebar-link">المخزون التالف</a></li>
-                <li><a href="#meals" class="sidebar-link">إدارة الوجبات الغذائية</a></li>
-                <li><a href="#ratings" class="sidebar-link">التقييمات والملاحظات</a></li>
-                <li><a href="#rewards" class="sidebar-link">المكافآت والحوافز</a></li>
-                <li><a href="#special-requests" class="sidebar-link">الطلبات الخاصة</a></li>
-                <li><a href="#marketing" class="sidebar-link">حملات التسويق</a></li>
-                <li><a href="#advanced-scheduling" class="sidebar-link">الجدولة المتقدمة</a></li>
-                <li><a href="#complaints" class="sidebar-link">الشكاوي</a></li>
+                <li><a href="#members">إدارة الأعضاء</a></li>
+                <li><a href="#trainers">إدارة المدربين</a></li>
+                <li><a href="#subscriptions">إدارة الاشتراكات</a></li>
+                <li><a href="#inventory">إدارة المخزون</a></li>
+                <li><a href="#damaged-inventory">المخزون التالف</a></li>
+                <li><a href="#meals">إدارة الوجبات الغذائية</a></li>
+                <li><a href="#ratings">التقييمات والملاحظات</a></li>
+                <li><a href="#rewards">المكافآت والحوافز</a></li>
+                <li><a href="#special-requests">الطلبات الخاصة</a></li>
+                <li><a href="#marketing">حملات التسويق</a></li>
+                <li><a href="#advanced-scheduling">الجدولة المتقدمة</a></li>
+                <li><a href="#complaints">الشكاوي</a></li>
             </ul>
         </aside>
 
         <main class="content">
-            <section id="members" class="section">
+            <!-- إدارة الأعضاء -->
+            <section id="members">
                 <h3>إدارة الأعضاء</h3>
                 <form id="memberForm">
                     <input type="text" name="fullName" placeholder="اسم العضو بالكامل" required>
@@ -51,10 +52,264 @@
                 </table>
             </section>
 
-            <!-- باقي الأقسام يتم إضافتها هنا بنفس الطريقة -->
-            
+            <!-- إدارة المدربين -->
+            <section id="trainers">
+                <h3>إدارة المدربين</h3>
+                <form id="trainerForm">
+                    <input type="text" name="trainerName" placeholder="اسم المدرب" required>
+                    <input type="text" name="specialization" placeholder="التخصص" required>
+                    <input type="tel" name="trainerPhone" placeholder="رقم الهاتف" required>
+                    <button type="submit">إضافة مدرب</button>
+                </form>
+                <table id="trainerTable">
+                    <thead>
+                        <tr>
+                            <th>اسم المدرب</th>
+                            <th>التخصص</th>
+                            <th>رقم الهاتف</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- إدارة الاشتراكات -->
+            <section id="subscriptions">
+                <h3>إدارة الاشتراكات</h3>
+                <form id="subscriptionForm">
+                    <input type="text" name="memberName" placeholder="اسم العضو" required>
+                    <input type="date" name="subscriptionStartDate" placeholder="تاريخ البداية" required>
+                    <input type="date" name="subscriptionEndDate" placeholder="تاريخ الانتهاء" required>
+                    <button type="submit">إضافة اشتراك</button>
+                </form>
+                <table id="subscriptionTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>تاريخ البداية</th>
+                            <th>تاريخ الانتهاء</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- عرض الأعضاء الذين يجب عليهم تجديد اشتراكهم -->
+            <section id="renewal">
+                <h3>الأعضاء الذين يجب عليهم تجديد اشتراكهم</h3>
+                <table id="renewalTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>تاريخ الانتهاء</th>
+                            <th>تاريخ التجديد</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- إدارة المخزون -->
+            <section id="inventory">
+                <h3>إدارة المخزون</h3>
+                <form id="inventoryForm">
+                    <input type="text" name="itemName" placeholder="اسم العنصر" required>
+                    <input type="number" name="itemQuantity" placeholder="الكمية" required>
+                    <button type="submit">إضافة عنصر</button>
+                </form>
+                <table id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العنصر</th>
+                            <th>الكمية</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- إدارة المخزون التالف -->
+            <section id="damaged-inventory">
+                <h3>إدارة المخزون التالف</h3>
+                <form id="damagedInventoryForm">
+                    <input type="text" name="damagedItemName" placeholder="اسم العنصر التالف" required>
+                    <input type="number" name="damagedQuantity" placeholder="الكمية التالفة" required>
+                    <textarea name="reason" placeholder="سبب التلف" required></textarea>
+                    <button type="submit">إضافة عنصر تالف</button>
+                </form>
+                <table id="damagedInventoryTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العنصر</th>
+                            <th>الكمية</th>
+                            <th>سبب التلف</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- إدارة الوجبات الغذائية -->
+            <section id="meals">
+                <h3>إدارة الوجبات الغذائية</h3>
+                <form id="mealForm">
+                    <input type="text" name="mealName" placeholder="اسم الوجبة" required>
+                    <input type="text" name="mealDescription" placeholder="وصف الوجبة" required>
+                    <input type="number" name="mealPrice" placeholder="السعر" required>
+                    <button type="submit">إضافة وجبة</button>
+                </form>
+                <table id="mealTable">
+                    <thead>
+                        <tr>
+                            <th>اسم الوجبة</th>
+                            <th>الوصف</th>
+                            <th>السعر</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- التقييمات والملاحظات -->
+            <section id="ratings">
+                <h3>التقييمات والملاحظات</h3>
+                <form id="ratingForm">
+                    <input type="text" name="memberName" placeholder="اسم العضو" required>
+                    <textarea name="feedback" placeholder="الملاحظات" required></textarea>
+                    <button type="submit">إضافة ملاحظة</button>
+                </form>
+                <table id="ratingTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>الملاحظات</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- المكافآت والحوافز -->
+            <section id="rewards">
+                <h3>المكافآت والحوافز</h3>
+                <form id="rewardForm">
+                    <input type="text" name="memberName" placeholder="اسم العضو" required>
+                    <input type="text" name="reward" placeholder="المكافأة" required>
+                    <button type="submit">إضافة مكافأة</button>
+                </form>
+                <table id="rewardTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>المكافأة</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- الطلبات الخاصة -->
+            <section id="special-requests">
+                <h3>الطلبات الخاصة</h3>
+                <form id="specialRequestForm">
+                    <input type="text" name="memberName" placeholder="اسم العضو" required>
+                    <textarea name="request" placeholder="الطلب" required></textarea>
+                    <button type="submit">إضافة طلب خاص</button>
+                </form>
+                <table id="specialRequestTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>الطلب</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- حملات التسويق -->
+            <section id="marketing">
+                <h3>حملات التسويق</h3>
+                <form id="marketingForm">
+                    <input type="text" name="campaignName" placeholder="اسم الحملة" required>
+                    <input type="date" name="campaignStartDate" placeholder="تاريخ البداية" required>
+                    <input type="date" name="campaignEndDate" placeholder="تاريخ الانتهاء" required>
+                    <button type="submit">إضافة حملة</button>
+                </form>
+                <table id="marketingTable">
+                    <thead>
+                        <tr>
+                            <th>اسم الحملة</th>
+                            <th>تاريخ البداية</th>
+                            <th>تاريخ الانتهاء</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- الجدولة المتقدمة -->
+            <section id="advanced-scheduling">
+                <h3>الجدولة المتقدمة</h3>
+                <form id="schedulingForm">
+                    <input type="text" name="trainerName" placeholder="اسم المدرب" required>
+                    <input type="datetime-local" name="scheduleTime" placeholder="وقت الجدولة" required>
+                    <button type="submit">إضافة جدول</button>
+                </form>
+                <table id="schedulingTable">
+                    <thead>
+                        <tr>
+                            <th>اسم المدرب</th>
+                            <th>وقت الجدولة</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- الشكاوي -->
+            <section id="complaints">
+                <h3>الشكاوي</h3>
+                <form id="complaintForm">
+                    <input type="text" name="memberName" placeholder="اسم العضو" required>
+                    <textarea name="complaint" placeholder="الشكاوى" required></textarea>
+                    <button type="submit">إضافة شكوى</button>
+                </form>
+                <table id="complaintTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>الشكاوى</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
         </main>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
