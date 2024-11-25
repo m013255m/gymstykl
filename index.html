@@ -4,29 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الجيم</title>
-    <link rel="stylesheet" href="styles.css"><script>
-    function showTab(tabId) {
-        // إخفاء كل الأقسام
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.style.display = 'none'; // إخفاء كل التبويبات
-        });
-
-        // إظهار القسم المطلوب
-        const selectedTab = document.getElementById(tabId);
-        if (selectedTab) {
-            selectedTab.style.display = 'block'; // إظهار التبويب المطلوب
-        } else {
-            console.error('لم يتم العثور على القسم:', tabId);
-        }
-    }
-
-    // عند تحميل الصفحة، قم بإظهار القسم الافتراضي
-    document.addEventListener("DOMContentLoaded", function () {
-        showTab('membersTab'); // القسم الافتراضي عند
-</script>
-
-</script>
-
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -464,30 +442,31 @@
         complaints: JSON.parse(localStorage.getItem('complaints')) || []
     };
 
-    
+    <script>
     function showTab(tabId) {
-        // Debug message to check the received tab ID
-        console.log('Switching to tab:', tabId);
-
-        // Hide all tabs
+        // إخفاء كل الأقسام
         document.querySelectorAll('.tab').forEach(tab => {
-            tab.style.display = 'none';
+            tab.style.display = 'none'; // إخفاء كل التبويبات
         });
-        // Show the selected tab
+
+        // إظهار القسم المطلوب
         const selectedTab = document.getElementById(tabId);
         if (selectedTab) {
-            selectedTab.style.display = 'block';
-            console.log('Displayed tab:', tabId);
+            selectedTab.style.display = 'block'; // إظهار التبويب المطلوب
         } else {
-            console.error('Tab not found:', tabId);
+            console.error('لم يتم العثور على القسم:', tabId);
         }
     }
 
-    // Display the default tab when the page loads
+    // عند تحميل الصفحة، قم بإظهار القسم الافتراضي
     document.addEventListener("DOMContentLoaded", function () {
-        showTab('membersTab'); // Default tab ID
+        showTab('membersTab'); // القسم الافتراضي عند تحميل الصفحة
     });
-);
+</script>
+
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.style.display = 'none';
+        });
         document.getElementById(tabId).style.display = 'block';
     }
 
