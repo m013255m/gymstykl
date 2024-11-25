@@ -442,28 +442,7 @@
         complaints: JSON.parse(localStorage.getItem('complaints')) || []
     };
 
-    <script>
     function showTab(tabId) {
-        // إخفاء كل الأقسام
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.style.display = 'none'; // إخفاء كل التبويبات
-        });
-
-        // إظهار القسم المطلوب
-        const selectedTab = document.getElementById(tabId);
-        if (selectedTab) {
-            selectedTab.style.display = 'block'; // إظهار التبويب المطلوب
-        } else {
-            console.error('لم يتم العثور على القسم:', tabId);
-        }
-    }
-
-    // عند تحميل الصفحة، قم بإظهار القسم الافتراضي
-    document.addEventListener("DOMContentLoaded", function () {
-        showTab('membersTab'); // القسم الافتراضي عند تحميل الصفحة
-    });
-</script>
-
         document.querySelectorAll('.tab').forEach(tab => {
             tab.style.display = 'none';
         });
@@ -992,3 +971,38 @@
         displayComplaints();
     }
 });
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // إخفاء كل الأقسام
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.style.display = 'none'; 
+        });
+        
+        // إظهار القسم الافتراضي عند تحميل الصفحة
+        showTab('membersTab'); // يمكنك تغيير 'membersTab' لعرض أي قسم افتراضي
+    });
+
+    function showTab(tabId) {
+        // إخفاء جميع الأقسام
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.style.display = 'none';
+        });
+
+        // إظهار القسم المحدد
+        const selectedTab = document.getElementById(tabId);
+        if (selectedTab) {
+            selectedTab.style.display = 'block';
+        } else {
+            console.error('لم يتم العثور على القسم:', tabId);
+        }
+    }
+
+    // ربط الروابط بالأقسام عند الضغط
+    document.querySelectorAll('.sidebar a').forEach(link => {
+        link.addEventListener('click', function(event) {
+            const tabId = event.target.getAttribute('onclick').match(/'([^']+)'/)[1];
+            showTab(tabId); // عرض القسم عند الضغط على الرابط
+        });
+    });
+</script>
