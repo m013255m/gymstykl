@@ -8,302 +8,144 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
+            background-color: #f4f4f9;
             margin: 0;
             padding: 0;
         }
-
         .container {
             display: flex;
         }
-
         .sidebar {
             width: 250px;
             background-color: #333;
             color: white;
             padding: 20px;
             height: 100vh;
-            position: fixed;
-            overflow-y: auto;
         }
-
         .sidebar h2 {
-            text-align: center;
             font-size: 24px;
+            text-align: center;
             margin-bottom: 20px;
         }
-
-        .sidebar ul {
+        .sidebar nav ul {
             list-style: none;
             padding: 0;
         }
-
-        .sidebar ul li {
-            margin: 10px 0;
+        .sidebar nav ul li {
+            margin: 15px 0;
         }
-
-        .sidebar ul li a {
+        .sidebar nav ul li a {
             color: white;
             text-decoration: none;
             font-size: 18px;
-            padding: 10px;
             display: block;
+            padding: 10px;
             border-radius: 5px;
+            transition: background-color 0.3s;
         }
-
-        .sidebar ul li a:hover {
+        .sidebar nav ul li a:hover {
             background-color: #575757;
         }
-
         .content {
-            margin-left: 270px;
+            flex: 1;
             padding: 20px;
-            width: calc(100% - 270px);
+            background-color: white;
         }
-
         .tab {
             display: none;
         }
-
-        .tab.active {
-            display: block;
+        .tab-content {
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-top: 20px;
         }
-
-        form input, form textarea, form button {
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        form button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin-top: 20px;
         }
-
         table th, table td {
             padding: 10px;
-            border: 1px solid #ddd;
             text-align: center;
+            border: 1px solid #ddd;
         }
-
         table th {
             background-color: #f2f2f2;
+        }
+        input[type="text"], input[type="number"], input[type="date"], input[type="tel"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .warning {
+            color: red;
         }
     </style>
 </head>
 <body>
-
 <div class="container">
-    <!-- Sidebar -->
+    <!-- الشريط الجانبي -->
     <aside class="sidebar">
         <h2>إدارة الجيم</h2>
-        <ul>
-            <li><a href="#" onclick="showTab('membersTab')">إدارة الأعضاء</a></li>
-            <li><a href="#" onclick="showTab('renewalTab')">الأعضاء بحاجة لتجديد الاشتراك</a></li>
-            <li><a href="#" onclick="showTab('ratingsTab')">التقييمات والملاحظات</a></li>
-            <li><a href="#" onclick="showTab('trainersTab')">إدارة المدربين</a></li>
-            <li><a href="#" onclick="showTab('subscriptionsTab')">إدارة الاشتراكات</a></li>
-            <li><a href="#" onclick="showTab('inventoryTab')">إدارة المخزون</a></li>
-            <li><a href="#" onclick="showTab('complaintsTab')">الشكاوى</a></li>
-            <li><a href="#" onclick="showTab('documentsTab')">إدارة الوثائق</a></li>
-        </ul>
+        <nav>
+            <ul>
+                <li><a href="javascript:void(0);" onclick="showTab('membersTab')">إدارة الأعضاء</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('trainersTab')">إدارة المدربين</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('subscriptionsTab')">إدارة الاشتراكات</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('inventoryTab')">إدارة المخزون</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('damagedInventoryTab')">المخزون التالف</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('mealsTab')">إدارة الوجبات الغذائية</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('ratingsTab')">التقييمات والملاحظات</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('rewardsTab')">المكافآت والحوافز</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('specialRequestsTab')">الطلبات الخاصة</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('marketingTab')">حملات التسويق</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('advancedSchedulingTab')">الجدولة المتقدمة</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('complaintsTab')">الشكاوي</a></li>
+            </ul>
+        </nav>
     </aside>
-
-    <!-- Content -->
+    <!-- المحتوى -->
     <main class="content">
-        <!-- إدارة الأعضاء -->
+        <!-- الأقسام -->
         <div id="membersTab" class="tab">
             <h3>إدارة الأعضاء</h3>
             <form>
-                <input type="text" placeholder="اسم العضو" required>
-                <input type="date" placeholder="تاريخ الانضمام" required>
-                <input type="number" placeholder="رقم الهاتف" required>
-                <button>إضافة عضو</button>
-            </form>
-            <table>
-                <thead>
-                    <tr>
-                        <th>اسم العضو</th>
-                        <th>تاريخ الانضمام</th>
-                        <th>رقم الهاتف</th>
-                        <th>إجراء</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- بيانات -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- الأعضاء بحاجة لتجديد الاشتراك -->
-        <div id="renewalTab" class="tab">
-            <h3>الأعضاء بحاجة لتجديد الاشتراك</h3>
-            <form>
-                <input type="text" placeholder="اسم العضو" required>
-                <input type="date" placeholder="تاريخ التجديد" required>
-                <button>تجديد الاشتراك</button>
-            </form>
-            <table>
-                <thead>
-                    <tr>
-                        <th>اسم العضو</th>
-                        <th>تاريخ انتهاء الاشتراك</th>
-                        <th>إجراء</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- بيانات -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- التقييمات والملاحظات -->
-        <div id="ratingsTab" class="tab">
-            <h3>التقييمات والملاحظات</h3>
-            <form>
-                <textarea placeholder="أضف تقييم"></textarea>
+                <input type="text" placeholder="اسم العضو">
+                <input type="tel" placeholder="رقم الهاتف">
                 <button>إضافة</button>
             </form>
-            <table>
-                <thead>
-                    <tr>
-                        <th>التقييم</th>
-                        <th>التاريخ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- بيانات -->
-                </tbody>
-            </table>
         </div>
-
-        <!-- إدارة المدربين -->
         <div id="trainersTab" class="tab">
             <h3>إدارة المدربين</h3>
             <form>
-                <input type="text" placeholder="اسم المدرب" required>
-                <input type="number" placeholder="رقم الهاتف" required>
-                <textarea placeholder="ملاحظات"></textarea>
-                <button>إضافة مدرب</button>
+                <input type="text" placeholder="اسم المدرب">
+                <input type="tel" placeholder="رقم الهاتف">
+                <button>إضافة</button>
             </form>
-            <table>
-                <thead>
-                    <tr>
-                        <th>اسم المدرب</th>
-                        <th>رقم الهاتف</th>
-                        <th>ملاحظات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- بيانات -->
-                </tbody>
-            </table>
         </div>
-
-        <!-- إدارة الاشتراكات -->
-        <div id="subscriptionsTab" class="tab">
-            <h3>إدارة الاشتراكات</h3>
-            <form>
-                <input type="text" placeholder="نوع الاشتراك" required>
-                <input type="number" placeholder="السعر" required>
-                <textarea placeholder="تفاصيل"></textarea>
-                <button>إضافة اشتراك</button>
-            </form>
-            <table>
-                <thead>
-                    <tr>
-                        <th>نوع الاشتراك</th>
-                        <th>السعر</th>
-                        <th>التفاصيل</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- بيانات -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- إدارة المخزون -->
-        <div id="inventoryTab" class="tab">
-            <h3>إدارة المخزون</h3>
-            <form>
-                <input type="text" placeholder="اسم العنصر" required>
-                <input type="number" placeholder="الكمية" required>
-                <button>إضافة عنصر</button>
-            </form>
-            <table>
-                <thead>
-                    <tr>
-                        <th>اسم العنصر</th>
-                        <th>الكمية</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- بيانات -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- قسم الشكاوى -->
-        <div id="complaintsTab" class="tab">
-            <h3>الشكاوى</h3>
-            <form>
-                <textarea placeholder="تفاصيل الشكوى"></textarea>
-                <button>إضافة شكوى</button>
-            </form>
-            <table>
-                <thead>
-                    <tr>
-                        <th>تفاصيل الشكوى</th>
-                        <th>التاريخ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- بيانات -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- إدارة الوثائق -->
-        <div id="documentsTab" class="tab">
-            <h3>إدارة الوثائق</h3>
-            <form>
-                <input type="file" required>
-                <textarea placeholder="ملاحظات"></textarea>
-                <button>رفع وثيقة</button>
-            </form>
-            <table>
-                <thead>
-                    <tr>
-                        <th>اسم الوثيقة</th>
-                        <th>التاريخ</th>
-                        <th>ملاحظات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- بيانات -->
-                </tbody>
-            </table>
-        </div>
+        <!-- إضافة باقي الأقسام هنا بنفس النمط -->
     </main>
 </div>
 
 <script>
     function showTab(tabId) {
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(tab => tab.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
+        document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'none');
+        document.getElementById(tabId).style.display = 'block';
     }
 </script>
 </body>
