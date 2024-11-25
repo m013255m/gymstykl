@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الجيم</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
+        /* تصميم عام */
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f4f4f9;
@@ -92,9 +92,6 @@
         button:hover {
             background-color: #45a049;
         }
-        .warning {
-            color: red;
-        }
     </style>
 </head>
 <body>
@@ -108,37 +105,123 @@
                 <li><a href="javascript:void(0);" onclick="showTab('trainersTab')">إدارة المدربين</a></li>
                 <li><a href="javascript:void(0);" onclick="showTab('subscriptionsTab')">إدارة الاشتراكات</a></li>
                 <li><a href="javascript:void(0);" onclick="showTab('inventoryTab')">إدارة المخزون</a></li>
-                <li><a href="javascript:void(0);" onclick="showTab('damagedInventoryTab')">المخزون التالف</a></li>
                 <li><a href="javascript:void(0);" onclick="showTab('mealsTab')">إدارة الوجبات الغذائية</a></li>
-                <li><a href="javascript:void(0);" onclick="showTab('ratingsTab')">التقييمات والملاحظات</a></li>
-                <li><a href="javascript:void(0);" onclick="showTab('rewardsTab')">المكافآت والحوافز</a></li>
-                <li><a href="javascript:void(0);" onclick="showTab('specialRequestsTab')">الطلبات الخاصة</a></li>
-                <li><a href="javascript:void(0);" onclick="showTab('marketingTab')">حملات التسويق</a></li>
-                <li><a href="javascript:void(0);" onclick="showTab('advancedSchedulingTab')">الجدولة المتقدمة</a></li>
-                <li><a href="javascript:void(0);" onclick="showTab('complaintsTab')">الشكاوي</a></li>
             </ul>
         </nav>
     </aside>
+
     <!-- المحتوى -->
     <main class="content">
-        <!-- الأقسام -->
+        <!-- إدارة الأعضاء -->
         <div id="membersTab" class="tab">
             <h3>إدارة الأعضاء</h3>
             <form>
                 <input type="text" placeholder="اسم العضو">
                 <input type="tel" placeholder="رقم الهاتف">
-                <button>إضافة</button>
+                <input type="date" placeholder="تاريخ الاشتراك">
+                <button>إضافة عضو</button>
             </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>الاسم</th>
+                        <th>رقم الهاتف</th>
+                        <th>تاريخ الاشتراك</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- بيانات الأعضاء -->
+                </tbody>
+            </table>
         </div>
+
+        <!-- إدارة المدربين -->
         <div id="trainersTab" class="tab">
             <h3>إدارة المدربين</h3>
             <form>
                 <input type="text" placeholder="اسم المدرب">
                 <input type="tel" placeholder="رقم الهاتف">
-                <button>إضافة</button>
+                <input type="text" placeholder="التخصص">
+                <button>إضافة مدرب</button>
             </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>الاسم</th>
+                        <th>رقم الهاتف</th>
+                        <th>التخصص</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- بيانات المدربين -->
+                </tbody>
+            </table>
         </div>
-        <!-- إضافة باقي الأقسام هنا بنفس النمط -->
+
+        <!-- إدارة الاشتراكات -->
+        <div id="subscriptionsTab" class="tab">
+            <h3>إدارة الاشتراكات</h3>
+            <form>
+                <input type="text" placeholder="اسم العضو">
+                <input type="text" placeholder="نوع الاشتراك">
+                <input type="date" placeholder="تاريخ الانتهاء">
+                <button>إضافة اشتراك</button>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>نوع الاشتراك</th>
+                        <th>تاريخ الانتهاء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- بيانات الاشتراكات -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- إدارة المخزون -->
+        <div id="inventoryTab" class="tab">
+            <h3>إدارة المخزون</h3>
+            <form>
+                <input type="text" placeholder="اسم العنصر">
+                <input type="number" placeholder="الكمية">
+                <button>إضافة إلى المخزون</button>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>اسم العنصر</th>
+                        <th>الكمية</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- بيانات المخزون -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- إدارة الوجبات الغذائية -->
+        <div id="mealsTab" class="tab">
+            <h3>إدارة الوجبات الغذائية</h3>
+            <form>
+                <input type="text" placeholder="اسم الوجبة">
+                <textarea placeholder="مكونات الوجبة"></textarea>
+                <button>إضافة وجبة</button>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>اسم الوجبة</th>
+                        <th>المكونات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- بيانات الوجبات -->
+                </tbody>
+            </table>
+        </div>
     </main>
 </div>
 
