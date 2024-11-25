@@ -444,6 +444,9 @@
 
     
     function showTab(tabId) {
+        // Debug message to check the received tab ID
+        console.log('Switching to tab:', tabId);
+
         // Hide all tabs
         document.querySelectorAll('.tab').forEach(tab => {
             tab.style.display = 'none';
@@ -452,6 +455,7 @@
         const selectedTab = document.getElementById(tabId);
         if (selectedTab) {
             selectedTab.style.display = 'block';
+            console.log('Displayed tab:', tabId);
         } else {
             console.error('Tab not found:', tabId);
         }
