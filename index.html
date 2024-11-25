@@ -24,6 +24,24 @@
     document.addEventListener("DOMContentLoaded", function () {
         showTab('membersTab'); // القسم الافتراضي عند تحميل الصفحة
     });
+        <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // منع إعادة تحميل الصفحة عند الضغط على زر الإرسال
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // إلغاء السلوك الافتراضي
+                const formId = form.getAttribute('id');
+
+                // تنفيذ دالة الإضافة المناسبة بناءً على الـ ID الخاص بالنموذج
+                if (formId === 'membersForm') addMember(event);
+                if (formId === 'trainersForm') addTrainer(event);
+                if (formId === 'subscriptionsForm') addSubscription(event);
+                // أضف باقي النماذج هنا إذا لزم الأمر
+            });
+        });
+    });
+</script>
+
 </script>
 
     <style>
