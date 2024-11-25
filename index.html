@@ -4,262 +4,970 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الجيم</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
         }
+
         .container {
             display: flex;
         }
+
         .sidebar {
             width: 250px;
             background-color: #333;
             color: white;
-            padding: 15px;
+            padding: 20px;
             height: 100vh;
         }
+
         .sidebar h2 {
+            font-size: 24px;
             text-align: center;
+            margin-bottom: 20px;
         }
-        .sidebar ul {
+
+        .sidebar nav ul {
             list-style: none;
             padding: 0;
         }
-        .sidebar ul li {
+
+        .sidebar nav ul li {
             margin: 15px 0;
         }
-        .sidebar ul li a {
-            text-decoration: none;
+
+        .sidebar nav ul li a {
             color: white;
-            padding: 10px;
+            text-decoration: none;
+            font-size: 18px;
             display: block;
+            padding: 10px;
             border-radius: 5px;
             transition: background-color 0.3s;
         }
-        .sidebar ul li a:hover {
+
+        .sidebar nav ul li a:hover {
             background-color: #575757;
         }
+
         .content {
             flex: 1;
             padding: 20px;
+            background-color: white;
         }
+
         .tab {
             display: none;
         }
-        .tab.active {
-            display: block;
+
+        .tab-buttons {
+            display: flex;
+            background-color: #f1f1f1;
+            padding: 10px;
         }
-        form {
-            margin-top: 15px;
+
+        .tab-buttons button {
+            background-color: #ddd;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
-        input, textarea, select, button {
+
+        .tab-buttons button.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .tab-content {
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"], input[type="number"], input[type="date"], input[type="tel"], textarea {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
-            border: 1px solid #ddd;
+            border: 1px solid #ccc;
             border-radius: 5px;
         }
+
         button {
             background-color: #4CAF50;
             color: white;
+            padding: 10px 20px;
             border: none;
             cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
         }
+
         button:hover {
             background-color: #45a049;
+        }
+
+        .warning {
+            color: red;
         }
     </style>
 </head>
 <body>
+
 <div class="container">
+    <!-- الشريط الجانبي -->
     <aside class="sidebar">
         <h2>إدارة الجيم</h2>
-        <ul>
-            <li><a href="#members" onclick="showTab('members')">إدارة الأعضاء</a></li>
-            <li><a href="#trainers" onclick="showTab('trainers')">إدارة المدربين</a></li>
-            <li><a href="#subscriptions" onclick="showTab('subscriptions')">إدارة الاشتراكات</a></li>
-            <li><a href="#inventory" onclick="showTab('inventory')">إدارة المخزون</a></li>
-            <li><a href="#damaged" onclick="showTab('damaged')">إدارة المخزون التالف</a></li>
-            <li><a href="#meals" onclick="showTab('meals')">إدارة الوجبات الغذائية</a></li>
-            <li><a href="#ratings" onclick="showTab('ratings')">التقييمات والملاحظات</a></li>
-            <li><a href="#rewards" onclick="showTab('rewards')">المكافآت والحوافز</a></li>
-            <li><a href="#requests" onclick="showTab('requests')">الطلبات الخاصة</a></li>
-            <li><a href="#marketing" onclick="showTab('marketing')">حملات التسويق</a></li>
-            <li><a href="#scheduling" onclick="showTab('scheduling')">الجدولة المتقدمة</a></li>
-            <li><a href="#complaints" onclick="showTab('complaints')">الشكاوى</a></li>
-            <li><a href="#penalties" onclick="showTab('penalties')">إدارة العقوبات</a></li>
-        </ul>
+        <nav>
+            <ul>
+                <li><a href="javascript:void(0);" onclick="showTab('membersTab')">إدارة الأعضاء</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('trainersTab')">إدارة المدربين</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('subscriptionsTab')">إدارة الاشتراكات</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('inventoryTab')">إدارة المخزون</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('damagedInventoryTab')">المخزون التالف</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('mealsTab')">إدارة الوجبات الغذائية</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('ratingsTab')">التقييمات والملاحظات</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('rewardsTab')">المكافآت والحوافز</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('specialRequestsTab')">الطلبات الخاصة</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('marketingTab')">حملات التسويق</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('advancedSchedulingTab')">الجدولة المتقدمة</a></li>
+                <li><a href="javascript:void(0);" onclick="showTab('complaintsTab')">الشكاوي</a></li>
+            </ul>
+        </nav>
     </aside>
+
+    <!-- المحتوى -->
     <main class="content">
         <!-- إدارة الأعضاء -->
-        <div id="members" class="tab active">
+        <div id="membersTab" class="tab">
             <h3>إدارة الأعضاء</h3>
-            <form>
-                <input type="text" placeholder="اسم العضو" required>
-                <input type="date" placeholder="تاريخ الانضمام" required>
-                <input type="tel" placeholder="رقم الهاتف" required>
-                <select>
-                    <option value="male">ذكر</option>
-                    <option value="female">أنثى</option>
-                </select>
-                <textarea placeholder="ملاحظات إضافية"></textarea>
-                <button>إضافة عضو</button>
+            <form id="membersForm" onsubmit="addMember(event)">
+                <input type="text" name="memberName" placeholder="اسم العضو" required>
+                <input type="tel" name="memberPhone" placeholder="رقم الهاتف" required>
+                <input type="date" name="memberJoinDate" required>
+                <button type="submit">إضافة عضو</button>
             </form>
+            <table id="membersTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>رقم الهاتف</th>
+                        <th>تاريخ الانضمام</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
         <!-- إدارة المدربين -->
-        <div id="trainers" class="tab">
+        <div id="trainersTab" class="tab">
             <h3>إدارة المدربين</h3>
-            <form>
-                <input type="text" placeholder="اسم المدرب" required>
-                <input type="text" placeholder="التخصص" required>
-                <input type="number" placeholder="الراتب الشهري" required>
-                <input type="tel" placeholder="رقم الهاتف" required>
-                <textarea placeholder="ملاحظات"></textarea>
-                <button>إضافة مدرب</button>
+            <form id="trainersForm" onsubmit="addTrainer(event)">
+                <input type="text" name="trainerName" placeholder="اسم المدرب" required>
+                <input type="tel" name="trainerPhone" placeholder="رقم الهاتف" required>
+                <input type="text" name="trainerSpecialty" placeholder="التخصص" required>
+                <button type="submit">إضافة مدرب</button>
             </form>
+            <table id="trainersTable">
+                <thead>
+                    <tr>
+                        <th>اسم المدرب</th>
+                        <th>رقم الهاتف</th>
+                        <th>التخصص</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
         <!-- إدارة الاشتراكات -->
-        <div id="subscriptions" class="tab">
+        <div id="subscriptionsTab" class="tab">
             <h3>إدارة الاشتراكات</h3>
-            <form>
-                <input type="text" placeholder="اسم العضو" required>
-                <input type="date" placeholder="تاريخ البداية" required>
-                <input type="date" placeholder="تاريخ النهاية" required>
-                <select>
-                    <option value="monthly">شهري</option>
-                    <option value="quarterly">ربع سنوي</option>
-                    <option value="yearly">سنوي</option>
-                </select>
-                <input type="number" placeholder="المبلغ المدفوع" required>
-                <button>إضافة اشتراك</button>
+            <form id="subscriptionsForm" onsubmit="addSubscription(event)">
+                <input type="text" name="subscriptionName" placeholder="اسم الاشتراك" required>
+                <input type="number" name="subscriptionPrice" placeholder="السعر" required>
+                <input type="date" name="subscriptionDate" required>
+                <button type="submit">إضافة اشتراك</button>
             </form>
+            <table id="subscriptionsTable">
+                <thead>
+                    <tr>
+                        <th>اسم الاشتراك</th>
+                        <th>السعر</th>
+                        <th>تاريخ البدء</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
         <!-- إدارة المخزون -->
-        <div id="inventory" class="tab">
+        <div id="inventoryTab" class="tab">
             <h3>إدارة المخزون</h3>
-            <form>
-                <input type="text" placeholder="اسم المنتج" required>
-                <input type="number" placeholder="الكمية" required>
-                <input type="number" placeholder="السعر" required>
-                <textarea placeholder="ملاحظات"></textarea>
-                <button>إضافة منتج</button>
+            <form id="inventoryForm" onsubmit="addInventory(event)">
+                <input type="text" name="itemName" placeholder="اسم العنصر" required>
+                <input type="number" name="itemQuantity" placeholder="الكمية" required>
+                <button type="submit">إضافة عنصر</button>
             </form>
+            <table id="inventoryTable">
+                <thead>
+                    <tr>
+                        <th>اسم العنصر</th>
+                        <th>الكمية</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
-        <!-- إدارة المخزون التالف -->
-        <div id="damaged" class="tab">
-            <h3>إدارة المخزون التالف</h3>
-            <form>
-                <input type="text" placeholder="اسم المنتج" required>
-                <input type="number" placeholder="الكمية التالفة" required>
-                <textarea placeholder="سبب التلف" required></textarea>
-                <button>إضافة سجل تالف</button>
+        <!-- المخزون التالف -->
+        <div id="damagedInventoryTab" class="tab">
+            <h3>المخزون التالف</h3>
+            <form id="damagedInventoryForm" onsubmit="addDamagedInventory(event)">
+                <input type="text" name="damagedItemName" placeholder="اسم العنصر التالف" required>
+                <input type="number" name="damagedItemQuantity" placeholder="الكمية التالفة" required>
+                <button type="submit">إضافة عنصر تالف</button>
             </form>
+            <table id="damagedInventoryTable">
+                <thead>
+                    <tr>
+                        <th>اسم العنصر التالف</th>
+                        <th>الكمية التالفة</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
-        <!-- إدارة الوجبات الغذائية -->
-        <div id="meals" class="tab">
+        <!-- إدارة الوجبات -->
+        <div id="mealsTab" class="tab">
             <h3>إدارة الوجبات الغذائية</h3>
-            <form>
-                <input type="text" placeholder="اسم الوجبة" required>
-                <textarea placeholder="تفاصيل الوجبة"></textarea>
-                <input type="number" placeholder="السعر" required>
-                <input type="number" placeholder="عدد السعرات الحرارية" required>
-                <button>إضافة وجبة</button>
+            <form id="mealsForm" onsubmit="addMeal(event)">
+                <input type="text" name="mealName" placeholder="اسم الوجبة" required>
+                <input type="number" name="mealCalories" placeholder="السعرات الحرارية" required>
+                <button type="submit">إضافة وجبة</button>
             </form>
+            <table id="mealsTable">
+                <thead>
+                    <tr>
+                        <th>اسم الوجبة</th>
+                        <th>السعرات الحرارية</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
-        <!-- التقييمات والملاحظات -->
-        <div id="ratings" class="tab">
+        <!-- التقييمات -->
+        <div id="ratingsTab" class="tab">
             <h3>التقييمات والملاحظات</h3>
-            <form>
-                <select>
-                    <option value="trainer1">المدرب 1</option>
-                    <option value="trainer2">المدرب 2</option>
-                    <option value="trainer3">المدرب 3</option>
-                </select>
-                <textarea placeholder="التقييم" required></textarea>
-                <button>إضافة تقييم</button>
+            <form id="ratingsForm" onsubmit="addRating(event)">
+                <input type="text" name="ratingTrainer" placeholder="اسم المدرب" required>
+                <textarea name="ratingText" placeholder="ملاحظات التقييم" required></textarea>
+                <button type="submit">إضافة تقييم</button>
             </form>
+            <table id="ratingsTable">
+                <thead>
+                    <tr>
+                        <th>اسم المدرب</th>
+                        <th>التقييم</th>
+                        <th>ملاحظات</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
-        <!-- المكافآت والحوافز -->
-        <div id="rewards" class="tab">
+        <!-- المكافآت -->
+        <div id="rewardsTab" class="tab">
             <h3>المكافآت والحوافز</h3>
-            <form>
-                <input type="text" placeholder="اسم العضو" required>
-                <textarea placeholder="تفاصيل المكافأة" required></textarea>
-                <button>إضافة مكافأة</button>
+            <form id="rewardsForm" onsubmit="addReward(event)">
+                <input type="text" name="rewardName" placeholder="اسم المكافأة" required>
+                <input type="number" name="rewardPoints" placeholder="النقاط" required>
+                <button type="submit">إضافة مكافأة</button>
             </form>
+            <table id="rewardsTable">
+                <thead>
+                    <tr>
+                        <th>اسم المكافأة</th>
+                        <th>النقاط</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
         <!-- الطلبات الخاصة -->
-        <div id="requests" class="tab">
+        <div id="specialRequestsTab" class="tab">
             <h3>الطلبات الخاصة</h3>
-            <form>
-                <input type="text" placeholder="اسم العضو" required>
-                <textarea placeholder="تفاصيل الطلب الخاص" required></textarea>
-                <button>إضافة طلب خاص</button>
+            <form id="specialRequestsForm" onsubmit="addSpecialRequest(event)">
+                <input type="text" name="specialRequestName" placeholder="اسم الطلب" required>
+                <textarea name="specialRequestDetails" placeholder="تفاصيل الطلب" required></textarea>
+                <button type="submit">إضافة طلب</button>
             </form>
+            <table id="specialRequestsTable">
+                <thead>
+                    <tr>
+                        <th>اسم الطلب</th>
+                        <th>تفاصيل الطلب</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
         <!-- حملات التسويق -->
-        <div id="marketing" class="tab">
+        <div id="marketingTab" class="tab">
             <h3>حملات التسويق</h3>
-            <form>
-                <input type="text" placeholder="اسم الحملة" required>
-                <textarea placeholder="تفاصيل الحملة" required></textarea>
-                <input type="date" placeholder="تاريخ بداية الحملة" required>
-                <input type="date" placeholder="تاريخ نهاية الحملة" required>
-                <button>إضافة حملة</button>
+            <form id="marketingForm" onsubmit="addMarketingCampaign(event)">
+                <input type="text" name="campaignName" placeholder="اسم الحملة" required>
+                <input type="date" name="campaignStartDate" required>
+                <input type="date" name="campaignEndDate" required>
+                <button type="submit">إضافة حملة</button>
             </form>
+            <table id="marketingTable">
+                <thead>
+                    <tr>
+                        <th>اسم الحملة</th>
+                        <th>تاريخ البدء</th>
+                        <th>تاريخ الانتهاء</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
         <!-- الجدولة المتقدمة -->
-        <div id="scheduling" class="tab">
+        <div id="advancedSchedulingTab" class="tab">
             <h3>الجدولة المتقدمة</h3>
-            <form>
-                <input type="text" placeholder="اسم المدرب" required>
-                <input type="datetime-local" placeholder="تاريخ ووقت الجلسة" required>
-                <textarea placeholder="ملاحظات عن الجلسة"></textarea>
-                <button>إضافة جلسة</button>
+            <form id="advancedSchedulingForm" onsubmit="addAdvancedSchedule(event)">
+                <input type="text" name="scheduleTitle" placeholder="عنوان الجدول" required>
+                <input type="date" name="scheduleDate" required>
+                <textarea name="scheduleDetails" placeholder="تفاصيل الجدول" required></textarea>
+                <button type="submit">إضافة جدول</button>
             </form>
+            <table id="advancedSchedulingTable">
+                <thead>
+                    <tr>
+                        <th>عنوان الجدول</th>
+                        <th>التاريخ</th>
+                        <th>التفاصيل</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
-        <!-- الشكاوى -->
-        <div id="complaints" class="tab">
-            <h3>الشكاوى</h3>
-            <form>
-                <input type="text" placeholder="اسم العضو" required>
-                <textarea placeholder="تفاصيل الشكوى" required></textarea>
-                <button>إضافة شكوى</button>
+        <!-- الشكاوي -->
+        <div id="complaintsTab" class="tab">
+            <h3>الشكاوي</h3>
+            <form id="complaintsForm" onsubmit="addComplaint(event)">
+                <input type="text" name="complaintTitle" placeholder="عنوان الشكوى" required>
+                <textarea name="complaintDetails" placeholder="تفاصيل الشكوى" required></textarea>
+                <button type="submit">إضافة شكوى</button>
             </form>
-        </div>
-
-        <!-- إدارة العقوبات -->
-        <div id="penalties" class="tab">
-            <h3>إدارة العقوبات</h3>
-            <form>
-                <input type="text" placeholder="اسم العضو" required>
-                <textarea placeholder="تفاصيل العقوبة" required></textarea>
-                <button>إضافة عقوبة</button>
-            </form>
+            <table id="complaintsTable">
+                <thead>
+                    <tr>
+                        <th>عنوان الشكوى</th>
+                        <th>التفاصيل</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </main>
 </div>
 
 <script>
+    let gymData = {
+        members: JSON.parse(localStorage.getItem('members')) || [],
+        trainers: JSON.parse(localStorage.getItem('trainers')) || [],
+        subscriptions: JSON.parse(localStorage.getItem('subscriptions')) || [],
+        inventory: JSON.parse(localStorage.getItem('inventory')) || [],
+        damagedInventory: JSON.parse(localStorage.getItem('damagedInventory')) || [],
+        meals: JSON.parse(localStorage.getItem('meals')) || [],
+        ratings: JSON.parse(localStorage.getItem('ratings')) || [],
+        rewards: JSON.parse(localStorage.getItem('rewards')) || [],
+        specialRequests: JSON.parse(localStorage.getItem('specialRequests')) || [],
+        marketing: JSON.parse(localStorage.getItem('marketing')) || [],
+        advancedScheduling: JSON.parse(localStorage.getItem('advancedScheduling')) || [],
+        complaints: JSON.parse(localStorage.getItem('complaints')) || []
+    };
+
     function showTab(tabId) {
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(tab => tab.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.style.display = 'none';
+        });
+        document.getElementById(tabId).style.display = 'block';
     }
-</script>
-</body>
-</html>
+
+    function addMember(event) {
+        event.preventDefault();
+        const form = document.getElementById('membersForm');
+        const name = form.memberName.value;
+        const phone = form.memberPhone.value;
+        const joinDate = form.memberJoinDate.value;
+        gymData.members.push({ name, phone, joinDate });
+        saveData();
+        form.reset();
+        displayMembers();
+    }
+
+    function addTrainer(event) {
+        event.preventDefault();
+        const form = document.getElementById('trainersForm');
+        const name = form.trainerName.value;
+        const phone = form.trainerPhone.value;
+        const specialty = form.trainerSpecialty.value;
+        gymData.trainers.push({ name, phone, specialty });
+        saveData();
+        form.reset();
+        displayTrainers();
+    }
+
+    function addSubscription(event) {
+        event.preventDefault();
+        const form = document.getElementById('subscriptionsForm');
+        const name = form.subscriptionName.value;
+        const price = form.subscriptionPrice.value;
+        const date = form.subscriptionDate.value;
+        gymData.subscriptions.push({ name, price, date });
+        saveData();
+        form.reset();
+        displaySubscriptions();
+    }
+
+    function addInventory(event) {
+        event.preventDefault();
+        const form = document.getElementById('inventoryForm');
+        const itemName = form.inventoryItemName.value;
+        const itemQuantity = form.inventoryItemQuantity.value;
+        gymData.inventory.push({ itemName, itemQuantity });
+        saveData();
+        form.reset();
+        displayInventory();
+    }
+
+    function addDamagedInventory(event) {
+        event.preventDefault();
+        const form = document.getElementById('damagedInventoryForm');
+        const itemName = form.damagedItemName.value;
+        const itemQuantity = form.damagedItemQuantity.value;
+        gymData.damagedInventory.push({ itemName, itemQuantity });
+        saveData();
+        form.reset();
+        displayDamagedInventory();
+    }
+
+    function addMeal(event) {
+        event.preventDefault();
+        const form = document.getElementById('mealsForm');
+        const mealName = form.mealName.value;
+        const mealCalories = form.mealCalories.value;
+        gymData.meals.push({ mealName, mealCalories });
+        saveData();
+        form.reset();
+        displayMeals();
+    }
+
+    function addRating(event) {
+        event.preventDefault();
+        const form = document.getElementById('ratingsForm');
+        const trainerName = form.ratingTrainer.value;
+        const ratingText = form.ratingText.value;
+        gymData.ratings.push({ trainerName, ratingText });
+        saveData();
+        form.reset();
+        displayRatings();
+    }
+
+    function addReward(event) {
+        event.preventDefault();
+        const form = document.getElementById('rewardsForm');
+        const rewardName = form.rewardName.value;
+        const rewardPoints = form.rewardPoints.value;
+        gymData.rewards.push({ rewardName, rewardPoints });
+        saveData();
+        form.reset();
+        displayRewards();
+    }
+
+    function addSpecialRequest(event) {
+        event.preventDefault();
+        const form = document.getElementById('specialRequestsForm');
+        const requestName = form.specialRequestName.value;
+        const requestDetails = form.specialRequestDetails.value;
+        gymData.specialRequests.push({ requestName, requestDetails });
+        saveData();
+        form.reset();
+        displaySpecialRequests();
+    }
+
+    function addMarketingCampaign(event) {
+        event.preventDefault();
+        const form = document.getElementById('marketingForm');
+        const campaignName = form.campaignName.value;
+        const campaignStartDate = form.campaignStartDate.value;
+        const campaignEndDate = form.campaignEndDate.value;
+        gymData.marketing.push({ campaignName, campaignStartDate, campaignEndDate });
+        saveData();
+        form.reset();
+        displayMarketingCampaigns();
+    }
+
+    function addAdvancedSchedule(event) {
+        event.preventDefault();
+        const form = document.getElementById('advancedSchedulingForm');
+        const scheduleTitle = form.scheduleTitle.value;
+        const scheduleDate = form.scheduleDate.value;
+        const scheduleDetails = form.scheduleDetails.value;
+        gymData.advancedScheduling.push({ scheduleTitle, scheduleDate, scheduleDetails });
+        saveData();
+        form.reset();
+        displayAdvancedSchedules();
+    }
+
+    function addComplaint(event) {
+        event.preventDefault();
+        const form = document.getElementById('complaintsForm');
+        const complaintTitle = form.complaintTitle.value;
+        const complaintDetails = form.complaintDetails.value;
+        gymData.complaints.push({ complaintTitle, complaintDetails });
+        saveData();
+        form.reset();
+        displayComplaints();
+    }
+
+    function saveData() {
+        localStorage.setItem('members', JSON.stringify(gymData.members));
+        localStorage.setItem('trainers', JSON.stringify(gymData.trainers));
+        localStorage.setItem('subscriptions', JSON.stringify(gymData.subscriptions));
+        localStorage.setItem('inventory', JSON.stringify(gymData.inventory));
+        localStorage.setItem('damagedInventory', JSON.stringify(gymData.damagedInventory));
+        localStorage.setItem('meals', JSON.stringify(gymData.meals));
+        localStorage.setItem('ratings', JSON.stringify(gymData.ratings));
+        localStorage.setItem('rewards', JSON.stringify(gymData.rewards));
+        localStorage.setItem('specialRequests', JSON.stringify(gymData.specialRequests));
+        localStorage.setItem('marketing', JSON.stringify(gymData.marketing));
+        localStorage.setItem('advancedScheduling', JSON.stringify(gymData.advancedScheduling));
+        localStorage.setItem('complaints', JSON.stringify(gymData.complaints));
+    }
+
+    function displayMembers() {
+        const tbody = document.getElementById('membersTable').querySelector('tbody');
+        tbody.innerHTML = '';
+        gymData.members.forEach(member => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${member.name}</td>
+                <td>${member.phone}</td>
+                <td>${member.joinDate}</td>
+                <td><button onclick="editMember(${gymData.members.indexOf(member)})">تعديل</button></td>
+                <td><button onclick="deleteMember(${gymData.members.indexOf(member)})">حذف</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displayTrainers() {
+        const tbody = document.getElementById('trainersTable').querySelector('tbody');
+        tbody.innerHTML = '';
+        gymData.trainers.forEach(trainer => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${trainer.name}</td>
+                <td>${trainer.phone}</td>
+                <td>${trainer.specialty}</td>
+                <td><button onclick="editTrainer(${gymData.trainers.indexOf(trainer)})">تعديل</button></td>
+                <td><button onclick="deleteTrainer(${gymData.trainers.indexOf(trainer)})">حذف</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displaySubscriptions() {
+        const tbody = document.getElementById('subscriptionsTable').querySelector('tbody');
+        tbody.innerHTML = '';
+        gymData.subscriptions.forEach(subscription => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${subscription.name}</td>
+                <td>${subscription.price}</td>
+                <td>${subscription.date}</td>
+                <td><button onclick="editSubscription(${gymData.subscriptions.indexOf(subscription)})">تعديل</button></td>
+                <td><button onclick="deleteSubscription(${gymData.subscriptions.indexOf(subscription)})">حذف</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displayInventory() {
+        const tbody = document.getElementById('inventoryTable').querySelector('tbody');
+        tbody.innerHTML = '';
+        gymData.inventory.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.itemName}</td>
+                <td>${item.itemQuantity}</td>
+                <td><button onclick="editInventory(${gymData.inventory.indexOf(item)})">تعديل</button></td>
+                <td><button onclick="deleteInventory(${gymData.inventory.indexOf(item)})">حذف</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displayDamagedInventory() {
+        const tbody = document.getElementById('damagedInventoryTable').querySelector('tbody');
+        tbody.innerHTML = '';
+        gymData.damagedInventory.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.itemName}</td>
+                <td>${item.itemQuantity}</td>
+                <td><button onclick="editDamagedInventory(${gymData.damagedInventory.indexOf(item)})">تعديل</button></td>
+                <td><button onclick="deleteDamagedInventory(${gymData.damagedInventory.indexOf(item)})">حذف</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displayMeals() {
+        const tbody = document.getElementById('mealsTable').querySelector('tbody');
+        tbody.innerHTML = '';
+        gymData.meals.forEach(meal => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${meal.mealName}</td>
+                <td>${meal.mealCalories}</td>
+                <td><button onclick="editMeal(${gymData.meals.indexOf(meal)})">تعديل</button></td>
+                <td><button onclick="deleteMeal(${gymData.meals.indexOf(meal)})">حذف</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displayRatings() {
+        const tbody = document.getElementById('ratingsTable').querySelector('tbody');
+        tbody.innerHTML = '';
+        gymData.ratings.forEach(rating => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${rating.trainerName}</td>
+                <td>${rating.ratingText}</td>
+                <td><button onclick="editRating(${gymData.ratings.indexOf(rating)})">تعديل</button></td>
+                <td><button onclick="deleteRating(${gymData.ratings.indexOf(rating)})">حذف</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displayRewards() {
+        const tbody = document.getElementById('rewardsTable').querySelector('tbody');
+        tbody.innerHTML = '';
+        gymData.rewards.forEach(reward => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${reward.rewardName}</td>
+                <td>${reward.rewardPoints}</td>
+                <td><button onclick="editReward(${gymData.rewards.indexOf(reward)})">تعديل</button></td>
+                <td><button onclick="deleteReward(${gymData.rewards.indexOf(reward)})">حذف</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displaySpecialRequests() {
+        const tbody = document.getElementById('specialRequestsTable').querySelector('tbody');
+        tbody.innerHTML = '';
+        gymData.specialRequests.forEach(request => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${request.requestName}</td>
+                <td>${request.requestDetails}</td>
+                <td><button onclick="editSpecialRequest(${gymData.specialRequests.indexOf(request)})">تعديل</button></td>
+                <td><button onclick="deleteSpecialRequest(${gymData.specialRequests.indexOf(request)})">حذف</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displayMarketingCampaigns() {
+        const tbody = document.getElementById('marketingTable').querySelector('tbody');
+        tbody.innerHTML = '';
+        gymData.marketing.forEach(campaign => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${campaign.campaignName}</td>
+                <td>${campaign.campaignStartDate}</td>
+                <td>${campaign.campaignEndDate}</td>
+                <td><button onclick="editMarketingCampaign(${gymData.marketing.indexOf(campaign)})">تعديل</button></td>
+                <td><button onclick="deleteMarketingCampaign(${gymData.marketing.indexOf(campaign)})">حذف</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displayAdvancedSchedules() {
+        const tbody = document.getElementById('advancedSchedulingTable').querySelector('tbody');
+        tbody.innerHTML = '';
+        gymData.advancedScheduling.forEach(schedule => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${schedule.scheduleTitle}</td>
+                <td>${schedule.scheduleDate}</td>
+                <td>${schedule.scheduleDetails}</td>
+                <td><button onclick="editAdvancedSchedule(${gymData.advancedScheduling.indexOf(schedule)})">تعديل</button></td>
+                <td><button onclick="deleteAdvancedSchedule(${gymData.advancedScheduling.indexOf(schedule)})">حذف</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displayComplaints() {
+        const tbody = document.getElementById('complaintsTable').querySelector('tbody');
+        tbody.innerHTML = '';
+        gymData.complaints.forEach(complaint => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${complaint.complaintTitle}</td>
+                <td>${complaint.complaintDetails}</td>
+                <td><button onclick="editComplaint(${gymData.complaints.indexOf(complaint)})">تعديل</button></td>
+                <td><button onclick="deleteComplaint(${gymData.complaints.indexOf(complaint)})">حذف</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function editMember(index) {
+        const member = gymData.members[index];
+        const form = document.getElementById('membersForm');
+        form.memberName.value = member.name;
+        form.memberPhone.value = member.phone;
+        form.memberJoinDate.value = member.joinDate;
+        gymData.members.splice(index, 1);
+        displayMembers();
+    }
+
+    function editTrainer(index) {
+        const trainer = gymData.trainers[index];
+        const form = document.getElementById('trainersForm');
+        form.trainerName.value = trainer.name;
+        form.trainerPhone.value = trainer.phone;
+        form.trainerSpecialty.value = trainer.specialty;
+        gymData.trainers.splice(index, 1);
+        displayTrainers();
+    }
+
+    function editSubscription(index) {
+        const subscription = gymData.subscriptions[index];
+        const form = document.getElementById('subscriptionsForm');
+        form.subscriptionName.value = subscription.name;
+        form.subscriptionPrice.value = subscription.price;
+        form.subscriptionDate.value = subscription.date;
+        gymData.subscriptions.splice(index, 1);
+        displaySubscriptions();
+    }
+
+    function editInventory(index) {
+        const item = gymData.inventory[index];
+        const form = document.getElementById('inventoryForm');
+        form.inventoryItemName.value = item.itemName;
+        form.inventoryItemQuantity.value = item.itemQuantity;
+        gymData.inventory.splice(index, 1);
+        displayInventory();
+    }
+
+    function editDamagedInventory(index) {
+        const item = gymData.damagedInventory[index];
+        const form = document.getElementById('damagedInventoryForm');
+        form.damagedItemName.value = item.itemName;
+        form.damagedItemQuantity.value = item.itemQuantity;
+        gymData.damagedInventory.splice(index, 1);
+        displayDamagedInventory();
+    }
+
+    function editMeal(index) {
+        const meal = gymData.meals[index];
+        const form = document.getElementById('mealsForm');
+        form.mealName.value = meal.mealName;
+        form.mealCalories.value = meal.mealCalories;
+        gymData.meals.splice(index, 1);
+        displayMeals();
+    }
+
+    function editRating(index) {
+        const rating = gymData.ratings[index];
+        const form = document.getElementById('ratingsForm');
+        form.ratingTrainer.value = rating.trainerName;
+        form.ratingText.value = rating.ratingText;
+        gymData.ratings.splice(index, 1);
+        displayRatings();
+    }
+
+    function editReward(index) {
+        const reward = gymData.rewards[index];
+        const form = document.getElementById('rewardsForm');
+        form.rewardName.value = reward.rewardName;
+        form.rewardPoints.value = reward.rewardPoints;
+        gymData.rewards.splice(index, 1);
+        displayRewards();
+    }
+
+    function editSpecialRequest(index) {
+        const request = gymData.specialRequests[index];
+        const form = document.getElementById('specialRequestsForm');
+        form.specialRequestName.value = request.requestName;
+        form.specialRequestDetails.value = request.requestDetails;
+        gymData.specialRequests.splice(index, 1);
+        displaySpecialRequests();
+    }
+
+    function editMarketingCampaign(index) {
+        const campaign = gymData.marketing[index];
+        const form = document.getElementById('marketingForm');
+        form.campaignName.value = campaign.campaignName;
+        form.campaignStartDate.value = campaign.campaignStartDate;
+        form.campaignEndDate.value = campaign.campaignEndDate;
+        gymData.marketing.splice(index, 1);
+        displayMarketingCampaigns();
+    }
+
+    function editAdvancedSchedule(index) {
+        const schedule = gymData.advancedScheduling[index];
+        const form = document.getElementById('advancedSchedulingForm');
+        form.scheduleTitle.value = schedule.scheduleTitle;
+        form.scheduleDate.value = schedule.scheduleDate;
+        form.scheduleDetails.value = schedule.scheduleDetails;
+        gymData.advancedScheduling.splice(index, 1);
+        displayAdvancedSchedules();
+    }
+
+    function editComplaint(index) {
+        const complaint = gymData.complaints[index];
+        const form = document.getElementById('complaintsForm');
+        form.complaintTitle.value = complaint.complaintTitle;
+        form.complaintDetails.value = complaint.complaintDetails;
+        gymData.complaints.splice(index, 1);
+        displayComplaints();
+    }
+
+    function deleteMember(index) {
+        gymData.members.splice(index, 1);
+        saveData();
+        displayMembers();
+    }
+
+    function deleteTrainer(index) {
+        gymData.trainers.splice(index, 1);
+        saveData();
+        displayTrainers();
+    }
+
+    function deleteSubscription(index) {
+        gymData.subscriptions.splice(index, 1);
+        saveData();
+        displaySubscriptions();
+    }
+
+    function deleteInventory(index) {
+        gymData.inventory.splice(index, 1);
+        saveData();
+        displayInventory();
+    }
+
+    function deleteDamagedInventory(index) {
+        gymData.damagedInventory.splice(index, 1);
+        saveData();
+        displayDamagedInventory();
+    }
+
+    function deleteMeal(index) {
+        gymData.meals.splice(index, 1);
+        saveData();
+        displayMeals();
+    }
+
+    function deleteRating(index) {
+        gymData.ratings.splice(index, 1);
+        saveData();
+        displayRatings();
+    }
+
+    function deleteReward(index) {
+        gymData.rewards.splice(index, 1);
+        saveData();
+        displayRewards();
+    }
+
+    function deleteSpecialRequest(index) {
+        gymData.specialRequests.splice(index, 1);
+        saveData();
+        displaySpecialRequests();
+    }
+
+    function deleteMarketingCampaign(index) {
+        gymData.marketing.splice(index, 1);
+        saveData();
+        displayMarketingCampaigns();
+    }
+
+    function deleteAdvancedSchedule(index) {
+        gymData.advancedScheduling.splice(index, 1);
+        saveData();
+        displayAdvancedSchedules();
+    }
+
+    function deleteComplaint(index) {
+        gymData.complaints.splice(index, 1);
+        saveData();
+        displayComplaints();
+    }
+});
