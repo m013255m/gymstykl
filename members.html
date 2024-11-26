@@ -22,10 +22,9 @@
             left: 0;
             height: 100%;
             width: 250px;
-            background-color: #333;
-            color: #fff;
+            background-color: #4CAF50; /* نفس اللون في الشريط الرئيسي */
+            color: white;
             padding-top: 20px;
-            padding-right: 20px;
             transition: 0.3s;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
@@ -41,7 +40,7 @@
         }
 
         .sidebar a:hover {
-            background-color: #4CAF50;
+            background-color: #45a049;
             border-radius: 5px;
         }
 
@@ -281,6 +280,39 @@
                 `;
                 tableBody.appendChild(row);
             });
+        };
+
+        // تعديل عضو
+        const editMember = (index) => {
+            const members = JSON.parse(localStorage.getItem('members')) || [];
+            const member = members[index];
+            document.getElementById('memberName').value = member.name;
+            document.getElementById('memberEmail').value = member.email;
+            document.getElementById('memberPhone').value = member.phone;
+            document.getElementById('memberJoinDate').value = member.joinDate;
+            
+            // تعديل الزر ليحفظ التعديل
+            const submitButton = document.querySelector('button[type="submit"]');
+            submitButton.textContent = 'تحديث العضو';
+            
+            submitButton.onclick = () => {
+                member.name = document.getElementById('memberName').value;
+                member.email = document.getElementById('memberEmail').value;
+                member.phone = document.getElementById('memberPhone').value;
+                member.joinDate = document.getElementById('memberJoinDate').value;
+                
+                localStorage.setItem('members', JSON.stringify(members));
+                loadMembers();
+                submitButton.textContent = 'إضافة العضو';
+            };
+        };
+
+        // حذف عضو
+        const deleteMember = (index) => {
+            const members = JSON.parse(localStorage.getItem('members')) || [];
+            members.splice(index, 1);
+            localStorage.setItem('members', JSON.stringify(members));
+            loadMembers();
         };
 
         // إضافة عضو جديد
