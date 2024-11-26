@@ -282,32 +282,31 @@
             });
         };
 
-        // تعديل عضو
-        const editMember = (index) => {
-            const members = JSON.parse(localStorage.getItem('members')) || [];
-            const member = members[index];
-            document.getElementById('memberName').value = member.name;
-            document.getElementById('memberEmail').value = member.email;
-            document.getElementById('memberPhone').value = member.phone;
-            document.getElementById('memberJoinDate').value = member.joinDate;
-            
-            // تعديل الزر ليحفظ التعديل
-            const submitButton = document.querySelector('button[type="submit"]');
-            submitButton.textContent = 'تحديث العضو';
-            
-            submitButton.onclick = () => {
-                member.name = document.getElementById('memberName').value;
-                member.email = document.getElementById('memberEmail').value;
-                member.phone = document.getElementById('memberPhone').value;
-                member.joinDate = document.getElementById('memberJoinDate').value;
-                
-                localStorage.setItem('members', JSON.stringify(members));
-                loadMembers();
-                submitButton.textContent = 'إضافة العضو';
+        const addMember = (e) => {
+            e.preventDefault();
+            const memberName = document.getElementById('memberName').value;
+            const memberEmail = document.getElementById('memberEmail').value;
+            const memberPhone = document.getElementById('memberPhone').value;
+            const memberJoinDate = document.getElementById('memberJoinDate').value;
+
+            const newMember = {
+                name: memberName,
+                email: memberEmail,
+                phone: memberPhone,
+                joinDate: memberJoinDate
             };
+
+            const members = JSON.parse(localStorage.getItem('members')) || [];
+            members.push(newMember);
+            localStorage.setItem('members', JSON.stringify(members));
+            loadMembers();
+            document.getElementById('addMemberForm').reset();
         };
 
-        // حذف عضو
+        const editMember = (index) => {
+            alert('تعديل العضو: ' + index);
+        };
+
         const deleteMember = (index) => {
             const members = JSON.parse(localStorage.getItem('members')) || [];
             members.splice(index, 1);
@@ -315,37 +314,10 @@
             loadMembers();
         };
 
-        // إضافة عضو جديد
-        const addMemberForm = document.getElementById('addMemberForm');
-        addMemberForm.addEventListener('submit', (event) => {
-            event.preventDefault();
+        document.getElementById('addMemberForm').addEventListener('submit', addMember);
 
-            // إظهار الأيقونة المتحركة
-            document.getElementById('loading').style.display = 'block';
-
-            // استخراج البيانات من النموذج
-            const memberName = document.getElementById('memberName').value;
-            const memberEmail = document.getElementById('memberEmail').value;
-            const memberPhone = document.getElementById('memberPhone').value;
-            const memberJoinDate = document.getElementById('memberJoinDate').value;
-
-            // إضافة البيانات إلى localStorage
-            const members = JSON.parse(localStorage.getItem('members')) || [];
-            members.push({ name: memberName, email: memberEmail, phone: memberPhone, joinDate: memberJoinDate });
-            localStorage.setItem('members', JSON.stringify(members));
-
-            // إخفاء الأيقونة المتحركة
-            document.getElementById('loading').style.display = 'none';
-
-            // إعادة تحميل الأعضاء في الجدول
-            loadMembers();
-
-            // مسح الحقول بعد الإضافة
-            addMemberForm.reset();
-        });
-
-        // تحميل الأعضاء عند فتح الصفحة
-        loadMembers();
+        window.onload = loadMembers;
     </script>
+
 </body>
 </html>
