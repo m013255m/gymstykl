@@ -1,68 +1,112 @@
 <!DOCTYPE html>
 <html lang="ar">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الصفحة الرئيسية</title>
     <style>
+        /* تعيين الخطوط وتنسيق الصفحة */
         body {
             font-family: Arial, sans-serif;
-            display: flex;
             margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
 
-        /* الشريط الجانبي */
+        /* تنسيق الشريط الجانبي */
         .sidebar {
             width: 250px;
+            height: 100vh;
             background-color: #333;
             color: white;
-            padding: 20px;
-            height: 100vh;
+            padding-top: 50px;
             position: fixed;
+            left: 0;
+            top: 0;
         }
 
-        .sidebar a {
+        .sidebar-btn {
+            background-color: #444;
+            border: none;
             color: white;
-            display: block;
-            padding: 10px;
-            text-decoration: none;
+            padding: 15px;
+            text-align: left;
+            width: 100%;
+            cursor: pointer;
+            font-size: 18px;
             margin-bottom: 10px;
+            transition: background-color 0.3s;
         }
 
-        .sidebar a:hover {
-            background-color: #575757;
+        .sidebar-btn:hover {
+            background-color: #555;
         }
 
-        /* المحتوى الرئيسي */
+        /* تنسيق المحتوى الرئيسي */
         .main-content {
-            margin-left: 260px;
+            margin-left: 250px;
             padding: 20px;
-            flex-grow: 1;
+            background-color: white;
+            height: 100vh;
+            overflow: auto;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        /* إضافة بعض التنسيقات المتقدمة لعمل تأثيرات */
+        .active-btn {
+            background-color: #007bff;
         }
     </style>
 </head>
+
 <body>
+    <!-- الشريط الجانبي -->
+    <div class="sidebar">
+        <button class="sidebar-btn" id="homeBtn" onclick="navigateTo('home')">الرئيسية</button>
+        <button class="sidebar-btn" id="contentBtn" onclick="navigateTo('content')">المحتوى</button>
+        <button class="sidebar-btn" id="settingsBtn" onclick="navigateTo('settings')">الإعدادات</button>
+        <button class="sidebar-btn" id="logoutBtn" onclick="navigateTo('logout')">الخروج</button>
+    </div>
 
-<div class="sidebar">
-    <h2>الشريط الجانبي</h2>
-    <a href="members.html">إدارة الأعضاء</a>
-    <a href="trainers.html">إدارة المدربين</a>
-    <a href="subscriptions.html">إدارة الاشتراكات</a>
-    <a href="inventory.html">إدارة المخزون</a>
-    <a href="damagedInventory.html">المخزون التالف</a>
-    <a href="meals.html">إدارة الوجبات الغذائية</a>
-    <a href="ratings.html">التقييمات والملاحظات</a>
-    <a href="rewards.html">المكافآت والحوافز</a>
-    <a href="specialRequests.html">الطلبات الخاصة</a>
-    <a href="marketing.html">حملات التسويق</a>
-    <a href="advancedScheduling.html">الجدولة المتقدمة</a>
-    <a href="complaints.html">الشكاوي</a>
-</div>
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content" id="mainContent">
+        <h1>أهلاً بك في الصفحة الرئيسية!</h1>
+        <p>هذا هو الجزء الرئيسي للتطبيق. يمكنك إضافة المزيد من المحتوى هنا.</p>
+    </div>
 
-<div class="main-content">
-    <h1>مرحبًا بك في الصفحة الرئيسية</h1>
-    <p>اختر قسمًا من الشريط الجانبي للوصول إلى النموذج المناسب.</p>
-</div>
+    <script>
+        // الوظيفة للتنقل بين الأقسام
+        function navigateTo(section) {
+            const content = document.getElementById('mainContent');
+            const buttons = document.querySelectorAll('.sidebar-btn');
 
+            // إزالة التنسيق النشط من جميع الأزرار
+            buttons.forEach(button => button.classList.remove('active-btn'));
+
+            // إضافة التنسيق النشط للزر الحالي
+            document.getElementById(section + 'Btn').classList.add('active-btn');
+
+            // تغيير المحتوى بناءً على الزر الذي تم الضغط عليه
+            if (section === 'home') {
+                content.innerHTML = `<h1>أهلاً بك في الصفحة الرئيسية!</h1><p>هذا هو الجزء الرئيسي للتطبيق. يمكنك إضافة المزيد من المحتوى هنا.</p>`;
+            } else if (section === 'content') {
+                content.innerHTML = `<h1>المحتوى</h1><p>هنا يمكنك إضافة المحتوى الخاص بك.</p>`;
+            } else if (section === 'settings') {
+                content.innerHTML = `<h1>الإعدادات</h1><p>هنا يمكنك تعديل إعدادات التطبيق.</p>`;
+            } else if (section === 'logout') {
+                content.innerHTML = `<h1>تسجيل الخروج</h1><p>تم تسجيل الخروج بنجاح.</p>`;
+            }
+        }
+    </script>
 </body>
+
 </html>
