@@ -27,6 +27,7 @@
             padding-top: 20px;
             padding-right: 20px;
             transition: 0.3s;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar a {
@@ -77,7 +78,7 @@
 
         .card-body {
             padding: 25px;
-            background-color: #f9f9f9;
+            background-color: #e8f5e9;
             border-radius: 10px;
         }
 
@@ -205,7 +206,7 @@
                 <div class="card-header">
                     <h4>إضافة عضو جديد</h4>
                 </div>
-                <div class="card-body" style="background-color: #e8f5e9;">
+                <div class="card-body">
                     <form id="addMemberForm">
                         <div class="row">
                             <div class="col-md-6">
@@ -286,6 +287,33 @@
         const addMemberForm = document.getElementById('addMemberForm');
         addMemberForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            
+
             // إظهار الأيقونة المتحركة
-            document.getElementById('loading').style.display =
+            document.getElementById('loading').style.display = 'block';
+
+            // استخراج البيانات من النموذج
+            const memberName = document.getElementById('memberName').value;
+            const memberEmail = document.getElementById('memberEmail').value;
+            const memberPhone = document.getElementById('memberPhone').value;
+            const memberJoinDate = document.getElementById('memberJoinDate').value;
+
+            // إضافة البيانات إلى localStorage
+            const members = JSON.parse(localStorage.getItem('members')) || [];
+            members.push({ name: memberName, email: memberEmail, phone: memberPhone, joinDate: memberJoinDate });
+            localStorage.setItem('members', JSON.stringify(members));
+
+            // إخفاء الأيقونة المتحركة
+            document.getElementById('loading').style.display = 'none';
+
+            // إعادة تحميل الأعضاء في الجدول
+            loadMembers();
+
+            // مسح الحقول بعد الإضافة
+            addMemberForm.reset();
+        });
+
+        // تحميل الأعضاء عند فتح الصفحة
+        loadMembers();
+    </script>
+</body>
+</html>
