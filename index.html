@@ -3,269 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الأقسام</title>
+    <title>الصفحة الرئيسية</title>
     <style>
-        /* تنسيق الأقسام */
-        .tab-content {
-            display: none; /* إخفاء جميع الأقسام افتراضيًا */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
         }
 
-        .tab-content.active {
-            display: block; /* عرض القسم النشط فقط */
-        }
-
-        /* تنسيق الروابط */
-        ul li {
-            display: inline-block;
-            margin: 10px;
-        }
-
-        ul li a {
-            text-decoration: none;
-            font-size: 18px;
-            color: #333;
-        }
-
-        /* تنسيق التاب النشط */
-        ul li a.active-tab {
-            font-weight: bold;
-            color: #007BFF;
-        }
-
-        /* تنسيق النماذج */
-        .form-container {
-            margin-top: 20px;
-        }
-
-        label {
-            font-size: 18px;
-            display: block;
-            margin: 10px 0;
-        }
-
-        input[type="text"], input[type="number"], select {
-            width: 100%;
-            padding: 8px;
-            font-size: 16px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            background-color: #007BFF;
+        /* الشريط الجانبي */
+        .sidebar {
+            width: 250px;
+            background-color: #333;
             color: white;
-            padding: 10px 20px;
-            font-size: 18px;
-            border: none;
-            cursor: pointer;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
         }
 
-        button:hover {
-            background-color: #0056b3;
+        .sidebar a {
+            color: white;
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            flex-grow: 1;
         }
     </style>
 </head>
 <body>
 
-<!-- قائمة الروابط -->
-<ul>
-    <li><a href="javascript:void(0);" onclick="showTab('membersTab')" id="tab-members">إدارة الأعضاء</a></li>
-    <li><a href="javascript:void(0);" onclick="showTab('trainersTab')" id="tab-trainers">إدارة المدربين</a></li>
-    <li><a href="javascript:void(0);" onclick="showTab('subscriptionsTab')" id="tab-subscriptions">إدارة الاشتراكات</a></li>
-    <li><a href="javascript:void(0);" onclick="showTab('inventoryTab')" id="tab-inventory">إدارة المخزون</a></li>
-    <li><a href="javascript:void(0);" onclick="showTab('damagedInventoryTab')" id="tab-damaged-inventory">المخزون التالف</a></li>
-    <li><a href="javascript:void(0);" onclick="showTab('mealsTab')" id="tab-meals">إدارة الوجبات الغذائية</a></li>
-    <li><a href="javascript:void(0);" onclick="showTab('ratingsTab')" id="tab-ratings">التقييمات والملاحظات</a></li>
-    <li><a href="javascript:void(0);" onclick="showTab('rewardsTab')" id="tab-rewards">المكافآت والحوافز</a></li>
-    <li><a href="javascript:void(0);" onclick="showTab('specialRequestsTab')" id="tab-special-requests">الطلبات الخاصة</a></li>
-    <li><a href="javascript:void(0);" onclick="showTab('marketingTab')" id="tab-marketing">حملات التسويق</a></li>
-    <li><a href="javascript:void(0);" onclick="showTab('advancedSchedulingTab')" id="tab-advanced-scheduling">الجدولة المتقدمة</a></li>
-    <li><a href="javascript:void(0);" onclick="showTab('complaintsTab')" id="tab-complaints">الشكاوي</a></li>
-</ul>
-
-<!-- الأقسام (Tabs) -->
-<div id="membersTab" class="tab-content">
-    <h2>إدارة الأعضاء</h2>
-    <div class="form-container">
-        <form>
-            <label for="memberName">اسم العضو</label>
-            <input type="text" id="memberName" name="memberName" required>
-            <label for="memberEmail">البريد الإلكتروني</label>
-            <input type="text" id="memberEmail" name="memberEmail" required>
-            <button type="submit">إضافة عضو</button>
-        </form>
-    </div>
+<div class="sidebar">
+    <h2>الشريط الجانبي</h2>
+    <a href="members.html">إدارة الأعضاء</a>
+    <a href="trainers.html">إدارة المدربين</a>
+    <a href="subscriptions.html">إدارة الاشتراكات</a>
+    <a href="inventory.html">إدارة المخزون</a>
+    <a href="damagedInventory.html">المخزون التالف</a>
+    <a href="meals.html">إدارة الوجبات الغذائية</a>
+    <a href="ratings.html">التقييمات والملاحظات</a>
+    <a href="rewards.html">المكافآت والحوافز</a>
+    <a href="specialRequests.html">الطلبات الخاصة</a>
+    <a href="marketing.html">حملات التسويق</a>
+    <a href="advancedScheduling.html">الجدولة المتقدمة</a>
+    <a href="complaints.html">الشكاوي</a>
 </div>
 
-<div id="trainersTab" class="tab-content">
-    <h2>إدارة المدربين</h2>
-    <div class="form-container">
-        <form>
-            <label for="trainerName">اسم المدرب</label>
-            <input type="text" id="trainerName" name="trainerName" required>
-            <label for="trainerSpecialty">التخصص</label>
-            <input type="text" id="trainerSpecialty" name="trainerSpecialty" required>
-            <button type="submit">إضافة مدرب</button>
-        </form>
-    </div>
+<div class="main-content">
+    <h1>مرحبًا بك في الصفحة الرئيسية</h1>
+    <p>اختر قسمًا من الشريط الجانبي للوصول إلى النموذج المناسب.</p>
 </div>
-
-<div id="subscriptionsTab" class="tab-content">
-    <h2>إدارة الاشتراكات</h2>
-    <div class="form-container">
-        <form>
-            <label for="subscriptionType">نوع الاشتراك</label>
-            <select id="subscriptionType" name="subscriptionType" required>
-                <option value="monthly">شهري</option>
-                <option value="quarterly">ربع سنوي</option>
-                <option value="yearly">سنوي</option>
-            </select>
-            <label for="subscriptionPrice">السعر</label>
-            <input type="number" id="subscriptionPrice" name="subscriptionPrice" required>
-            <button type="submit">إضافة اشتراك</button>
-        </form>
-    </div>
-</div>
-
-<div id="inventoryTab" class="tab-content">
-    <h2>إدارة المخزون</h2>
-    <div class="form-container">
-        <form>
-            <label for="itemName">اسم العنصر</label>
-            <input type="text" id="itemName" name="itemName" required>
-            <label for="itemQuantity">الكمية</label>
-            <input type="number" id="itemQuantity" name="itemQuantity" required>
-            <button type="submit">إضافة عنصر</button>
-        </form>
-    </div>
-</div>
-
-<div id="damagedInventoryTab" class="tab-content">
-    <h2>المخزون التالف</h2>
-    <div class="form-container">
-        <form>
-            <label for="damagedItemName">اسم العنصر التالف</label>
-            <input type="text" id="damagedItemName" name="damagedItemName" required>
-            <label for="damagedItemQuantity">الكمية التالفة</label>
-            <input type="number" id="damagedItemQuantity" name="damagedItemQuantity" required>
-            <button type="submit">إضافة عنصر تالف</button>
-        </form>
-    </div>
-</div>
-
-<div id="mealsTab" class="tab-content">
-    <h2>إدارة الوجبات الغذائية</h2>
-    <div class="form-container">
-        <form>
-            <label for="mealName">اسم الوجبة</label>
-            <input type="text" id="mealName" name="mealName" required>
-            <label for="mealPrice">السعر</label>
-            <input type="number" id="mealPrice" name="mealPrice" required>
-            <button type="submit">إضافة وجبة</button>
-        </form>
-    </div>
-</div>
-
-<div id="ratingsTab" class="tab-content">
-    <h2>التقييمات والملاحظات</h2>
-    <div class="form-container">
-        <form>
-            <label for="ratingScore">التقييم</label>
-            <input type="number" id="ratingScore" name="ratingScore" min="1" max="5" required>
-            <label for="ratingComments">الملاحظات</label>
-            <textarea id="ratingComments" name="ratingComments" rows="4" required></textarea>
-            <button type="submit">إضافة تقييم</button>
-        </form>
-    </div>
-</div>
-
-<div id="rewardsTab" class="tab-content">
-    <h2>المكافآت والحوافز</h2>
-    <div class="form-container">
-        <form>
-            <label for="rewardName">اسم المكافأة</label>
-            <input type="text" id="rewardName" name="rewardName" required>
-            <label for="rewardPoints">عدد النقاط</label>
-            <input type="number" id="rewardPoints" name="rewardPoints" required>
-            <button type="submit">إضافة مكافأة</button>
-        </form>
-    </div>
-</div>
-
-<div id="specialRequestsTab" class="tab-content">
-    <h2>الطلبات الخاصة</h2>
-    <div class="form-container">
-        <form>
-            <label for="specialRequestDescription">وصف الطلب الخاص</label>
-            <textarea id="specialRequestDescription" name="specialRequestDescription" rows="4" required></textarea>
-            <button type="submit">إضافة طلب</button>
-        </form>
-    </div>
-</div>
-
-<div id="marketingTab" class="tab-content">
-    <h2>حملات التسويق</h2>
-    <div class="form-container">
-        <form>
-            <label for="campaignName">اسم الحملة</label>
-            <input type="text" id="campaignName" name="campaignName" required>
-            <label for="campaignBudget">الميزانية</label>
-            <input type="number" id="campaignBudget" name="campaignBudget" required>
-            <button type="submit">إطلاق الحملة</button>
-        </form>
-    </div>
-</div>
-
-<div id="advancedSchedulingTab" class="tab-content">
-    <h2>الجدولة المتقدمة</h2>
-    <div class="form-container">
-        <form>
-            <label for="scheduleEvent">الحدث</label>
-            <input type="text" id="scheduleEvent" name="scheduleEvent" required>
-            <label for="scheduleTime">الوقت</label>
-            <input type="datetime-local" id="scheduleTime" name="scheduleTime" required>
-            <button type="submit">جدولة الحدث</button>
-        </form>
-    </div>
-</div>
-
-<div id="complaintsTab" class="tab-content">
-    <h2>الشكاوي</h2>
-    <div class="form-container">
-        <form>
-            <label for="complaintDescription">وصف الشكوى</label>
-            <textarea id="complaintDescription" name="complaintDescription" rows="4" required></textarea>
-            <button type="submit">إضافة شكوى</button>
-        </form>
-    </div>
-</div>
-
-<script>
-    // إظهار القسم الذي يتم النقر عليه
-    function showTab(tabName) {
-        const tabs = document.querySelectorAll('.tab-content');
-        tabs.forEach(tab => {
-            tab.classList.remove('active');
-        });
-
-        const activeTab = document.getElementById(tabName);
-        activeTab.classList.add('active');
-
-        // تغيير الرابط النشط
-        const links = document.querySelectorAll('ul li a');
-        links.forEach(link => {
-            link.classList.remove('active-tab');
-        });
-
-        const activeLink = document.getElementById(`tab-${tabName}`);
-        activeLink.classList.add('active-tab');
-    }
-
-    // تعيين القسم الأول كنشط عند تحميل الصفحة
-    document.addEventListener('DOMContentLoaded', () => {
-        showTab('membersTab');
-    });
-</script>
 
 </body>
 </html>
