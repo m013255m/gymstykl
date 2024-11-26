@@ -5,17 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الأعضاء</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f4f7fb;
             margin: 0;
             padding: 0;
+            display: flex;
         }
 
-        .container {
-            margin-top: 30px;
+        /* الشريط الجانبي */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            padding-top: 20px;
+            padding-right: 20px;
+            transition: 0.3s;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #4CAF50;
+            border-radius: 5px;
+        }
+
+        /* الصفحة الرئيسية */
+        .main-content {
+            margin-left: 270px;
             padding: 20px;
+            width: 100%;
         }
 
         h2 {
@@ -44,6 +77,8 @@
 
         .card-body {
             padding: 25px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
         }
 
         .form-group label {
@@ -114,6 +149,13 @@
             transition: transform 0.3s ease-in-out;
         }
 
+        .loading-icon {
+            display: none;
+            text-align: center;
+            font-size: 24px;
+            color: #4CAF50;
+        }
+
         .btn-warning, .btn-danger {
             transition: background-color 0.3s ease;
         }
@@ -126,15 +168,6 @@
             background-color: #f44336;
         }
 
-        /* إضافات التفاعل الحركي */
-        .form-control, button {
-            transition: all 0.3s ease;
-        }
-
-        .btn-sm {
-            font-size: 14px;
-        }
-
         .alert {
             display: none;
             margin-top: 20px;
@@ -143,86 +176,116 @@
 </head>
 <body>
 
-    <div class="container">
-        <h2>إدارة الأعضاء</h2>
-        
-        <!-- نموذج إضافة عضو جديد -->
-        <div class="card">
-            <div class="card-header">
-                <h4>إضافة عضو جديد</h4>
+    <div class="sidebar">
+        <a href="#members">إدارة الأعضاء</a>
+        <a href="#trainers">إدارة المدربين</a>
+        <a href="#subscriptions">إدارة الاشتراكات</a>
+        <a href="#inventory">إدارة المخزون</a>
+        <a href="#damagedInventory">المخزون التالف</a>
+        <a href="#meals">إدارة الوجبات الغذائية</a>
+        <a href="#ratings">التقييمات</a>
+        <a href="#rewards">المكافآت</a>
+        <a href="#specialRequests">الطلبات الخاصة</a>
+        <a href="#marketing">حملات التسويق</a>
+        <a href="#advancedScheduling">الجدولة المتقدمة</a>
+        <a href="#complaints">الشكاوي</a>
+    </div>
+
+    <div class="main-content">
+        <div id="members">
+            <h2>إدارة الأعضاء</h2>
+            
+            <!-- أيقونة تحميل -->
+            <div class="loading-icon" id="loading">
+                <i class="fa fa-spinner fa-spin"></i> تحميل...
             </div>
-            <div class="card-body">
-                <form>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="memberName">اسم العضو</label>
-                                <input type="text" class="form-control" id="memberName" placeholder="أدخل اسم العضو">
+
+            <!-- نموذج إضافة عضو جديد -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>إضافة عضو جديد</h4>
+                </div>
+                <div class="card-body" style="background-color: #e8f5e9;">
+                    <form id="addMemberForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="memberName">اسم العضو</label>
+                                    <input type="text" class="form-control" id="memberName" placeholder="أدخل اسم العضو">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="memberEmail">البريد الإلكتروني</label>
+                                    <input type="email" class="form-control" id="memberEmail" placeholder="أدخل البريد الإلكتروني">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="memberEmail">البريد الإلكتروني</label>
-                                <input type="email" class="form-control" id="memberEmail" placeholder="أدخل البريد الإلكتروني">
-                            </div>
+                        <div class="form-group">
+                            <label for="memberPhone">رقم الهاتف</label>
+                            <input type="tel" class="form-control" id="memberPhone" placeholder="أدخل رقم الهاتف">
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="memberPhone">رقم الهاتف</label>
-                        <input type="tel" class="form-control" id="memberPhone" placeholder="أدخل رقم الهاتف">
-                    </div>
-                    <div class="form-group">
-                        <label for="memberJoinDate">تاريخ الانضمام</label>
-                        <input type="date" class="form-control" id="memberJoinDate">
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-3">إضافة العضو</button>
-                </form>
+                        <div class="form-group">
+                            <label for="memberJoinDate">تاريخ الانضمام</label>
+                            <input type="date" class="form-control" id="memberJoinDate">
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">إضافة العضو</button>
+                    </form>
+                </div>
             </div>
-        </div>
-        
-        <!-- جدول عرض الأعضاء -->
-        <div class="card">
-            <div class="card-header">
-                <h4>قائمة الأعضاء</h4>
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>اسم العضو</th>
-                            <th>البريد الإلكتروني</th>
-                            <th>رقم الهاتف</th>
-                            <th>تاريخ الانضمام</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>أحمد محمد</td>
-                            <td>ahmed@example.com</td>
-                            <td>0123456789</td>
-                            <td>2024-11-01</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm">تعديل</button>
-                                <button class="btn btn-danger btn-sm">حذف</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>منى علي</td>
-                            <td>mona@example.com</td>
-                            <td>0987654321</td>
-                            <td>2024-10-10</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm">تعديل</button>
-                                <button class="btn btn-danger btn-sm">حذف</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            
+            <!-- جدول عرض الأعضاء -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>قائمة الأعضاء</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered" id="membersTable">
+                        <thead>
+                            <tr>
+                                <th>اسم العضو</th>
+                                <th>البريد الإلكتروني</th>
+                                <th>رقم الهاتف</th>
+                                <th>تاريخ الانضمام</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم إضافة الأعضاء هنا باستخدام JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <script>
+        // حفظ البيانات في localStorage
+        const loadMembers = () => {
+            const members = JSON.parse(localStorage.getItem('members')) || [];
+            const tableBody = document.getElementById('membersTable').querySelector('tbody');
+            tableBody.innerHTML = '';
+            members.forEach((member, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${member.name}</td>
+                    <td>${member.email}</td>
+                    <td>${member.phone}</td>
+                    <td>${member.joinDate}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editMember(${index})">تعديل</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteMember(${index})">حذف</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        };
+
+        // إضافة عضو جديد
+        const addMemberForm = document.getElementById('addMemberForm');
+        addMemberForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            
+            // إظهار الأيقونة المتحركة
+            document.getElementById('loading').style.display =
