@@ -10,7 +10,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* إعدادات أساسية */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -18,12 +17,10 @@
             padding: 0;
         }
 
-        /* إعدادات الحاوية التي تحتوي على الشريط الجانبي والمحتوى */
         .container {
             display: flex;
         }
 
-        /* إعدادات الشريط الجانبي */
         .sidebar {
             width: 250px;
             background-color: #333;
@@ -61,18 +58,19 @@
             background-color: #575757;
         }
 
-        /* إعدادات المحتوى الرئيسي */
         .content {
             flex: 1;
             padding: 20px;
             background-color: white;
         }
 
-        /* تصميم جدول الأعضاء */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         table, th, td {
@@ -104,15 +102,34 @@
             display: inline-block;
             text-decoration: none;
             margin-top: 20px;
+            transition: transform 0.2s ease-in-out;
         }
 
         .button:hover {
             background-color: #45a049;
+            transform: scale(1.05);
         }
 
-        /* إضافة تأثيرات SweetAlert */
         .swal2-popup {
             font-family: 'Arial', sans-serif;
+        }
+
+        .input-icon {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-icon input {
+            padding-left: 30px;
+        }
+
+        .input-icon i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #888;
         }
     </style>
 </head>
@@ -120,7 +137,6 @@
 <body>
 
     <div class="container">
-        <!-- الشريط الجانبي -->
         <div class="sidebar">
             <h2>إدارة الجيم</h2>
             <nav>
@@ -142,93 +158,126 @@
             </nav>
         </div>
 
-        <!-- المحتوى الرئيسي -->
         <div class="content">
             <h3>إدارة الأعضاء</h3>
             <p>قائمة الأعضاء في الجيم، يمكنك إضافة عضو جديد، تعديل بيانات الأعضاء الحاليين أو حذفهم.</p>
 
-            <!-- جدول الأعضاء -->
-            <table>
+            <table id="membersTable">
                 <thead>
                     <tr>
                         <th>الاسم</th>
-                        <th>البريد الإلكتروني</th>
+                        <th>رقم الهاتف</th>
+                        <th>السن</th>
                         <th>الاشتراك</th>
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>أحمد علي</td>
-                        <td>ahmed@example.com</td>
-                        <td>شهري</td>
-                        <td>
-                            <a href="#" class="button">تعديل</a>
-                            <a href="#" class="button" onclick="confirmDelete('أحمد علي')">حذف</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>محمود سعيد</td>
-                        <td>mahmoud@example.com</td>
-                        <td>سنوي</td>
-                        <td>
-                            <a href="#" class="button">تعديل</a>
-                            <a href="#" class="button" onclick="confirmDelete('محمود سعيد')">حذف</a>
-                        </td>
-                    </tr>
-                    <!-- أضف المزيد من الأعضاء هنا -->
+                    <!-- الأعضاء سيتم إضافتهم هنا -->
                 </tbody>
             </table>
 
-            <!-- زر إضافة عضو جديد -->
             <a href="#" class="button" id="addMemberBtn">إضافة عضو جديد</a>
         </div>
     </div>
 
     <script>
-        // استخدام SweetAlert لتأكيد الحذف
-        function confirmDelete(memberName) {
+        // دالة إضافة العضو
+        function addMember(name, phone, age, subscription) {
+            const table = document.getElementById("membersTable").getElementsByTagName('tbody')[0];
+            const row = table.insertRow();
+
+            row.innerHTML = `
+                <td>${name}</td>
+                <td>${phone}</td>
+                <td>${age}</td>
+                <td>${subscription}</td>
+                <td>
+                    <button class="button editBtn" onclick="editMember(this)">تعديل</button>
+                    <button class="button deleteBtn" onclick="deleteMember(this)">حذف</button>
+                </td>
+            `;
+        }
+
+        // دالة تعديل العضو
+        function editMember(button) {
+            const row = button.closest("tr");
+            const name = row.cells[0].textContent;
+            const phone = row.cells[1].textContent;
+            const age = row.cells[2].textContent;
+            const subscription = row.cells[3].textContent;
+
+            Swal.fire({
+                title: 'تعديل بيانات العضو',
+                html: `
+                    <input type="text" id="editName" class="swal2-input" value="${name}" placeholder="الاسم">
+                    <input type="text" id="editPhone" class="swal2-input" value="${phone}" placeholder="رقم الهاتف">
+                    <input type="number" id="editAge" class="swal2-input" value="${age}" placeholder="السن">
+                    <input type="text" id="editSubscription" class="swal2-input" value="${subscription}" placeholder="الاشتراك">
+                `,
+                confirmButtonText: 'تعديل',
+                preConfirm: () => {
+                    return {
+                        name: document.getElementById('editName').value,
+                        phone: document.getElementById('editPhone').value,
+                        age: document.getElementById('editAge').value,
+                        subscription: document.getElementById('editSubscription').value
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    row.cells[0].textContent = result.value.name;
+                    row.cells[1].textContent = result.value.phone;
+                    row.cells[2].textContent = result.value.age;
+                    row.cells[3].textContent = result.value.subscription;
+                    Swal.fire('تم التعديل!', '', 'success');
+                }
+            });
+        }
+
+        // دالة حذف العضو
+        function deleteMember(button) {
+            const row = button.closest("tr");
+            const name = row.cells[0].textContent;
+
             Swal.fire({
                 title: 'هل أنت متأكد؟',
-                text: "هل تريد حذف العضو " + memberName + "?",
+                text: "هل تريد حذف العضو " + name + "?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'نعم، احذف!',
                 cancelButtonText: 'إلغاء'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // هنا يمكن إضافة الكود الفعلي لحذف العضو
-                    Swal.fire(
-                        'تم الحذف!',
-                        'تم حذف العضو بنجاح.',
-                        'success'
-                    );
+                    row.remove();
+                    Swal.fire('تم الحذف!', '', 'success');
                 }
             });
         }
 
-        // إضافة حدث للنقر على زر "إضافة عضو جديد"
+        // دالة إضافة عضو جديد
         document.getElementById("addMemberBtn").addEventListener("click", function() {
             Swal.fire({
                 title: 'إضافة عضو جديد',
                 html: `
-                    <input type="text" id="memberName" class="swal2-input" placeholder="الاسم">
-                    <input type="email" id="memberEmail" class="swal2-input" placeholder="البريد الإلكتروني">
-                    <input type="text" id="memberSubscription" class="swal2-input" placeholder="الاشتراك">
+                    <input type="text" id="newName" class="swal2-input" placeholder="الاسم">
+                    <input type="text" id="newPhone" class="swal2-input" placeholder="رقم الهاتف">
+                    <input type="number" id="newAge" class="swal2-input" placeholder="السن">
+                    <input type="text" id="newSubscription" class="swal2-input" placeholder="الاشتراك">
                 `,
                 confirmButtonText: 'إضافة',
                 preConfirm: () => {
-                    const name = document.getElementById('memberName').value;
-                    const email = document.getElementById('memberEmail').value;
-                    const subscription = document.getElementById('memberSubscription').value;
-                    if (!name || !email || !subscription) {
-                        Swal.showValidationMessage('الرجاء ملء جميع الحقول');
-                    }
-                    return { name, email, subscription };
+                    return {
+                        name: document.getElementById('newName').value,
+                        phone: document.getElementById('newPhone').value,
+                        age: document.getElementById('newAge').value,
+                        subscription: document.getElementById('newSubscription').value
+                    };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire('تم إضافة العضو!', 'تم إضافة العضو الجديد بنجاح.', 'success');
+                    addMember(result.value.name, result.value.phone, result.value.age, result.value.subscription);
+                    Swal.fire('تم الإضافة!', '', 'success');
                 }
             });
         });
