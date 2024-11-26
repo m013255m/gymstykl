@@ -1,247 +1,271 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الجيم</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>إدارة الأقسام</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
+        /* تنسيق الأقسام */
+        .tab-content {
+            display: none; /* إخفاء جميع الأقسام افتراضيًا */
         }
 
-        .container {
-            display: flex;
+        .tab-content.active {
+            display: block; /* عرض القسم النشط فقط */
         }
 
-        .sidebar {
-            width: 250px;
-            background-color: #333;
-            color: white;
-            padding: 20px;
-            height: 100vh;
+        /* تنسيق الروابط */
+        ul li {
+            display: inline-block;
+            margin: 10px;
         }
 
-        .sidebar h2 {
-            font-size: 24px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .sidebar nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar nav ul li {
-            margin: 15px 0;
-        }
-
-        .sidebar nav ul li a {
-            color: white;
+        ul li a {
             text-decoration: none;
             font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            color: #333;
         }
 
-        .sidebar nav ul li a:hover {
-            background-color: #575757;
+        /* تنسيق التاب النشط */
+        ul li a.active-tab {
+            font-weight: bold;
+            color: #007BFF;
         }
 
-        .content {
-            flex: 1;
-            padding: 20px;
-            background-color: white;
-        }
-
-        .tab {
-            display: none;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        /* تنسيق النماذج */
+        .form-container {
             margin-top: 20px;
         }
 
-        table th, table td {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-
-        table th {
-            background-color: #f2f2f2;
-        }
-
-        input[type="text"], input[type="number"], input[type="date"], input[type="tel"], textarea {
-            width: 100%;
-            padding: 10px;
+        label {
+            font-size: 18px;
+            display: block;
             margin: 10px 0;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            margin: 8px 0;
             border: 1px solid #ccc;
-            border-radius: 5px;
         }
 
         button {
-            background-color: #4CAF50;
+            background-color: #007BFF;
             color: white;
             padding: 10px 20px;
+            font-size: 18px;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
         }
 
         button:hover {
-            background-color: #45a049;
-        }
-
-        .warning {
-            color: red;
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- الشريط الجانبي -->
-    <aside class="sidebar">
-        <h2>إدارة الجيم</h2>
-        <nav>
-            <ul>
-                <li><a href="javascript:void(0);" onclick="showTab('membersTab')">إدارة الأعضاء</a></li>
-                <li><a href="javascript:void(0);" onclick="showTab('trainersTab')">إدارة المدربين</a></li>
-                <li><a href="javascript:void(0);" onclick="showTab('subscriptionsTab')">إدارة الاشتراكات</a></li>
-            </ul>
-        </nav>
-    </aside>
 
-    <!-- المحتوى -->
-    <main class="content">
-        <!-- إدارة الأعضاء -->
-        <div id="membersTab" class="tab">
-            <h3>إدارة الأعضاء</h3>
-            <form id="membersForm" onsubmit="addMember(event)">
-                <input type="text" name="memberName" placeholder="اسم العضو" required>
-                <input type="tel" name="memberPhone" placeholder="رقم الهاتف" required>
-                <input type="date" name="memberJoinDate" required>
-                <button type="submit">إضافة عضو</button>
-            </form>
-            <table id="membersTable">
-                <thead>
-                    <tr>
-                        <th>اسم العضو</th>
-                        <th>رقم الهاتف</th>
-                        <th>تاريخ الانضمام</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+<!-- قائمة الروابط -->
+<ul>
+    <li><a href="javascript:void(0);" onclick="showTab('membersTab')" id="tab-members">إدارة الأعضاء</a></li>
+    <li><a href="javascript:void(0);" onclick="showTab('trainersTab')" id="tab-trainers">إدارة المدربين</a></li>
+    <li><a href="javascript:void(0);" onclick="showTab('subscriptionsTab')" id="tab-subscriptions">إدارة الاشتراكات</a></li>
+    <li><a href="javascript:void(0);" onclick="showTab('inventoryTab')" id="tab-inventory">إدارة المخزون</a></li>
+    <li><a href="javascript:void(0);" onclick="showTab('damagedInventoryTab')" id="tab-damaged-inventory">المخزون التالف</a></li>
+    <li><a href="javascript:void(0);" onclick="showTab('mealsTab')" id="tab-meals">إدارة الوجبات الغذائية</a></li>
+    <li><a href="javascript:void(0);" onclick="showTab('ratingsTab')" id="tab-ratings">التقييمات والملاحظات</a></li>
+    <li><a href="javascript:void(0);" onclick="showTab('rewardsTab')" id="tab-rewards">المكافآت والحوافز</a></li>
+    <li><a href="javascript:void(0);" onclick="showTab('specialRequestsTab')" id="tab-special-requests">الطلبات الخاصة</a></li>
+    <li><a href="javascript:void(0);" onclick="showTab('marketingTab')" id="tab-marketing">حملات التسويق</a></li>
+    <li><a href="javascript:void(0);" onclick="showTab('advancedSchedulingTab')" id="tab-advanced-scheduling">الجدولة المتقدمة</a></li>
+    <li><a href="javascript:void(0);" onclick="showTab('complaintsTab')" id="tab-complaints">الشكاوي</a></li>
+</ul>
 
-        <!-- إدارة المدربين -->
-        <div id="trainersTab" class="tab">
-            <h3>إدارة المدربين</h3>
-            <form id="trainersForm" onsubmit="addTrainer(event)">
-                <input type="text" name="trainerName" placeholder="اسم المدرب" required>
-                <input type="tel" name="trainerPhone" placeholder="رقم الهاتف" required>
-                <input type="text" name="trainerSpecialty" placeholder="التخصص" required>
-                <button type="submit">إضافة مدرب</button>
-            </form>
-            <table id="trainersTable">
-                <thead>
-                    <tr>
-                        <th>اسم المدرب</th>
-                        <th>رقم الهاتف</th>
-                        <th>التخصص</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+<!-- الأقسام (Tabs) -->
+<div id="membersTab" class="tab-content">
+    <h2>إدارة الأعضاء</h2>
+    <div class="form-container">
+        <form>
+            <label for="memberName">اسم العضو</label>
+            <input type="text" id="memberName" name="memberName" required>
+            <label for="memberEmail">البريد الإلكتروني</label>
+            <input type="text" id="memberEmail" name="memberEmail" required>
+            <button type="submit">إضافة عضو</button>
+        </form>
+    </div>
+</div>
 
-        <!-- إدارة الاشتراكات -->
-        <div id="subscriptionsTab" class="tab">
-            <h3>إدارة الاشتراكات</h3>
-            <form id="subscriptionsForm" onsubmit="addSubscription(event)">
-                <input type="text" name="subscriptionName" placeholder="اسم الاشتراك" required>
-                <input type="number" name="subscriptionPrice" placeholder="السعر" required>
-                <input type="date" name="subscriptionDate" required>
-                <button type="submit">إضافة اشتراك</button>
-            </form>
-            <table id="subscriptionsTable">
-                <thead>
-                    <tr>
-                        <th>اسم الاشتراك</th>
-                        <th>السعر</th>
-                        <th>تاريخ البدء</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </main>
+<div id="trainersTab" class="tab-content">
+    <h2>إدارة المدربين</h2>
+    <div class="form-container">
+        <form>
+            <label for="trainerName">اسم المدرب</label>
+            <input type="text" id="trainerName" name="trainerName" required>
+            <label for="trainerSpecialty">التخصص</label>
+            <input type="text" id="trainerSpecialty" name="trainerSpecialty" required>
+            <button type="submit">إضافة مدرب</button>
+        </form>
+    </div>
+</div>
+
+<div id="subscriptionsTab" class="tab-content">
+    <h2>إدارة الاشتراكات</h2>
+    <div class="form-container">
+        <form>
+            <label for="subscriptionType">نوع الاشتراك</label>
+            <select id="subscriptionType" name="subscriptionType" required>
+                <option value="monthly">شهري</option>
+                <option value="quarterly">ربع سنوي</option>
+                <option value="yearly">سنوي</option>
+            </select>
+            <label for="subscriptionPrice">السعر</label>
+            <input type="number" id="subscriptionPrice" name="subscriptionPrice" required>
+            <button type="submit">إضافة اشتراك</button>
+        </form>
+    </div>
+</div>
+
+<div id="inventoryTab" class="tab-content">
+    <h2>إدارة المخزون</h2>
+    <div class="form-container">
+        <form>
+            <label for="itemName">اسم العنصر</label>
+            <input type="text" id="itemName" name="itemName" required>
+            <label for="itemQuantity">الكمية</label>
+            <input type="number" id="itemQuantity" name="itemQuantity" required>
+            <button type="submit">إضافة عنصر</button>
+        </form>
+    </div>
+</div>
+
+<div id="damagedInventoryTab" class="tab-content">
+    <h2>المخزون التالف</h2>
+    <div class="form-container">
+        <form>
+            <label for="damagedItemName">اسم العنصر التالف</label>
+            <input type="text" id="damagedItemName" name="damagedItemName" required>
+            <label for="damagedItemQuantity">الكمية التالفة</label>
+            <input type="number" id="damagedItemQuantity" name="damagedItemQuantity" required>
+            <button type="submit">إضافة عنصر تالف</button>
+        </form>
+    </div>
+</div>
+
+<div id="mealsTab" class="tab-content">
+    <h2>إدارة الوجبات الغذائية</h2>
+    <div class="form-container">
+        <form>
+            <label for="mealName">اسم الوجبة</label>
+            <input type="text" id="mealName" name="mealName" required>
+            <label for="mealPrice">السعر</label>
+            <input type="number" id="mealPrice" name="mealPrice" required>
+            <button type="submit">إضافة وجبة</button>
+        </form>
+    </div>
+</div>
+
+<div id="ratingsTab" class="tab-content">
+    <h2>التقييمات والملاحظات</h2>
+    <div class="form-container">
+        <form>
+            <label for="ratingScore">التقييم</label>
+            <input type="number" id="ratingScore" name="ratingScore" min="1" max="5" required>
+            <label for="ratingComments">الملاحظات</label>
+            <textarea id="ratingComments" name="ratingComments" rows="4" required></textarea>
+            <button type="submit">إضافة تقييم</button>
+        </form>
+    </div>
+</div>
+
+<div id="rewardsTab" class="tab-content">
+    <h2>المكافآت والحوافز</h2>
+    <div class="form-container">
+        <form>
+            <label for="rewardName">اسم المكافأة</label>
+            <input type="text" id="rewardName" name="rewardName" required>
+            <label for="rewardPoints">عدد النقاط</label>
+            <input type="number" id="rewardPoints" name="rewardPoints" required>
+            <button type="submit">إضافة مكافأة</button>
+        </form>
+    </div>
+</div>
+
+<div id="specialRequestsTab" class="tab-content">
+    <h2>الطلبات الخاصة</h2>
+    <div class="form-container">
+        <form>
+            <label for="specialRequestDescription">وصف الطلب الخاص</label>
+            <textarea id="specialRequestDescription" name="specialRequestDescription" rows="4" required></textarea>
+            <button type="submit">إضافة طلب</button>
+        </form>
+    </div>
+</div>
+
+<div id="marketingTab" class="tab-content">
+    <h2>حملات التسويق</h2>
+    <div class="form-container">
+        <form>
+            <label for="campaignName">اسم الحملة</label>
+            <input type="text" id="campaignName" name="campaignName" required>
+            <label for="campaignBudget">الميزانية</label>
+            <input type="number" id="campaignBudget" name="campaignBudget" required>
+            <button type="submit">إطلاق الحملة</button>
+        </form>
+    </div>
+</div>
+
+<div id="advancedSchedulingTab" class="tab-content">
+    <h2>الجدولة المتقدمة</h2>
+    <div class="form-container">
+        <form>
+            <label for="scheduleEvent">الحدث</label>
+            <input type="text" id="scheduleEvent" name="scheduleEvent" required>
+            <label for="scheduleTime">الوقت</label>
+            <input type="datetime-local" id="scheduleTime" name="scheduleTime" required>
+            <button type="submit">جدولة الحدث</button>
+        </form>
+    </div>
+</div>
+
+<div id="complaintsTab" class="tab-content">
+    <h2>الشكاوي</h2>
+    <div class="form-container">
+        <form>
+            <label for="complaintDescription">وصف الشكوى</label>
+            <textarea id="complaintDescription" name="complaintDescription" rows="4" required></textarea>
+            <button type="submit">إضافة شكوى</button>
+        </form>
+    </div>
 </div>
 
 <script>
-    function showTab(tabId) {
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(tab => tab.style.display = 'none');
-        document.getElementById(tabId).style.display = 'block';
+    // إظهار القسم الذي يتم النقر عليه
+    function showTab(tabName) {
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        const activeTab = document.getElementById(tabName);
+        activeTab.classList.add('active');
+
+        // تغيير الرابط النشط
+        const links = document.querySelectorAll('ul li a');
+        links.forEach(link => {
+            link.classList.remove('active-tab');
+        });
+
+        const activeLink = document.getElementById(`tab-${tabName}`);
+        activeLink.classList.add('active-tab');
     }
 
-    function addMember(event) {
-        event.preventDefault();
-        const form = event.target;
-        const name = form.memberName.value;
-        const phone = form.memberPhone.value;
-        const joinDate = form.memberJoinDate.value;
-
-        const table = document.querySelector('#membersTable tbody');
-        const row = document.createElement('tr');
-        row.innerHTML = `<td>${name}</td><td>${phone}</td><td>${joinDate}</td>`;
-        table.appendChild(row);
-
-        form.reset();
-    }
-
-    function addTrainer(event) {
-        event.preventDefault();
-        const form = event.target;
-        const name = form.trainerName.value;
-        const phone = form.trainerPhone.value;
-        const specialty = form.trainerSpecialty.value;
-
-        const table = document.querySelector('#trainersTable tbody');
-        const row = document.createElement('tr');
-        row.innerHTML = `<td>${name}</td><td>${phone}</td><td>${specialty}</td>`;
-        table.appendChild(row);
-
-        form.reset();
-    }
-
-    function addSubscription(event) {
-        event.preventDefault();
-        const form = event.target;
-        const name = form.subscriptionName.value;
-        const price = form.subscriptionPrice.value;
-        const date = form.subscriptionDate.value;
-
-        const table = document.querySelector('#subscriptionsTable tbody');
-        const row = document.createElement('tr');
-        row.innerHTML = `<td>${name}</td><td>${price}</td><td>${date}</td>`;
-        table.appendChild(row);
-
-        form.reset();
-    }
-
-    // عرض أول تبويب عند التحميل
-    showTab('membersTab');
+    // تعيين القسم الأول كنشط عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', () => {
+        showTab('membersTab');
+    });
 </script>
+
 </body>
 </html>
