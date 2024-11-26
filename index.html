@@ -64,62 +64,6 @@
             padding: 20px;
             background-color: white;
         }
-
-        /* إعدادات التبويبات */
-        .tab {
-            display: none;
-        }
-
-        /* إعدادات الجدول */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table th,
-        table td {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-
-        table th {
-            background-color: #f2f2f2;
-        }
-
-        /* إعدادات المدخلات */
-        input[type="text"],
-        input[type="number"],
-        input[type="date"],
-        input[type="tel"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        /* إعدادات الأزرار */
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        /* إعدادات الرسائل التحذيرية */
-        .warning {
-            color: red;
-        }
     </style>
 </head>
 
@@ -131,74 +75,29 @@
             <h2>إدارة الجيم</h2>
             <nav>
                 <ul>
-                    <li><a href="#" onclick="showTab('home')">الرئيسية</a></li>
-                    <li><a href="#" onclick="showTab('members')">الأعضاء</a></li>
-                    <li><a href="#" onclick="showTab('classes')">الدورات</a></li>
-                    <li><a href="#" onclick="showTab('payments')">المدفوعات</a></li>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="members.html">إدارة الأعضاء</a></li>
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
+                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                    <li><a href="inventory.html">إدارة المخزون</a></li>
+                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
+                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+                    <li><a href="ratings.html">التقييمات</a></li>
+                    <li><a href="rewards.html">المكافآت</a></li>
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                    <li><a href="complaints.html">الشكاوي</a></li>
                 </ul>
             </nav>
         </div>
 
         <!-- المحتوى الرئيسي -->
         <div class="content">
-            <!-- التبويبات -->
-            <div id="home" class="tab">
-                <h3>الرئيسية</h3>
-                <p>مرحبًا بك في لوحة تحكم إدارة الجيم.</p>
-            </div>
-            <div id="members" class="tab">
-                <h3>الأعضاء</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>اسم العضو</th>
-                            <th>تاريخ الانضمام</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>أحمد علي</td>
-                            <td>01-01-2024</td>
-                            <td><button>تعديل</button></td>
-                        </tr>
-                        <tr>
-                            <td>مريم محمد</td>
-                            <td>05-02-2024</td>
-                            <td><button>تعديل</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div id="classes" class="tab">
-                <h3>الدورات</h3>
-                <p>قائمة الدورات التدريبية المتاحة.</p>
-            </div>
-            <div id="payments" class="tab">
-                <h3>المدفوعات</h3>
-                <p>إدارة المدفوعات المتعلقة بالأعضاء.</p>
-            </div>
+            <h3>مرحبًا بك في لوحة تحكم إدارة الجيم</h3>
+            <p>اختر أحد الأقسام من الشريط الجانبي للتنقل بين النماذج المختلفة.</p>
         </div>
     </div>
-
-    <script>
-        // إظهار التبويبات
-        function showTab(tabName) {
-            // إخفاء جميع التبويبات
-            let tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => {
-                tab.style.display = 'none';
-            });
-
-            // إظهار التبويب المطلوب
-            document.getElementById(tabName).style.display = 'block';
-        }
-
-        // عرض التبويب الأول عند تحميل الصفحة
-        window.onload = function () {
-            showTab('home');
-        }
-    </script>
 
 </body>
 
