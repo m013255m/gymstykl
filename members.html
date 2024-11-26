@@ -282,70 +282,46 @@
             });
         };
 
-        // تعديل عضو
-        const editMember = (index) => {
+        // إضافة عضو جديد
+        document.getElementById('addMemberForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const name = document.getElementById('memberName').value;
+            const email = document.getElementById('memberEmail').value;
+            const phone = document.getElementById('memberPhone').value;
+            const joinDate = document.getElementById('memberJoinDate').value;
+
             const members = JSON.parse(localStorage.getItem('members')) || [];
-            const member = members[index];
-            document.getElementById('memberName').value = member.name;
-            document.getElementById('memberEmail').value = member.email;
-            document.getElementById('memberPhone').value = member.phone;
-            document.getElementById('memberJoinDate').value = member.joinDate;
-            
-            // تعديل الزر ليحفظ التعديل
-            const submitButton = document.querySelector('button[type="submit"]');
-            submitButton.textContent = 'تحديث العضو';
-            
-            submitButton.onclick = () => {
-                member.name = document.getElementById('memberName').value;
-                member.email = document.getElementById('memberEmail').value;
-                member.phone = document.getElementById('memberPhone').value;
-                member.joinDate = document.getElementById('memberJoinDate').value;
-                
-                localStorage.setItem('members', JSON.stringify(members));
-                loadMembers();
-                submitButton.textContent = 'إضافة العضو';
-            };
-        };
+            members.push({ name, email, phone, joinDate });
+            localStorage.setItem('members', JSON.stringify(members));
+
+            loadMembers();
+            document.getElementById('addMemberForm').reset();
+        });
 
         // حذف عضو
         const deleteMember = (index) => {
-            const members = JSON.parse(localStorage.getItem('members')) || [];
+            const members = JSON.parse(localStorage.getItem('members'));
             members.splice(index, 1);
             localStorage.setItem('members', JSON.stringify(members));
             loadMembers();
         };
 
-        // إضافة عضو جديد
-        const addMemberForm = document.getElementById('addMemberForm');
-        addMemberForm.addEventListener('submit', (event) => {
-            event.preventDefault();
+        // تعديل عضو
+        const editMember = (index) => {
+            const members = JSON.parse(localStorage.getItem('members'));
+            const member = members[index];
 
-            // إظهار الأيقونة المتحركة
-            document.getElementById('loading').style.display = 'block';
+            document.getElementById('memberName').value = member.name;
+            document.getElementById('memberEmail').value = member.email;
+            document.getElementById('memberPhone').value = member.phone;
+            document.getElementById('memberJoinDate').value = member.joinDate;
 
-            // استخراج البيانات من النموذج
-            const memberName = document.getElementById('memberName').value;
-            const memberEmail = document.getElementById('memberEmail').value;
-            const memberPhone = document.getElementById('memberPhone').value;
-            const memberJoinDate = document.getElementById('memberJoinDate').value;
+            deleteMember(index); // حذف العضو القديم لتحديثه لاحقًا
+        };
 
-            // إضافة البيانات إلى localStorage
-            const members = JSON.parse(localStorage.getItem('members')) || [];
-            members.push({ name: memberName, email: memberEmail, phone: memberPhone, joinDate: memberJoinDate });
-            localStorage.setItem('members', JSON.stringify(members));
-
-            // إخفاء الأيقونة المتحركة
-            document.getElementById('loading').style.display = 'none';
-
-            // إعادة تحميل الأعضاء في الجدول
-            loadMembers();
-
-            // مسح الحقول بعد الإضافة
-            addMemberForm.reset();
-        });
-
-        // تحميل الأعضاء عند فتح الصفحة
-        loadMembers();
+        // تحميل الأعضاء عند تحميل الصفحة
+        window.onload = loadMembers;
     </script>
+
 </body>
 </html>
