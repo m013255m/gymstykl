@@ -3,239 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة متكامل</title>
+    <title>إدارة الجيم</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
             background-color: #f4f4f9;
         }
+
         .container {
             display: flex;
         }
+
         .sidebar {
             width: 250px;
-            background-color: #333;
-            color: white;
+            background-color: #2c3e50;
+            color: #fff;
             height: 100vh;
             padding: 20px;
         }
+
         .sidebar h2 {
             text-align: center;
             margin-bottom: 20px;
         }
+
         .sidebar ul {
             list-style: none;
             padding: 0;
         }
+
         .sidebar ul li {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
+
         .sidebar ul li a {
             text-decoration: none;
-            color: white;
+            color: #fff;
             display: block;
             padding: 10px;
-            background-color: #444;
+            background-color: #34495e;
             border-radius: 5px;
-            transition: 0.3s;
         }
+
         .sidebar ul li a:hover {
-            background-color: #555;
+            background-color: #1abc9c;
         }
+
         .content {
             flex: 1;
             padding: 20px;
+            background-color: #ecf0f1;
         }
+
         .tab {
             display: none;
         }
+
         .tab.active {
             display: block;
         }
+
         form {
             margin-bottom: 20px;
         }
-        input, button, textarea, select {
+
+        input, select, textarea {
             display: block;
-            margin: 10px 0;
-            padding: 10px;
             width: 100%;
-            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
             border-radius: 5px;
         }
+
         button {
-            background-color: #4CAF50;
+            background-color: #3498db;
             color: white;
-            cursor: pointer;
-            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
         }
-        button:hover {
-            background-color: #45a049;
-        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
+
         table th, table td {
-            padding: 10px;
             border: 1px solid #ddd;
+            padding: 10px;
             text-align: center;
         }
+
         table th {
-            background-color: #f2f2f2;
+            background-color: #2c3e50;
+            color: #fff;
         }
     </style>
 </head>
 <body>
-
 <div class="container">
     <!-- الشريط الجانبي -->
     <aside class="sidebar">
-        <h2>نظام الإدارة</h2>
-        <ul id="menu">
-            <!-- الأقسام يتم توليدها تلقائيًا -->
+        <h2>إدارة الجيم</h2>
+        <ul>
+            <li><a href="#" onclick="showTab('members')">إدارة الأعضاء</a></li>
+            <li><a href="#" onclick="showTab('trainers')">إدارة المدربين</a></li>
+            <li><a href="#" onclick="showTab('subscriptions')">إدارة الاشتراكات</a></li>
+            <li><a href="#" onclick="showTab('meals')">إدارة الوجبات</a></li>
+            <li><a href="#" onclick="showTab('penalties')">إدارة العقوبات</a></li>
+            <li><a href="#" onclick="showTab('rewards')">إدارة المكافآت</a></li>
+            <li><a href="#" onclick="showTab('requests')">إدارة الطلبات الخاصة</a></li>
+            <li><a href="#" onclick="showTab('ratings')">إدارة تقييمات المدربين</a></li>
+            <li><a href="#" onclick="showTab('incentives')">إدارة الحوافز المالية</a></li>
+            <li><a href="#" onclick="showTab('campaigns')">إدارة الحملات التسويقية</a></li>
+            <li><a href="#" onclick="showTab('complaints')">الشكاوى</a></li>
         </ul>
     </aside>
 
     <!-- المحتوى -->
-    <main class="content" id="content">
-        <!-- يتم توليد النماذج والجداول هنا -->
-    </main>
-</div>
-
-<script>
-    // الأقسام الرئيسية
-    const sections = [
-        "الأعضاء", "المدربين", "الاشتراكات", "الأجهزة", "الحجوزات",
-        "الخدمات الإضافية", "المصاريف", "الإيرادات", "الموظفين",
-        "المنتجات", "المبيعات", "الشكاوى والمقترحات", "الإحصائيات"
-    ];
-
-    // توليد الشريط الجانبي
-    const menu = document.getElementById('menu');
-    const content = document.getElementById('content');
-
-    sections.forEach((section, index) => {
-        // إنشاء رابط القسم
-        const li = document.createElement('li');
-        li.innerHTML = `<a href="#" onclick="showSection(${index})">${section}</a>`;
-        menu.appendChild(li);
-
-        // إنشاء محتوى القسم
-        const tab = document.createElement('div');
-        tab.className = 'tab';
-        tab.id = `section-${index}`;
-        tab.innerHTML = `
-            <h3>إدارة ${section}</h3>
-            <form onsubmit="addItem(event, ${index})">
-                <input type="text" placeholder="اسم العنصر" id="name-${index}" required>
-                <textarea placeholder="وصف العنصر" id="description-${index}" required></textarea>
-                <button type="submit">إضافة</button>
+    <main class="content">
+        <!-- قسم إدارة الأعضاء -->
+        <div id="members" class="tab active">
+            <h3>إدارة الأعضاء</h3>
+            <form id="membersForm">
+                <input type="text" id="memberName" placeholder="اسم العضو">
+                <input type="text" id="memberPhone" placeholder="رقم الهاتف">
+                <input type="text" id="memberSubscription" placeholder="الاشتراك">
+                <button type="button" onclick="addMember()">إضافة</button>
             </form>
-            <table>
+            <table id="membersTable">
                 <thead>
-                    <tr>
-                        <th>الاسم</th>
-                        <th>الوصف</th>
-                        <th>إجراءات</th>
-                    </tr>
+                <tr>
+                    <th>اسم العضو</th>
+                    <th>رقم الهاتف</th>
+                    <th>الاشتراك</th>
+                    <th>الإجراءات</th>
+                </tr>
                 </thead>
-                <tbody id="table-${index}">
-                    <!-- البيانات يتم توليدها هنا -->
-                </tbody>
+                <tbody></tbody>
             </table>
-        `;
-        content.appendChild(tab);
-    });
+        </div>
 
-    // عرض القسم المطلوب
-    function showSection(index) {
-        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-        document.getElementById(`section-${index}`).classList.add('active');
-    }
+        <!-- قسم إدارة المدربين -->
+        <div id="trainers" class="tab">
+            <h3>إدارة المدربين</h3>
+            <form id="trainersForm">
+                <input type="text" id="trainerName" placeholder="اسم المدرب">
+                <input type="text" id="trainerExperience" placeholder="الخبرة">
+                <button type="button" onclick="addTrainer()">إضافة</button>
+            </form>
+            <table id="trainersTable">
+                <thead>
+                <tr>
+                    <th>اسم المدرب</th>
+                    <th>الخبرة</th>
+                    <th>الإجراءات</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-    // إضافة عنصر جديد
-    function addItem(event, index) {
-        event.preventDefault();
-        const name = document.getElementById(`name-${index}`).value;
-        const description = document.getElementById(`description-${index}`).value;
+        <!-- قسم إدارة الاشتراكات -->
+        <div id="subscriptions" class="tab">
+            <h3>إدارة الاشتراكات</h3>
+            <form id="subscriptionsForm">
+                <input type="text" id="subscriptionName" placeholder="اسم المشترك">
+                <input type="text" id="subscriptionType" placeholder="نوع الاشتراك">
+                <button type="button" onclick="addSubscription()">إضافة</button>
+            </form>
+            <table id="subscriptionsTable">
+                <thead>
+                <tr>
+                    <th>اسم المشترك</th>
+                    <th>نوع الاشتراك</th>
+                    <th>الإجراءات</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-        const tableBody = document.getElementById(`table-${index}`);
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${name}</td>
-            <td>${description}</td>
-            <td>
-                <button onclick="editItem(this, ${index})">تعديل</button>
-                <button onclick="deleteItem(this, ${index})">حذف</button>
-            </td>
-        `;
-        tableBody.appendChild(row);
+        <!-- قسم إدارة الوجبات -->
+        <div id="meals" class="tab">
+            <h3>إدارة الوجبات</h3>
+            <form id="mealsForm">
+                <input type="text" id="mealName" placeholder="اسم الوجبة">
+                <textarea id="mealDetails" placeholder="تفاصيل الوجبة"></textarea>
+                <button type="button" onclick="addMeal()">إضافة</button>
+            </form>
+            <table id="mealsTable">
+                <thead>
+                <tr>
+                    <th>اسم الوجبة</th>
+                    <th>تفاصيل الوجبة</th>
+                    <th>الإجراءات</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-        // حفظ البيانات في LocalStorage
-        saveToLocalStorage(index, { name, description });
-    }
+        <!-- قسم إدارة العقوبات -->
+        <div id="penalties" class="tab">
+            <h3>إدارة العقوبات</h3>
+            <form id="penaltiesForm">
+                <input type="text" id="penaltyName" placeholder="اسم العضو">
+                <textarea id="penaltyDetails" placeholder="تفاصيل العقوبة"></textarea>
+                <button type="button" onclick="addPenalty()">إضافة</button>
+            </form>
+            <table id="penaltiesTable">
+                <thead>
+                <tr>
+                    <th>اسم العضو</th>
+                    <th>تفاصيل العقوبة</th>
+                    <th>الإجراءات</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-    // تعديل عنصر
-    function editItem(button, index) {
-        const row = button.parentElement.parentElement;
-        const name = prompt("تعديل الاسم:", row.children[0].innerText);
-        const description = prompt("تعديل الوصف:", row.children[1].innerText);
+        <!-- قسم إدارة المكافآت -->
+        <div id="rewards" class="tab">
+            <h3>إدارة المكافآت</h3>
+            <form id="rewardsForm">
+                <input type="text" id="rewardName" placeholder="اسم العضو">
+                <textarea id="rewardDetails" placeholder="تفاصيل المكافأة"></textarea>
+                <button type="button" onclick="addReward()">إضافة</button>
+            </form>
+            <table id="rewardsTable">
+                <thead>
+                <tr>
+                    <th>اسم العضو</th>
+                    <th>تفاصيل المكافأة</th>
+                    <th>الإجراءات</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-        if (name && description) {
-            row.children[0].innerText = name;
-            row.children[1].innerText = description;
-
-            updateLocalStorage(index);
-        }
-    }
-
-    // حذف عنصر
-    function deleteItem(button, index) {
-        const row = button.parentElement.parentElement;
-        row.remove();
-        updateLocalStorage(index);
-    }
-
-    // إدارة LocalStorage
-    function saveToLocalStorage(index, item) {
-        const data = JSON.parse(localStorage.getItem(`section-${index}`)) || [];
-        data.push(item);
-        localStorage.setItem(`section-${index}`, JSON.stringify(data));
-    }
-
-    function updateLocalStorage(index) {
-        const rows = document.querySelectorAll(`#table-${index} tr`);
-        const data = Array.from(rows).map(row => ({
-            name: row.children[0].innerText,
-            description: row.children[1].innerText
-        }));
-        localStorage.setItem(`section-${index}`, JSON.stringify(data));
-    }
-
-    // استعادة البيانات عند التحميل
-    window.onload = () => {
-        sections.forEach((_, index) => {
-            const data = JSON.parse(localStorage.getItem(`section-${index}`)) || [];
-            const tableBody = document.getElementById(`table-${index}`);
-            data.forEach(item => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${item.name}</td>
-                    <td>${item.description}</td>
-                    <td>
-                        <button onclick="editItem(this, ${index})">تعديل</button>
-                        <button onclick="deleteItem(this, ${index})">حذف</button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        });
-    };
-</script>
-
-</body>
-</html>
+        <!-- قسم إدارة الطلبات الخاصة -->
+        <div id="requests" class="tab">
+            <h3>إدارة الطلبات الخاصة</h3>
+            <form id="requestsForm">
+                <input type="text" id="requestName" placeholder="اسم العضو">
+                <textarea id="requestDetails" placeholder="تفاصيل الطلب"></textarea>
+                <button type="button" onclick="addRequest()">
