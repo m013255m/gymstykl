@@ -22,7 +22,7 @@
             left: 0;
             height: 100%;
             width: 250px;
-            background-color: #4CAF50; /* نفس اللون في الشريط الرئيسي */
+            background-color: #4CAF50;
             color: white;
             padding-top: 20px;
             transition: 0.3s;
@@ -176,6 +176,7 @@
 </head>
 <body>
 
+    <!-- الشريط الجانبي -->
     <div class="sidebar">
         <a href="#members">إدارة الأعضاء</a>
         <a href="#trainers">إدارة المدربين</a>
@@ -191,6 +192,7 @@
         <a href="#complaints">الشكاوي</a>
     </div>
 
+    <!-- المحتوى الرئيسي -->
     <div class="main-content">
         <div id="members">
             <h2>إدارة الأعضاء</h2>
@@ -268,56 +270,36 @@
             tableBody.innerHTML = '';
             members.forEach((member, index) => {
                 const row = document.createElement('tr');
-                row.innerHTML = `
+                row.innerHTML = 
                     <td>${member.name}</td>
                     <td>${member.email}</td>
                     <td>${member.phone}</td>
                     <td>${member.joinDate}</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm" onclick="editMember(${index})">تعديل</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteMember(${index})">حذف</button>
-                    </td>
-                `;
+                    <td><button class="btn btn-warning btn-sm">تعديل</button> <button class="btn btn-danger btn-sm">حذف</button></td>
+                ;
                 tableBody.appendChild(row);
             });
-        };
+        }
 
-        const addMember = (e) => {
+        document.getElementById('addMemberForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const memberName = document.getElementById('memberName').value;
-            const memberEmail = document.getElementById('memberEmail').value;
-            const memberPhone = document.getElementById('memberPhone').value;
-            const memberJoinDate = document.getElementById('memberJoinDate').value;
+            const name = document.getElementById('memberName').value;
+            const email = document.getElementById('memberEmail').value;
+            const phone = document.getElementById('memberPhone').value;
+            const joinDate = document.getElementById('memberJoinDate').value;
 
-            const newMember = {
-                name: memberName,
-                email: memberEmail,
-                phone: memberPhone,
-                joinDate: memberJoinDate
-            };
+            if (name && email && phone && joinDate) {
+                const newMember = { name, email, phone, joinDate };
+                const members = JSON.parse(localStorage.getItem('members')) || [];
+                members.push(newMember);
+                localStorage.setItem('members', JSON.stringify(members));
 
-            const members = JSON.parse(localStorage.getItem('members')) || [];
-            members.push(newMember);
-            localStorage.setItem('members', JSON.stringify(members));
-            loadMembers();
-            document.getElementById('addMemberForm').reset();
-        };
+                loadMembers();
+            }
+        });
 
-        const editMember = (index) => {
-            alert('تعديل العضو: ' + index);
-        };
-
-        const deleteMember = (index) => {
-            const members = JSON.parse(localStorage.getItem('members')) || [];
-            members.splice(index, 1);
-            localStorage.setItem('members', JSON.stringify(members));
-            loadMembers();
-        };
-
-        document.getElementById('addMemberForm').addEventListener('submit', addMember);
-
+        // تحميل البيانات عند تحميل الصفحة
         window.onload = loadMembers;
     </script>
-
 </body>
 </html>
