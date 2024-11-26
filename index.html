@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الجيم</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #f4f4f9;
         }
 
         .container {
@@ -53,7 +52,6 @@
         .content {
             flex: 1;
             padding: 20px;
-            background-color: #ecf0f1;
         }
 
         .tab {
@@ -62,27 +60,6 @@
 
         .tab.active {
             display: block;
-        }
-
-        form {
-            margin-bottom: 20px;
-        }
-
-        input, select, textarea {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        button {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
         }
 
         table {
@@ -129,10 +106,10 @@
         <div id="members" class="tab active">
             <h3>إدارة الأعضاء</h3>
             <form id="membersForm">
-                <input type="text" id="memberName" placeholder="اسم العضو">
-                <input type="text" id="memberPhone" placeholder="رقم الهاتف">
-                <input type="text" id="memberSubscription" placeholder="الاشتراك">
-                <button type="button" onclick="addMember()">إضافة</button>
+                <input type="text" id="memberName" class="form-control" placeholder="اسم العضو">
+                <input type="text" id="memberPhone" class="form-control" placeholder="رقم الهاتف">
+                <input type="text" id="memberSubscription" class="form-control" placeholder="الاشتراك">
+                <button type="button" class="btn btn-primary" onclick="addMember()">إضافة</button>
             </form>
             <table id="membersTable">
                 <thead>
@@ -151,9 +128,9 @@
         <div id="trainers" class="tab">
             <h3>إدارة المدربين</h3>
             <form id="trainersForm">
-                <input type="text" id="trainerName" placeholder="اسم المدرب">
-                <input type="text" id="trainerExperience" placeholder="الخبرة">
-                <button type="button" onclick="addTrainer()">إضافة</button>
+                <input type="text" id="trainerName" class="form-control" placeholder="اسم المدرب">
+                <input type="text" id="trainerExperience" class="form-control" placeholder="الخبرة">
+                <button type="button" class="btn btn-primary" onclick="addTrainer()">إضافة</button>
             </form>
             <table id="trainersTable">
                 <thead>
@@ -171,9 +148,9 @@
         <div id="subscriptions" class="tab">
             <h3>إدارة الاشتراكات</h3>
             <form id="subscriptionsForm">
-                <input type="text" id="subscriptionName" placeholder="اسم المشترك">
-                <input type="text" id="subscriptionType" placeholder="نوع الاشتراك">
-                <button type="button" onclick="addSubscription()">إضافة</button>
+                <input type="text" id="subscriptionName" class="form-control" placeholder="اسم المشترك">
+                <input type="text" id="subscriptionType" class="form-control" placeholder="نوع الاشتراك">
+                <button type="button" class="btn btn-primary" onclick="addSubscription()">إضافة</button>
             </form>
             <table id="subscriptionsTable">
                 <thead>
@@ -191,9 +168,9 @@
         <div id="meals" class="tab">
             <h3>إدارة الوجبات</h3>
             <form id="mealsForm">
-                <input type="text" id="mealName" placeholder="اسم الوجبة">
-                <textarea id="mealDetails" placeholder="تفاصيل الوجبة"></textarea>
-                <button type="button" onclick="addMeal()">إضافة</button>
+                <input type="text" id="mealName" class="form-control" placeholder="اسم الوجبة">
+                <textarea id="mealDetails" class="form-control" placeholder="تفاصيل الوجبة"></textarea>
+                <button type="button" class="btn btn-primary" onclick="addMeal()">إضافة</button>
             </form>
             <table id="mealsTable">
                 <thead>
@@ -211,9 +188,9 @@
         <div id="penalties" class="tab">
             <h3>إدارة العقوبات</h3>
             <form id="penaltiesForm">
-                <input type="text" id="penaltyName" placeholder="اسم العضو">
-                <textarea id="penaltyDetails" placeholder="تفاصيل العقوبة"></textarea>
-                <button type="button" onclick="addPenalty()">إضافة</button>
+                <input type="text" id="penaltyName" class="form-control" placeholder="اسم العضو">
+                <textarea id="penaltyDetails" class="form-control" placeholder="تفاصيل العقوبة"></textarea>
+                <button type="button" class="btn btn-primary" onclick="addPenalty()">إضافة</button>
             </form>
             <table id="penaltiesTable">
                 <thead>
@@ -231,9 +208,9 @@
         <div id="rewards" class="tab">
             <h3>إدارة المكافآت</h3>
             <form id="rewardsForm">
-                <input type="text" id="rewardName" placeholder="اسم العضو">
-                <textarea id="rewardDetails" placeholder="تفاصيل المكافأة"></textarea>
-                <button type="button" onclick="addReward()">إضافة</button>
+                <input type="text" id="rewardName" class="form-control" placeholder="اسم العضو">
+                <textarea id="rewardDetails" class="form-control" placeholder="تفاصيل المكافأة"></textarea>
+                <button type="button" class="btn btn-primary" onclick="addReward()">إضافة</button>
             </form>
             <table id="rewardsTable">
                 <thead>
@@ -251,6 +228,6 @@
         <div id="requests" class="tab">
             <h3>إدارة الطلبات الخاصة</h3>
             <form id="requestsForm">
-                <input type="text" id="requestName" placeholder="اسم العضو">
-                <textarea id="requestDetails" placeholder="تفاصيل الطلب"></textarea>
-                <button type="button" onclick="addRequest()">
+                <input type="text" id="requestName" class="form-control" placeholder="اسم العضو">
+                <textarea id="requestDetails" class="form-control" placeholder="تفاصيل الطلب"></textarea>
+                <button type="button" class="btn btn-primary" onclick="add
