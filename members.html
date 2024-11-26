@@ -5,16 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الأعضاء</title>
-
-    <!-- إضافة Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- إضافة DataTables CSS -->
-    <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
-
-    <!-- إضافة SweetAlert2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* إعدادات أساسية */
         body {
@@ -74,6 +68,31 @@
             background-color: white;
         }
 
+        /* تصميم جدول الأعضاء */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
         .button {
             background-color: #4CAF50;
             color: white;
@@ -89,6 +108,11 @@
 
         .button:hover {
             background-color: #45a049;
+        }
+
+        /* إضافة تأثيرات SweetAlert */
+        .swal2-popup {
+            font-family: 'Arial', sans-serif;
         }
     </style>
 </head>
@@ -124,7 +148,7 @@
             <p>قائمة الأعضاء في الجيم، يمكنك إضافة عضو جديد، تعديل بيانات الأعضاء الحاليين أو حذفهم.</p>
 
             <!-- جدول الأعضاء -->
-            <table id="membersTable" class="display">
+            <table>
                 <thead>
                     <tr>
                         <th>الاسم</th>
@@ -139,8 +163,8 @@
                         <td>ahmed@example.com</td>
                         <td>شهري</td>
                         <td>
-                            <a href="#" class="button" onclick="editMember()">تعديل</a>
-                            <a href="#" class="button" onclick="deleteMember()">حذف</a>
+                            <a href="#" class="button">تعديل</a>
+                            <a href="#" class="button" onclick="confirmDelete('أحمد علي')">حذف</a>
                         </td>
                     </tr>
                     <tr>
@@ -148,8 +172,8 @@
                         <td>mahmoud@example.com</td>
                         <td>سنوي</td>
                         <td>
-                            <a href="#" class="button" onclick="editMember()">تعديل</a>
-                            <a href="#" class="button" onclick="deleteMember()">حذف</a>
+                            <a href="#" class="button">تعديل</a>
+                            <a href="#" class="button" onclick="confirmDelete('محمود سعيد')">حذف</a>
                         </td>
                     </tr>
                     <!-- أضف المزيد من الأعضاء هنا -->
@@ -157,46 +181,59 @@
             </table>
 
             <!-- زر إضافة عضو جديد -->
-            <a href="#" class="button" onclick="addMember()">إضافة عضو جديد</a>
+            <a href="#" class="button" id="addMemberBtn">إضافة عضو جديد</a>
         </div>
     </div>
 
-    <!-- إضافة مكتبات JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
     <script>
-        // تهيئة DataTables
-        $(document).ready(function() {
-            $('#membersTable').DataTable();
-        });
-
-        // دوال لتفاعل مع الأعضاء
-        function editMember() {
-            Swal.fire('تعديل العضو', 'سيتم تعديل بيانات العضو', 'info');
-        }
-
-        function deleteMember() {
+        // استخدام SweetAlert لتأكيد الحذف
+        function confirmDelete(memberName) {
             Swal.fire({
                 title: 'هل أنت متأكد؟',
-                text: 'سيتم حذف العضو من السجل!',
+                text: "هل تريد حذف العضو " + memberName + "?",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'نعم',
+                confirmButtonText: 'نعم، احذف!',
                 cancelButtonText: 'إلغاء'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire('تم الحذف!', 'تم حذف العضو بنجاح.', 'success');
+                    // هنا يمكن إضافة الكود الفعلي لحذف العضو
+                    Swal.fire(
+                        'تم الحذف!',
+                        'تم حذف العضو بنجاح.',
+                        'success'
+                    );
                 }
             });
         }
 
-        function addMember() {
-            Swal.fire('إضافة عضو', 'سيتم إضافة عضو جديد.', 'success');
-        }
+        // إضافة حدث للنقر على زر "إضافة عضو جديد"
+        document.getElementById("addMemberBtn").addEventListener("click", function() {
+            Swal.fire({
+                title: 'إضافة عضو جديد',
+                html: `
+                    <input type="text" id="memberName" class="swal2-input" placeholder="الاسم">
+                    <input type="email" id="memberEmail" class="swal2-input" placeholder="البريد الإلكتروني">
+                    <input type="text" id="memberSubscription" class="swal2-input" placeholder="الاشتراك">
+                `,
+                confirmButtonText: 'إضافة',
+                preConfirm: () => {
+                    const name = document.getElementById('memberName').value;
+                    const email = document.getElementById('memberEmail').value;
+                    const subscription = document.getElementById('memberSubscription').value;
+                    if (!name || !email || !subscription) {
+                        Swal.showValidationMessage('الرجاء ملء جميع الحقول');
+                    }
+                    return { name, email, subscription };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('تم إضافة العضو!', 'تم إضافة العضو الجديد بنجاح.', 'success');
+                }
+            });
+        });
     </script>
+
 </body>
 
 </html>
