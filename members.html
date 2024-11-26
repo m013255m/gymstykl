@@ -1,152 +1,272 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الأعضاء</title>
-    <!-- ربط بمكتبة AdminLTE الخاصة بالشريط الجانبي و Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fb;
+            margin: 0;
+            padding: 0;
+            display: flex;
         }
 
-        .content {
-            margin-left: 250px; /* الشريط الجانبي ثابت على اليسار */
+        /* الشريط الجانبي */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            padding-top: 20px;
+            padding-right: 20px;
+            transition: 0.3s;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #4CAF50;
+            border-radius: 5px;
+        }
+
+        /* الصفحة الرئيسية */
+        .main-content {
+            margin-left: 270px;
             padding: 20px;
+            width: 100%;
         }
 
-        /* تخصيص الأيقونة المتحركة قبل تحميل الأعضاء */
-        #loading {
-            display: none;
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
             text-align: center;
-            font-size: 24px;
-            color: #28a745;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 20px;
+            text-align: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            padding: 15px;
+        }
+
+        .card-body {
+            padding: 25px;
+            background-color: #e8f5e9;
+            border-radius: 10px;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            cursor: pointer;
+        }
+
+        button:active {
+            background-color: #388e3c;
         }
 
         table {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
 
-        th, td {
+        table th, table td {
+            padding: 15px;
             text-align: center;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+            transform: scale(1.02);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .loading-icon {
+            display: none;
+            text-align: center;
+            font-size: 24px;
+            color: #4CAF50;
         }
 
         .btn-warning, .btn-danger {
-            margin: 0 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-warning:hover {
+            background-color: #ff9800;
+        }
+
+        .btn-danger:hover {
+            background-color: #f44336;
+        }
+
+        .alert {
+            display: none;
+            margin-top: 20px;
         }
     </style>
 </head>
-<body class="hold-transition sidebar-mini">
+<body>
 
-<!-- الشريط الجانبي باستخدام AdminLTE -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="index.html" class="brand-link">
-        <span class="brand-text font-weight-light">إدارة النظام</span>
-    </a>
     <div class="sidebar">
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item">
-                    <a href="index.html" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>الرئيسية</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="members.html" class="nav-link active">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>إدارة الأعضاء</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="trainers.html" class="nav-link">
-                        <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                        <p>إدارة المدربين</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="subscriptions.html" class="nav-link">
-                        <i class="nav-icon fas fa-credit-card"></i>
-                        <p>إدارة الاشتراكات</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="inventory.html" class="nav-link">
-                        <i class="nav-icon fas fa-cogs"></i>
-                        <p>إدارة المخزون</p>
-                    </a>
-                </li>
-                <!-- إضافة أقسام أخرى هنا -->
-            </ul>
-        </nav>
+        <a href="#members">إدارة الأعضاء</a>
+        <a href="#trainers">إدارة المدربين</a>
+        <a href="#subscriptions">إدارة الاشتراكات</a>
+        <a href="#inventory">إدارة المخزون</a>
+        <a href="#damagedInventory">المخزون التالف</a>
+        <a href="#meals">إدارة الوجبات الغذائية</a>
+        <a href="#ratings">التقييمات</a>
+        <a href="#rewards">المكافآت</a>
+        <a href="#specialRequests">الطلبات الخاصة</a>
+        <a href="#marketing">حملات التسويق</a>
+        <a href="#advancedScheduling">الجدولة المتقدمة</a>
+        <a href="#complaints">الشكاوي</a>
     </div>
-</aside>
 
-<!-- المحتوى -->
-<div class="content-wrapper">
-    <section class="content">
-        <div class="container-fluid">
+    <div class="main-content">
+        <div id="members">
             <h2>إدارة الأعضاء</h2>
+            
+            <!-- أيقونة تحميل -->
+            <div class="loading-icon" id="loading">
+                <i class="fa fa-spinner fa-spin"></i> تحميل...
+            </div>
 
-            <!-- أيقونة التحميل -->
-            <div id="loading">جاري تحميل الأعضاء...</div>
-
-            <!-- نموذج إضافة عضو -->
-            <form id="addMemberForm">
-                <div class="mb-3">
-                    <label for="memberName" class="form-label">اسم العضو</label>
-                    <input type="text" class="form-control" id="memberName" required>
+            <!-- نموذج إضافة عضو جديد -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>إضافة عضو جديد</h4>
                 </div>
-                <div class="mb-3">
-                    <label for="memberEmail" class="form-label">البريد الإلكتروني</label>
-                    <input type="email" class="form-control" id="memberEmail" required>
+                <div class="card-body">
+                    <form id="addMemberForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="memberName">اسم العضو</label>
+                                    <input type="text" class="form-control" id="memberName" placeholder="أدخل اسم العضو">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="memberEmail">البريد الإلكتروني</label>
+                                    <input type="email" class="form-control" id="memberEmail" placeholder="أدخل البريد الإلكتروني">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="memberPhone">رقم الهاتف</label>
+                            <input type="tel" class="form-control" id="memberPhone" placeholder="أدخل رقم الهاتف">
+                        </div>
+                        <div class="form-group">
+                            <label for="memberJoinDate">تاريخ الانضمام</label>
+                            <input type="date" class="form-control" id="memberJoinDate">
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">إضافة العضو</button>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="memberPhone" class="form-label">رقم الهاتف</label>
-                    <input type="text" class="form-control" id="memberPhone" required>
+            </div>
+            
+            <!-- جدول عرض الأعضاء -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>قائمة الأعضاء</h4>
                 </div>
-                <div class="mb-3">
-                    <label for="memberJoinDate" class="form-label">تاريخ الانضمام</label>
-                    <input type="date" class="form-control" id="memberJoinDate" required>
+                <div class="card-body">
+                    <table class="table table-bordered" id="membersTable">
+                        <thead>
+                            <tr>
+                                <th>اسم العضو</th>
+                                <th>البريد الإلكتروني</th>
+                                <th>رقم الهاتف</th>
+                                <th>تاريخ الانضمام</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم إضافة الأعضاء هنا باستخدام JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
-                <button type="submit" class="btn btn-success">إضافة العضو</button>
-            </form>
-
-            <h3 class="mt-5">قائمة الأعضاء</h3>
-            <table class="table table-bordered mt-3">
-                <thead>
-                    <tr>
-                        <th>اسم العضو</th>
-                        <th>البريد الإلكتروني</th>
-                        <th>رقم الهاتف</th>
-                        <th>تاريخ الانضمام</th>
-                        <th>التحكم</th>
-                    </tr>
-                </thead>
-                <tbody id="membersList">
-                    <!-- سيتم تحميل الأعضاء هنا -->
-                </tbody>
-            </table>
+            </div>
         </div>
-    </section>
-</div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1.0/dist/js/adminlte.min.js"></script>
-
-<script>
-    // وظيفة لتحميل الأعضاء
-    const loadMembers = () => {
-        setTimeout(() => {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // حفظ البيانات في localStorage
+        const loadMembers = () => {
             const members = JSON.parse(localStorage.getItem('members')) || [];
-            const tableBody = document.getElementById('membersList');
+            const tableBody = document.getElementById('membersTable').querySelector('tbody');
             tableBody.innerHTML = '';
-
             members.forEach((member, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -161,70 +281,39 @@
                 `;
                 tableBody.appendChild(row);
             });
-
-            document.getElementById('loading').style.display = 'none'; // إخفاء الأيقونة بعد تحميل الأعضاء
-        }, 3000); // تأخير 3 ثوانٍ
-    };
-
-    // تعديل عضو
-    const editMember = (index) => {
-        const members = JSON.parse(localStorage.getItem('members')) || [];
-        const member = members[index];
-        document.getElementById('memberName').value = member.name;
-        document.getElementById('memberEmail').value = member.email;
-        document.getElementById('memberPhone').value = member.phone;
-        document.getElementById('memberJoinDate').value = member.joinDate;
-
-        // تعديل الزر ليحفظ التعديل
-        const submitButton = document.querySelector('button[type="submit"]');
-        submitButton.textContent = 'تحديث العضو';
-
-        submitButton.onclick = () => {
-            member.name = document.getElementById('memberName').value;
-            member.email = document.getElementById('memberEmail').value;
-            member.phone = document.getElementById('memberPhone').value;
-            member.joinDate = document.getElementById('memberJoinDate').value;
-
-            localStorage.setItem('members', JSON.stringify(members));
-            loadMembers();
-            submitButton.textContent = 'إضافة العضو';
         };
-    };
 
-    // حذف عضو
-    const deleteMember = (index) => {
-        const members = JSON.parse(localStorage.getItem('members')) || [];
-        members.splice(index, 1);
-        localStorage.setItem('members', JSON.stringify(members));
+        // إضافة عضو جديد
+        const addMemberForm = document.getElementById('addMemberForm');
+        addMemberForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            // إظهار الأيقونة المتحركة
+            document.getElementById('loading').style.display = 'block';
+
+            // استخراج البيانات من النموذج
+            const memberName = document.getElementById('memberName').value;
+            const memberEmail = document.getElementById('memberEmail').value;
+            const memberPhone = document.getElementById('memberPhone').value;
+            const memberJoinDate = document.getElementById('memberJoinDate').value;
+
+            // إضافة البيانات إلى localStorage
+            const members = JSON.parse(localStorage.getItem('members')) || [];
+            members.push({ name: memberName, email: memberEmail, phone: memberPhone, joinDate: memberJoinDate });
+            localStorage.setItem('members', JSON.stringify(members));
+
+            // إخفاء الأيقونة المتحركة
+            document.getElementById('loading').style.display = 'none';
+
+            // إعادة تحميل الأعضاء في الجدول
+            loadMembers();
+
+            // مسح الحقول بعد الإضافة
+            addMemberForm.reset();
+        });
+
+        // تحميل الأعضاء عند فتح الصفحة
         loadMembers();
-    };
-
-    // إضافة عضو جديد
-    const addMemberForm = document.getElementById('addMemberForm');
-    addMemberForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        // إظهار الأيقونة المتحركة
-        document.getElementById('loading').style.display = 'block';
-
-        // استخراج البيانات من النموذج
-        const memberName = document.getElementById('memberName').value;
-        const memberEmail = document.getElementById('memberEmail').value;
-        const memberPhone = document.getElementById('memberPhone').value;
-        const memberJoinDate = document.getElementById('memberJoinDate').value;
-
-        // إضافة البيانات إلى localStorage
-        const members = JSON.parse(localStorage.getItem('members')) || [];
-        members.push({ name: memberName, email: memberEmail, phone: memberPhone, joinDate: memberJoinDate });
-        localStorage.setItem('members', JSON.stringify(members));
-
-        // إعادة تحميل الأعضاء بعد الإضافة
-        loadMembers();
-    });
-
-    // تحميل الأعضاء عند فتح الصفحة
-    window.onload = loadMembers;
-</script>
-
+    </script>
 </body>
 </html>
