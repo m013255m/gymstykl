@@ -5,22 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الأعضاء</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
+        /* إعدادات أساسية */
         body {
-            font-family:  Arial , sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
         }
 
+        /* إعدادات الحاوية التي تحتوي على الشريط الجانبي والمحتوى */
         .container {
             display: flex;
         }
 
+        /* إعدادات الشريط الجانبي */
         .sidebar {
             width: 250px;
             background-color: #333;
@@ -58,55 +59,22 @@
             background-color: #575757;
         }
 
+        /* إعدادات المحتوى الرئيسي */
         .content {
             flex: 1;
             padding: 20px;
             background-color: white;
         }
 
-        h3 {
-            font-size: 24px;
+        .content h3 {
             margin-bottom: 20px;
         }
 
-        .input-icon {
-            position: relative;
-            width: 100%;
-            margin-bottom: 15px;
-        }
-
-        .input-icon input {
-            width: 100%;
-            padding: 12px 20px;
-            padding-left: 40px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            outline: none;
-            transition: border 0.3s;
-        }
-
-        .input-icon input:focus {
-            border-color: #4CAF50;
-        }
-
-        .input-icon i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            color: #888;
-        }
-
+        /* تصميم جدول الأعضاء */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         table, th, td {
@@ -116,19 +84,54 @@
         th, td {
             padding: 12px;
             text-align: center;
-            font-size: 16px;
         }
 
         th {
             background-color: #333;
             color: white;
+            font-size: 18px;
+        }
+
+        td {
+            font-size: 16px;
         }
 
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
 
-        .button {
+        /* تصميم الحقول */
+        .form-container {
+            margin-bottom: 20px;
+        }
+
+        .form-container label {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .form-container input, .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-container input:focus, .form-container select:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        /* أيقونات */
+        .icon {
+            margin-right: 5px;
+            color: #4CAF50;
+        }
+
+        /* زر إضافة */
+        .add-button {
             background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
@@ -138,137 +141,133 @@
             text-align: center;
             display: inline-block;
             text-decoration: none;
-            transition: transform 0.2s ease-in-out;
+            font-size: 16px;
+            margin-bottom: 20px;
         }
 
-        .button:hover {
+        .add-button:hover {
             background-color: #45a049;
-            transform: scale(1.05);
         }
 
-        .swal2-popup {
-            font-family:  Arial , sans-serif;
+        /* تأثيرات */
+        .animate-table {
+            animation: fadeInUp 1s;
+        }
+
+        .animate-form {
+            animation: fadeInLeft 1s;
+        }
+
+        .animate-button {
+            animation: fadeInRight 1s;
         }
     </style>
 </head>
 
 <body>
-
     <div class="container">
+        <!-- الشريط الجانبي -->
         <div class="sidebar">
             <h2>إدارة الجيم</h2>
             <nav>
                 <ul>
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="members.html">إدارة الأعضاء</a></li>
-                    <li><a href="trainers.html">إدارة المدربين</a></li>
-                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
-                    <li><a href="inventory.html">إدارة المخزون</a></li>
-                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
-                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
-                    <li><a href="ratings.html">التقييمات</a></li>
-                    <li><a href="rewards.html">المكافآت</a></li>
-                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
-                    <li><a href="marketing.html">حملات التسويق</a></li>
-                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                    <li><a href="complaints.html">الشكاوي</a></li>
+                    <li><a href="#"><i class="fas fa-home icon"></i>الرئيسية</a></li>
+                    <li><a href="#"><i class="fas fa-user icon"></i>إدارة الأعضاء</a></li>
+                    <li><a href="#"><i class="fas fa-dumbbell icon"></i>إدارة الاشتراكات</a></li>
                 </ul>
             </nav>
         </div>
 
+        <!-- المحتوى الرئيسي -->
         <div class="content">
             <h3>إدارة الأعضاء</h3>
-            <p>قائمة الأعضاء في الجيم، يمكنك إضافة عضو جديد، تعديل بيانات الأعضاء الحاليين أو حذفهم.</p>
 
-            <a href="#" class="button" id="addMemberBtn">إضافة عضو جديد</a>
+            <!-- نموذج إدخال -->
+            <div class="form-container animate-form">
+                <label><i class="fas fa-user icon"></i>الاسم:</label>
+                <input type="text" id="name" placeholder="أدخل الاسم">
 
-            <table id="membersTable">
+                <label><i class="fas fa-phone icon"></i>رقم الهاتف:</label>
+                <input type="text" id="phone" placeholder="أدخل رقم الهاتف">
+
+                <label><i class="fas fa-calendar icon"></i>السن:</label>
+                <input type="number" id="age" placeholder="أدخل السن">
+
+                <label><i class="fas fa-clipboard icon"></i>نوع الاشتراك:</label>
+                <select id="subscription">
+                    <option value="شهري">شهري</option>
+                    <option value="سنوي">سنوي</option>
+                </select>
+                <button class="add-button animate-button" onclick="addMember()">إضافة عضو جديد</button>
+            </div>
+
+            <!-- جدول الأعضاء -->
+            <table class="animate-table">
                 <thead>
                     <tr>
                         <th>الاسم</th>
                         <th>رقم الهاتف</th>
                         <th>السن</th>
-                        <th>الاشتراك</th>
+                        <th>نوع الاشتراك</th>
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- الأعضاء سيتم إضافتهم هنا -->
+                <tbody id="memberTable">
+                    <!-- البيانات -->
                 </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // دالة إضافة العضو
-        function addMember(name, phone, age, subscription) {
-            const table = document.getElementById("membersTable").getElementsByTagName( tbody )[0];
-            const row = table.insertRow();
+        function addMember() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const age = document.getElementById('age').value;
+            const subscription = document.getElementById('subscription').value;
 
+            if (!name || !phone || !age) {
+                alert("يرجى ملء جميع الحقول!");
+                return;
+            }
+
+            const table = document.getElementById('memberTable');
+            const row = table.insertRow();
             row.innerHTML = `
                 <td>${name}</td>
                 <td>${phone}</td>
                 <td>${age}</td>
                 <td>${subscription}</td>
                 <td>
-                    <button class="button editBtn" onclick="editMember(this)">تعديل</button>
-                    <button class="button deleteBtn" onclick="deleteMember(this)">حذف</button>
+                    <button onclick="editRow(this)">تعديل</button>
+                    <button onclick="deleteRow(this)">حذف</button>
                 </td>
             `;
+
+            // تفريغ الحقول
+            document.getElementById('name').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('age').value = '';
+            document.getElementById('subscription').value = 'شهري';
         }
 
-        // دالة تعديل العضو
-        function editMember(button) {
-            const row = button.closest("tr");
-            const name = row.cells[0].textContent;
-            const phone = row.cells[1].textContent;
-            const age = row.cells[2].textContent;
-            const subscription = row.cells[3].textContent;
-
-            Swal.fire({
-                title:  تعديل بيانات العضو ,
-                html: `
-                    <div class="input-icon">
-                        <input type="text" id="editName" value="${name}" placeholder="الاسم">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="input-icon">
-                        <input type="text" id="editPhone" value="${phone}" placeholder="رقم الهاتف">
-                        <i class="fas fa-phone-alt"></i>
-                    </div>
-                    <div class="input-icon">
-                        <input type="number" id="editAge" value="${age}" placeholder="السن">
-                        <i class="fas fa-birthday-cake"></i>
-                    </div>
-                    <div class="input-icon">
-                        <input type="text" id="editSubscription" value="${subscription}" placeholder="الاشتراك">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                `,
-                confirmButtonText:  تعديل ,
-                preConfirm: () => {
-                    return {
-                        name: document.getElementById( editName ).value,
-                        phone: document.getElementById( editPhone ).value,
-                        age: document.getElementById( editAge ).value,
-                        subscription: document.getElementById( editSubscription ).value
-                    };
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    row.cells[0].textContent = result.value.name;
-                    row.cells[1].textContent = result.value.phone;
-                    row.cells[2].textContent = result.value.age;
-                    row.cells[3].textContent = result.value.subscription;
-                    Swal.fire( تم التعديل! ,   ,  success );
-                }
-            });
+        function deleteRow(btn) {
+            const row = btn.parentElement.parentElement;
+            row.remove();
         }
 
-        // دالة حذف العضو
-        function deleteMember(button) {
-            const row = button.closest("tr");
-            const name = row.cells[0].textContent;
+        function editRow(btn) {
+            const row = btn.parentElement.parentElement;
+            const cells = row.querySelectorAll('td');
 
-            Swal.fire({
-                title:  هل
+            document.getElementById('name').value = cells[0].textContent;
+            document.getElementById('phone').value = cells[1].textContent;
+            document.getElementById('age').value = cells[2].textContent;
+            document.getElementById('subscription').value = cells[3].textContent;
+
+            row.remove();
+        }
+    </script>
+</body>
+
+</html>
