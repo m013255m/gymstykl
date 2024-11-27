@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family:  Arial , sans-serif;
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
@@ -64,6 +64,42 @@
             background-color: white;
         }
 
+        h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .input-icon {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .input-icon input {
+            width: 100%;
+            padding: 12px 20px;
+            padding-left: 40px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .input-icon input:focus {
+            border-color: #4CAF50;
+        }
+
+        .input-icon i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #888;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -80,6 +116,7 @@
         th, td {
             padding: 12px;
             text-align: center;
+            font-size: 16px;
         }
 
         th {
@@ -101,7 +138,6 @@
             text-align: center;
             display: inline-block;
             text-decoration: none;
-            margin-top: 20px;
             transition: transform 0.2s ease-in-out;
         }
 
@@ -111,25 +147,7 @@
         }
 
         .swal2-popup {
-            font-family: 'Arial', sans-serif;
-        }
-
-        .input-icon {
-            position: relative;
-            width: 100%;
-        }
-
-        .input-icon input {
-            padding-left: 30px;
-        }
-
-        .input-icon i {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 16px;
-            color: #888;
+            font-family:  Arial , sans-serif;
         }
     </style>
 </head>
@@ -162,6 +180,8 @@
             <h3>إدارة الأعضاء</h3>
             <p>قائمة الأعضاء في الجيم، يمكنك إضافة عضو جديد، تعديل بيانات الأعضاء الحاليين أو حذفهم.</p>
 
+            <a href="#" class="button" id="addMemberBtn">إضافة عضو جديد</a>
+
             <table id="membersTable">
                 <thead>
                     <tr>
@@ -176,15 +196,13 @@
                     <!-- الأعضاء سيتم إضافتهم هنا -->
                 </tbody>
             </table>
-
-            <a href="#" class="button" id="addMemberBtn">إضافة عضو جديد</a>
         </div>
     </div>
 
     <script>
         // دالة إضافة العضو
         function addMember(name, phone, age, subscription) {
-            const table = document.getElementById("membersTable").getElementsByTagName('tbody')[0];
+            const table = document.getElementById("membersTable").getElementsByTagName( tbody )[0];
             const row = table.insertRow();
 
             row.innerHTML = `
@@ -208,20 +226,32 @@
             const subscription = row.cells[3].textContent;
 
             Swal.fire({
-                title: 'تعديل بيانات العضو',
+                title:  تعديل بيانات العضو ,
                 html: `
-                    <input type="text" id="editName" class="swal2-input" value="${name}" placeholder="الاسم">
-                    <input type="text" id="editPhone" class="swal2-input" value="${phone}" placeholder="رقم الهاتف">
-                    <input type="number" id="editAge" class="swal2-input" value="${age}" placeholder="السن">
-                    <input type="text" id="editSubscription" class="swal2-input" value="${subscription}" placeholder="الاشتراك">
+                    <div class="input-icon">
+                        <input type="text" id="editName" value="${name}" placeholder="الاسم">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="input-icon">
+                        <input type="text" id="editPhone" value="${phone}" placeholder="رقم الهاتف">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div class="input-icon">
+                        <input type="number" id="editAge" value="${age}" placeholder="السن">
+                        <i class="fas fa-birthday-cake"></i>
+                    </div>
+                    <div class="input-icon">
+                        <input type="text" id="editSubscription" value="${subscription}" placeholder="الاشتراك">
+                        <i class="fas fa-cogs"></i>
+                    </div>
                 `,
-                confirmButtonText: 'تعديل',
+                confirmButtonText:  تعديل ,
                 preConfirm: () => {
                     return {
-                        name: document.getElementById('editName').value,
-                        phone: document.getElementById('editPhone').value,
-                        age: document.getElementById('editAge').value,
-                        subscription: document.getElementById('editSubscription').value
+                        name: document.getElementById( editName ).value,
+                        phone: document.getElementById( editPhone ).value,
+                        age: document.getElementById( editAge ).value,
+                        subscription: document.getElementById( editSubscription ).value
                     };
                 }
             }).then((result) => {
@@ -230,7 +260,7 @@
                     row.cells[1].textContent = result.value.phone;
                     row.cells[2].textContent = result.value.age;
                     row.cells[3].textContent = result.value.subscription;
-                    Swal.fire('تم التعديل!', '', 'success');
+                    Swal.fire( تم التعديل! ,   ,  success );
                 }
             });
         }
@@ -241,48 +271,4 @@
             const name = row.cells[0].textContent;
 
             Swal.fire({
-                title: 'هل أنت متأكد؟',
-                text: "هل تريد حذف العضو " + name + "?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'نعم، احذف!',
-                cancelButtonText: 'إلغاء'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    row.remove();
-                    Swal.fire('تم الحذف!', '', 'success');
-                }
-            });
-        }
-
-        // دالة إضافة عضو جديد
-        document.getElementById("addMemberBtn").addEventListener("click", function() {
-            Swal.fire({
-                title: 'إضافة عضو جديد',
-                html: `
-                    <input type="text" id="newName" class="swal2-input" placeholder="الاسم">
-                    <input type="text" id="newPhone" class="swal2-input" placeholder="رقم الهاتف">
-                    <input type="number" id="newAge" class="swal2-input" placeholder="السن">
-                    <input type="text" id="newSubscription" class="swal2-input" placeholder="الاشتراك">
-                `,
-                confirmButtonText: 'إضافة',
-                preConfirm: () => {
-                    return {
-                        name: document.getElementById('newName').value,
-                        phone: document.getElementById('newPhone').value,
-                        age: document.getElementById('newAge').value,
-                        subscription: document.getElementById('newSubscription').value
-                    };
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    addMember(result.value.name, result.value.phone, result.value.age, result.value.subscription);
-                    Swal.fire('تم الإضافة!', '', 'success');
-                }
-            });
-        });
-    </script>
-
-</body>
-
-</html>
+                title:  هل
