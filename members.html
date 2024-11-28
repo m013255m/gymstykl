@@ -78,8 +78,9 @@
         }
 
         th, td {
-            padding: 12px;
+            padding: 14px;
             text-align: center;
+            font-size: 16px;
         }
 
         th {
@@ -94,13 +95,11 @@
         .button {
             background-color: #4CAF50;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            margin: 5px;
+            font-size: 16px;
             transition: transform 0.2s ease-in-out;
         }
 
@@ -126,6 +125,11 @@
             width: 300px;
             border: 1px solid #ddd;
             border-radius: 5px;
+        }
+
+        h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -238,6 +242,7 @@
                 if (result.isConfirmed) {
                     addMemberToTable(result.value.name, result.value.phone, result.value.age, result.value.subscription);
                     saveMembers();
+                    Swal.fire('تمت الإضافة!', 'تم إضافة العضو بنجاح.', 'success');
                 }
             });
         });
@@ -255,7 +260,7 @@
                     <input type="number" id="editAge" class="swal2-input" value="${age}">
                     <input type="text" id="editSubscription" class="swal2-input" value="${subscription}">
                 `,
-                confirmButtonText: 'تعديل',
+                confirmButtonText: 'حفظ',
                 preConfirm: () => ({
                     name: document.getElementById("editName").value,
                     phone: document.getElementById("editPhone").value,
@@ -285,22 +290,4 @@
             }).then(result => {
                 if (result.isConfirmed) {
                     button.closest("tr").remove();
-                    saveMembers();
-                }
-            });
-        }
-
-        // بحث عن الأعضاء
-        document.querySelector("#searchInput").addEventListener("input", function () {
-            const query = this.value.toLowerCase();
-            document.querySelectorAll("#membersTable tbody tr").forEach(row => {
-                row.style.display = row.textContent.toLowerCase().includes(query) ? "" : "none";
-            });
-        });
-
-        // تحميل الأعضاء عند فتح الصفحة
-        loadMembers();
-    </script>
-</body>
-
-</html>
+                    save
