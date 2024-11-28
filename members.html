@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الأعضاء</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -183,7 +182,7 @@
     <script>
         const membersKey = "gymMembers";
 
-        // تحميل البيانات من التخزين المحلي
+        // تحميل البيانات
         function loadMembers() {
             const storedMembers = localStorage.getItem(membersKey);
             if (storedMembers) {
@@ -193,7 +192,7 @@
             }
         }
 
-        // حفظ البيانات في التخزين المحلي
+        // حفظ البيانات
         function saveMembers() {
             const rows = document.querySelectorAll("#membersTable tbody tr");
             const members = Array.from(rows).map(row => ({
@@ -205,7 +204,7 @@
             localStorage.setItem(membersKey, JSON.stringify(members));
         }
 
-        // إضافة عضو إلى الجدول
+        // إضافة عضو للجدول
         function addMemberToTable(name, phone, age, subscription) {
             const table = document.querySelector("#membersTable tbody");
             const row = table.insertRow();
@@ -221,7 +220,7 @@
             `;
         }
 
-        // إضافة عضو جديد
+        // إضافة عضو
         document.querySelector("#addMemberBtn").addEventListener("click", () => {
             Swal.fire({
                 title: 'إضافة عضو جديد',
@@ -247,7 +246,7 @@
             });
         });
 
-        // تعديل بيانات العضو
+        // تعديل العضو
         function editMember(button) {
             const row = button.closest("tr");
             const [name, phone, age, subscription] = Array.from(row.cells).map(cell => cell.textContent);
@@ -290,4 +289,24 @@
             }).then(result => {
                 if (result.isConfirmed) {
                     button.closest("tr").remove();
-                    save
+                    saveMembers();
+                }
+            });
+        }
+
+        // البحث عن عضو
+        document.getElementById("searchInput").addEventListener("input", function () {
+            const searchText = this.value.toLowerCase();
+            const rows = document.querySelectorAll("#membersTable tbody tr");
+            rows.forEach(row => {
+                const name = row.cells[0].textContent.toLowerCase();
+                row.style.display = name.includes(searchText) ? "" : "none";
+            });
+        });
+
+        // تحميل الأعضاء عند تحميل الصفحة
+        loadMembers();
+    </script>
+</body>
+
+</html>
