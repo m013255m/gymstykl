@@ -26,6 +26,7 @@
             color: white;
             padding: 20px;
             height: 100vh;
+            position: fixed;
         }
 
         .sidebar h2 {
@@ -60,7 +61,7 @@
         .content {
             flex: 1;
             padding: 20px;
-            background-color: white;
+            margin-left: 250px;
         }
 
         table {
@@ -259,7 +260,7 @@
                     <input type="number" id="editAge" class="swal2-input" value="${age}">
                     <input type="text" id="editSubscription" class="swal2-input" value="${subscription}">
                 `,
-                confirmButtonText: 'حفظ',
+                confirmButtonText: 'تحديث',
                 preConfirm: () => ({
                     name: document.getElementById("editName").value,
                     phone: document.getElementById("editPhone").value,
