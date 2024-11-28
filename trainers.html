@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المدربين</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        .sidebar h2 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar nav ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #575757;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            background-color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .swal2-popup {
+            font-family: 'Arial', sans-serif;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>إدارة الجيم</h2>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="members.html">إدارة الأعضاء</a></li>
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
+                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                    <li><a href="inventory.html">إدارة المخزون</a></li>
+                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
+                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+                    <li><a href="ratings.html">التقييمات</a></li>
+                    <li><a href="rewards.html">المكافآت</a></li>
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                    <li><a href="complaints.html">الشكاوي</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <h3>إدارة المدربين</h3>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="بحث عن مدرب...">
+                <button class="button" id="addTrainerBtn">إضافة مدرب جديد</button>
+            </div>
+            <table id="trainersTable">
+                <thead>
+                    <tr>
+                        <th>الاسم</th>
+                        <th>رقم الهاتف</th>
+                        <th>الخبرة</th>
+                        <th>التخصص</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- المدربين سيتم إضافتهم هنا -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const trainersKey = "gymTrainers";
+
+        // تحميل البيانات من التخزين المحلي
+        function loadTrainers() {
+            const storedTrainers = localStorage.getItem(trainersKey);
+            if (storedTrainers) {
+                JSON.parse(storedTrainers).forEach(trainer => {
+                    addTrainerToTable(trainer.name, trainer.phone, trainer.experience, trainer.specialization);
+                });
+            }
+        }
+
+        // حفظ البيانات في التخزين المحلي
+        function saveTrainers() {
+            const rows = document.querySelectorAll("#trainersTable tbody tr");
+            const trainers = Array.from(rows).map(row => ({
+                name: row.cells[0].textContent,
+                phone: row.cells[1].textContent,
+                experience: row.cells[2].textContent,
+                specialization: row.cells[3].textContent
+            }));
+            localStorage.setItem(trainersKey, JSON.stringify(trainers));
+        }
+
+        // إضافة مدرب إلى الجدول
+        function addTrainerToTable(name, phone, experience, specialization) {
+            const table = document.querySelector("#trainersTable tbody");
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${name}</td>
+                <td>${phone}</td>
+                <td>${experience}</td>
+                <td>${specialization}</td>
+                <td>
+                    <button class="button" onclick="editTrainer(this)">تعديل</button>
+                    <button class="button" onclick="deleteTrainer(this)">حذف</button>
+                </td>
+            `;
+        }
+
+        // إضافة مدرب جديد
+        document.querySelector("#addTrainerBtn").addEventListener("click", () => {
+            Swal.fire({
+                title: 'إضافة مدرب جديد',
+                html: `
+                    <input type="text" id="newName" class="swal2-input" placeholder="الاسم">
+                    <input type="text" id="newPhone" class="swal2-input" placeholder="رقم الهاتف">
+                    <input type="text" id="newExperience" class="swal2-input" placeholder="الخبرة">
+                    <input type="text" id="newSpecialization" class="swal2-input" placeholder="التخصص">
+                `,
+                confirmButtonText: 'إضافة',
+                preConfirm: () => ({
+                    name: document.getElementById("newName").value,
+                    phone: document.getElementById("newPhone").value,
+                    experience: document.getElementById("newExperience").value,
+                    specialization: document.getElementById("newSpecialization").value
+                })
+            }).then(result => {
+                if (result.isConfirmed) {
+                    addTrainerToTable(result.value.name, result.value.phone, result.value.experience, result.value.specialization);
+                    saveTrainers();
+                    Swal.fire('تمت الإضافة!', 'تم إضافة المدرب بنجاح.', 'success');
+                }
+            });
+        });
+
+        // تعديل بيانات المدرب
+        function editTrainer(button) {
+            const row = button.closest("tr");
+            const [name, phone, experience, specialization] = Array.from(row.cells).map(cell => cell.textContent);
+
+            Swal.fire({
+                title: 'تعديل بيانات المدرب',
+                html: `
+                    <input type="text" id="editName" class="swal2-input" value="${name}" placeholder="الاسم">
+                    <input type="text" id="editPhone" class="swal2-input" value="${phone}" placeholder="رقم الهاتف">
+                    <input type="text" id="editExperience" class="swal2-input" value="${experience}" placeholder="الخبرة">
+                    <input type="text" id="editSpecialization" class="swal2-input" value="${specialization}" placeholder="التخصص">
+                `,
+                confirmButtonText: 'تعديل',
+                preConfirm: () => ({
+                    name: document.getElementById("editName").value,
+                    phone: document.getElementById("editPhone").value,
+                    experience: document.getElementById("editExperience").value,
+                    specialization: document.getElementById("editSpecialization").value
+                })
+            }).then(result => {
+                if (result.isConfirmed) {
+                    row.cells[0].textContent = result.value.name;
+                    row.cells[1].textContent = result.value.phone;
+                    row.cells[2].textContent = result.value.experience;
+                    row.cells[3].textContent = result.value.specialization;
+                    saveTrainers();
+                    Swal.fire('تم التعديل!', 'تم تعديل بيانات المدرب بنجاح.', 'success');
+                }
+            });
+        }
+
+        // حذف مدرب
+        function deleteTrainer(button) {
+            const row = button.closest("tr");
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "هل ترغب في حذف هذا المدرب؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، احذف!',
+                cancelButtonText: 'إلغاء'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    row.remove();
+                    saveTrainers();
+                    Swal.fire('تم الحذف!', 'تم حذف المدرب بنجاح.', 'success');
+                }
+            });
+        }
+
+        // البحث عن المدربين
+        document.getElementById("searchInput").addEventListener("input", function () {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll("#trainersTable tbody tr");
+            rows.forEach(row => {
+                const name = row.cells[0].textContent.toLowerCase();
+                row.style.display = name.includes(query) ? '' : 'none';
+            });
+        });
+
+        // تحميل المدربين عند تحميل الصفحة
+        window.onload = loadTrainers;
+    </script>
+</body>
+
+</html>
