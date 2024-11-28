@@ -2,7 +2,7 @@
 session_start(); // بدء الجلسة
 // التحقق من أن المستخدم قد قام بتسجيل الدخول وأن الجلسة لم تنته
 if (!isset($_SESSION['username']) || time() > $_SESSION['expiry_time']) {
-    header("Location: login.php"); // إعادة التوجيه إلى صفحة تسجيل الدخول
+    header("Location: login.php"); // إعادة التوجيه إلى صفحة تسجيل الدخول إذا لم يكن هناك جلسة نشطة
     exit();
 }
 ?>
@@ -26,7 +26,17 @@ if (!isset($_SESSION['username']) || time() > $_SESSION['expiry_time']) {
                 <ul>
                     <li><a href="index.html">الرئيسية</a></li>
                     <li><a href="members.html">إدارة الأعضاء</a></li>
-                    <!-- إضافة المزيد من الروابط هنا -->
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
+                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                    <li><a href="inventory.html">إدارة المخزون</a></li>
+                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
+                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+                    <li><a href="ratings.html">التقييمات</a></li>
+                    <li><a href="rewards.html">المكافآت</a></li>
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                    <li><a href="complaints.html">الشكاوي</a></li>
                 </ul>
             </nav>
         </div>
