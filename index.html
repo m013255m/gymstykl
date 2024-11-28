@@ -99,6 +99,21 @@
         </div>
     </div>
 
+    <script>
+        // التحقق من صلاحية المستخدم
+        window.onload = function() {
+            var user = JSON.parse(localStorage.getItem("user"));
+            if (user) {
+                if (Date.now() > user.expirationTime) {
+                    alert("انتهت مدة استخدامك، يرجى تسجيل الدخول مجددًا.");
+                    localStorage.removeItem("user");
+                    window.location.href = "login.html"; // العودة لصفحة تسجيل الدخول
+                }
+            } else {
+                window.location.href = "login.html"; // إذا لم يكن هناك مستخدم مسجل الدخول
+            }
+        }
+    </script>
 </body>
 
 </html>
