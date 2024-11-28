@@ -99,9 +99,8 @@
             border-radius: 5px;
             cursor: pointer;
             text-align: center;
-            display: inline-block;
             text-decoration: none;
-            margin-top: 20px;
+            margin: 5px;
             transition: transform 0.2s ease-in-out;
         }
 
@@ -114,28 +113,24 @@
             font-family: 'Arial', sans-serif;
         }
 
-        .input-icon {
-            position: relative;
-            width: 100%;
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .input-icon input {
-            padding-left: 30px;
-        }
-
-        .input-icon i {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
+        .search-bar input {
+            padding: 10px;
             font-size: 16px;
-            color: #888;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
     </style>
 </head>
 
 <body>
-
     <div class="container">
         <div class="sidebar">
             <h2>إدارة الجيم</h2>
@@ -160,8 +155,10 @@
 
         <div class="content">
             <h3>إدارة الأعضاء</h3>
-            <p>قائمة الأعضاء في الجيم، يمكنك إضافة عضو جديد، تعديل بيانات الأعضاء الحاليين أو حذفهم.</p>
-
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="بحث عن عضو...">
+                <button class="button" id="addMemberBtn">إضافة عضو جديد</button>
+            </div>
             <table id="membersTable">
                 <thead>
                     <tr>
@@ -176,87 +173,52 @@
                     <!-- الأعضاء سيتم إضافتهم هنا -->
                 </tbody>
             </table>
-
-            <a href="#" class="button" id="addMemberBtn">إضافة عضو جديد</a>
         </div>
     </div>
 
     <script>
-        // دالة إضافة العضو
-        function addMember(name, phone, age, subscription) {
-            const table = document.getElementById("membersTable").getElementsByTagName('tbody')[0];
-            const row = table.insertRow();
+        const membersKey = "gymMembers";
 
+        // تحميل البيانات من التخزين المحلي
+        function loadMembers() {
+            const storedMembers = localStorage.getItem(membersKey);
+            if (storedMembers) {
+                JSON.parse(storedMembers).forEach(member => {
+                    addMemberToTable(member.name, member.phone, member.age, member.subscription);
+                });
+            }
+        }
+
+        // حفظ البيانات في التخزين المحلي
+        function saveMembers() {
+            const rows = document.querySelectorAll("#membersTable tbody tr");
+            const members = Array.from(rows).map(row => ({
+                name: row.cells[0].textContent,
+                phone: row.cells[1].textContent,
+                age: row.cells[2].textContent,
+                subscription: row.cells[3].textContent
+            }));
+            localStorage.setItem(membersKey, JSON.stringify(members));
+        }
+
+        // إضافة عضو إلى الجدول
+        function addMemberToTable(name, phone, age, subscription) {
+            const table = document.querySelector("#membersTable tbody");
+            const row = table.insertRow();
             row.innerHTML = `
                 <td>${name}</td>
                 <td>${phone}</td>
                 <td>${age}</td>
                 <td>${subscription}</td>
                 <td>
-                    <button class="button editBtn" onclick="editMember(this)">تعديل</button>
-                    <button class="button deleteBtn" onclick="deleteMember(this)">حذف</button>
+                    <button class="button" onclick="editMember(this)">تعديل</button>
+                    <button class="button" onclick="deleteMember(this)">حذف</button>
                 </td>
             `;
         }
 
-        // دالة تعديل العضو
-        function editMember(button) {
-            const row = button.closest("tr");
-            const name = row.cells[0].textContent;
-            const phone = row.cells[1].textContent;
-            const age = row.cells[2].textContent;
-            const subscription = row.cells[3].textContent;
-
-            Swal.fire({
-                title: 'تعديل بيانات العضو',
-                html: `
-                    <input type="text" id="editName" class="swal2-input" value="${name}" placeholder="الاسم">
-                    <input type="text" id="editPhone" class="swal2-input" value="${phone}" placeholder="رقم الهاتف">
-                    <input type="number" id="editAge" class="swal2-input" value="${age}" placeholder="السن">
-                    <input type="text" id="editSubscription" class="swal2-input" value="${subscription}" placeholder="الاشتراك">
-                `,
-                confirmButtonText: 'تعديل',
-                preConfirm: () => {
-                    return {
-                        name: document.getElementById('editName').value,
-                        phone: document.getElementById('editPhone').value,
-                        age: document.getElementById('editAge').value,
-                        subscription: document.getElementById('editSubscription').value
-                    };
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    row.cells[0].textContent = result.value.name;
-                    row.cells[1].textContent = result.value.phone;
-                    row.cells[2].textContent = result.value.age;
-                    row.cells[3].textContent = result.value.subscription;
-                    Swal.fire('تم التعديل!', '', 'success');
-                }
-            });
-        }
-
-        // دالة حذف العضو
-        function deleteMember(button) {
-            const row = button.closest("tr");
-            const name = row.cells[0].textContent;
-
-            Swal.fire({
-                title: 'هل أنت متأكد؟',
-                text: "هل تريد حذف العضو " + name + "?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'نعم، احذف!',
-                cancelButtonText: 'إلغاء'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    row.remove();
-                    Swal.fire('تم الحذف!', '', 'success');
-                }
-            });
-        }
-
-        // دالة إضافة عضو جديد
-        document.getElementById("addMemberBtn").addEventListener("click", function() {
+        // إضافة عضو جديد
+        document.querySelector("#addMemberBtn").addEventListener("click", () => {
             Swal.fire({
                 title: 'إضافة عضو جديد',
                 html: `
@@ -266,23 +228,79 @@
                     <input type="text" id="newSubscription" class="swal2-input" placeholder="الاشتراك">
                 `,
                 confirmButtonText: 'إضافة',
-                preConfirm: () => {
-                    return {
-                        name: document.getElementById('newName').value,
-                        phone: document.getElementById('newPhone').value,
-                        age: document.getElementById('newAge').value,
-                        subscription: document.getElementById('newSubscription').value
-                    };
-                }
-            }).then((result) => {
+                preConfirm: () => ({
+                    name: document.getElementById("newName").value,
+                    phone: document.getElementById("newPhone").value,
+                    age: document.getElementById("newAge").value,
+                    subscription: document.getElementById("newSubscription").value
+                })
+            }).then(result => {
                 if (result.isConfirmed) {
-                    addMember(result.value.name, result.value.phone, result.value.age, result.value.subscription);
-                    Swal.fire('تم الإضافة!', '', 'success');
+                    addMemberToTable(result.value.name, result.value.phone, result.value.age, result.value.subscription);
+                    saveMembers();
                 }
             });
         });
-    </script>
 
+        // تعديل بيانات العضو
+        function editMember(button) {
+            const row = button.closest("tr");
+            const [name, phone, age, subscription] = Array.from(row.cells).map(cell => cell.textContent);
+
+            Swal.fire({
+                title: 'تعديل بيانات العضو',
+                html: `
+                    <input type="text" id="editName" class="swal2-input" value="${name}">
+                    <input type="text" id="editPhone" class="swal2-input" value="${phone}">
+                    <input type="number" id="editAge" class="swal2-input" value="${age}">
+                    <input type="text" id="editSubscription" class="swal2-input" value="${subscription}">
+                `,
+                confirmButtonText: 'تعديل',
+                preConfirm: () => ({
+                    name: document.getElementById("editName").value,
+                    phone: document.getElementById("editPhone").value,
+                    age: document.getElementById("editAge").value,
+                    subscription: document.getElementById("editSubscription").value
+                })
+            }).then(result => {
+                if (result.isConfirmed) {
+                    row.cells[0].textContent = result.value.name;
+                    row.cells[1].textContent = result.value.phone;
+                    row.cells[2].textContent = result.value.age;
+                    row.cells[3].textContent = result.value.subscription;
+                    saveMembers();
+                }
+            });
+        }
+
+        // حذف العضو
+        function deleteMember(button) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: 'لن يمكنك استعادة هذا العضو بعد الحذف!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، احذف',
+                cancelButtonText: 'إلغاء'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    button.closest("tr").remove();
+                    saveMembers();
+                }
+            });
+        }
+
+        // بحث عن الأعضاء
+        document.querySelector("#searchInput").addEventListener("input", function () {
+            const query = this.value.toLowerCase();
+            document.querySelectorAll("#membersTable tbody tr").forEach(row => {
+                row.style.display = row.textContent.toLowerCase().includes(query) ? "" : "none";
+            });
+        });
+
+        // تحميل الأعضاء عند فتح الصفحة
+        loadMembers();
+    </script>
 </body>
 
 </html>
