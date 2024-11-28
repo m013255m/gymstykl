@@ -26,7 +26,6 @@
             color: white;
             padding: 20px;
             height: 100vh;
-            position: fixed;
         }
 
         .sidebar h2 {
@@ -61,7 +60,7 @@
         .content {
             flex: 1;
             padding: 20px;
-            margin-left: 250px;
+            background-color: white;
         }
 
         table {
@@ -256,58 +255,4 @@
                 title: 'تعديل بيانات العضو',
                 html: `
                     <input type="text" id="editName" class="swal2-input" value="${name}">
-                    <input type="text" id="editPhone" class="swal2-input" value="${phone}">
-                    <input type="number" id="editAge" class="swal2-input" value="${age}">
-                    <input type="text" id="editSubscription" class="swal2-input" value="${subscription}">
-                `,
-                confirmButtonText: 'تحديث',
-                preConfirm: () => ({
-                    name: document.getElementById("editName").value,
-                    phone: document.getElementById("editPhone").value,
-                    age: document.getElementById("editAge").value,
-                    subscription: document.getElementById("editSubscription").value
-                })
-            }).then(result => {
-                if (result.isConfirmed) {
-                    row.cells[0].textContent = result.value.name;
-                    row.cells[1].textContent = result.value.phone;
-                    row.cells[2].textContent = result.value.age;
-                    row.cells[3].textContent = result.value.subscription;
-                    saveMembers();
-                }
-            });
-        }
-
-        // حذف العضو
-        function deleteMember(button) {
-            Swal.fire({
-                title: 'هل أنت متأكد؟',
-                text: 'لن يمكنك استعادة هذا العضو بعد الحذف!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'نعم، احذف',
-                cancelButtonText: 'إلغاء'
-            }).then(result => {
-                if (result.isConfirmed) {
-                    button.closest("tr").remove();
-                    saveMembers();
-                }
-            });
-        }
-
-        // البحث عن عضو
-        document.getElementById("searchInput").addEventListener("input", function () {
-            const searchText = this.value.toLowerCase();
-            const rows = document.querySelectorAll("#membersTable tbody tr");
-            rows.forEach(row => {
-                const name = row.cells[0].textContent.toLowerCase();
-                row.style.display = name.includes(searchText) ? "" : "none";
-            });
-        });
-
-        // تحميل الأعضاء عند تحميل الصفحة
-        loadMembers();
-    </script>
-</body>
-
-</html>
+                    <
