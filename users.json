@@ -1,14 +1,20 @@
 [
     {
         "username": "halok",
-        "password": "123456",
-        "startTime": "2024-11-01T00:00:00Z",
-        "endTime": "2024-12-01T23:59:59Z"
+        "password": "halok",
+        "startDate": "2024-11-01T00:00:00Z",
+        "endDate": "2024-11-30T23:59:59Z"
     },
     {
-        "username": "user1",
-        "password": "password1",
-        "startTime": "2024-11-15T00:00:00Z",
-        "endTime": "2024-12-31T23:59:59Z"
+        "username": "user2",
+        "password": "password456",
+        "startDate": "2024-11-10T00:00:00Z",
+        "endDate": "2024-12-10T23:59:59Z"
+    },
+    {
+        "username": "user3",
+        "password": "password789",
+        "startDate": "2024-11-15T00:00:00Z",
+        "endDate": "2024-12-15T23:59:59Z"
     }
 ]
