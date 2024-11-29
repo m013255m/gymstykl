@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الجيم - تسجيل الدخول</title>
+    <title>إدارة الجيم</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         /* إعدادات أساسية */
@@ -13,153 +13,91 @@
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
+        }
+
+        /* إعدادات الحاوية التي تحتوي على الشريط الجانبي والمحتوى */
+        .container {
             display: flex;
-            justify-content: center;
-            align-items: center;
+        }
+
+        /* إعدادات الشريط الجانبي */
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
             height: 100vh;
         }
 
-        /* صفحة تسجيل الدخول */
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .login-container h2 {
+        .sidebar h2 {
             font-size: 24px;
+            text-align: center;
             margin-bottom: 20px;
-            color: #333;
         }
 
-        .login-container input {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: 0.3s;
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
         }
 
-        .login-container input:focus {
-            border-color: #2575fc;
-            box-shadow: 0 0 5px rgba(37, 117, 252, 0.7);
+        .sidebar nav ul li {
+            margin: 15px 0;
         }
 
-        .login-container button {
-            width: 100%;
-            padding: 15px;
-            background-color: #2575fc;
+        .sidebar nav ul li a {
             color: white;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
 
-        .login-container button:hover {
-            background-color: #6a11cb;
+        .sidebar nav ul li a:hover {
+            background-color: #575757;
         }
 
-        /* الرسالة عند الخطأ */
-        #error {
-            color: red;
-            display: none;
-            margin-top: 15px;
-        }
-
-        /* تأثير تحميل الزر */
-        .loading {
-            display: none;
-        }
-
-        .loading.show {
-            display: inline-block;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #2575fc;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* خلفية جميلة */
-        .background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('background.jpg'); /* قم بإضافة مسار الصورة الخاصة بك هنا */
-            background-size: cover;
-            background-position: center;
-            filter: blur(8px);
-            z-index: -1;
+        /* إعدادات المحتوى الرئيسي */
+        .content {
+            flex: 1;
+            padding: 20px;
+            background-color: white;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- خلفية جميلة -->
-    <div class="background"></div>
+    <div class="container">
+        <!-- الشريط الجانبي -->
+        <div class="sidebar">
+            <h2>إدارة الجيم</h2>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="members.html">إدارة الأعضاء</a></li>
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
+                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                    <li><a href="inventory.html">إدارة المخزون</a></li>
+                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
+                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+                    <li><a href="ratings.html">التقييمات</a></li>
+                    <li><a href="rewards.html">المكافآت</a></li>
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                    <li><a href="complaints.html">الشكاوي</a></li>
+                </ul>
+            </nav>
+        </div>
 
-    <!-- صفحة تسجيل الدخول -->
-    <div class="login-container">
-        <h2>تسجيل الدخول</h2>
-        <input type="text" id="username" placeholder="اسم المستخدم" required>
-        <input type="password" id="password" placeholder="كلمة المرور" required>
-        <button onclick="login()">دخول <span class="loading" id="loading"></span></button>
-        <p id="error">اسم المستخدم أو كلمة المرور غير صحيحة.</p>
+        <!-- المحتوى الرئيسي -->
+        <div class="content">
+            <h1>مرحبا بك في إدارة الجيم</h1>
+            <p>هنا يمكنك إدارة جميع جوانب الجيم والاشتراكات...</p>
+        </div>
     </div>
-
-    <script>
-        async function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorElement = document.getElementById('error');
-            const loadingElement = document.getElementById('loading');
-
-            // إظهار تأثير التحميل عند النقر
-            loadingElement.classList.add('show');
-
-            try {
-                // تحميل بيانات المستخدمين من ملف JSON
-                const response = await fetch('users.json');
-                const users = await response.json();
-
-                // التحقق من البيانات المدخلة
-                const user = users.find(user => user.username === username && user.password === password && new Date() >= new Date(user.startTime) && new Date() <= new Date(user.endTime));
-
-                if (user) {
-                    // إخفاء صفحة تسجيل الدخول وعرض الصفحة الرئيسية
-                    window.location.href = "index.html";  // الانتقال إلى الصفحة الرئيسية بعد النجاح
-                } else {
-                    // عرض رسالة الخطأ
-                    errorElement.style.display = 'block';
-                }
-            } catch (error) {
-                console.error('حدث خطأ أثناء تحميل بيانات المستخدمين:', error);
-                errorElement.textContent = 'حدث خطأ. يرجى المحاولة لاحقًا.';
-                errorElement.style.display = 'block';
-            } finally {
-                // إخفاء تأثير التحميل بعد انتهاء العملية
-                loadingElement.classList.remove('show');
-            }
-        }
-    </script>
 
 </body>
 
