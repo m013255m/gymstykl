@@ -13,102 +13,98 @@
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
-        }
-
-        /* إعدادات الحاوية التي تحتوي على الشريط الجانبي والمحتوى */
-        .container {
             display: flex;
-        }
-
-        /* إعدادات الشريط الجانبي */
-        .sidebar {
-            width: 250px;
-            background-color: #333;
-            color: white;
-            padding: 20px;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
-            display: none; /* إخفاء الشريط الجانبي في حالة عدم تسجيل الدخول */
-        }
-
-        .sidebar h2 {
-            font-size: 24px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .sidebar nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar nav ul li {
-            margin: 15px 0;
-        }
-
-        .sidebar nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .sidebar nav ul li a:hover {
-            background-color: #575757;
-        }
-
-        /* إعدادات المحتوى الرئيسي */
-        .content {
-            flex: 1;
-            padding: 20px;
-            background-color: white;
-            display: none; /* إخفاء المحتوى حتى يتم التحقق من تسجيل الدخول */
+            overflow: hidden;
         }
 
         /* تصميم صفحة تسجيل الدخول */
         .login-container {
             width: 100%;
             max-width: 400px;
-            margin: auto;
-            padding: 30px;
             background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            transform: scale(0);
+            animation: slideIn 0.5s ease-in-out forwards;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
         }
 
         input {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
             border: 2px solid #ddd;
-            border-radius: 5px;
+            border-radius: 10px;
             font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 10px rgba(106, 17, 203, 0.5);
         }
 
         button {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: linear-gradient(135deg, #6a11cb, #2575fc);
             color: white;
-            font-size: 1rem;
+            font-size: 1.1rem;
             border: none;
             border-radius: 10px;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s ease;
         }
 
         button:hover {
             background: linear-gradient(135deg, #2575fc, #6a11cb);
         }
 
+        button:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: #fff;
+            transition: all 0.5s;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        button:hover:before {
+            width: 0;
+            height: 0;
+        }
+
+        /* إخفاء رسالة الخطأ عند البدء */
         #error {
             color: red;
             display: none;
+        }
+
+        /* تأثير انزلاق مربع تسجيل الدخول */
+        @keyframes slideIn {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
     </style>
 </head>
@@ -124,7 +120,7 @@
     </div>
 
     <!-- واجهة المحتوى الرئيسية -->
-    <div class="container">
+    <div class="container" style="display:none;">
         <!-- الشريط الجانبي -->
         <div class="sidebar" id="sidebar">
             <h2>إدارة الجيم</h2>
