@@ -5,135 +5,122 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الجيم</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
-        /* إعدادات أساسية */
+        /* إعدادات عامة */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f3f4f7;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
         }
 
-        /* تصميم صفحة تسجيل الدخول */
+        /* تصميم واجهة تسجيل الدخول */
         .login-container {
-            width: 100%;
-            max-width: 400px;
-            background-color: #fff;
-            padding: 30px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            padding: 40px;
+            width: 350px;
             border-radius: 15px;
             box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
-            transform: scale(0);
-            animation: slideIn 0.5s ease-in-out forwards;
+            transition: 0.5s;
         }
 
-        h2 {
-            font-size: 2rem;
-            color: #333;
-            margin-bottom: 20px;
+        .login-container h2 {
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 24px;
         }
 
-        input {
+        .login-container input {
             width: 100%;
-            padding: 12px;
+            padding: 15px;
             margin: 10px 0;
             border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: 0.3s;
         }
 
-        input:focus {
-            border-color: #6a11cb;
-            box-shadow: 0 0 10px rgba(106, 17, 203, 0.5);
+        .login-container input:focus {
+            border-color: #2575fc;
+            box-shadow: 0 0 5px rgba(37, 117, 252, 0.7);
         }
 
-        button {
+        .login-container button {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            padding: 15px;
+            background: #2575fc;
             color: white;
-            font-size: 1.1rem;
+            font-size: 16px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: background 0.3s ease;
+            transition: 0.3s;
         }
 
-        button:hover {
-            background: linear-gradient(135deg, #2575fc, #6a11cb);
+        .login-container button:hover {
+            background: #6a11cb;
         }
 
-        button:before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300%;
-            height: 300%;
-            background: #fff;
-            transition: all 0.5s;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
+        .login-container i {
+            font-size: 25px;
+            color: #fff;
+            margin-right: 10px;
         }
 
-        button:hover:before {
-            width: 0;
-            height: 0;
-        }
-
-        /* إخفاء رسالة الخطأ عند البدء */
-        #error {
-            color: red;
+        /* صفحة رئيسية */
+        .container {
             display: none;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
         }
 
-        /* تأثير انزلاق مربع تسجيل الدخول */
-        @keyframes slideIn {
-            0% {
-                transform: scale(0);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* تصميم الشريط الجانبي */
         .sidebar {
             width: 250px;
             background-color: #333;
             color: white;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            box-shadow: 5px 0px 20px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar h2 {
-            font-size: 1.5rem;
+            font-size: 22px;
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .sidebar ul {
-            list-style-type: none;
+            list-style: none;
             padding: 0;
         }
 
         .sidebar ul li {
-            margin: 10px 0;
+            margin: 15px 0;
+            text-align: right;
         }
 
         .sidebar ul li a {
             color: white;
             text-decoration: none;
-            font-size: 1.1rem;
+            font-size: 18px;
             transition: 0.3s;
         }
 
@@ -141,68 +128,65 @@
             color: #6a11cb;
         }
 
-        /* تصميم المحتوى */
         .content {
             margin-left: 270px;
             padding: 20px;
         }
 
         .content h3 {
-            font-size: 2rem;
+            font-size: 30px;
             color: #333;
         }
 
         .content p {
-            font-size: 1.2rem;
-            color: #555;
+            font-size: 18px;
+            color: #666;
         }
 
+        /* الرسالة عند الخطأ */
+        #error {
+            color: red;
+            display: none;
+            margin-top: 15px;
+        }
     </style>
 </head>
 
 <body>
     <!-- واجهة تسجيل الدخول -->
     <div id="loginPage" class="login-container">
-        <h2>تسجيل الدخول</h2>
+        <h2><i class="fas fa-user-lock"></i> تسجيل الدخول</h2>
         <input type="text" id="username" placeholder="اسم المستخدم" required>
         <input type="password" id="password" placeholder="كلمة المرور" required>
-        <button onclick="login()">دخول</button>
+        <button onclick="login()"><i class="fas fa-sign-in-alt"></i> دخول</button>
         <p id="error">اسم المستخدم أو كلمة المرور غير صحيحة.</p>
     </div>
 
-    <!-- واجهة المحتوى الرئيسية -->
-    <div class="container" style="display:none;">
+    <!-- الصفحة الرئيسية -->
+    <div class="container" id="mainContent">
         <!-- الشريط الجانبي -->
-        <div class="sidebar" id="sidebar" style="display:none;">
+        <div class="sidebar" id="sidebar">
             <h2>إدارة الجيم</h2>
-            <nav>
-                <ul>
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="members.html">إدارة الأعضاء</a></li>
-                    <li><a href="trainers.html">إدارة المدربين</a></li>
-                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
-                    <li><a href="inventory.html">إدارة المخزون</a></li>
-                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
-                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
-                    <li><a href="ratings.html">التقييمات</a></li>
-                    <li><a href="rewards.html">المكافآت</a></li>
-                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
-                    <li><a href="marketing.html">حملات التسويق</a></li>
-                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                    <li><a href="complaints.html">الشكاوي</a></li>
-                </ul>
-            </nav>
+            <ul>
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="members.html">إدارة الأعضاء</a></li>
+                <li><a href="trainers.html">إدارة المدربين</a></li>
+                <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                <li><a href="inventory.html">إدارة المخزون</a></li>
+                <li><a href="meals.html">إدارة الوجبات</a></li>
+                <li><a href="ratings.html">التقييمات</a></li>
+            </ul>
         </div>
 
-        <!-- المحتوى الرئيسي -->
-        <div class="content" id="content" style="display:none;">
+        <!-- المحتوى -->
+        <div class="content" id="content">
             <h3>مرحبًا بك في لوحة تحكم إدارة الجيم</h3>
             <p>اختر أحد الأقسام من الشريط الجانبي للتنقل بين النماذج المختلفة.</p>
         </div>
     </div>
 
     <script>
-        // التحقق من بيانات المستخدم من ملف JSON
+        // التحقق من بيانات المستخدم
         async function login() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -217,10 +201,9 @@
                 const user = users.find(user => user.username === username && user.password === password && new Date() >= new Date(user.startTime) && new Date() <= new Date(user.endTime));
 
                 if (user) {
-                    // إظهار الصفحة الرئيسية وإخفاء صفحة تسجيل الدخول
+                    // إخفاء صفحة تسجيل الدخول وعرض الصفحة الرئيسية
                     document.getElementById('loginPage').style.display = 'none';
-                    document.getElementById('sidebar').style.display = 'block';
-                    document.getElementById('content').style.display = 'block';
+                    document.getElementById('mainContent').style.display = 'block';
                 } else {
                     // عرض رسالة الخطأ
                     errorElement.style.display = 'block';
