@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول</title>
+
+    <!-- إضافة مكتبة jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- إضافة مكتبة SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- إضافة مكتبة Font Awesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <style>
         /* إعدادات أساسية */
         body {
@@ -12,6 +22,7 @@
             background-size: cover;
             margin: 0;
             padding: 0;
+            text-align: center;
         }
 
         /* إعدادات صفحة تسجيل الدخول */
@@ -19,7 +30,7 @@
             background-color: rgba(255, 255, 255, 0.8);
             padding: 30px;
             border-radius: 15px;
-            width: 300px;
+            width: 350px;
             margin: 100px auto;
             text-align: center;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
@@ -29,6 +40,11 @@
             font-size: 28px;
             margin-bottom: 20px;
             font-weight: bold;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 20px;
         }
 
         input {
@@ -48,22 +64,6 @@
             box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
         }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
         .loading-icon {
             display: none;
             margin-top: 20px;
@@ -80,10 +80,28 @@
             100% { transform: rotate(360deg); }
         }
 
-        .error-message {
-            color: red;
-            display: none;
-            margin-top: 10px;
+        .icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4CAF50;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -92,37 +110,83 @@
     <!-- صفحة تسجيل الدخول -->
     <div class="login-box">
         <h2>تسجيل الدخول</h2>
-        <input type="text" id="username" placeholder="اسم المستخدم" />
-        <input type="password" id="password" placeholder="كلمة المرور" />
+        <div class="input-container">
+            <i class="fas fa-user icon"></i>
+            <input type="text" id="username" placeholder="اسم المستخدم" />
+        </div>
+        <div class="input-container">
+            <i class="fas fa-lock icon"></i>
+            <input type="password" id="password" placeholder="كلمة المرور" />
+        </div>
         <button onclick="login()">تسجيل الدخول</button>
         <div class="loading-icon" id="loadingIcon"></div>
-        <p class="error-message" id="errorMessage">اسم المستخدم أو كلمة المرور غير صحيحة.</p>
     </div>
 
     <script>
-        // دالة تسجيل الدخول
+        // محاكاة بيانات المستخدم من ملف JSON
+        const users = [
+            {
+                "username": "admin",
+                "password": "password123",
+                "startDate": "2024-01-01",
+                "endDate": "2024-12-31"
+            },
+            {
+                "username": "user1",
+                "password": "password456",
+                "startDate": "2024-05-01",
+                "endDate": "2024-11-01"
+            }
+        ];
+
         function login() {
             var username = document.getElementById('username').value;
             var password = document.getElementById('password').value;
             var loadingIcon = document.getElementById('loadingIcon');
-            var errorMessage = document.getElementById('errorMessage');
 
             // إظهار أيقونة التحميل
             loadingIcon.style.display = 'block';
 
-            // محاكاة تأخير (على سبيل المثال 5 ثواني)
+            // محاكاة تحقق من البيانات
             setTimeout(function() {
-                // تحقق من اسم المستخدم وكلمة المرور
-                if (username === 'admin' && password === 'password') {
-                    // إذا كانت البيانات صحيحة، انتقل إلى الصفحة التالية
-                    window.location.href = 'index2.html'; // الانتقال إلى صفحة index2.html
+                var user = users.find(user => user.username === username && user.password === password);
+
+                // إذا كان المستخدم موجودًا
+                if (user) {
+                    // التحقق من تاريخ البداية والنهاية
+                    var currentDate = new Date().toISOString().split('T')[0];
+                    if (currentDate >= user.startDate && currentDate <= user.endDate) {
+                        // الانتقال إلى الصفحة التالية
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'تم التسجيل بنجاح',
+                            text: 'أنت الآن مسجل بنجاح!',
+                            confirmButtonText: 'موافق'
+                        }).then(() => {
+                            window.location.href = 'index2.html';
+                        });
+                    } else {
+                        // إذا كانت التواريخ غير صالحة
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'البيانات غير صحيحة',
+                            text: 'فترة الاشتراك انتهت أو غير صالحة.',
+                            confirmButtonText: 'حاول مرة أخرى'
+                        });
+                    }
                 } else {
-                    // عرض رسالة الخطأ
-                    errorMessage.style.display = 'block';
+                    // إذا كانت البيانات غير صحيحة
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'البيانات غير صحيحة',
+                        text: 'اسم المستخدم أو كلمة المرور غير صحيحة.',
+                        confirmButtonText: 'حاول مرة أخرى'
+                    });
                 }
+
                 // إخفاء أيقونة التحميل
                 loadingIcon.style.display = 'none';
-            }, 3000); // تأخير لمدة 3 ثواني (محاكاة للتحميل)
+            }, 2000); // تأخير 2 ثانية لمحاكاة التحميل
         }
     </script>
 
