@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
-        /* إعدادات أساسية */
         body {
             font-family: Arial, sans-serif;
             background-image: url('https://i.top4top.io/p_32559up6d1.jpg');
@@ -25,7 +24,6 @@
             text-align: center;
         }
 
-        /* إعدادات صفحة تسجيل الدخول */
         .login-box {
             background-color: rgba(255, 255, 255, 0.8);
             padding: 30px;
@@ -87,25 +85,6 @@
         button:hover {
             background-color: #45a049;
         }
-
-        /* أيقونة التحميل داخل المربع أسفل الزر وبمحاذاة لليسار */
-        .loading-icon {
-            display: none;
-            margin-top: 10px; /* مسافة بين الزر والأيقونة */
-            margin-left: 10px; /* محاذاة الأيقونة لليسار */
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 2s linear infinite;
-            position: relative;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
@@ -122,8 +101,6 @@
             <input type="password" id="password" placeholder="كلمة المرور" />
         </div>
         <button onclick="login()">تسجيل الدخول</button>
-        <!-- أيقونة التحميل داخل المربع أسفل الزر وبمحاذاة لليسار -->
-        <div class="loading-icon" id="loadingIcon"></div>
     </div>
 
     <script>
@@ -137,10 +114,17 @@
         async function login() {
             var username = document.getElementById('username').value;
             var password = document.getElementById('password').value;
-            var loadingIcon = document.getElementById('loadingIcon');
 
-            // إظهار أيقونة التحميل
-            loadingIcon.style.display = 'block';
+            // إظهار مربع منبثق مع أيقونة التحميل باستخدام SweetAlert2
+            Swal.fire({
+                title: 'جاري التحقق...',
+                html: 'الرجاء الانتظار',
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+                allowOutsideClick: false, // لا يسمح بإغلاق المربع
+                showConfirmButton: false, // إخفاء زر التأكيد
+            });
 
             // تحميل بيانات المستخدمين والتحقق من البيانات
             const users = await loadUsers();
@@ -180,9 +164,6 @@
                         confirmButtonText: 'حاول مرة أخرى'
                     });
                 }
-
-                // إخفاء أيقونة التحميل
-                loadingIcon.style.display = 'none';
             }, 2000); // تأخير 2 ثانية لمحاكاة التحميل
         }
     </script>
