@@ -49,10 +49,28 @@
             border-radius: 5px;
             margin-bottom: 15px;
             transition: border 0.3s ease;
+            border: 2px solid #ccc;
+            padding: 10px;
+            width: 100%;
         }
 
         .login-form input:focus {
             border: 2px solid #007bff;
+        }
+
+        .login-form input.error {
+            border: 2px solid red;
+        }
+
+        /* تحميل الأيقونة */
+        .loading {
+            display: none;
+            text-align: center;
+        }
+
+        .loading img {
+            width: 50px;
+            height: 50px;
         }
 
         /* إعدادات الشريط الجانبي */
@@ -121,6 +139,9 @@
                     <label for="password" class="form-label">كلمة المرور</label>
                     <input type="password" class="form-control" id="password" required>
                 </div>
+                <div class="loading">
+                    <img src="https://i.gifer.com/7VTK.gif" alt="تحميل..."> <!-- مثال على أيقونة تحميل -->
+                </div>
                 <button type="submit" class="btn btn-primary w-100">تسجيل الدخول</button>
             </form>
         </div>
@@ -156,62 +177,70 @@
     </div>
 
     <script>
-        // بيانات المستخدمين المخزنة في ملف JSON (أو يمكن استبدالها بنظام قاعدة بيانات)
-        const users = [
-            { "username": "admin", "password": "1234", "startDate": new Date().toISOString(), "endDate": new Date(new Date().setDate(new Date().getDate() + 1)).toISOString() },
-            { "username": "manager", "password": "5678", "startDate": new Date().toISOString(), "endDate": new Date(new Date().setDate(new Date().getDate() + 1)).toISOString() }
-        ];
-
-        // التحقق من انتهاء الجلسة
-        function checkSession() {
-            const sessionData = JSON.parse(localStorage.getItem('userSession'));
-            if (sessionData) {
-                const currentTime = new Date();
-                const sessionEnd = new Date(sessionData.endDate);
-                if (currentTime > sessionEnd) {
-                    alert("لقد انتهت مدة الجلسة. سيتم تسجيل الخروج.");
-                    localStorage.removeItem('userSession');
-                    window.location.reload();  // إعادة تحميل الصفحة بعد انتهاء الجلسة
-                }
-            }
+        // تحميل بيانات المستخدمين من ملف JSON
+        async function loadUsers() {
+            const response = await fetch('users.json');
+            const users = await response.json();
+            return users;
         }
 
         // معالجة عملية تسجيل الدخول
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
             e.preventDefault();
+
+            // إخفاء الأيقونة عند بداية التحقق
+            document.querySelector('.loading').style.display = 'block';
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
+            // تحميل بيانات المستخدمين
+            const users = await loadUsers();
+
+            // تحقق من البيانات
             const user = users.find(u => u.username === username && u.password === password);
 
-            if (user) {
-                // تخزين بيانات الجلسة في localStorage
-                const sessionData = {
-                    username: user.username,
-                    startDate: user.startDate,
-                    endDate: user.endDate
-                };
-                localStorage.setItem('userSession', JSON.stringify(sessionData));
+            setTimeout(() => {
+                document.querySelector('.loading').style.display = 'none';
 
-                // إخفاء صفحة تسجيل الدخول وإظهار الصفحة الرئيسية
-                document.getElementById('loginPage').style.display = 'none';
-                document.getElementById('adminPage').style.display = 'flex';
-            } else {
-                alert('اسم المستخدم أو كلمة المرور غير صحيحة');
-            }
+                if (user) {
+                    // تخزين بيانات الجلسة في localStorage
+                    const sessionData = {
+                        username: user.username,
+                        startDate: user.startDate,
+                        endDate: user.endDate
+                    };
+                    localStorage.setItem('userSession', JSON.stringify(sessionData));
+
+                    // إخفاء صفحة تسجيل الدخول وإظهار الصفحة الرئيسية
+                    document.getElementById('loginPage').style.display = 'none';
+                    document.getElementById('adminPage').style.display = 'flex';
+                } else {
+                    alert('اسم المستخدم أو كلمة المرور غير صحيحة');
+                    document.getElementById('username').classList.add('error');
+                    document.getElementById('password').classList.add('error');
+                }
+            }, 5000); // وقت الانتظار 5 ثوانٍ
         });
 
         // التحقق من الجلسة عند تحميل الصفحة
         window.onload = function() {
-            checkSession();
-        }
+            const sessionData = JSON.parse(localStorage.getItem('userSession'));
+            if (sessionData) {
+                const currentDate = new Date();
+                const endDate = new Date(sessionData.endDate);
+                if (currentDate > endDate) {
+                    localStorage.removeItem('userSession');
+                    alert('انتهت صلاحية الجلسة، يرجى تسجيل الدخول مرة أخرى');
+                    document.getElementById('loginPage').style.display = 'flex';
+                    document.getElementById('adminPage').style.display = 'none';
+                } else {
+                    document.getElementById('loginPage').style.display = 'none';
+                    document.getElementById('adminPage').style.display = 'flex';
+                }
+            }
+        };
     </script>
-
-    <!-- تحميل مكتبات JavaScript اللازمة -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/materialize-css@1.0.0/dist/js/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
 
 </body>
 
