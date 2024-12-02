@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المخزون التالف</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        .sidebar h2 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar nav ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #575757;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            background-color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .button {
+            background-color: #f44336;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #e53935;
+            transform: scale(1.05);
+        }
+
+        .swal2-popup {
+            font-family: 'Arial', sans-serif;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>إدارة الجيم</h2>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="members.html">إدارة الأعضاء</a></li>
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
+                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                    <li><a href="inventory.html">إدارة المخزون</a></li>
+                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
+                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+                    <li><a href="ratings.html">التقييمات</a></li>
+                    <li><a href="rewards.html">المكافآت</a></li>
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                    <li><a href="complaints.html">الشكاوي</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <h3>إدارة المخزون التالف</h3>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="بحث عن منتج تالف...">
+                <button class="button" id="addDamagedProductBtn">إضافة منتج تالف</button>
+            </div>
+            <table id="damagedInventoryTable">
+                <thead>
+                    <tr>
+                        <th>اسم المنتج التالف</th>
+                        <th>الكمية التالفة</th>
+                        <th>السعر</th>
+                        <th>تاريخ الإبلاغ عن التالف</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- المنتجات التالفة سيتم إضافتها هنا -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const damagedInventoryKey = "gymDamagedInventory";
+
+        // تحميل البيانات من التخزين المحلي
+        function loadDamagedInventory() {
+            const storedInventory = localStorage.getItem(damagedInventoryKey);
+            if (storedInventory) {
+                JSON.parse(storedInventory).forEach(product => {
+                    addDamagedProductToTable(product.name, product.quantity, product.price, product.reportedDate);
+                });
+            }
+        }
+
+        // حفظ البيانات في التخزين المحلي
+        function saveDamagedInventory() {
+            const rows = document.querySelectorAll("#damagedInventoryTable tbody tr");
+            const damagedInventory = Array.from(rows).map(row => ({
+                name: row.cells[0].textContent,
+                quantity: row.cells[1].textContent,
+                price: row.cells[2].textContent,
+                reportedDate: row.cells[3].textContent
+            }));
+            localStorage.setItem(damagedInventoryKey, JSON.stringify(damagedInventory));
+        }
+
+        // إضافة منتج تالف إلى الجدول
+        function addDamagedProductToTable(name, quantity, price, reportedDate) {
+            const table = document.querySelector("#damagedInventoryTable tbody");
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${name}</td>
+                <td>${quantity}</td>
+                <td>${price}</td>
+                <td>${reportedDate}</td>
+                <td>
+                    <button class="button" onclick="editDamagedProduct(this)">تعديل</button>
+                    <button class="button" onclick="deleteDamagedProduct(this)">حذف</button>
+                </td>
+            `;
+        }
+
+        // إضافة منتج تالف جديد
+        document.querySelector("#addDamagedProductBtn").addEventListener("click", () => {
+            Swal.fire({
+                title: 'إضافة منتج تالف',
+                html: `
+                    <input type="text" id="newDamagedProductName" class="swal2-input" placeholder="اسم المنتج التالف">
+                    <input type="number" id="newDamagedQuantity" class="swal2-input" placeholder="الكمية التالفة">
+                    <input type="number" id="newDamagedPrice" class="swal2-input" placeholder="السعر">
+                    <input type="date" id="newDamagedReportedDate" class="swal2-input" placeholder="تاريخ الإبلاغ عن التالف">
+                `,
+                confirmButtonText: 'إضافة',
+                preConfirm: () => ({
+                    name: document.getElementById("newDamagedProductName").value,
+                    quantity: document.getElementById("newDamagedQuantity").value,
+                    price: document.getElementById("newDamagedPrice").value,
+                    reportedDate: document.getElementById("newDamagedReportedDate").value
+                })
+            }).then(result => {
+                if (result.isConfirmed) {
+                    addDamagedProductToTable(result.value.name, result.value.quantity, result.value.price, result.value.reportedDate);
+                    saveDamagedInventory();
+                    Swal.fire('تمت الإضافة!', 'تم إضافة المنتج التالف بنجاح.', 'success');
+                }
+            });
+        });
+
+        // تعديل بيانات المنتج التالف
+        function editDamagedProduct(button) {
+            const row = button.closest("tr");
+            const name = row.cells[0].textContent;
+            const quantity = row.cells[1].textContent;
+            const price = row.cells[2].textContent;
+            const reportedDate = row.cells[3].textContent;
+
+            Swal.fire({
+                title: 'تعديل بيانات المنتج التالف',
+                html: `
+                    <input type="text" id="editDamagedProductName" class="swal2-input" value="${name}">
+                    <input type="number" id="editDamagedQuantity" class="swal2-input" value="${quantity}">
+                    <input type="number" id="editDamagedPrice" class="swal2-input" value="${price}">
+                    <input type="date" id="editDamagedReportedDate" class="swal2-input" value="${reportedDate}">
+                `,
+                confirmButtonText: 'تحديث',
+                preConfirm: () => ({
+                    name: document.getElementById("editDamagedProductName").value,
+                    quantity: document.getElementById("editDamagedQuantity").value,
+                    price: document.getElementById("editDamagedPrice").value,
+                    reportedDate: document.getElementById("editDamagedReportedDate").value
+                })
+            }).then(result => {
+                if (result.isConfirmed) {
+                    row.cells[0].textContent = result.value.name;
+                    row.cells[1].textContent = result.value.quantity;
+                    row.cells[2].textContent = result.value.price;
+                    row.cells[3].textContent = result.value.reportedDate;
+                    saveDamagedInventory();
+                    Swal.fire('تم التحديث!', 'تم تحديث بيانات المنتج التالف.', 'success');
+                }
+            });
+        }
+
+        // حذف المنتج التالف
+        function deleteDamagedProduct(button) {
+            const row = button.closest("tr");
+            row.remove();
+            saveDamagedInventory();
+            Swal.fire('تم الحذف!', 'تم حذف المنتج التالف.', 'success');
+        }
+
+        // البحث عن منتج تالف
+        document.getElementById("searchInput").addEventListener("input", () => {
+            const filter = document.getElementById("searchInput").value.toLowerCase();
+            const rows = document.querySelectorAll("#damagedInventoryTable tbody tr");
+            rows.forEach(row => {
+                const cells = row.querySelectorAll("td");
+                const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(filter));
+                row.style.display = match ? "" : "none";
+            });
+        });
+
+        loadDamagedInventory();
+    </script>
+</body>
+</html>
