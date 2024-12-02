@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المكافآت</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        .sidebar h2 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar nav ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #575757;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            background-color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .swal2-popup {
+            font-family: 'Arial', sans-serif;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>إدارة الجيم</h2>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="members.html">إدارة الأعضاء</a></li>
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
+                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                    <li><a href="inventory.html">إدارة المخزون</a></li>
+                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
+                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+                    <li><a href="ratings.html">التقييمات</a></li>
+                    <li><a href="rewards.html">المكافآت</a></li>
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                    <li><a href="complaints.html">الشكاوي</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <h3>إدارة المكافآت</h3>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="بحث عن مكافأة...">
+                <button class="button" id="addRewardBtn">إضافة مكافأة</button>
+            </div>
+            <table id="rewardsTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>نوع المكافأة</th>
+                        <th>التاريخ</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- المكافآت سيتم إضافتها هنا -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const rewardsKey = "gymRewards";
+
+        // تحميل البيانات من التخزين المحلي
+        function loadRewards() {
+            const storedRewards = localStorage.getItem(rewardsKey);
+            if (storedRewards) {
+                JSON.parse(storedRewards).forEach(reward => {
+                    addRewardToTable(reward.memberName, reward.rewardType, reward.date);
+                });
+            }
+        }
+
+        // حفظ البيانات في التخزين المحلي
+        function saveRewards() {
+            const rows = document.querySelectorAll("#rewardsTable tbody tr");
+            const rewards = Array.from(rows).map(row => ({
+                memberName: row.cells[0].textContent,
+                rewardType: row.cells[1].textContent,
+                date: row.cells[2].textContent
+            }));
+            localStorage.setItem(rewardsKey, JSON.stringify(rewards));
+        }
+
+        // إضافة مكافأة جديدة إلى الجدول
+        function addRewardToTable(memberName, rewardType, date) {
+            const table = document.querySelector("#rewardsTable tbody");
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${memberName}</td>
+                <td>${rewardType}</td>
+                <td>${date}</td>
+                <td>
+                    <button class="button" onclick="editReward(this)">تعديل</button>
+                    <button class="button" onclick="deleteReward(this)">حذف</button>
+                </td>
+            `;
+        }
+
+        // إضافة مكافأة جديدة
+        document.querySelector("#addRewardBtn").addEventListener("click", () => {
+            Swal.fire({
+                title: 'إضافة مكافأة جديدة',
+                html: `
+                    <input type="text" id="newMemberName" class="swal2-input" placeholder="اسم العضو">
+                    <input type="text" id="newRewardType" class="swal2-input" placeholder="نوع المكافأة">
+                `,
+                confirmButtonText: 'إضافة',
+                preConfirm: () => ({
+                    memberName: document.getElementById("newMemberName").value,
+                    rewardType: document.getElementById("newRewardType").value,
+                    date: new Date().toLocaleDateString()
+                })
+            }).then(result => {
+                if (result.isConfirmed) {
+                    addRewardToTable(result.value.memberName, result.value.rewardType, result.value.date);
+                    saveRewards();
+                    Swal.fire('تمت الإضافة!', 'تم إضافة المكافأة الجديدة بنجاح.', 'success');
+                }
+            });
+        });
+
+        // تعديل بيانات المكافأة
+        function editReward(button) {
+            const row = button.closest("tr");
+            const memberName = row.cells[0].textContent;
+            const rewardType = row.cells[1].textContent;
+
+            Swal.fire({
+                title: 'تعديل بيانات المكافأة',
+                html: `
+                    <input type="text" id="editMemberName" class="swal2-input" value="${memberName}">
+                    <input type="text" id="editRewardType" class="swal2-input" value="${rewardType}">
+                `,
+                confirmButtonText: 'تحديث',
+                preConfirm: () => ({
+                    memberName: document.getElementById("editMemberName").value,
+                    rewardType: document.getElementById("editRewardType").value
+                })
+            }).then(result => {
+                if (result.isConfirmed) {
+                    row.cells[0].textContent = result.value.memberName;
+                    row.cells[1].textContent = result.value.rewardType;
+                    saveRewards();
+                    Swal.fire('تم التحديث!', 'تم تحديث بيانات المكافأة بنجاح.', 'success');
+                }
+            });
+        }
+
+        // حذف المكافأة
+        function deleteReward(button) {
+            const row = button.closest("tr");
+            row.remove();
+            saveRewards();
+            Swal.fire('تم الحذف!', 'تم حذف المكافأة بنجاح.', 'success');
+        }
+
+        // البحث عن المكافآت
+        document.getElementById("searchInput").addEventListener("input", () => {
+            const filter = document.getElementById("searchInput").value.toLowerCase();
+            const rows = document.querySelectorAll("#rewardsTable tbody tr");
+            rows.forEach(row => {
+                const cells = row.querySelectorAll("td");
+                const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(filter));
+                row.style.display = match ? "" : "none";
+            });
+        });
+
+        loadRewards();
+    </script>
+</body>
+</html>
