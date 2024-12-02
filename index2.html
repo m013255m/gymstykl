@@ -5,59 +5,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الجيم</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Tajawal", Arial, sans-serif;
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
         .container {
             display: flex;
+            flex: 1;
         }
 
         .sidebar {
             width: 250px;
             background-color: #333;
             color: white;
-            padding: 20px;
-            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar h2 {
             font-size: 24px;
             text-align: center;
-            margin-bottom: 20px;
+            margin: 0 20px 20px;
+            padding: 10px;
+            background-color: #444;
+            border-radius: 10px;
         }
 
         .sidebar nav ul {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
 
         .sidebar nav ul li {
-            margin: 15px 0;
+            margin: 10px 20px;
         }
 
         .sidebar nav ul li a {
             color: white;
             text-decoration: none;
             font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            display: block;
+            text-align: center;
             padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            background-color: #444;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
         }
 
         .sidebar nav ul li a:hover {
             background-color: #575757;
+            transform: translateX(-5px);
         }
 
         .notification-dot {
@@ -69,48 +80,103 @@
             margin-left: 5px;
         }
 
+        .sidebar .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .sidebar .actions button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #444;
+            color: white;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .sidebar .actions button:hover {
+            background-color: #575757;
+        }
+
         .content {
             flex: 1;
             padding: 20px;
             background-color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 18px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <!-- الشريط الجانبي -->
         <div class="sidebar">
-            <h2>إدارة الجيم</h2>
-            <nav>
-                <ul>
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="members.html">إدارة الأعضاء</a></li>
-                    <li><a href="trainers.html">إدارة المدربين</a></li>
-                    <li>
-                        <a href="renewals.html" id="renewalButton">
-                            تجديد الأعضاء
-                            <span class="notification-dot" id="renewalDot" style="display: none;"></span>
-                        </a>
-                    </li>
-                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
-                    <li><a href="inventory.html">إدارة المخزون</a></li>
-                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
-                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
-                    <li><a href="ratings.html">التقييمات</a></li>
-                    <li><a href="rewards.html">المكافآت</a></li>
-                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
-                    <li><a href="marketing.html">حملات التسويق</a></li>
-                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                    <li><a href="complaints.html">الشكاوي</a></li>
-                </ul>
-            </nav>
+            <div>
+                <h2>إدارة الجيم</h2>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="members.html">إدارة الأعضاء</a></li>
+                        <li><a href="trainers.html">إدارة المدربين</a></li>
+                        <li>
+                            <a href="renewals.html" id="renewalButton">
+                                تجديد الأعضاء
+                                <span class="notification-dot" id="renewalDot" style="display: none;"></span>
+                            </a>
+                        </li>
+                        <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                        <li><a href="inventory.html">إدارة المخزون</a></li>
+                        <li><a href="damagedInventory.html">المخزون التالف</a></li>
+                        <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+                        <li><a href="ratings.html">التقييمات</a></li>
+                        <li><a href="rewards.html">المكافآت</a></li>
+                        <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                        <li><a href="marketing.html">حملات التسويق</a></li>
+                        <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                        <li><a href="complaints.html">الشكاوي</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="actions">
+                <button id="settingsBtn">الإعدادات</button>
+                <button id="logoutBtn">تسجيل الخروج</button>
+            </div>
         </div>
 
+        <!-- المحتوى -->
         <div class="content">
             <h3>الرئيسية</h3>
             <p>مرحباً بك في لوحة تحكم إدارة الجيم.</p>
         </div>
     </div>
+
+    <!-- الفوتر -->
+    <footer>
+        جميع الحقوق محفوظة &copy; 2024
+    </footer>
 
     <script>
         const newMembersKey = "newRenewalMembers";
