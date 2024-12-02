@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة حملات التسويق</title>
+    <title>إدارة الجدولة المتقدمة</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -157,128 +157,115 @@
         </div>
 
         <div class="content">
-            <h3>إدارة حملات التسويق</h3>
+            <h3>إدارة الجدولة المتقدمة</h3>
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن حملة تسويق...">
-                <button class="button" id="addCampaignBtn">إضافة حملة تسويق</button>
+                <input type="text" id="searchInput" placeholder="بحث عن جدول...">
+                <button class="button" id="addScheduleBtn">إضافة جدول</button>
             </div>
-            <table id="campaignsTable">
+            <table id="schedulesTable">
                 <thead>
                     <tr>
-                        <th>اسم الحملة</th>
-                        <th>تفاصيل الحملة</th>
-                        <th>التاريخ</th>
+                        <th>اسم الجدول</th>
+                        <th>تفاصيل الجدول</th>
+                        <th>التاريخ والوقت</th>
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- الحملات سيتم إضافتها هنا -->
+                    <!-- الجداول سيتم إضافتها هنا -->
                 </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        const campaignsKey = "gymMarketingCampaigns";
+        const schedulesKey = "gymAdvancedSchedules";
 
         // تحميل البيانات من التخزين المحلي
-        function loadCampaigns() {
-            const storedCampaigns = localStorage.getItem(campaignsKey);
-            const campaigns = storedCampaigns ? JSON.parse(storedCampaigns) : [];
+        function loadSchedules() {
+            const storedSchedules = localStorage.getItem(schedulesKey);
+            const schedules = storedSchedules ? JSON.parse(storedSchedules) : [];
 
-            const campaignsTable = document.querySelector('#campaignsTable tbody');
-            campaignsTable.innerHTML = ''; // مسح الجدول قبل الإضافة
+            const schedulesTable = document.querySelector('#schedulesTable tbody');
+            schedulesTable.innerHTML = ''; // مسح الجدول قبل الإضافة
 
-            campaigns.forEach((campaign, index) => {
+            schedules.forEach((schedule, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${campaign.name}</td>
-                    <td>${campaign.details}</td>
-                    <td>${campaign.date}</td>
+                    <td>${schedule.name}</td>
+                    <td>${schedule.details}</td>
+                    <td>${schedule.datetime}</td>
                     <td>
-                        <button class="button" onclick="editCampaign(${index})">تعديل</button>
-                        <button class="button" onclick="deleteCampaign(${index})">حذف</button>
+                        <button class="button" onclick="editSchedule(${index})">تعديل</button>
+                        <button class="button" onclick="deleteSchedule(${index})">حذف</button>
                     </td>
                 `;
-                campaignsTable.appendChild(row);
+                schedulesTable.appendChild(row);
             });
         }
 
-        // إضافة حملة تسويق جديدة
-        function addCampaign() {
-            const name = prompt('أدخل اسم الحملة:');
-            const details = prompt('أدخل تفاصيل الحملة:');
-            const date = new Date().toLocaleDateString();
+        // إضافة جدول جديد
+        function addSchedule() {
+            const name = prompt('أدخل اسم الجدول:');
+            const details = prompt('أدخل تفاصيل الجدول:');
+            const datetime = prompt('أدخل التاريخ والوقت (مثال: 2024-11-28 15:00):');
 
-            if (name && details) {
-                const campaigns = JSON.parse(localStorage.getItem(campaignsKey)) || [];
-                campaigns.push({ name, details, date });
-                localStorage.setItem(campaignsKey, JSON.stringify(campaigns));
-                loadCampaigns();
+            if (name && details && datetime) {
+                const schedules = JSON.parse(localStorage.getItem(schedulesKey)) || [];
+                schedules.push({ name, details, datetime });
+                localStorage.setItem(schedulesKey, JSON.stringify(schedules));
+                loadSchedules();
             }
         }
 
-        // تعديل حملة تسويق
-        function editCampaign(index) {
-            const campaigns = JSON.parse(localStorage.getItem(campaignsKey));
-            const campaign = campaigns[index];
+        // تعديل جدول
+        function editSchedule(index) {
+            const schedules = JSON.parse(localStorage.getItem(schedulesKey));
+            const schedule = schedules[index];
 
-            const newName = prompt('تعديل اسم الحملة:', campaign.name);
-            const newDetails = prompt('تعديل تفاصيل الحملة:', campaign.details);
+            const newName = prompt('تعديل اسم الجدول:', schedule.name);
+            const newDetails = prompt('تعديل تفاصيل الجدول:', schedule.details);
+            const newDatetime = prompt('تعديل التاريخ والوقت:', schedule.datetime);
 
-            if (newName && newDetails) {
-                campaign.name = newName;
-                campaign.details = newDetails;
-                localStorage.setItem(campaignsKey, JSON.stringify(campaigns));
-                loadCampaigns();
+            if (newName && newDetails && newDatetime) {
+                schedule.name = newName;
+                schedule.details = newDetails;
+                schedule.datetime = newDatetime;
+                localStorage.setItem(schedulesKey, JSON.stringify(schedules));
+                loadSchedules();
             }
         }
 
-        // حذف حملة تسويق
-        function deleteCampaign(index) {
+        // حذف جدول
+        function deleteSchedule(index) {
             Swal.fire({
                 title: 'هل أنت متأكد؟',
-                text: "لن تتمكن من استرجاع هذه الحملة بعد الحذف!",
+                text: "لن تتمكن من استرجاع هذا الجدول بعد الحذف!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'نعم، حذف الحملة!'
+                confirmButtonText: 'نعم، حذف الجدول!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const campaigns = JSON.parse(localStorage.getItem(campaignsKey));
-                    campaigns.splice(index, 1);
-                    localStorage.setItem(campaignsKey, JSON.stringify(campaigns));
-                    loadCampaigns();
+                    const schedules = JSON.parse(localStorage.getItem(schedulesKey));
+                    schedules.splice(index, 1);
+                    localStorage.setItem(schedulesKey, JSON.stringify(schedules));
+                    loadSchedules();
                     Swal.fire(
                         'تم الحذف!',
-                        'تم حذف الحملة بنجاح.',
+                        'تم حذف الجدول بنجاح.',
                         'success'
                     );
                 }
             });
         }
 
-        // البحث عن حملة تسويق
+        // البحث عن جدول
         document.getElementById('searchInput').addEventListener('input', function () {
             const searchQuery = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#campaignsTable tbody tr');
+            const rows = document.querySelectorAll('#schedulesTable tbody tr');
             rows.forEach(row => {
                 const name = row.cells[0].textContent.toLowerCase();
                 const details = row.cells[1].textContent.toLowerCase();
-                if (name.includes(searchQuery) || details.includes(searchQuery)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-
-        // تحميل الحملات عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', loadCampaigns);
-
-        // إضافة حملة جديدة عند النقر على الزر
-        document.getElementById('addCampaignBtn').addEventListener('click', addCampaign);
-    </script>
-</body>
-</html>
+                const datetime = row.cells[2].textContent.toLower
