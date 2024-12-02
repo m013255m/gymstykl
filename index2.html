@@ -10,10 +10,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
-            font-family: "Tajawal", Arial, sans-serif;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
         }
 
         .container {
@@ -22,14 +22,13 @@
 
         .sidebar {
             width: 250px;
-            background-color: #222;
+            background-color: #333;
             color: white;
             padding: 20px;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 100vh;
-            position: fixed;
         }
 
         .sidebar h2 {
@@ -41,90 +40,68 @@
         .sidebar nav ul {
             list-style: none;
             padding: 0;
-            margin: 0;
         }
 
         .sidebar nav ul li {
-            margin-bottom: 15px;
+            margin: 15px 0;
         }
 
         .sidebar nav ul li a {
             color: white;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 10px;
-            display: block;
             border-radius: 5px;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s;
         }
 
         .sidebar nav ul li a:hover {
-            background-color: #444;
-            transform: scale(1.05);
+            background-color: #575757;
         }
 
         .notification-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background-color: red;
             border-radius: 50%;
             display: inline-block;
             margin-left: 5px;
         }
 
-        .sidebar .actions {
-            margin-top: 20px;
-            text-align: center;
+        .content {
+            flex: 1;
+            padding: 20px;
+            background-color: white;
         }
 
-        .sidebar .actions button {
-            margin: 5px 0;
-            padding: 10px 15px;
-            font-size: 14px;
+        .actions {
+            margin-top: 20px;
+        }
+
+        .actions button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
             background-color: #444;
             color: white;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        .sidebar .actions button:hover {
+        .actions button:hover {
             background-color: #575757;
-            transform: translateY(-2px);
-        }
-
-        .content {
-            margin-right: 250px;
-            padding: 20px;
-            width: 100%;
-        }
-
-        .content h3 {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-
-        .content p {
-            font-size: 18px;
-            line-height: 1.6;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #222;
-            color: white;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <!-- الشريط الجانبي -->
         <div class="sidebar">
             <h2>إدارة الجيم</h2>
             <nav>
@@ -156,23 +133,16 @@
             </div>
         </div>
 
-        <!-- المحتوى -->
         <div class="content">
-            <h3>مرحباً بك في إدارة الجيم</h3>
-            <p>
-                يمكنك إدارة الأعضاء والمدربين والاشتراكات من خلال هذه الواجهة البسيطة والعملية. <br>
-                اختر القسم الذي تريد العمل عليه من القائمة الجانبية.
-            </p>
+            <h3>الرئيسية</h3>
+            <p>مرحباً بك في لوحة تحكم إدارة الجيم.</p>
         </div>
     </div>
-
-    <footer>
-        جميع الحقوق محفوظة &copy; 2024
-    </footer>
 
     <script>
         const newMembersKey = "newRenewalMembers";
 
+        // فحص إذا كان هناك أسماء جديدة
         function checkForNewRenewals() {
             const newRenewals = JSON.parse(localStorage.getItem(newMembersKey) || "[]");
             const renewalDot = document.getElementById("renewalDot");
@@ -183,7 +153,10 @@
             }
         }
 
-        window.addEventListener("load", checkForNewRenewals);
+        // تحديث النقطة بناءً على البيانات
+        window.addEventListener("load", () => {
+            checkForNewRenewals();
+        });
     </script>
 </body>
 
