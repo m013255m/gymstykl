@@ -2,19 +2,13 @@
     {
         "username": "halok",
         "password": "halok",
-        "startDate": "2024-12-02T00:00:00Z",
-        "endDate": "2025-10-05T23:59:59Z"
+        "startDate": "2024-01-01T00:00:00Z",
+        "endDate": "2024-12-31T23:59:59Z"
     },
     {
-        "username": "user2",
-        "password": "password456",
-        "startDate": "2024-12-10T00:00:00Z",
-        "endDate": "2025-3-10T23:59:59Z"
-    },
-    {
-        "username": "user3",
-        "password": "password789",
-        "startDate": "2024-11-15T00:00:00Z",
-        "endDate": "2024-12-15T23:59:59Z"
+        "username": "halok",
+        "password": "halok",
+        "startDate": "2025-01-01T00:00:00Z",
+        "endDate": "2025-12-31T23:59:59Z"
     }
 ]
