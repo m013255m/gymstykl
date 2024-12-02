@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الجيم</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         /* إعدادات أساسية */
         body {
@@ -92,14 +91,24 @@
             position: relative;
         }
 
+        .btn-settings {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+        }
+
         .notification-dot {
             width: 10px;
             height: 10px;
             background-color: red;
             border-radius: 50%;
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 5px;
+            right: 5px;
             display: none; /* مخفية افتراضيًا */
         }
     </style>
@@ -137,6 +146,8 @@
 
             <!-- الأزرار المطلوبة -->
             <div class="button-container">
+                <button class="btn-settings" onclick="changeTheme()">الإعدادات</button>
+                <button class="btn-logout" onclick="logout()">تسجيل الخروج</button>
                 <button class="btn-renew" onclick="goToRenewals()">
                     تجديد الأعضاء
                     <span class="notification-dot" id="notification-dot"></span>
@@ -161,16 +172,16 @@
             window.location.href = "renewals.html";
         }
 
-        // عرض النقطة الحمراء إذا كان هناك أعضاء جدد في الجدول
+        // عرض النقطة الحمراء إذا كان هناك أعضاء جدد في قسم تجديد الأعضاء
         function checkNewMembers() {
-            const hasNewMembers = true; // افترض وجود أعضاء جدد (يتم تغييره بالديناميكية حسب حالتك)
+            const hasNewMembers = true; // افتراض وجود أعضاء جدد (تحديث حسب قاعدة البيانات)
             const notificationDot = document.getElementById('notification-dot');
             if (hasNewMembers) {
                 notificationDot.style.display = 'block';
             }
         }
 
-        // تحقق من وجود الأعضاء الجدد عند تحميل الصفحة
+        // التحقق من وجود الأعضاء الجدد عند تحميل الصفحة
         window.onload = checkNewMembers;
     </script>
 
