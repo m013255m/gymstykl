@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الجيم</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         /* إعدادات أساسية */
         body {
@@ -23,9 +24,6 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
             height: 100vh;
         }
 
@@ -58,37 +56,48 @@
             background-color: #575757;
         }
 
-        .notification-dot {
-            width: 10px;
-            height: 10px;
-            background-color: red;
-            border-radius: 50%;
-            display: inline-block;
-            margin-left: 5px;
-        }
-
-        .sidebar .actions button {
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #444;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .sidebar .actions button:hover {
-            background-color: #575757;
-        }
-
         .content {
             flex: 1;
             padding: 20px;
             background-color: white;
             text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .button-container button {
+            font-size: 18px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-container button:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-settings {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-renew {
+            background-color: #28a745;
+            color: white;
         }
     </style>
 </head>
@@ -98,63 +107,55 @@
     <div class="container">
         <!-- الشريط الجانبي -->
         <div class="sidebar">
-            <div>
-                <h2>إدارة الجيم</h2>
-                <nav>
-                    <ul>
-                        <li><a href="index.html">الرئيسية</a></li>
-                        <li><a href="members.html">إدارة الأعضاء</a></li>
-                        <li><a href="trainers.html">إدارة المدربين</a></li>
-                        <li>
-                            <a href="renewals.html" id="renewalButton">
-                                تجديد الأعضاء
-                                <span class="notification-dot" id="renewalDot" style="display: none;"></span>
-                            </a>
-                        </li>
-                        <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
-                        <li><a href="inventory.html">إدارة المخزون</a></li>
-                        <li><a href="damagedInventory.html">المخزون التالف</a></li>
-                        <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
-                        <li><a href="ratings.html">التقييمات</a></li>
-                        <li><a href="rewards.html">المكافآت</a></li>
-                        <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
-                        <li><a href="marketing.html">حملات التسويق</a></li>
-                        <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                        <li><a href="complaints.html">الشكاوي</a></li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="actions">
-                <button id="settingsBtn">الإعدادات</button>
-                <button id="logoutBtn">تسجيل الخروج</button>
-            </div>
+            <h2>إدارة الجيم</h2>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="members.html">إدارة الأعضاء</a></li>
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
+                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                    <li><a href="inventory.html">إدارة المخزون</a></li>
+                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
+                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+                    <li><a href="ratings.html">التقييمات</a></li>
+                    <li><a href="rewards.html">المكافآت</a></li>
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                    <li><a href="complaints.html">الشكاوي</a></li>
+                </ul>
+            </nav>
         </div>
 
         <!-- المحتوى الرئيسي -->
         <div class="content">
             <h3>مرحبًا بك في لوحة تحكم إدارة الجيم</h3>
             <p>اختر أحد الأقسام من الشريط الجانبي للتنقل بين النماذج المختلفة.</p>
+            
+            <!-- الأزرار المطلوبة -->
+            <div class="button-container">
+                <button class="btn-settings" onclick="changeTheme()">الإعدادات</button>
+                <button class="btn-logout" onclick="logout()">تسجيل الخروج</button>
+                <button class="btn-renew" onclick="goToRenewals()">تجديد الأعضاء</button>
+            </div>
         </div>
     </div>
 
     <script>
-        const newMembersKey = "newRenewalMembers";
-
-        // فحص إذا كان هناك أسماء جديدة
-        function checkForNewRenewals() {
-            const newRenewals = JSON.parse(localStorage.getItem(newMembersKey) || "[]");
-            const renewalDot = document.getElementById("renewalDot");
-            if (newRenewals.length > 0) {
-                renewalDot.style.display = "inline-block";
-            } else {
-                renewalDot.style.display = "none";
-            }
+        // تغيير لون الخلفية في الصفحة
+        function changeTheme() {
+            document.body.style.backgroundColor = prompt("أدخل لون الخلفية الجديد (مثال: #f4f4f9 أو blue):");
         }
 
-        // تحديث النقطة بناءً على البيانات
-        window.addEventListener("load", () => {
-            checkForNewRenewals();
-        });
+        // تسجيل الخروج
+        function logout() {
+            window.location.href = "login.html"; // إعادة توجيه المستخدم إلى صفحة تسجيل الدخول
+        }
+
+        // الانتقال إلى صفحة تجديد الأعضاء
+        function goToRenewals() {
+            window.location.href = "renewals.html";
+        }
     </script>
 
 </body>
