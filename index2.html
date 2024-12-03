@@ -13,11 +13,13 @@
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
+            height: 100%; /* تأكد من أن الجسم يغطي كامل الصفحة */
         }
 
         /* إعدادات الحاوية التي تحتوي على الشريط الجانبي والمحتوى */
         .container {
             display: flex;
+            height: 100%; /* تأكد من أن الحاوية تغطي كامل الصفحة */
         }
 
         /* إعدادات الشريط الجانبي */
@@ -26,7 +28,8 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100vh;
+            height: 100%; /* تأكد من أن الشريط الجانبي يغطي كامل ارتفاع الصفحة */
+            position: fixed; /* يجعله مثبتًا أثناء التمرير */
         }
 
         .sidebar h2 {
@@ -63,7 +66,16 @@
             flex: 1;
             padding: 20px;
             background-color: white;
+            margin-left: 250px; /* إزاحة المحتوى ليظهر بجانب الشريط الجانبي */
+            height: 100%; /* تأكد من أن المحتوى يغطي كامل الصفحة */
+            box-sizing: border-box; /* لتضمين الحواف الداخلية في الارتفاع */
         }
+
+        /* لتغطية الصفحة بالكامل */
+        html, body {
+            height: 100%;
+        }
+
     </style>
 </head>
 
