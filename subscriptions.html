@@ -161,6 +161,7 @@
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+                <button class="button" id="renewSubscriptionBtn">تجديد الاشتراك</button>
             </div>
             <table id="subscriptionsTable">
                 <thead>
@@ -241,18 +242,42 @@
                 if (result.isConfirmed) {
                     addSubscriptionToTable(result.value.memberName, result.value.subscriptionType, result.value.startDate, result.value.endDate);
                     saveSubscriptions();
-                    Swal.fire('تمت الإضافة!', 'تم إضافة الاشتراك بنجاح.', 'success');
                 }
             });
         });
 
-        // تعديل بيانات الاشتراك
+        // تجديد الاشتراك
+        document.querySelector("#renewSubscriptionBtn").addEventListener("click", () => {
+            Swal.fire({
+                title: 'تجديد الاشتراك',
+                html: `
+                    <h3>الأعضاء الذين انتهت اشتراكاتهم</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم العضو</th>
+                                <th>إجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم إضافة الأعضاء الذين انتهت اشتراكاتهم هنا -->
+                        </tbody>
+                    </table>
+                `
+            });
+        });
+
+        // تعديل الاشتراك
         function editSubscription(button) {
             const row = button.closest("tr");
-            const [memberName, subscriptionType, startDate, endDate] = Array.from(row.cells).map(cell => cell.textContent);
+            const cells = row.getElementsByTagName("td");
+            const memberName = cells[0].textContent;
+            const subscriptionType = cells[1].textContent;
+            const startDate = cells[2].textContent;
+            const endDate = cells[3].textContent;
 
             Swal.fire({
-                title: 'تعديل بيانات الاشتراك',
+                title: 'تعديل الاشتراك',
                 html: `
                     <input type="text" id="editMemberName" class="swal2-input" value="${memberName}">
                     <input type="text" id="editSubscriptionType" class="swal2-input" value="${subscriptionType}">
@@ -268,12 +293,11 @@
                 })
             }).then(result => {
                 if (result.isConfirmed) {
-                    row.cells[0].textContent = result.value.memberName;
-                    row.cells[1].textContent = result.value.subscriptionType;
-                    row.cells[2].textContent = result.value.startDate;
-                    row.cells[3].textContent = result.value.endDate;
+                    cells[0].textContent = result.value.memberName;
+                    cells[1].textContent = result.value.subscriptionType;
+                    cells[2].textContent = result.value.startDate;
+                    cells[3].textContent = result.value.endDate;
                     saveSubscriptions();
-                    Swal.fire('تم التحديث!', 'تم تحديث بيانات الاشتراك.', 'success');
                 }
             });
         }
@@ -283,20 +307,9 @@
             const row = button.closest("tr");
             row.remove();
             saveSubscriptions();
-            Swal.fire('تم الحذف!', 'تم حذف الاشتراك.', 'success');
         }
 
-        // البحث عن اشتراك
-        document.getElementById("searchInput").addEventListener("input", () => {
-            const filter = document.getElementById("searchInput").value.toLowerCase();
-            const rows = document.querySelectorAll("#subscriptionsTable tbody tr");
-            rows.forEach(row => {
-                const cells = row.querySelectorAll("td");
-                const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(filter));
-                row.style.display = match ? "" : "none";
-            });
-        });
-
+        // تحميل الاشتراكات عند تحميل الصفحة
         loadSubscriptions();
     </script>
 </body>
