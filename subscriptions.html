@@ -105,3 +105,199 @@
         .button:hover {
             background-color: #45a049;
             transform: scale(1.05);
+        }
+
+        .swal2-popup {
+            font-family: 'Arial', sans-serif;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>إدارة الجيم</h2>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="members.html">إدارة الأعضاء</a></li>
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
+                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                    <li><a href="inventory.html">إدارة المخزون</a></li>
+                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
+                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+                    <li><a href="ratings.html">التقييمات</a></li>
+                    <li><a href="rewards.html">المكافآت</a></li>
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                    <li><a href="complaints.html">الشكاوي</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <h3>إدارة الاشتراكات</h3>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
+                <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+            </div>
+            <table id="subscriptionsTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>نوع الاشتراك</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- الاشتراكات سيتم إضافتها هنا -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const subscriptionsKey = "gymSubscriptions";
+
+        // تحميل البيانات من التخزين المحلي
+        function loadSubscriptions() {
+            const storedSubscriptions = localStorage.getItem(subscriptionsKey);
+            if (storedSubscriptions) {
+                JSON.parse(storedSubscriptions).forEach(subscription => {
+                    addSubscriptionToTable(subscription.memberName, subscription.subscriptionType, subscription.startDate, subscription.endDate);
+                });
+            }
+        }
+
+        // حفظ البيانات في التخزين المحلي
+        function saveSubscriptions() {
+            const rows = document.querySelectorAll("#subscriptionsTable tbody tr");
+            const subscriptions = Array.from(rows).map(row => ({
+                memberName: row.cells[0].textContent,
+                subscriptionType: row.cells[1].textContent,
+                startDate: row.cells[2].textContent,
+                endDate: row.cells[3].textContent
+            }));
+            localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
+        }
+
+        // إضافة اشتراك إلى الجدول
+        function addSubscriptionToTable(memberName, subscriptionType, startDate, endDate) {
+            const table = document.querySelector("#subscriptionsTable tbody");
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${memberName}</td>
+                <td>${subscriptionType}</td>
+                <td>${startDate}</td>
+                <td>${endDate}</td>
+                <td>
+                    <button class="button" onclick="editSubscription(this)">تعديل</button>
+                    <button class="button" onclick="deleteSubscription(this)">حذف</button>
+                </td>
+            `;
+        }
+
+        // إضافة اشتراك جديد
+        document.querySelector("#addSubscriptionBtn").addEventListener("click", () => {
+            Swal.fire({
+                title: 'إضافة اشتراك جديد',
+                html: `
+                    <input type="text" id="newMemberName" class="swal2-input" placeholder="اسم العضو">
+                    <input type="text" id="newSubscriptionType" class="swal2-input" placeholder="نوع الاشتراك">
+                    <input type="date" id="newStartDate" class="swal2-input" placeholder="تاريخ البداية">
+                    <input type="date" id="newEndDate" class="swal2-input" placeholder="تاريخ النهاية">
+                `,
+                confirmButtonText: 'إضافة',
+                preConfirm: () => ({
+                    memberName: document.getElementById("newMemberName").value,
+                    subscriptionType: document.getElementById("newSubscriptionType").value,
+                    startDate: document.getElementById("newStartDate").value,
+                    endDate: document.getElementById("newEndDate").value
+                })
+            }).then(result => {
+                if (result.isConfirmed) {
+                    addSubscriptionToTable(result.value.memberName, result.value.subscriptionType, result.value.startDate, result.value.endDate);
+                    saveSubscriptions();
+                    Swal.fire('تمت الإضافة!', 'تم إضافة الاشتراك بنجاح.', 'success');
+                }
+            });
+        });
+
+        // تعديل بيانات الاشتراك
+        function editSubscription(button) {
+            const row = button.closest("tr");
+            const [memberName, subscriptionType, startDate, endDate] = Array.from(row.cells).map(cell => cell.textContent);
+
+            Swal.fire({
+                title: 'تعديل بيانات الاشتراك',
+                html: `
+                    <input type="text" id="editMemberName" class="swal2-input" value="${memberName}">
+                    <input type="text" id="editSubscriptionType" class="swal2-input" value="${subscriptionType}">
+                    <input type="date" id="editStartDate" class="swal2-input" value="${startDate}">
+                    <input type="date" id="editEndDate" class="swal2-input" value="${endDate}">
+                `,
+                confirmButtonText: 'تحديث',
+                preConfirm: () => ({
+                    memberName: document.getElementById("editMemberName").value,
+                    subscriptionType: document.getElementById("editSubscriptionType").value,
+                    startDate: document.getElementById("editStartDate").value,
+                    endDate: document.getElementById("editEndDate").value
+                })
+            }).then(result => {
+                if (result.isConfirmed) {
+                    row.cells[0].textContent = result.value.memberName;
+                    row.cells[1].textContent = result.value.subscriptionType;
+                    row.cells[2].textContent = result.value.startDate;
+                    row.cells[3].textContent = result.value.endDate;
+                    saveSubscriptions();
+                    Swal.fire('تم التحديث!', 'تم تحديث بيانات الاشتراك.', 'success');
+                }
+            });
+        }
+
+        // حذف الاشتراك
+        function deleteSubscription(button) {
+            const row = button.closest("tr");
+            row.remove();
+            saveSubscriptions();
+            Swal.fire('تم الحذف!', 'تم حذف الاشتراك.', 'success');
+        }
+
+        // البحث عن اشتراك
+        document.getElementById("searchInput").addEventListener("input", () => {
+            const filter = document.getElementById("searchInput").value.toLowerCase();
+            const rows = document.querySelectorAll("#subscriptionsTable tbody tr");
+            rows.forEach(row => {
+                const cells = row.querySelectorAll("td");
+                const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(filter));
+                row.style.display = match ? "" : "none";
+            });
+        });
+
+        loadSubscriptions();
+    </script>
+</body>
+</html>
