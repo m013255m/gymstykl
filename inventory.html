@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة المخزون</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>إدارة الاشتراكات</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -107,23 +106,14 @@
             transform: scale(1.05);
         }
 
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
         .swal2-popup {
             font-family: 'Arial', sans-serif;
-        }
-
-        .search-bar {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .search-bar input {
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
         }
 
         h3 {
@@ -132,172 +122,147 @@
         }
     </style>
 </head>
-
 <body>
     <div class="container">
         <div class="sidebar">
-            <h2>إدارة الجيم</h2>
+            <h2>إدارة الاشتراكات</h2>
             <nav>
                 <ul>
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="members.html">إدارة الأعضاء</a></li>
-                    <li><a href="trainers.html">إدارة المدربين</a></li>
-                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
-                    <li><a href="inventory.html">إدارة المخزون</a></li>
-                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
-                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
-                    <li><a href="ratings.html">التقييمات</a></li>
-                    <li><a href="rewards.html">المكافآت</a></li>
-                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
-                    <li><a href="marketing.html">حملات التسويق</a></li>
-                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                    <li><a href="complaints.html">الشكاوي</a></li>
+                    <li><a href="#">الرئيسية</a></li>
+                    <li><a href="#">إدارة الاشتراكات</a></li>
                 </ul>
             </nav>
         </div>
-
         <div class="content">
-            <h3>إدارة المخزون</h3>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن منتج...">
-                <button class="button" id="addProductBtn">إضافة منتج جديد</button>
+            <h3>إدارة الاشتراكات</h3>
+            <div class="button-container">
+                <button class="button" id="addMemberBtn">إضافة مشترك جديد</button>
+                <button class="button" id="renewSubscriptionsBtn">تجديد الاشتراكات</button>
             </div>
-            <table id="inventoryTable">
+            <table id="subscriptionsTable">
                 <thead>
                     <tr>
-                        <th>اسم المنتج</th>
-                        <th>الكمية المتاحة</th>
-                        <th>السعر</th>
-                        <th>تاريخ الإضافة</th>
+                        <th>اسم المشترك</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- المنتجات سيتم إضافتها هنا -->
+                    <!-- سيتم إضافة الصفوف هنا ديناميكيًا -->
                 </tbody>
             </table>
         </div>
     </div>
-
     <script>
-        const inventoryKey = "gymInventory";
+        const subscriptionsKey = "subscriptionsData";
 
-        // تحميل البيانات من التخزين المحلي
-        function loadInventory() {
-            const storedInventory = localStorage.getItem(inventoryKey);
-            if (storedInventory) {
-                JSON.parse(storedInventory).forEach(product => {
-                    addProductToTable(product.name, product.quantity, product.price, product.addedDate);
+        function loadSubscriptions() {
+            const storedData = localStorage.getItem(subscriptionsKey);
+            if (storedData) {
+                JSON.parse(storedData).forEach(subscription => {
+                    addSubscriptionToTable(subscription.name, subscription.startDate, subscription.endDate);
                 });
             }
         }
 
-        // حفظ البيانات في التخزين المحلي
-        function saveInventory() {
-            const rows = document.querySelectorAll("#inventoryTable tbody tr");
-            const inventory = Array.from(rows).map(row => ({
+        function saveSubscriptions() {
+            const rows = document.querySelectorAll("#subscriptionsTable tbody tr");
+            const subscriptions = Array.from(rows).map(row => ({
                 name: row.cells[0].textContent,
-                quantity: row.cells[1].textContent,
-                price: row.cells[2].textContent,
-                addedDate: row.cells[3].textContent
+                startDate: row.cells[1].textContent,
+                endDate: row.cells[2].textContent
             }));
-            localStorage.setItem(inventoryKey, JSON.stringify(inventory));
+            localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
         }
 
-        // إضافة منتج إلى الجدول
-        function addProductToTable(name, quantity, price, addedDate) {
-            const table = document.querySelector("#inventoryTable tbody");
+        function addSubscriptionToTable(name, startDate, endDate) {
+            const table = document.querySelector("#subscriptionsTable tbody");
             const row = table.insertRow();
             row.innerHTML = `
                 <td>${name}</td>
-                <td>${quantity}</td>
-                <td>${price}</td>
-                <td>${addedDate}</td>
+                <td>${startDate}</td>
+                <td>${endDate}</td>
                 <td>
-                    <button class="button" onclick="editProduct(this)">تعديل</button>
-                    <button class="button" onclick="deleteProduct(this)">حذف</button>
+                    <button class="button" onclick="renewSubscription(this)">تجديد</button>
                 </td>
             `;
         }
 
-        // إضافة منتج جديد
-        document.querySelector("#addProductBtn").addEventListener("click", () => {
+        document.querySelector("#addMemberBtn").addEventListener("click", () => {
             Swal.fire({
-                title: 'إضافة منتج جديد',
+                title: 'إضافة مشترك جديد',
                 html: `
-                    <input type="text" id="newProductName" class="swal2-input" placeholder="اسم المنتج">
-                    <input type="number" id="newQuantity" class="swal2-input" placeholder="الكمية المتاحة">
-                    <input type="number" id="newPrice" class="swal2-input" placeholder="السعر">
-                    <input type="date" id="newAddedDate" class="swal2-input" placeholder="تاريخ الإضافة">
+                    <input type="text" id="newMemberName" class="swal2-input" placeholder="اسم المشترك">
+                    <input type="date" id="newStartDate" class="swal2-input">
+                    <input type="date" id="newEndDate" class="swal2-input">
                 `,
                 confirmButtonText: 'إضافة',
                 preConfirm: () => ({
-                    name: document.getElementById("newProductName").value,
-                    quantity: document.getElementById("newQuantity").value,
-                    price: document.getElementById("newPrice").value,
-                    addedDate: document.getElementById("newAddedDate").value
+                    name: document.getElementById("newMemberName").value,
+                    startDate: document.getElementById("newStartDate").value,
+                    endDate: document.getElementById("newEndDate").value
                 })
             }).then(result => {
                 if (result.isConfirmed) {
-                    addProductToTable(result.value.name, result.value.quantity, result.value.price, result.value.addedDate);
-                    saveInventory();
-                    Swal.fire('تمت الإضافة!', 'تم إضافة المنتج بنجاح.', 'success');
+                    addSubscriptionToTable(result.value.name, result.value.startDate, result.value.endDate);
+                    saveSubscriptions();
+                    Swal.fire('تمت الإضافة!', 'تم إضافة المشترك بنجاح.', 'success');
                 }
             });
         });
 
-        // تعديل بيانات المنتج
-        function editProduct(button) {
-            const row = button.closest("tr");
-            const [name, quantity, price, addedDate] = Array.from(row.cells).map(cell => cell.textContent);
+        document.querySelector("#renewSubscriptionsBtn").addEventListener("click", () => {
+            const tableData = JSON.parse(localStorage.getItem(subscriptionsKey) || "[]");
+            const expired = tableData.filter(sub => new Date(sub.endDate) < new Date());
+            if (expired.length === 0) {
+                Swal.fire("لا يوجد مشتركون بحاجة للتجديد!");
+                return;
+            }
+
+            const expiredTable = expired.map(sub => `
+                <tr>
+                    <td>${sub.name}</td>
+                    <td>${sub.startDate}</td>
+                    <td>${sub.endDate}</td>
+                    <td><button class="button" onclick="renewSingle('${sub.name}')">تجديد</button></td>
+                </tr>
+            `).join("");
 
             Swal.fire({
-                title: 'تعديل بيانات المنتج',
+                title: 'المشتركين المنتهية اشتراكاتهم',
                 html: `
-                    <input type="text" id="editProductName" class="swal2-input" value="${name}">
-                    <input type="number" id="editQuantity" class="swal2-input" value="${quantity}">
-                    <input type="number" id="editPrice" class="swal2-input" value="${price}">
-                    <input type="date" id="editAddedDate" class="swal2-input" value="${addedDate}">
+                    <table style="width: 100%; text-align: center; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #333; color: white;">
+                                <th>اسم المشترك</th>
+                                <th>تاريخ البداية</th>
+                                <th>تاريخ النهاية</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>${expiredTable}</tbody>
+                    </table>
                 `,
-                confirmButtonText: 'تحديث',
-                preConfirm: () => ({
-                    name: document.getElementById("editProductName").value,
-                    quantity: document.getElementById("editQuantity").value,
-                    price: document.getElementById("editPrice").value,
-                    addedDate: document.getElementById("editAddedDate").value
-                })
-            }).then(result => {
-                if (result.isConfirmed) {
-                    row.cells[0].textContent = result.value.name;
-                    row.cells[1].textContent = result.value.quantity;
-                    row.cells[2].textContent = result.value.price;
-                    row.cells[3].textContent = result.value.addedDate;
-                    saveInventory();
-                    Swal.fire('تم التحديث!', 'تم تحديث بيانات المنتج.', 'success');
-                }
-            });
-        }
-
-        // حذف المنتج
-        function deleteProduct(button) {
-            const row = button.closest("tr");
-            row.remove();
-            saveInventory();
-            Swal.fire('تم الحذف!', 'تم حذف المنتج.', 'success');
-        }
-
-        // البحث عن منتج
-        document.getElementById("searchInput").addEventListener("input", () => {
-            const filter = document.getElementById("searchInput").value.toLowerCase();
-            const rows = document.querySelectorAll("#inventoryTable tbody tr");
-            rows.forEach(row => {
-                const cells = row.querySelectorAll("td");
-                const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(filter));
-                row.style.display = match ? "" : "none";
+                width: '800px',
+                showConfirmButton: false
             });
         });
 
-        loadInventory();
+        function renewSingle(name) {
+            const subscriptions = JSON.parse(localStorage.getItem(subscriptionsKey) || "[]");
+            const index = subscriptions.findIndex(sub => sub.name === name);
+            if (index !== -1) {
+                const newEndDate = new Date(subscriptions[index].endDate);
+                newEndDate.setMonth(newEndDate.getMonth() + 1);
+                subscriptions[index].endDate = newEndDate.toISOString().split("T")[0];
+                localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
+                loadSubscriptions();
+                Swal.fire("تم التجديد بنجاح!", "", "success");
+            }
+        }
+
+        loadSubscriptions();
     </script>
 </body>
 </html>
