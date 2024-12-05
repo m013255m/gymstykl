@@ -107,6 +107,14 @@
             transform: scale(1.05);
         }
 
+        .red-button {
+            background-color: red;
+        }
+
+        .red-button:hover {
+            background-color: darkred;
+        }
+
         .swal2-popup {
             font-family: 'Arial', sans-serif;
         }
@@ -129,6 +137,11 @@
         h3 {
             font-size: 22px;
             margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
         }
     </style>
 </head>
@@ -160,8 +173,10 @@
             <h3>إدارة الاشتراكات</h3>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
-                <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-                <button class="button" id="renewSubscriptionBtn">تجديد الاشتراك</button>
+                <div class="button-container">
+                    <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراك</button>
+                </div>
             </div>
             <table id="subscriptionsTable">
                 <thead>
@@ -250,31 +265,32 @@
         document.querySelector("#renewSubscriptionBtn").addEventListener("click", () => {
             Swal.fire({
                 title: 'تجديد الاشتراك',
-                html: `
-                    <h3>الأعضاء الذين انتهت اشتراكاتهم</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>اسم العضو</th>
-                                <th>إجراء</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- سيتم إضافة الأعضاء الذين انتهت اشتراكاتهم هنا -->
-                        </tbody>
-                    </table>
-                `
+                text: 'هل ترغب في تجديد الاشتراك؟',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، تجديد',
+                cancelButtonText: 'لا'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    Swal.fire('تم تجديد الاشتراك', '', 'success');
+                }
             });
         });
 
-        // تعديل الاشتراك
+        // حذف اشتراك
+        function deleteSubscription(button) {
+            const row = button.closest("tr");
+            row.remove();
+            saveSubscriptions();
+        }
+
+        // تعديل اشتراك
         function editSubscription(button) {
             const row = button.closest("tr");
-            const cells = row.getElementsByTagName("td");
-            const memberName = cells[0].textContent;
-            const subscriptionType = cells[1].textContent;
-            const startDate = cells[2].textContent;
-            const endDate = cells[3].textContent;
+            const memberName = row.cells[0].textContent;
+            const subscriptionType = row.cells[1].textContent;
+            const startDate = row.cells[2].textContent;
+            const endDate = row.cells[3].textContent;
 
             Swal.fire({
                 title: 'تعديل الاشتراك',
@@ -284,7 +300,7 @@
                     <input type="date" id="editStartDate" class="swal2-input" value="${startDate}">
                     <input type="date" id="editEndDate" class="swal2-input" value="${endDate}">
                 `,
-                confirmButtonText: 'تحديث',
+                confirmButtonText: 'تعديل',
                 preConfirm: () => ({
                     memberName: document.getElementById("editMemberName").value,
                     subscriptionType: document.getElementById("editSubscriptionType").value,
@@ -293,21 +309,30 @@
                 })
             }).then(result => {
                 if (result.isConfirmed) {
-                    cells[0].textContent = result.value.memberName;
-                    cells[1].textContent = result.value.subscriptionType;
-                    cells[2].textContent = result.value.startDate;
-                    cells[3].textContent = result.value.endDate;
+                    row.cells[0].textContent = result.value.memberName;
+                    row.cells[1].textContent = result.value.subscriptionType;
+                    row.cells[2].textContent = result.value.startDate;
+                    row.cells[3].textContent = result.value.endDate;
                     saveSubscriptions();
                 }
             });
         }
 
-        // حذف الاشتراك
-        function deleteSubscription(button) {
-            const row = button.closest("tr");
-            row.remove();
-            saveSubscriptions();
-        }
+        // البحث عن اشتراك
+        document.getElementById("searchInput").addEventListener("input", (e) => {
+            const searchQuery = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll("#subscriptionsTable tbody tr");
+            rows.forEach(row => {
+                const cells = row.getElementsByTagName("td");
+                const memberName = cells[0].textContent.toLowerCase();
+                const subscriptionType = cells[1].textContent.toLowerCase();
+                if (memberName.includes(searchQuery) || subscriptionType.includes(searchQuery)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
 
         // تحميل الاشتراكات عند تحميل الصفحة
         loadSubscriptions();
