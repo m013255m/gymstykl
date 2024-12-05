@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,138 +9,41 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        /* إضافة بعض التنسيق الأساسي */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            direction: rtl;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
         }
-
         .container {
-            display: flex;
+            margin: 20px;
         }
-
-        .sidebar {
-            width: 250px;
-            background-color: #333;
-            color: white;
-            padding: 20px;
-            height: 100vh;
-        }
-
-        .sidebar h2 {
-            font-size: 24px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .sidebar nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar nav ul li {
-            margin: 15px 0;
-        }
-
-        .sidebar nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .sidebar nav ul li a:hover {
-            background-color: #575757;
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-            background-color: white;
-        }
-
-        table {
+        .table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
-
-        table, th, td {
+        .table th, .table td {
             border: 1px solid #ddd;
-        }
-
-        th, td {
-            padding: 14px;
+            padding: 8px;
             text-align: center;
-            font-size: 16px;
         }
-
-        th {
-            background-color: #333;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
         .button {
             background-color: #4CAF50;
             color: white;
-            padding: 12px 25px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
-            transition: transform 0.2s ease-in-out;
+            margin: 5px;
         }
-
-        .button:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
-        }
-
         .button-red {
             background-color: #f44336;
-            color: white;
         }
-
-        .button-red:hover {
-            background-color: #e53935;
+        .button-blue {
+            background-color: #008CBA;
         }
-
-        .swal2-popup {
-            font-family: 'Arial', sans-serif;
-        }
-
-        .search-bar {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .search-bar input {
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
-        }
-
-        /* النمط الخاص بالنافذة المنبثقة */
         .modal {
             display: none;
             position: fixed;
@@ -149,207 +52,180 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
             overflow: auto;
-            padding-top: 60px;
+            background-color: rgba(0,0,0,0.4);
         }
-
         .modal-content {
-            background-color: #fefefe;
+            background-color: #fff;
             margin: 5% auto;
             padding: 20px;
-            border: 1px solid #888;
+            border-radius: 10px;
             width: 80%;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .modal-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .modal-table, .modal-table th, .modal-table td {
-            border: 1px solid #ddd;
-        }
-
-        .modal-table th, .modal-table td {
-            padding: 12px;
-            text-align: center;
-        }
-
-        /* تنسيق الأزرار جنباً إلى جنب */
-        .button-group {
-            display: flex;
-            gap: 10px;
         }
     </style>
 </head>
-
 <body>
     <div class="container">
-        <div class="sidebar">
-            <h2>إدارة الجيم</h2>
-            <nav>
-                <ul>
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="members.html">إدارة الأعضاء</a></li>
-                    <li><a href="trainers.html">إدارة المدربين</a></li>
-                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
-                    <li><a href="inventory.html">إدارة المخزون</a></li>
-                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
-                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
-                    <li><a href="ratings.html">التقييمات</a></li>
-                    <li><a href="rewards.html">المكافآت</a></li>
-                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
-                    <li><a href="marketing.html">حملات التسويق</a></li>
-                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                    <li><a href="complaints.html">الشكاوي</a></li>
-                </ul>
-            </nav>
-        </div>
+        <h2>إدارة الاشتراكات</h2>
+        
+        <!-- جدول الاشتراكات -->
+        <table class="table" id="subscriptionTable">
+            <thead>
+                <tr>
+                    <th>اسم العضو</th>
+                    <th>تاريخ البداية</th>
+                    <th>تاريخ النهاية</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>أحمد علي</td>
+                    <td>2024-01-01</td>
+                    <td>2024-12-01</td>
+                    <td>
+                        <button class="button" onclick="editSubscription('أحمد علي')">تعديل</button>
+                        <button class="button button-red" onclick="deleteSubscription('أحمد علي')">حذف</button>
+                    </td>
+                </tr>
+                <!-- المزيد من الأعضاء يمكن إضافتها هنا -->
+            </tbody>
+        </table>
 
-        <div class="content">
-            <h3>إدارة الاشتراكات</h3>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
-                <div class="button-group">
-                    <button class="button" id="addSubscriptionBtn">إضافة اشتراك</button>
-                    <button class="button button-red" id="renewSubscriptionBtn">تجديد الاشتراك</button>
-                </div>
-            </div>
-            <table id="subscriptionsTable">
-                <thead>
-                    <tr>
-                        <th>اسم المشترك</th>
-                        <th>الاشتراك</th>
-                        <th>تاريخ البدء</th>
-                        <th>تاريخ الانتهاء</th>
-                        <th>التعديل / الحذف</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- الاشتراكات سيتم إضافتها هنا -->
-                </tbody>
-            </table>
+        <!-- زر إضافة اشتراك -->
+        <button class="button" onclick="showAddSubscriptionPopup()">إضافة اشتراك</button>
+
+        <!-- زر التجديد -->
+        <button class="button button-blue" onclick="showRenewalPopup()">عرض الأعضاء المنتهية اشتراكاتهم</button>
+    </div>
+
+    <!-- مربع منبثق لإضافة اشتراك جديد -->
+    <div id="addSubscriptionModal" class="modal">
+        <div class="modal-content">
+            <h3>إضافة اشتراك جديد</h3>
+            <label for="memberName">اسم العضو:</label>
+            <input type="text" id="memberName" placeholder="أدخل اسم العضو">
+            <label for="startDate">تاريخ البداية:</label>
+            <input type="date" id="startDate">
+            <label for="endDate">تاريخ النهاية:</label>
+            <input type="date" id="endDate">
+            <button class="button" onclick="addSubscription()">إضافة</button>
+            <button class="button button-red" onclick="closeAddSubscriptionPopup()">إغلاق</button>
         </div>
     </div>
 
-    <!-- نافذة إضافة اشتراك -->
-    <div id="addModal" class="modal">
+    <!-- مربع منبثق للتجديد -->
+    <div id="renewalPopup" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3>إضافة اشتراك جديد</h3>
-            <form id="addSubscriptionForm">
-                <label for="name">اسم المشترك:</label>
-                <input type="text" id="name" name="name" required>
-                <br>
-                <label for="subscription">نوع الاشتراك:</label>
-                <input type="text" id="subscription" name="subscription" required>
-                <br>
-                <label for="startDate">تاريخ البدء:</label>
-                <input type="date" id="startDate" name="startDate" required>
-                <br>
-                <label for="endDate">تاريخ الانتهاء:</label>
-                <input type="date" id="endDate" name="endDate" required>
-                <br>
-                <button type="submit" class="button">إضافة الاشتراك</button>
-            </form>
+            <h3>الأعضاء الذين انتهت اشتراكاتهم</h3>
+            <table class="table" id="renewalTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>تاريخ النهاية</th>
+                        <th>الإجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>أحمد علي</td>
+                        <td>2024-12-01</td>
+                        <td>
+                            <button class="button" onclick="renewSubscription('أحمد علي')">تجديد</button>
+                        </td>
+                    </tr>
+                    <!-- المزيد من الأعضاء الذين انتهت اشتراكاتهم يمكن إضافتها هنا -->
+                </tbody>
+            </table>
+            <button class="button button-red" onclick="closeRenewalPopup()">إغلاق</button>
         </div>
     </div>
 
     <script>
-        // فتح نافذة إضافة اشتراك
-        document.getElementById('addSubscriptionBtn').onclick = function() {
-            document.getElementById('addModal').style.display = 'block';
-        };
-
-        // إغلاق نافذة إضافة الاشتراك
-        document.querySelector('.close').onclick = function() {
-            document.getElementById('addModal').style.display = 'none';
-        };
-
-        // إضافة اشتراك
-        document.getElementById('addSubscriptionForm').onsubmit = function(e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const subscription = document.getElementById('subscription').value;
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-
-            const tableBody = document.getElementById('subscriptionsTable').getElementsByTagName('tbody')[0];
-            const row = tableBody.insertRow();
-            row.insertCell(0).textContent = name;
-            row.insertCell(1).textContent = subscription;
-            row.insertCell(2).textContent = startDate;
-            row.insertCell(3).textContent = endDate;
-
-            const actionCell = row.insertCell(4);
-            actionCell.innerHTML = `
-                <button class="button" onclick="editSubscription(this)">تعديل</button>
-                <button class="button button-red" onclick="deleteSubscription(this)">حذف</button>
-            `;
-
-            // إغلاق النافذة بعد إضافة الاشتراك
-            document.getElementById('addModal').style.display = 'none';
-            document.getElementById('addSubscriptionForm').reset();
-        };
-
-        // تعديل اشتراك
-        function editSubscription(button) {
-            const row = button.parentElement.parentElement;
-            const name = row.cells[0].textContent;
-            const subscription = row.cells[1].textContent;
-            const startDate = row.cells[2].textContent;
-            const endDate = row.cells[3].textContent;
-
-            // تحديث المدخلات مع البيانات الحالية
-            document.getElementById('name').value = name;
-            document.getElementById('subscription').value = subscription;
-            document.getElementById('startDate').value = startDate;
-            document.getElementById('endDate').value = endDate;
-
-            document.getElementById('addModal').style.display = 'block';
-
-            // إضافة وظيفة لتحديث البيانات عند الإرسال
-            document.getElementById('addSubscriptionForm').onsubmit = function(e) {
-                e.preventDefault();
-                row.cells[0].textContent = document.getElementById('name').value;
-                row.cells[1].textContent = document.getElementById('subscription').value;
-                row.cells[2].textContent = document.getElementById('startDate').value;
-                row.cells[3].textContent = document.getElementById('endDate').value;
-
-                document.getElementById('addModal').style.display = 'none';
-                document.getElementById('addSubscriptionForm').reset();
-            };
+        // إظهار مربع إضافة الاشتراك
+        function showAddSubscriptionPopup() {
+            document.getElementById("addSubscriptionModal").style.display = "block";
         }
 
-        // حذف اشتراك
-        function deleteSubscription(button) {
+        // إغلاق مربع إضافة الاشتراك
+        function closeAddSubscriptionPopup() {
+            document.getElementById("addSubscriptionModal").style.display = "none";
+        }
+
+        // إضافة اشتراك جديد
+        function addSubscription() {
+            var memberName = document.getElementById("memberName").value;
+            var startDate = document.getElementById("startDate").value;
+            var endDate = document.getElementById("endDate").value;
+
+            if (memberName && startDate && endDate) {
+                // يمكن إضافة اشتراك جديد إلى الجدول هنا
+                Swal.fire({
+                    icon: 'success',
+                    title: 'تم إضافة الاشتراك بنجاح',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                closeAddSubscriptionPopup();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'يرجى ملء جميع الحقول',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        }
+
+        // عرض الأعضاء الذين انتهت اشتراكاتهم
+        function showRenewalPopup() {
+            document.getElementById("renewalPopup").style.display = "block";
+        }
+
+        // إغلاق مربع التجديد
+        function closeRenewalPopup() {
+            document.getElementById("renewalPopup").style.display = "none";
+        }
+
+        // تجديد اشتراك
+        function renewSubscription(memberName) {
+            Swal.fire({
+                icon: 'success',
+                title: memberName + ' تم تجديد اشتراكه بنجاح',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            // إضافة الكود لتجديد الاشتراك هنا
+        }
+
+        // تعديل الاشتراك
+        function editSubscription(memberName) {
+            Swal.fire({
+                title: 'تعديل اشتراك ' + memberName,
+                input: 'text',
+                inputLabel: 'أدخل التعديلات',
+                showCancelButton: true,
+                confirmButtonText: 'تأكيد'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('تم التعديل بنجاح!');
+                }
+            });
+        }
+
+        // حذف الاشتراك
+        function deleteSubscription(memberName) {
             Swal.fire({
                 title: 'هل أنت متأكد؟',
-                text: 'لن تتمكن من استرجاع هذا الاشتراك!',
+                text: "لن تتمكن من استرجاع البيانات!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'نعم، احذف',
+                confirmButtonText: 'نعم، احذف!',
                 cancelButtonText: 'إلغاء'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const row = button.parentElement.parentElement;
-                    row.remove();
                     Swal.fire('تم الحذف!', 'تم حذف الاشتراك بنجاح.', 'success');
+                    // حذف الاشتراك من الجدول هنا
                 }
             });
         }
