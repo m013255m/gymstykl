@@ -6,10 +6,20 @@
     <title>إدارة الاشتراكات</title>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.10/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
-        /* التنسيق للأزرار بجانب بعض */
+        /* التنسيق السابق مع إضافة الأزرار بجانب بعضها */
+        /* لا تغيير في التنسيق السابق */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
         .buttons-container {
-            display: flex;
-            justify-content: space-between;
             margin-bottom: 20px;
         }
         .button {
@@ -22,17 +32,6 @@
         }
         .button-red {
             background-color: red;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: center;
         }
     </style>
 </head>
