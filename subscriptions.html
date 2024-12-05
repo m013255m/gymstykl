@@ -195,34 +195,6 @@
             display: flex;
             gap: 10px;
         }
-
-        .notification {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #f44336;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 50%;
-            font-size: 12px;
-            display: none;
-        }
-
-        /* تأثير الحركي لفتح جدول التجديد */
-        .modal-content {
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50%);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
     </style>
 </head>
 
@@ -257,7 +229,6 @@
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك</button>
                     <button class="button button-red" id="renewSubscriptionBtn">تجديد الاشتراك</button>
                 </div>
-                <div id="notification" class="notification">!</div>
             </div>
             <table id="subscriptionsTable">
                 <thead>
@@ -266,7 +237,7 @@
                         <th>الاشتراك</th>
                         <th>تاريخ البدء</th>
                         <th>تاريخ الانتهاء</th>
-                        <th>الإجراءات</th>
+                        <th>التعديل / الحذف</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -276,87 +247,112 @@
         </div>
     </div>
 
-    <!-- نافذة تجديد الاشتراك -->
-    <div id="renewModal" class="modal">
+    <!-- نافذة إضافة اشتراك -->
+    <div id="addModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h3>تفاصيل العضو لتجديد الاشتراك</h3>
-            <table class="modal-table" id="renewalTable">
-                <thead>
-                    <tr>
-                        <th>اسم المشترك</th>
-                        <th>الاشتراك</th>
-                        <th>تاريخ الانتهاء</th>
-                        <th>الإجراء</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- سيتم ملء البيانات هنا -->
-                </tbody>
-            </table>
+            <h3>إضافة اشتراك جديد</h3>
+            <form id="addSubscriptionForm">
+                <label for="name">اسم المشترك:</label>
+                <input type="text" id="name" name="name" required>
+                <br>
+                <label for="subscription">نوع الاشتراك:</label>
+                <input type="text" id="subscription" name="subscription" required>
+                <br>
+                <label for="startDate">تاريخ البدء:</label>
+                <input type="date" id="startDate" name="startDate" required>
+                <br>
+                <label for="endDate">تاريخ الانتهاء:</label>
+                <input type="date" id="endDate" name="endDate" required>
+                <br>
+                <button type="submit" class="button">إضافة الاشتراك</button>
+            </form>
         </div>
     </div>
 
     <script>
-        // إظهار إشعار جديد عند وجود عضو جديد
-        function showNewNotification() {
-            document.getElementById('notification').style.display = 'block';
-        }
-
-        // إغلاق النافذة عند الضغط على زر الإغلاق
-        document.querySelector('.close').onclick = function () {
-            document.getElementById('renewModal').style.display = 'none';
+        // فتح نافذة إضافة اشتراك
+        document.getElementById('addSubscriptionBtn').onclick = function() {
+            document.getElementById('addModal').style.display = 'block';
         };
 
-        // فتح نافذة تجديد الاشتراك
-        document.getElementById('renewSubscriptionBtn').onclick = function () {
-            const expiredSubscriptions = getExpiredSubscriptions();
-            if (expiredSubscriptions.length > 0) {
-                showRenewalTable(expiredSubscriptions);
-                document.getElementById('renewModal').style.display = 'block';
-            } else {
-                Swal.fire('لا يوجد اشتراكات منتهية');
-            }
+        // إغلاق نافذة إضافة الاشتراك
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('addModal').style.display = 'none';
         };
 
-        // إظهار جدول الاشتراكات المنتهية
-        function showRenewalTable(subscriptions) {
-            const tableBody = document.getElementById('renewalTable').getElementsByTagName('tbody')[0];
-            tableBody.innerHTML = ''; // مسح البيانات القديمة
-            subscriptions.forEach(function (sub) {
-                const row = tableBody.insertRow();
-                row.insertCell(0).textContent = sub.name;
-                row.insertCell(1).textContent = sub.subscription;
-                row.insertCell(2).textContent = sub.expiryDate;
-                const actionCell = row.insertCell(3);
-                actionCell.innerHTML = `<button class="button" onclick="renewSubscription('${sub.name}')">تجديد</button>`;
+        // إضافة اشتراك
+        document.getElementById('addSubscriptionForm').onsubmit = function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const subscription = document.getElementById('subscription').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            const tableBody = document.getElementById('subscriptionsTable').getElementsByTagName('tbody')[0];
+            const row = tableBody.insertRow();
+            row.insertCell(0).textContent = name;
+            row.insertCell(1).textContent = subscription;
+            row.insertCell(2).textContent = startDate;
+            row.insertCell(3).textContent = endDate;
+
+            const actionCell = row.insertCell(4);
+            actionCell.innerHTML = `
+                <button class="button" onclick="editSubscription(this)">تعديل</button>
+                <button class="button button-red" onclick="deleteSubscription(this)">حذف</button>
+            `;
+
+            // إغلاق النافذة بعد إضافة الاشتراك
+            document.getElementById('addModal').style.display = 'none';
+            document.getElementById('addSubscriptionForm').reset();
+        };
+
+        // تعديل اشتراك
+        function editSubscription(button) {
+            const row = button.parentElement.parentElement;
+            const name = row.cells[0].textContent;
+            const subscription = row.cells[1].textContent;
+            const startDate = row.cells[2].textContent;
+            const endDate = row.cells[3].textContent;
+
+            // تحديث المدخلات مع البيانات الحالية
+            document.getElementById('name').value = name;
+            document.getElementById('subscription').value = subscription;
+            document.getElementById('startDate').value = startDate;
+            document.getElementById('endDate').value = endDate;
+
+            document.getElementById('addModal').style.display = 'block';
+
+            // إضافة وظيفة لتحديث البيانات عند الإرسال
+            document.getElementById('addSubscriptionForm').onsubmit = function(e) {
+                e.preventDefault();
+                row.cells[0].textContent = document.getElementById('name').value;
+                row.cells[1].textContent = document.getElementById('subscription').value;
+                row.cells[2].textContent = document.getElementById('startDate').value;
+                row.cells[3].textContent = document.getElementById('endDate').value;
+
+                document.getElementById('addModal').style.display = 'none';
+                document.getElementById('addSubscriptionForm').reset();
+            };
+        }
+
+        // حذف اشتراك
+        function deleteSubscription(button) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: 'لن تتمكن من استرجاع هذا الاشتراك!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، احذف',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const row = button.parentElement.parentElement;
+                    row.remove();
+                    Swal.fire('تم الحذف!', 'تم حذف الاشتراك بنجاح.', 'success');
+                }
             });
         }
-
-        // تجديد الاشتراك
-        function renewSubscription(name) {
-            Swal.fire('تم تجديد اشتراك ' + name);
-            document.getElementById('renewModal').style.display = 'none';
-        }
-
-        // إظهار الأعضاء الذين انتهت اشتراكاتهم
-        function getExpiredSubscriptions() {
-            // محاكاة بيانات الاشتراكات
-            const subscriptions = [
-                { name: 'أحمد علي', subscription: 'عضوية شهرية', expiryDate: '2024-12-01' },
-                { name: 'فاطمة مصطفى', subscription: 'عضوية سنوية', expiryDate: '2024-12-02' }
-            ];
-
-            // البحث عن الاشتراكات المنتهية
-            const expiredSubscriptions = subscriptions.filter(function (sub) {
-                return new Date(sub.expiryDate) < new Date();
-            });
-
-            return expiredSubscriptions;
-        }
-
-        // إظهار نافذة إشعار عند وجود عضو جديد
-        showNewNotification();
     </script>
 </body>
 </html>
