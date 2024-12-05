@@ -4,16 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الاشتراكات</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -68,35 +63,13 @@
             background-color: white;
         }
 
-        h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
-        }
-
-        .button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .button:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
-        }
-
-        .button-container {
-            margin-bottom: 20px;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         table, th, td {
@@ -118,160 +91,246 @@
             background-color: #f2f2f2;
         }
 
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
         .swal2-popup {
             font-family: 'Arial', sans-serif;
         }
 
-        .renew-button {
-            background-color: #FFA500;
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .renew-button:hover {
-            background-color: #FF8C00;
+        .search-bar input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="sidebar">
-            <h2>إدارة الاشتراكات</h2>
+            <h2>إدارة الجيم</h2>
             <nav>
                 <ul>
-                    <li><a href="#">الرئيسية</a></li>
-                    <li><a href="#">إدارة الاشتراكات</a></li>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="members.html">إدارة الأعضاء</a></li>
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
+                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                    <li><a href="inventory.html">إدارة المخزون</a></li>
+                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
+                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+                    <li><a href="ratings.html">التقييمات</a></li>
+                    <li><a href="rewards.html">المكافآت</a></li>
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                    <li><a href="complaints.html">الشكاوي</a></li>
                 </ul>
             </nav>
         </div>
+
         <div class="content">
             <h3>إدارة الاشتراكات</h3>
-            <div class="button-container">
-                <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-                <button class="button renew-button" id="renewSubscriptionsBtn">تجديد الاشتراكات</button>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
+                <button class="button" id="addSubscriptionBtn">إضافة اشتراك</button>
             </div>
             <table id="subscriptionsTable">
                 <thead>
                     <tr>
                         <th>اسم المشترك</th>
-                        <th>تاريخ البداية</th>
-                        <th>تاريخ النهاية</th>
+                        <th>الاشتراك</th>
+                        <th>تاريخ البدء</th>
+                        <th>تاريخ الانتهاء</th>
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- سيتم إضافة الصفوف هنا ديناميكيًا -->
+                    <!-- الاشتراكات سيتم إضافتها هنا -->
                 </tbody>
             </table>
         </div>
     </div>
-    <script>
-        const subscriptionsKey = "subscriptionsData";
 
+    <script>
+        const subscriptionsKey = "gymSubscriptions";
+
+        // تحميل البيانات من التخزين المحلي
         function loadSubscriptions() {
-            const storedData = localStorage.getItem(subscriptionsKey);
-            if (storedData) {
-                JSON.parse(storedData).forEach(subscription => {
-                    addSubscriptionToTable(subscription.name, subscription.startDate, subscription.endDate);
-                });
+            const storedSubscriptions = localStorage.getItem(subscriptionsKey);
+            if (storedSubscriptions) {
+                return JSON.parse(storedSubscriptions);
             }
+            return [];
         }
 
-        function saveSubscriptions() {
-            const rows = document.querySelectorAll("#subscriptionsTable tbody tr");
-            const subscriptions = Array.from(rows).map(row => ({
-                name: row.cells[0].textContent,
-                startDate: row.cells[1].textContent,
-                endDate: row.cells[2].textContent
-            }));
+        // حفظ البيانات في التخزين المحلي
+        function saveSubscriptions(subscriptions) {
             localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
         }
 
-        function addSubscriptionToTable(name, startDate, endDate) {
-            const table = document.querySelector("#subscriptionsTable tbody");
-            const row = table.insertRow();
-            row.innerHTML = `
-                <td>${name}</td>
-                <td>${startDate}</td>
-                <td>${endDate}</td>
-                <td>
-                    <button class="button" onclick="renewSubscription(this)">تجديد</button>
-                </td>
-            `;
-        }
-
-        document.querySelector("#addSubscriptionBtn").addEventListener("click", () => {
+        // إضافة اشتراك
+        document.getElementById("addSubscriptionBtn").addEventListener("click", function() {
             Swal.fire({
                 title: 'إضافة اشتراك جديد',
                 html: `
-                    <input type="text" id="newSubscriberName" class="swal2-input" placeholder="اسم المشترك">
-                    <input type="date" id="newStartDate" class="swal2-input">
-                    <input type="date" id="newEndDate" class="swal2-input">
+                    <input type="text" id="subscriberName" class="swal2-input" placeholder="اسم المشترك">
+                    <input type="text" id="subscriptionType" class="swal2-input" placeholder="نوع الاشتراك">
+                    <input type="date" id="startDate" class="swal2-input">
+                    <input type="date" id="endDate" class="swal2-input">
                 `,
-                confirmButtonText: 'إضافة',
-                preConfirm: () => ({
-                    name: document.getElementById("newSubscriberName").value,
-                    startDate: document.getElementById("newStartDate").value,
-                    endDate: document.getElementById("newEndDate").value
-                })
-            }).then(result => {
+                preConfirm: () => {
+                    const name = document.getElementById('subscriberName').value;
+                    const type = document.getElementById('subscriptionType').value;
+                    const startDate = document.getElementById('startDate').value;
+                    const endDate = document.getElementById('endDate').value;
+                    if (!name || !type || !startDate || !endDate) {
+                        Swal.showValidationMessage('يرجى ملء جميع الحقول');
+                    } else {
+                        return { name, type, startDate, endDate };
+                    }
+                }
+            }).then((result) => {
                 if (result.isConfirmed) {
-                    addSubscriptionToTable(result.value.name, result.value.startDate, result.value.endDate);
-                    saveSubscriptions();
-                    Swal.fire('تمت الإضافة!', 'تم إضافة الاشتراك بنجاح.', 'success');
+                    const newSubscription = result.value;
+                    const subscriptions = loadSubscriptions();
+                    subscriptions.push(newSubscription);
+                    saveSubscriptions(subscriptions);
+                    loadSubscriptionsTable();
+                    Swal.fire('تم إضافة الاشتراك', '', 'success');
                 }
             });
         });
 
-        document.querySelector("#renewSubscriptionsBtn").addEventListener("click", () => {
-            const tableData = JSON.parse(localStorage.getItem(subscriptionsKey) || "[]");
-            const expired = tableData.filter(sub => new Date(sub.endDate) < new Date());
-            if (expired.length === 0) {
-                Swal.fire("لا يوجد اشتراكات منتهية!");
-                return;
-            }
+        // تحميل جدول الاشتراكات
+        function loadSubscriptionsTable() {
+            const subscriptions = loadSubscriptions();
+            const tableBody = document.getElementById("subscriptionsTable").getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; // مسح الجدول الحالي
 
-            const expiredTable = expired.map(sub => `
-                <tr>
-                    <td>${sub.name}</td>
-                    <td>${sub.startDate}</td>
-                    <td>${sub.endDate}</td>
-                    <td><button class="button" onclick="renewSingle('${sub.name}')">تجديد</button></td>
-                </tr>
-            `).join("");
+            subscriptions.forEach((subscription, index) => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${subscription.name}</td>
+                    <td>${subscription.type}</td>
+                    <td>${subscription.startDate}</td>
+                    <td>${subscription.endDate}</td>
+                    <td>
+                        <button class="button" onclick="editSubscription(${index})">تعديل</button>
+                        <button class="button" onclick="deleteSubscription(${index})">حذف</button>
+                    </td>
+                `;
+            });
+        }
+
+        // تعديل اشتراك
+        function editSubscription(index) {
+            const subscriptions = loadSubscriptions();
+            const subscription = subscriptions[index];
 
             Swal.fire({
-                title: 'الاشتراكات المنتهية',
+                title: 'تعديل الاشتراك',
                 html: `
-                    <table style="width: 100%; text-align: center; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background: #333; color: white;">
-                                <th>اسم المشترك</th>
-                                <th>تاريخ البداية</th>
-                                <th>تاريخ النهاية</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody>${expiredTable}</tbody>
-                    </table>
+                    <input type="text" id="subscriberName" class="swal2-input" value="${subscription.name}">
+                    <input type="text" id="subscriptionType" class="swal2-input" value="${subscription.type}">
+                    <input type="date" id="startDate" class="swal2-input" value="${subscription.startDate}">
+                    <input type="date" id="endDate" class="swal2-input" value="${subscription.endDate}">
                 `,
-                width: '800px',
-                showConfirmButton: false
+                preConfirm: () => {
+                    const name = document.getElementById('subscriberName').value;
+                    const type = document.getElementById('subscriptionType').value;
+                    const startDate = document.getElementById('startDate').value;
+                    const endDate = document.getElementById('endDate').value;
+                    if (!name || !type || !startDate || !endDate) {
+                        Swal.showValidationMessage('يرجى ملء جميع الحقول');
+                    } else {
+                        return { name, type, startDate, endDate };
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    subscriptions[index] = result.value;
+                    saveSubscriptions(subscriptions);
+                    loadSubscriptionsTable();
+                    Swal.fire('تم تعديل الاشتراك', '', 'success');
+                }
+            });
+        }
+
+        // حذف اشتراك
+        function deleteSubscription(index) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: 'سيتم حذف هذا الاشتراك.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، حذف',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const subscriptions = loadSubscriptions();
+                    subscriptions.splice(index, 1);
+                    saveSubscriptions(subscriptions);
+                    loadSubscriptionsTable();
+                    Swal.fire('تم الحذف', '', 'success');
+                }
+            });
+        }
+
+        // البحث عن اشتراك
+        document.getElementById("searchInput").addEventListener("keyup", function() {
+            const searchTerm = this.value.toLowerCase();
+            const subscriptions = loadSubscriptions();
+            const filteredSubscriptions = subscriptions.filter(subscription =>
+                subscription.name.toLowerCase().includes(searchTerm) ||
+                subscription.type.toLowerCase().includes(searchTerm)
+            );
+            const tableBody = document.getElementById("subscriptionsTable").getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; // مسح الجدول الحالي
+            filteredSubscriptions.forEach((subscription, index) => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${subscription.name}</td>
+                    <td>${subscription.type}</td>
+                    <td>${subscription.startDate}</td>
+                    <td>${subscription.endDate}</td>
+                    <td>
+                        <button class="button" onclick="editSubscription(${index})">تعديل</button>
+                        <button class="button" onclick="deleteSubscription(${index})">حذف</button>
+                    </td>
+                `;
             });
         });
 
-        function renewSingle(name) {
-            const subscriptions = JSON.parse(localStorage.getItem(subscriptionsKey) || "[]");
-            const index = subscriptions.findIndex(sub => sub.name === name);
-            if (index !== -1) {
-                const newEndDate = new Date(subscriptions[index].endDate);
-                newEndDate.setMonth(newEndDate.getMonth() + 1);
-                subscriptions[index].endDate = newEndDate.toISOString().split("T")[0];
-                localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
-                loadSubscriptions();
-                Swal.fire("تم التجديد بنجاح!", "", "success");
-            }
-        }
-
-        loadSubscriptions();
+        // تحميل الجدول عند تحميل الصفحة
+        loadSubscriptionsTable();
     </script>
 </body>
 </html>
