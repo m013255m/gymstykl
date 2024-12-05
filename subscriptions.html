@@ -9,185 +9,23 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
+        /* إضافة الأنماط الخاصة بك */
+        /* ... */
+        
+        .notification-icon {
+            color: #4CAF50;
+            font-size: 20px;
+            margin-left: 10px;
+            display: none;
         }
 
-        .container {
-            display: flex;
-        }
-
-        .sidebar {
-            width: 250px;
-            background-color: #333;
-            color: white;
-            padding: 20px;
-            height: 100vh;
-        }
-
-        .sidebar h2 {
-            font-size: 24px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .sidebar nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar nav ul li {
-            margin: 15px 0;
-        }
-
-        .sidebar nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .sidebar nav ul li a:hover {
-            background-color: #575757;
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-            background-color: white;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            padding: 14px;
-            text-align: center;
-            font-size: 16px;
-        }
-
-        th {
-            background-color: #333;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .button:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
-        }
-
-        .button-red {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .button-red:hover {
-            background-color: #e53935;
-        }
-
-        .swal2-popup {
-            font-family: 'Arial', sans-serif;
-        }
-
-        .search-bar {
-            margin-bottom: 20px;
+        .button-group {
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
 
-        .search-bar input {
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
-        }
-
-        /* النمط الخاص بالنافذة المنبثقة */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-            overflow: auto;
-            padding-top: 60px;
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .modal-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .modal-table, .modal-table th, .modal-table td {
-            border: 1px solid #ddd;
-        }
-
-        .modal-table th, .modal-table td {
-            padding: 12px;
-            text-align: center;
+        .button-group .button {
+            margin: 0 5px;
         }
     </style>
 </head>
@@ -196,23 +34,7 @@
     <div class="container">
         <div class="sidebar">
             <h2>إدارة الجيم</h2>
-            <nav>
-                <ul>
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="members.html">إدارة الأعضاء</a></li>
-                    <li><a href="trainers.html">إدارة المدربين</a></li>
-                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
-                    <li><a href="inventory.html">إدارة المخزون</a></li>
-                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
-                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
-                    <li><a href="ratings.html">التقييمات</a></li>
-                    <li><a href="rewards.html">المكافآت</a></li>
-                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
-                    <li><a href="marketing.html">حملات التسويق</a></li>
-                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                    <li><a href="complaints.html">الشكاوي</a></li>
-                </ul>
-            </nav>
+            <!-- التنقل الجانبي -->
         </div>
 
         <div class="content">
@@ -221,6 +43,7 @@
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <button class="button" id="addSubscriptionBtn">إضافة اشتراك</button>
                 <button class="button button-red" id="renewSubscriptionBtn">تجديد الاشتراك</button>
+                <span class="notification-icon" id="notificationIcon"><i class="fas fa-bell"></i></span>
             </div>
             <table id="subscriptionsTable">
                 <thead>
@@ -239,32 +62,14 @@
         </div>
     </div>
 
-    <!-- نافذة تجديد الاشتراك -->
     <div id="renewModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3>تفاصيل العضو لتجديد الاشتراك</h3>
-            <table class="modal-table" id="renewalTable">
-                <thead>
-                    <tr>
-                        <th>اسم المشترك</th>
-                        <th>الاشتراك</th>
-                        <th>تاريخ الانتهاء</th>
-                        <th>تجديد الاشتراك</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- سيتم عرض البيانات هنا -->
-                </tbody>
-            </table>
-        </div>
+        <!-- نافذة تجديد الاشتراك -->
     </div>
 
     <script>
         const subscriptionsKey = "gymSubscriptions";
         const renewalKey = "gymRenewals";
 
-        // تحميل البيانات من التخزين المحلي
         function loadSubscriptions() {
             const storedSubscriptions = localStorage.getItem(subscriptionsKey);
             if (storedSubscriptions) {
@@ -273,12 +78,10 @@
             return [];
         }
 
-        // حفظ البيانات في التخزين المحلي
         function saveSubscriptions(subscriptions) {
             localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
         }
 
-        // تحميل البيانات من جدول التجديد
         function loadRenewals() {
             const storedRenewals = localStorage.getItem(renewalKey);
             if (storedRenewals) {
@@ -287,7 +90,6 @@
             return [];
         }
 
-        // حفظ بيانات التجديد في التخزين المحلي
         function saveRenewals(renewals) {
             localStorage.setItem(renewalKey, JSON.stringify(renewals));
         }
@@ -324,6 +126,7 @@
                     subscriptions.push(newSubscription);
                     saveSubscriptions(subscriptions);
                     loadTableData();
+                    document.getElementById("notificationIcon").style.display = 'inline';
                 }
             });
         });
@@ -357,7 +160,7 @@
             const subscriptions = loadSubscriptions();
             const renewalDate = new Date();
             const renewalEndDate = new Date(renewalDate);
-            renewalEndDate.setMonth(renewalEndDate.getMonth() + 1); // تجديد لمدة شهر
+            renewalEndDate.setMonth(renewalEndDate.getMonth() + 1);
 
             const subscription = subscriptions.find(sub => sub.subscriberName === subscriberName);
             if (subscription) {
@@ -380,41 +183,73 @@
                 row.insertCell(1).innerText = subscription.subscriptionType;
                 row.insertCell(2).innerText = subscription.startDate;
                 row.insertCell(3).innerText = subscription.endDate;
-                row.insertCell(4).innerHTML = `<button class="button button-red" onclick="removeSubscription('${subscription.subscriberName}')">حذف</button>`;
+                const actionsCell = row.insertCell(4);
+                actionsCell.innerHTML = `
+                    <div class="button-group">
+                        <button class="button" onclick="editSubscription('${subscription.subscriberName}')">تعديل</button>
+                        <button class="button button-red" onclick="deleteSubscription('${subscription.subscriberName}')">حذف</button>
+                    </div>
+                `;
             });
         }
 
-        // حذف اشتراك
-        function removeSubscription(subscriberName) {
+        // تعديل الاشتراك
+        function editSubscription(subscriberName) {
+            const subscriptions = loadSubscriptions();
+            const subscription = subscriptions.find(sub => sub.subscriberName === subscriberName);
+            if (subscription) {
+                Swal.fire({
+                    title: 'تعديل الاشتراك',
+                    html: 
+                        `<input type="text" id="subscriberName" class="swal2-input" value="${subscription.subscriberName}" placeholder="اسم المشترك">` +
+                        `<input type="text" id="subscriptionType" class="swal2-input" value="${subscription.subscriptionType}" placeholder="الاشتراك">` +
+                        `<input type="date" id="startDate" class="swal2-input" value="${subscription.startDate}">` +
+                        `<input type="date" id="endDate" class="swal2-input" value="${subscription.endDate}">`,
+                    confirmButtonText: 'تعديل',
+                    preConfirm: () => {
+                        const subscriberName = document.getElementById("subscriberName").value;
+                        const subscriptionType = document.getElementById("subscriptionType").value;
+                        const startDate = document.getElementById("startDate").value;
+                        const endDate = document.getElementById("endDate").value;
+
+                        if (!subscriberName || !subscriptionType || !startDate || !endDate) {
+                            Swal.showValidationMessage("يرجى ملء جميع الحقول");
+                            return false;
+                        }
+
+                        subscription.subscriberName = subscriberName;
+                        subscription.subscriptionType = subscriptionType;
+                        subscription.startDate = startDate;
+                        subscription.endDate = endDate;
+                        saveSubscriptions(subscriptions);
+                        loadTableData();
+                    }
+                });
+            }
+        }
+
+        // حذف الاشتراك
+        function deleteSubscription(subscriberName) {
             Swal.fire({
-                title: 'هل أنت متأكد من حذف الاشتراك؟',
+                title: 'هل أنت متأكد؟',
+                text: "لا يمكن التراجع عن هذا الإجراء!",
+                icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'نعم',
-                cancelButtonText: 'إلغاء',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'نعم، حذف الاشتراك!'
             }).then(result => {
                 if (result.isConfirmed) {
-                    let subscriptions = loadSubscriptions();
-                    subscriptions = subscriptions.filter(sub => sub.subscriberName !== subscriberName);
-                    saveSubscriptions(subscriptions);
+                    const subscriptions = loadSubscriptions();
+                    const updatedSubscriptions = subscriptions.filter(sub => sub.subscriberName !== subscriberName);
+                    saveSubscriptions(updatedSubscriptions);
                     loadTableData();
+                    Swal.fire('تم الحذف!', 'تم حذف الاشتراك بنجاح.', 'success');
                 }
             });
         }
 
-        // البحث في الاشتراكات
-        document.getElementById("searchInput").addEventListener("input", function(e) {
-            const searchValue = e.target.value.toLowerCase();
-            const filteredSubscriptions = loadSubscriptions().filter(sub =>
-                sub.subscriberName.toLowerCase().includes(searchValue) ||
-                sub.subscriptionType.toLowerCase().includes(searchValue)
-            );
-            renderTable(filteredSubscriptions);
-        });
-
-        // تحميل الجدول عند تحميل الصفحة
-        window.onload = function() {
-            loadTableData();
-        };
+        loadTableData();
     </script>
 </body>
 </html>
