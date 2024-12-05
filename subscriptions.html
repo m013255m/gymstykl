@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الاشتراكات</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -72,11 +72,14 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        table, th, td {
+        table,
+        th,
+        td {
             border: 1px solid #ddd;
         }
 
-        th, td {
+        th,
+        td {
             padding: 14px;
             text-align: center;
             font-size: 16px;
@@ -143,6 +146,10 @@
             display: flex;
             gap: 10px;
         }
+
+        .renewal-modal {
+            display: none;
+        }
     </style>
 </head>
 
@@ -154,17 +161,8 @@
                 <ul>
                     <li><a href="index.html">الرئيسية</a></li>
                     <li><a href="members.html">إدارة الأعضاء</a></li>
-                    <li><a href="trainers.html">إدارة المدربين</a></li>
                     <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
                     <li><a href="inventory.html">إدارة المخزون</a></li>
-                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
-                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
-                    <li><a href="ratings.html">التقييمات</a></li>
-                    <li><a href="rewards.html">المكافآت</a></li>
-                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
-                    <li><a href="marketing.html">حملات التسويق</a></li>
-                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                    <li><a href="complaints.html">الشكاوي</a></li>
                 </ul>
             </nav>
         </div>
@@ -227,7 +225,7 @@
                 <td>${startDate}</td>
                 <td>${endDate}</td>
                 <td>
-                    <button class="button" onclick="editSubscription(this)">تعديل</button>
+                    <button class="button" onclick="renewSubscription(this)">تجديد</button>
                     <button class="button red-button" onclick="deleteSubscription(this)">حذف</button>
                 </td>
             `;
@@ -239,8 +237,8 @@
                 html: `
                     <input type="text" id="newMemberName" class="swal2-input" placeholder="اسم العضو">
                     <input type="text" id="newSubscriptionType" class="swal2-input" placeholder="نوع الاشتراك">
-                    <input type="date" id="newStartDate" class="swal2-input" placeholder="تاريخ البداية">
-                    <input type="date" id="newEndDate" class="swal2-input" placeholder="تاريخ النهاية">
+                    <input type="date" id="newStartDate" class="swal2-input">
+                    <input type="date" id="newEndDate" class="swal2-input">
                 `,
                 confirmButtonText: 'إضافة',
                 preConfirm: () => ({
@@ -257,36 +255,23 @@
             });
         });
 
-        document.querySelector("#renewSubscriptionBtn").addEventListener("click", () => {
-            Swal.fire('تجديد الاشتراك', 'ميزة قيد التطوير', 'info');
-        });
-
-        function editSubscription(button) {
+        function renewSubscription(button) {
             const row = button.closest("tr");
             const memberName = row.cells[0].textContent;
-            const subscriptionType = row.cells[1].textContent;
-            const startDate = row.cells[2].textContent;
-            const endDate = row.cells[3].textContent;
 
             Swal.fire({
-                title: 'تعديل الاشتراك',
+                title: `تجديد اشتراك ${memberName}`,
                 html: `
-                    <input type="text" id="editMemberName" class="swal2-input" value="${memberName}">
-                    <input type="text" id="editSubscriptionType" class="swal2-input" value="${subscriptionType}">
-                    <input type="date" id="editStartDate" class="swal2-input" value="${startDate}">
-                    <input type="date" id="editEndDate" class="swal2-input" value="${endDate}">
+                    <input type="date" id="renewStartDate" class="swal2-input">
+                    <input type="date" id="renewEndDate" class="swal2-input">
                 `,
-                confirmButtonText: 'حفظ التعديلات',
+                confirmButtonText: 'تجديد',
                 preConfirm: () => ({
-                    memberName: document.getElementById("editMemberName").value,
-                    subscriptionType: document.getElementById("editSubscriptionType").value,
-                    startDate: document.getElementById("editStartDate").value,
-                    endDate: document.getElementById("editEndDate").value
+                    startDate: document.getElementById("renewStartDate").value,
+                    endDate: document.getElementById("renewEndDate").value
                 })
             }).then(result => {
                 if (result.isConfirmed) {
-                    row.cells[0].textContent = result.value.memberName;
-                    row.cells[1].textContent = result.value.subscriptionType;
                     row.cells[2].textContent = result.value.startDate;
                     row.cells[3].textContent = result.value.endDate;
                     saveSubscriptions();
@@ -312,4 +297,5 @@
         loadSubscriptions();
     </script>
 </body>
+
 </html>
