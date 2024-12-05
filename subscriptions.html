@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الاشتراكات</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -139,7 +140,6 @@
             <nav>
                 <ul>
                     <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="members.html">إدارة الأعضاء</a></li>
                     <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
                 </ul>
             </nav>
@@ -148,88 +148,99 @@
         <div class="content">
             <h3>إدارة الاشتراكات</h3>
             <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="بحث عن مشترك...">
                 <button class="button" id="addMemberBtn">إضافة مشترك جديد</button>
-                <button class="button" id="renewSubscriptionsBtn">تجديد الاشتراك</button>
+                <button class="button" id="renewSubscriptionsBtn">تجديد الاشتراكات</button>
             </div>
             <table id="subscriptionsTable">
                 <thead>
                     <tr>
                         <th>اسم المشترك</th>
-                        <th>بداية الاشتراك</th>
-                        <th>نهاية الاشتراك</th>
-                        <th>الحالة</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
+                        <th>الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- سيتم إدراج البيانات هنا -->
+                    <!-- بيانات المشتركين ستضاف هنا -->
                 </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // بيانات الاشتراكات (مثال)
-        const subscriptions = [
-            { name: "أحمد علي", startDate: "2023-12-01", endDate: "2023-12-31", status: "منتهي" },
-            { name: "محمد حسن", startDate: "2023-11-15", endDate: "2023-12-15", status: "ساري" }
-        ];
+        const subscriptionsKey = "subscriptionsData";
 
+        // تحميل بيانات المشتركين
         function loadSubscriptions() {
-            const tbody = document.querySelector("#subscriptionsTable tbody");
-            tbody.innerHTML = "";
-            subscriptions.forEach(sub => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${sub.name}</td>
-                    <td>${sub.startDate}</td>
-                    <td>${sub.endDate}</td>
-                    <td>${sub.status}</td>
-                `;
-                tbody.appendChild(row);
-            });
+            const storedData = localStorage.getItem(subscriptionsKey);
+            if (storedData) {
+                JSON.parse(storedData).forEach(subscription => {
+                    addSubscriptionToTable(subscription.name, subscription.startDate, subscription.endDate);
+                });
+            }
         }
 
-        document.querySelector("#renewSubscriptionsBtn").addEventListener("click", () => {
-            const expiredSubscriptions = subscriptions.filter(sub => sub.status === "منتهي");
-            if (expiredSubscriptions.length === 0) {
-                Swal.fire("لا توجد اشتراكات بحاجة للتجديد.");
-                return;
-            }
+        // حفظ بيانات المشتركين
+        function saveSubscriptions() {
+            const rows = document.querySelectorAll("#subscriptionsTable tbody tr");
+            const subscriptions = Array.from(rows).map(row => ({
+                name: row.cells[0].textContent,
+                startDate: row.cells[1].textContent,
+                endDate: row.cells[2].textContent
+            }));
+            localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
+        }
 
-            const table = expiredSubscriptions.map(sub => `
-                <tr>
-                    <td>${sub.name}</td>
-                    <td>${sub.endDate}</td>
-                    <td><button class="button" onclick="renewSubscription('${sub.name}')">تجديد</button></td>
-                </tr>
-            `).join("");
+        // إضافة مشترك إلى الجدول
+        function addSubscriptionToTable(name, startDate, endDate) {
+            const table = document.querySelector("#subscriptionsTable tbody");
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${name}</td>
+                <td>${startDate}</td>
+                <td>${endDate}</td>
+                <td>
+                    <button class="button" onclick="renewSubscription(this)">تجديد</button>
+                </td>
+            `;
+        }
 
+        // إضافة مشترك جديد
+        document.querySelector("#addMemberBtn").addEventListener("click", () => {
             Swal.fire({
-                title: "تجديد الاشتراكات",
+                title: 'إضافة مشترك جديد',
                 html: `
-                    <table style="width: 100%; text-align: center;">
-                        <tr>
-                            <th>اسم المشترك</th>
-                            <th>نهاية الاشتراك</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                        ${table}
-                    </table>
+                    <input type="text" id="newMemberName" class="swal2-input" placeholder="اسم المشترك">
+                    <input type="date" id="newStartDate" class="swal2-input" placeholder="تاريخ البداية">
+                    <input type="date" id="newEndDate" class="swal2-input" placeholder="تاريخ النهاية">
                 `,
-                showConfirmButton: false
+                confirmButtonText: 'إضافة',
+                preConfirm: () => ({
+                    name: document.getElementById("newMemberName").value,
+                    startDate: document.getElementById("newStartDate").value,
+                    endDate: document.getElementById("newEndDate").value
+                })
+            }).then(result => {
+                if (result.isConfirmed) {
+                    addSubscriptionToTable(result.value.name, result.value.startDate, result.value.endDate);
+                    saveSubscriptions();
+                    Swal.fire('تمت الإضافة!', 'تم إضافة المشترك بنجاح.', 'success');
+                }
             });
         });
 
-        function renewSubscription(name) {
-            const sub = subscriptions.find(sub => sub.name === name);
-            if (sub) {
-                sub.startDate = new Date().toISOString().split("T")[0];
-                sub.endDate = new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split("T")[0];
-                sub.status = "ساري";
-                loadSubscriptions();
-                Swal.close();
-                Swal.fire("تم التجديد!", `تم تجديد اشتراك ${name}.`, "success");
-            }
+        // تجديد الاشتراك
+        function renewSubscription(button) {
+            const row = button.closest("tr");
+            const name = row.cells[0].textContent;
+            const startDate = new Date(row.cells[1].textContent);
+            const endDate = new Date(row.cells[2].textContent);
+            const newEndDate = new Date(endDate.setMonth(endDate.getMonth() + 1));
+
+            row.cells[2].textContent = newEndDate.toISOString().split("T")[0];
+            saveSubscriptions();
+            Swal.fire('تم التجديد!', `تم تجديد الاشتراك للمشترك ${name}.`, 'success');
         }
 
         loadSubscriptions();
