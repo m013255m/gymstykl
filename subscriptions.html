@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -14,9 +15,11 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             display: flex;
         }
+
         .sidebar {
             width: 250px;
             background-color: #333;
@@ -24,18 +27,22 @@
             padding: 20px;
             height: 100vh;
         }
+
         .sidebar h2 {
             font-size: 24px;
             text-align: center;
             margin-bottom: 20px;
         }
+
         .sidebar nav ul {
             list-style: none;
             padding: 0;
         }
+
         .sidebar nav ul li {
             margin: 15px 0;
         }
+
         .sidebar nav ul li a {
             color: white;
             text-decoration: none;
@@ -45,14 +52,17 @@
             border-radius: 5px;
             transition: background-color 0.3s;
         }
+
         .sidebar nav ul li a:hover {
             background-color: #575757;
         }
+
         .content {
             flex: 1;
             padding: 20px;
             background-color: white;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -61,21 +71,26 @@
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+
         table, th, td {
             border: 1px solid #ddd;
         }
+
         th, td {
             padding: 14px;
             text-align: center;
             font-size: 16px;
         }
+
         th {
             background-color: #333;
             color: white;
         }
+
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+
         .button {
             background-color: #4CAF50;
             color: white;
@@ -86,272 +101,7 @@
             font-size: 16px;
             transition: transform 0.2s ease-in-out;
         }
+
         .button:hover {
             background-color: #45a049;
             transform: scale(1.05);
-        }
-        .button-red {
-            background-color: #f44336;
-            color: white;
-        }
-        .button-red:hover {
-            background-color: #e53935;
-        }
-        .swal2-popup {
-            font-family: 'Arial', sans-serif;
-        }
-        .search-bar {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .search-bar input {
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
-        }
-        /* النمط الخاص بالنافذة المنبثقة */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-            overflow: auto;
-            padding-top: 60px;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .modal-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .modal-table, .modal-table th, .modal-table td {
-            border: 1px solid #ddd;
-        }
-        .modal-table th, .modal-table td {
-            padding: 12px;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="sidebar">
-            <h2>إدارة الجيم</h2>
-            <nav>
-                <ul>
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="members.html">إدارة الأعضاء</a></li>
-                    <li><a href="trainers.html">إدارة المدربين</a></li>
-                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
-                    <li><a href="inventory.html">إدارة المخزون</a></li>
-                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
-                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
-                    <li><a href="ratings.html">التقييمات</a></li>
-                    <li><a href="rewards.html">المكافآت</a></li>
-                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
-                    <li><a href="marketing.html">حملات التسويق</a></li>
-                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                    <li><a href="complaints.html">الشكاوي</a></li>
-                </ul>
-            </nav>
-        </div>
-
-        <div class="content">
-            <h3>إدارة الاشتراكات</h3>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
-                <button class="button" id="addSubscriptionBtn">إضافة اشتراك</button>
-                <button class="button button-red" id="renewSubscriptionBtn">تجديد الاشتراك</button>
-            </div>
-            <table id="subscriptionsTable">
-                <thead>
-                    <tr>
-                        <th>اسم المشترك</th>
-                        <th>الاشتراك</th>
-                        <th>تاريخ البدء</th>
-                        <th>تاريخ الانتهاء</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- الاشتراكات سيتم إضافتها هنا -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- نافذة تجديد الاشتراك -->
-    <div id="renewModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3>تفاصيل العضو لتجديد الاشتراك</h3>
-            <table class="modal-table" id="renewalTable">
-                <thead>
-                    <tr>
-                        <th>اسم المشترك</th>
-                        <th>الاشتراك</th>
-                        <th>تاريخ الانتهاء</th>
-                        <th>تجديد الاشتراك</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- سيتم عرض البيانات هنا -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <script>
-        const subscriptionsKey = "gymSubscriptions";
-        const renewalKey = "gymRenewals";
-
-        // تحميل البيانات من التخزين المحلي
-        function loadSubscriptions() {
-            const storedSubscriptions = localStorage.getItem(subscriptionsKey);
-            if (storedSubscriptions) {
-                return JSON.parse(storedSubscriptions);
-            }
-            return [];
-        }
-
-        // حفظ البيانات في التخزين المحلي
-        function saveSubscriptions(subscriptions) {
-            localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
-        }
-
-        // عرض الاشتراكات في الجدول
-        function renderSubscriptions() {
-            const subscriptions = loadSubscriptions();
-            const tableBody = document.querySelector("#subscriptionsTable tbody");
-            tableBody.innerHTML = "";
-            subscriptions.forEach((subscription, index) => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${subscription.name}</td>
-                    <td>${subscription.type}</td>
-                    <td>${subscription.startDate}</td>
-                    <td>${subscription.endDate}</td>
-                    <td>
-                        <button class="button" onclick="editSubscription(${index})">تعديل</button>
-                        <button class="button button-red" onclick="deleteSubscription(${index})">حذف</button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        // إضافة اشتراك جديد
-        function addSubscription() {
-            const name = prompt("أدخل اسم المشترك");
-            const type = prompt("أدخل نوع الاشتراك");
-            const startDate = prompt("أدخل تاريخ بدء الاشتراك (مثال: 2024-12-01)");
-            const endDate = prompt("أدخل تاريخ انتهاء الاشتراك (مثال: 2025-12-01)");
-            const subscriptions = loadSubscriptions();
-            subscriptions.push({ name, type, startDate, endDate });
-            saveSubscriptions(subscriptions);
-            renderSubscriptions();
-        }
-
-        // تعديل اشتراك
-        function editSubscription(index) {
-            const subscriptions = loadSubscriptions();
-            const subscription = subscriptions[index];
-            const newName = prompt("أدخل اسم المشترك", subscription.name);
-            const newType = prompt("أدخل نوع الاشتراك", subscription.type);
-            const newStartDate = prompt("أدخل تاريخ بدء الاشتراك", subscription.startDate);
-            const newEndDate = prompt("أدخل تاريخ انتهاء الاشتراك", subscription.endDate);
-            subscriptions[index] = { name: newName, type: newType, startDate: newStartDate, endDate: newEndDate };
-            saveSubscriptions(subscriptions);
-            renderSubscriptions();
-        }
-
-        // حذف اشتراك
-        function deleteSubscription(index) {
-            const subscriptions = loadSubscriptions();
-            subscriptions.splice(index, 1);
-            saveSubscriptions(subscriptions);
-            renderSubscriptions();
-        }
-
-        // عرض نافذة تجديد الاشتراك
-        function showRenewalModal() {
-            const modal = document.getElementById("renewModal");
-            const closeBtn = modal.querySelector(".close");
-            const renewals = loadSubscriptions();
-            const renewalTableBody = document.querySelector("#renewalTable tbody");
-            renewalTableBody.innerHTML = "";
-            renewals.forEach((subscription, index) => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${subscription.name}</td>
-                    <td>${subscription.type}</td>
-                    <td>${subscription.endDate}</td>
-                    <td>
-                        <button class="button" onclick="renewSubscription(${index})">تجديد</button>
-                    </td>
-                `;
-                renewalTableBody.appendChild(row);
-            });
-
-            modal.style.display = "block";
-
-            closeBtn.onclick = function() {
-                modal.style.display = "none";
-            };
-
-            window.onclick = function(event) {
-                if (event.target === modal) {
-                    modal.style.display = "none";
-                }
-            };
-        }
-
-        // تجديد اشتراك
-        function renewSubscription(index) {
-            const subscriptions = loadSubscriptions();
-            const subscription = subscriptions[index];
-            const newEndDate = prompt("أدخل تاريخ انتهاء الاشتراك الجديد (مثال: 2026-12-01)");
-            subscriptions[index].endDate = newEndDate;
-            saveSubscriptions(subscriptions);
-            renderSubscriptions();
-            document.getElementById("renewModal").style.display = "none";
-        }
-
-        // التفاعل مع الأزرار
-        document.getElementById("addSubscriptionBtn").addEventListener("click", addSubscription);
-        document.getElementById("renewSubscriptionBtn").addEventListener("click", showRenewalModal);
-
-        // تحميل البيانات عند تحميل الصفحة
-        renderSubscriptions();
-    </script>
-</body>
-</html>
