@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الاشتراكات</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -163,29 +162,38 @@
                     <li><a href="#">الرئيسية</a></li>
                     <li><a href="#">المشتركين</a></li>
                     <li><a href="#">التقارير</a></li>
+                    <li><a href="#">التجديد</a></li>
+                    <li><a href="#">الإعدادات</a></li>
                 </ul>
             </nav>
         </div>
         <div class="content">
             <div class="buttons">
-                <button class="button">إضافة مشترك</button>
+                <button class="button" id="add-subscriber-btn">إضافة مشترك</button>
                 <button class="button" id="renewal-btn">عرض التجديد</button>
             </div>
             <table id="subscriptions-table">
                 <thead>
                     <tr>
                         <th>اسم المشترك</th>
-                        <th>البريد الإلكتروني</th>
-                        <th>مدة الاشتراك</th>
+                        <th>رقم الهاتف</th>
+                        <th>السن</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>محمد أحمد</td>
-                        <td>mohamed@example.com</td>
-                        <td>30 يوم</td>
-                        <td><button class="button">تعديل</button></td>
+                        <td>01012345678</td>
+                        <td>25</td>
+                        <td>2024-12-01</td>
+                        <td>2024-12-31</td>
+                        <td>
+                            <button class="button edit-btn">تعديل</button>
+                            <button class="button delete-btn">حذف</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -197,18 +205,15 @@
                     <thead>
                         <tr>
                             <th>اسم المشترك</th>
-                            <th>البريد الإلكتروني</th>
-                            <th>مدة الاشتراك</th>
+                            <th>رقم الهاتف</th>
+                            <th>السن</th>
+                            <th>تاريخ البداية</th>
+                            <th>تاريخ النهاية</th>
                             <th>الإجراءات</th>
                         </tr>
                     </thead>
                     <tbody id="renewal-table">
-                        <tr>
-                            <td>أحمد علي</td>
-                            <td>ahmed@example.com</td>
-                            <td>0 يوم</td>
-                            <td><button class="button renew-btn">تجديد</button></td>
-                        </tr>
+                        <!-- بيانات التجديد -->
                     </tbody>
                 </table>
             </div>
@@ -217,6 +222,7 @@
 
     <script>
         $(document).ready(function () {
+            // كود زر التجديد
             $("#renewal-btn").click(function () {
                 $("#overlay, #renewal-modal").fadeIn();
             });
@@ -225,11 +231,14 @@
                 $("#overlay, #renewal-modal").fadeOut();
             });
 
-            $(".renew-btn").click(function () {
-                const row = $(this).closest("tr");
-                const rowData = row.html();
-                $("#subscriptions-table tbody").append(`<tr>${rowData}</tr>`);
-                row.remove();
+            // كود إضافة مشترك
+            $("#add-subscriber-btn").click(function () {
+                Swal.fire("إضافة مشترك", "تم الإضافة بنجاح!", "success");
+            });
+
+            // كود حذف العضو
+            $(".delete-btn").click(function () {
+                $(this).closest("tr").remove();
             });
         });
     </script>
