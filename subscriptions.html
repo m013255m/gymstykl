@@ -9,7 +9,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* الأنماط القديمة */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -33,29 +32,6 @@
             font-size: 24px;
             text-align: center;
             margin-bottom: 20px;
-        }
-
-        .sidebar nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar nav ul li {
-            margin: 15px 0;
-        }
-
-        .sidebar nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .sidebar nav ul li a:hover {
-            background-color: #575757;
         }
 
         .content {
@@ -145,11 +121,6 @@
             gap: 10px;
         }
 
-        /* تأثيرات للنوافذ المنبثقة */
-        .swal2-popup {
-            font-family: 'Arial', sans-serif;
-        }
-
     </style>
 </head>
 
@@ -182,7 +153,6 @@
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <div class="button-container">
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراك</button>
                 </div>
             </div>
             <table id="subscriptionsTable">
@@ -225,12 +195,16 @@
                         if (memberName && subscriptionType && startDate && endDate) {
                             // إضافة الاشتراك إلى الجدول
                             $('#subscriptionsTable tbody').append(`
+
                                 <tr>
                                     <td>${memberName}</td>
                                     <td>${subscriptionType}</td>
                                     <td>${startDate}</td>
                                     <td>${endDate}</td>
-                                    <td><button class="button red-button" onclick="removeSubscription(this)">حذف</button></td>
+                                    <td>
+                                        <button class="button" onclick="editSubscription(this)">تعديل</button>
+                                        <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
+                                    </td>
                                 </tr>
                             `);
                             Swal.fire(
@@ -242,39 +216,6 @@
                             Swal.showValidationMessage('الرجاء ملء جميع الحقول');
                         }
                     }
-                });
-            });
-
-            // عرض الجدول الخاص بالأعضاء الذين انتهت فترة اشتراكهم
-            $('#renewSubscriptionBtn').click(function () {
-                Swal.fire({
-                    title: 'الأعضاء الذين انتهت فترة اشتراكهم',
-                    html: `
-                        <table class="swal2-table">
-                            <thead>
-                                <tr>
-                                    <th>اسم العضو</th>
-                                    <th>نوع الاشتراك</th>
-                                    <th>تاريخ الانتهاء</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>أحمد محمد</td>
-                                    <td>شهر</td>
-                                    <td>2024-12-10</td>
-                                </tr>
-                                <tr>
-                                    <td>فاطمة علي</td>
-                                    <td>سنة</td>
-                                    <td>2024-11-25</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    `,
-                    showCloseButton: true,
-                    focusConfirm: false,
-                    confirmButtonText: 'موافق'
                 });
             });
 
@@ -291,6 +232,47 @@
         // دالة لحذف الاشتراك
         function removeSubscription(button) {
             $(button).closest('tr').remove();
+        }
+
+        // دالة لتعديل الاشتراك
+        function editSubscription(button) {
+            const row = $(button).closest('tr');
+            const memberName = row.find('td').eq(0).text();
+            const subscriptionType = row.find('td').eq(1).text();
+            const startDate = row.find('td').eq(2).text();
+            const endDate = row.find('td').eq(3).text();
+
+            Swal.fire({
+                title: 'تعديل الاشتراك',
+                html:
+                    '<input type="text" id="editMemberName" class="swal2-input" value="' + memberName + '">' +
+                    '<input type="text" id="editSubscriptionType" class="swal2-input" value="' + subscriptionType + '">' +
+                    '<input type="date" id="editStartDate" class="swal2-input" value="' + startDate + '">' +
+                    '<input type="date" id="editEndDate" class="swal2-input" value="' + endDate + '">',
+                confirmButtonText: 'تحديث',
+                showCancelButton: true,
+                cancelButtonText: 'إلغاء',
+                preConfirm: () => {
+                    const newMemberName = $('#editMemberName').val();
+                    const newSubscriptionType = $('#editSubscriptionType').val();
+                    const newStartDate = $('#editStartDate').val();
+                    const newEndDate = $('#editEndDate').val();
+
+                    if (newMemberName && newSubscriptionType && newStartDate && newEndDate) {
+                        row.find('td').eq(0).text(newMemberName);
+                        row.find('td').eq(1).text(newSubscriptionType);
+                        row.find('td').eq(2).text(newStartDate);
+                        row.find('td').eq(3).text(newEndDate);
+                        Swal.fire(
+                            'تم!',
+                            'تم تعديل الاشتراك بنجاح.',
+                            'success'
+                        );
+                    } else {
+                        Swal.showValidationMessage('الرجاء ملء جميع الحقول');
+                    }
+                }
+            });
         }
     </script>
 </body>
