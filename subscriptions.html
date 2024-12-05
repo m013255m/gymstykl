@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* إضافة الأنماط القديمة */
+        /* الأنماط القديمة */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -144,6 +144,62 @@
             display: flex;
             gap: 10px;
         }
+
+        /* أنماط المربع المنبثق */
+        #subscriptionModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 50px;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 60%;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .modal-content button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal-content button:hover {
+            background-color: #45a049;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -194,6 +250,23 @@
                 </tbody>
             </table>
 
+            <!-- مربع منبثق لإضافة اشتراك جديد -->
+            <div id="subscriptionModal">
+                <div class="modal-content">
+                    <span class="close" id="closeModal">&times;</span>
+                    <h3>إضافة اشتراك جديد</h3>
+                    <label for="memberName">اسم العضو:</label>
+                    <input type="text" id="memberName" placeholder="اسم العضو" required><br>
+                    <label for="subscriptionType">نوع الاشتراك:</label>
+                    <input type="text" id="subscriptionType" placeholder="نوع الاشتراك" required><br>
+                    <label for="startDate">تاريخ البداية:</label>
+                    <input type="date" id="startDate" required><br>
+                    <label for="endDate">تاريخ النهاية:</label>
+                    <input type="date" id="endDate" required><br><br>
+                    <button id="saveSubscription">حفظ</button>
+                </div>
+            </div>
+
             <!-- جدول الأعضاء الذين انتهت فترة اشتراكهم -->
             <div id="renewalTableContainer" style="display: none;">
                 <h3>الأعضاء الذين انتهت فترة اشتراكهم</h3>
@@ -215,120 +288,70 @@
     </div>
 
     <script>
-        const subscriptionsKey = "gymSubscriptions";
+        $(document).ready(function () {
+            // إخفاء مربع الإضافة عند الضغط على زر الإغلاق
+            $('#closeModal').click(function () {
+                $('#subscriptionModal').hide();
+            });
 
-        // تحميل الاشتراكات
-        function loadSubscriptions() {
-            const storedSubscriptions = localStorage.getItem(subscriptionsKey);
-            if (storedSubscriptions) {
-                JSON.parse(storedSubscriptions).forEach(subscription => {
-                    addSubscriptionToTable(subscription.memberName, subscription.subscriptionType, subscription.startDate, subscription.endDate);
-                });
-            }
-        }
+            // إظهار مربع الإضافة عند الضغط على زر "إضافة اشتراك جديد"
+            $('#addSubscriptionBtn').click(function () {
+                $('#subscriptionModal').show();
+            });
 
-        // حفظ الاشتراكات
-        function saveSubscriptions() {
-            const rows = document.querySelectorAll("#subscriptionsTable tbody tr");
-            const subscriptions = Array.from(rows).map(row => ({
-                memberName: row.cells[0].textContent,
-                subscriptionType: row.cells[1].textContent,
-                startDate: row.cells[2].textContent,
-                endDate: row.cells[3].textContent
-            }));
-            localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
-        }
+            // عند حفظ الاشتراك
+            $('#saveSubscription').click(function () {
+                var memberName = $('#memberName').val();
+                var subscriptionType = $('#subscriptionType').val();
+                var startDate = $('#startDate').val();
+                var endDate = $('#endDate').val();
 
-        // إضافة الاشتراك إلى الجدول
-        function addSubscriptionToTable(memberName, subscriptionType, startDate, endDate) {
-            const table = document.querySelector("#subscriptionsTable tbody");
-            const row = table.insertRow();
-            row.innerHTML = 
-                `<td>${memberName}</td>
-                <td>${subscriptionType}</td>
-                <td>${startDate}</td>
-                <td>${endDate}</td>
-                <td>
-                    <button class="button" onclick="editSubscription(this)">تعديل</button>
-                    <button class="button red-button" onclick="deleteSubscription(this)">حذف</button>
-                </td>`;
-        }
-
-        // عرض جدول التجديد
-        document.querySelector("#renewSubscriptionBtn").addEventListener("click", () => {
-            document.getElementById("renewalTableContainer").style.display = "block";
-            loadRenewalTable();
-        });
-
-        // تحميل الأعضاء الذين انتهت فترة اشتراكهم
-        function loadRenewalTable() {
-            const storedSubscriptions = localStorage.getItem(subscriptionsKey);
-            const renewalTable = document.querySelector("#renewalTable tbody");
-            renewalTable.innerHTML = "";
-            if (storedSubscriptions) {
-                const subscriptions = JSON.parse(storedSubscriptions);
-                subscriptions.forEach(subscription => {
-                    const endDate = new Date(subscription.endDate);
-                    if (endDate < new Date()) {
-                        const row = renewalTable.insertRow();
-                        row.innerHTML = 
-                            `<td>${subscription.memberName}</td>
-                            <td>${subscription.subscriptionType}</td>
-                            <td>${subscription.endDate}</td>
-                            <td>
-                                <button class="button" onclick="renewSubscription('${subscription.memberName}')">تجديد</button>
-                            </td>`;
-                    }
-                });
-            }
-        }
-
-        // تجديد الاشتراك
-        function renewSubscription(memberName) {
-            Swal.fire({
-                title: 'حدد تاريخ الاشتراك الجديد',
-                html: `
-                    <label for="startDate">تاريخ البداية</label>
-                    <input type="date" id="startDate" required><br><br>
-                    <label for="endDate">تاريخ النهاية</label>
-                    <input type="date" id="endDate" required><br><br>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'إضافة',
-                cancelButtonText: 'إلغاء',
-                preConfirm: () => {
-                    const startDate = document.getElementById("startDate").value;
-                    const endDate = document.getElementById("endDate").value;
-                    if (!startDate || !endDate) {
-                        Swal.showValidationMessage("يرجى تحديد التواريخ");
-                    } else {
-                        return { startDate, endDate };
-                    }
-                }
-            }).then(result => {
-                if (result.isConfirmed) {
-                    updateSubscription(memberName, result.value.startDate, result.value.endDate);
-                    Swal.fire('تم التحديث!', 'تم تجديد اشتراك العضو بنجاح', 'success');
-                    loadRenewalTable();
+                if (memberName && subscriptionType && startDate && endDate) {
+                    // إضافة الاشتراك إلى الجدول
+                    $('#subscriptionsTable tbody').append(`
+                        <tr>
+                            <td>${memberName}</td>
+                            <td>${subscriptionType}</td>
+                            <td>${startDate}</td>
+                            <td>${endDate}</td>
+                            <td><button class="button red-button" onclick="removeSubscription(this)">حذف</button></td>
+                        </tr>
+                    `);
+                    $('#subscriptionModal').hide();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم إضافة الاشتراك بنجاح',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطأ',
+                        text: 'الرجاء ملء جميع الحقول'
+                    });
                 }
             });
-        }
 
-        // تحديث بيانات الاشتراك
-        function updateSubscription(memberName, startDate, endDate) {
-            const storedSubscriptions = localStorage.getItem(subscriptionsKey);
-            const subscriptions = JSON.parse(storedSubscriptions);
-            const index = subscriptions.findIndex(sub => sub.memberName === memberName);
-            if (index !== -1) {
-                subscriptions[index].startDate = startDate;
-                subscriptions[index].endDate = endDate;
-                localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
-            }
-            saveSubscriptions();
-        }
+            // البحث عن اشتراكات
+            $('#searchInput').on('input', function () {
+                var searchValue = $(this).val().toLowerCase();
+                $('#subscriptionsTable tbody tr').each(function () {
+                    var rowText = $(this).text().toLowerCase();
+                    $(this).toggle(rowText.includes(searchValue));
+                });
+            });
 
-        // تحميل البيانات عند تحميل الصفحة
-        window.onload = loadSubscriptions;
+            // إلغاء الاشتراك
+            $('#renewSubscriptionBtn').click(function () {
+                $('#renewalTableContainer').toggle();
+            });
+        });
+
+        // دالة لحذف الاشتراك
+        function removeSubscription(button) {
+            $(button).closest('tr').remove();
+        }
     </script>
 </body>
 </html>
