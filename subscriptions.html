@@ -261,19 +261,35 @@
                             </table>`,
                         confirmButtonText: 'تجديد',
                         preConfirm: () => {
-                            // يمكن إضافة منطق لتحديث الاشتراكات هنا
-                            Swal.fire('تم تجديد الاشتراك بنجاح', '', 'success');
+                            // تجديد الاشتراكات
+                            $('#expiredSubscriptionsTable input').each(function () {
+                                const newEndDate = $(this).val();
+                                $(this).closest('tr').find('td').eq(3).text(newEndDate);
+                            });
+                            Swal.fire('تم!',
+                                'تم تجديد الاشتراكات بنجاح.',
+                                'success'
+                            );
                         }
                     });
                 } else {
-                    Swal.fire('لا توجد اشتراكات منتهية', '', 'info');
+                    Swal.fire(
+                        'لا يوجد اشتراكات منتهية!',
+                        'لا توجد اشتراكات انتهت في الوقت الحالي.',
+                        'info'
+                    );
                 }
             });
-        });
 
-        function removeSubscription(button) {
-            $(button).closest('tr').remove();
-        }
+            // البحث عن اشتراك
+            $('#searchInput').on('input', function () {
+                const searchValue = $(this).val().toLowerCase();
+                $('#subscriptionsTable tbody tr').each(function () {
+                    const rowText = $(this).text().toLowerCase();
+                    $(this).toggle(rowText.indexOf(searchValue) > -1);
+                });
+            });
+        });
 
         function editSubscription(button) {
             const row = $(button).closest('tr');
@@ -282,20 +298,47 @@
             const startDate = row.find('td').eq(2).text();
             const endDate = row.find('td').eq(3).text();
 
-            // فتح نافذة لتعديل الاشتراك
             Swal.fire({
                 title: 'تعديل الاشتراك',
                 html:
-                    `<input type="text" id="editMemberName" class="swal2-input" value="${memberName}">` +
-                    `<input type="text" id="editSubscriptionType" class="swal2-input" value="${subscriptionType}">` +
-                    `<input type="date" id="editStartDate" class="swal2-input" value="${startDate}">` +
-                    `<input type="date" id="editEndDate" class="swal2-input" value="${endDate}">`,
+                    `<input type="text" id="editMemberName" class="swal2-input" value="${memberName}" placeholder="اسم العضو">` +
+                    `<input type="text" id="editSubscriptionType" class="swal2-input" value="${subscriptionType}" placeholder="نوع الاشتراك">` +
+                    `<input type="date" id="editStartDate" class="swal2-input" value="${startDate}" placeholder="تاريخ البداية">` +
+                    `<input type="date" id="editEndDate" class="swal2-input" value="${endDate}" placeholder="تاريخ النهاية">`,
                 confirmButtonText: 'تحديث',
                 preConfirm: () => {
-                    row.find('td').eq(0).text($('#editMemberName').val());
-                    row.find('td').eq(1).text($('#editSubscriptionType').val());
-                    row.find('td').eq(2).text($('#editStartDate').val());
-                    row.find('td').eq(3).text($('#editEndDate').val());
+                    const newMemberName = $('#editMemberName').val();
+                    const newSubscriptionType = $('#editSubscriptionType').val();
+                    const newStartDate = $('#editStartDate').val();
+                    const newEndDate = $('#editEndDate').val();
+
+                    if (newMemberName && newSubscriptionType && newStartDate && newEndDate) {
+                        row.find('td').eq(0).text(newMemberName);
+                        row.find('td').eq(1).text(newSubscriptionType);
+                        row.find('td').eq(2).text(newStartDate);
+                        row.find('td').eq(3).text(newEndDate);
+                    } else {
+                        Swal.showValidationMessage('الرجاء ملء جميع الحقول');
+                    }
+                }
+            });
+        }
+
+        function removeSubscription(button) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "سيتم حذف هذا الاشتراك.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'حذف',
+                cancelButtonText: 'إلغاء',
+                preConfirm: () => {
+                    $(button).closest('tr').remove();
+                    Swal.fire(
+                        'تم الحذف!',
+                        'تم حذف الاشتراك بنجاح.',
+                        'success'
+                    );
                 }
             });
         }
