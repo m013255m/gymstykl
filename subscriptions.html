@@ -198,7 +198,6 @@
     <script>
         const subscriptionsKey = "gymSubscriptions";
 
-        // تحميل البيانات من التخزين المحلي
         function loadSubscriptions() {
             const storedSubscriptions = localStorage.getItem(subscriptionsKey);
             if (storedSubscriptions) {
@@ -208,7 +207,6 @@
             }
         }
 
-        // حفظ البيانات في التخزين المحلي
         function saveSubscriptions() {
             const rows = document.querySelectorAll("#subscriptionsTable tbody tr");
             const subscriptions = Array.from(rows).map(row => ({
@@ -220,7 +218,6 @@
             localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
         }
 
-        // إضافة اشتراك إلى الجدول
         function addSubscriptionToTable(memberName, subscriptionType, startDate, endDate) {
             const table = document.querySelector("#subscriptionsTable tbody");
             const row = table.insertRow();
@@ -231,12 +228,11 @@
                 <td>${endDate}</td>
                 <td>
                     <button class="button" onclick="editSubscription(this)">تعديل</button>
-                    <button class="button" onclick="deleteSubscription(this)">حذف</button>
+                    <button class="button red-button" onclick="deleteSubscription(this)">حذف</button>
                 </td>
             `;
         }
 
-        // إضافة اشتراك جديد
         document.querySelector("#addSubscriptionBtn").addEventListener("click", () => {
             Swal.fire({
                 title: 'إضافة اشتراك جديد',
@@ -261,30 +257,10 @@
             });
         });
 
-        // تجديد الاشتراك
         document.querySelector("#renewSubscriptionBtn").addEventListener("click", () => {
-            Swal.fire({
-                title: 'تجديد الاشتراك',
-                text: 'هل ترغب في تجديد الاشتراك؟',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'نعم، تجديد',
-                cancelButtonText: 'لا'
-            }).then(result => {
-                if (result.isConfirmed) {
-                    Swal.fire('تم تجديد الاشتراك', '', 'success');
-                }
-            });
+            Swal.fire('تجديد الاشتراك', 'ميزة قيد التطوير', 'info');
         });
 
-        // حذف اشتراك
-        function deleteSubscription(button) {
-            const row = button.closest("tr");
-            row.remove();
-            saveSubscriptions();
-        }
-
-        // تعديل اشتراك
         function editSubscription(button) {
             const row = button.closest("tr");
             const memberName = row.cells[0].textContent;
@@ -300,7 +276,7 @@
                     <input type="date" id="editStartDate" class="swal2-input" value="${startDate}">
                     <input type="date" id="editEndDate" class="swal2-input" value="${endDate}">
                 `,
-                confirmButtonText: 'تعديل',
+                confirmButtonText: 'حفظ التعديلات',
                 preConfirm: () => ({
                     memberName: document.getElementById("editMemberName").value,
                     subscriptionType: document.getElementById("editSubscriptionType").value,
@@ -318,23 +294,21 @@
             });
         }
 
-        // البحث عن اشتراك
-        document.getElementById("searchInput").addEventListener("input", (e) => {
-            const searchQuery = e.target.value.toLowerCase();
+        function deleteSubscription(button) {
+            const row = button.closest("tr");
+            row.remove();
+            saveSubscriptions();
+        }
+
+        document.getElementById("searchInput").addEventListener("input", function () {
+            const searchValue = this.value.toLowerCase();
             const rows = document.querySelectorAll("#subscriptionsTable tbody tr");
             rows.forEach(row => {
-                const cells = row.getElementsByTagName("td");
-                const memberName = cells[0].textContent.toLowerCase();
-                const subscriptionType = cells[1].textContent.toLowerCase();
-                if (memberName.includes(searchQuery) || subscriptionType.includes(searchQuery)) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
-                }
+                const memberName = row.cells[0].textContent.toLowerCase();
+                row.style.display = memberName.includes(searchValue) ? "" : "none";
             });
         });
 
-        // تحميل الاشتراكات عند تحميل الصفحة
         loadSubscriptions();
     </script>
 </body>
