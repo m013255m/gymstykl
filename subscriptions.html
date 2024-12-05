@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الاشتراكات</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -26,7 +25,6 @@
             color: white;
             padding: 20px;
             height: 100vh;
-            position: fixed;
         }
 
         .sidebar h2 {
@@ -60,31 +58,8 @@
 
         .content {
             flex: 1;
-            margin-left: 270px;
             padding: 20px;
             background-color: white;
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .button:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
         }
 
         table {
@@ -115,135 +90,149 @@
             background-color: #f2f2f2;
         }
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
-
-        .modal table {
-            margin: 20px;
-        }
-
-        .modal .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: red;
+        .button {
+            background-color: #4CAF50;
             color: white;
+            padding: 12px 25px;
             border: none;
-            padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease-in-out;
         }
 
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .swal2-popup {
+            font-family: 'Arial', sans-serif;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="sidebar">
             <h2>إدارة الاشتراكات</h2>
             <nav>
                 <ul>
-                    <li><a href="#">الرئيسية</a></li>
-                    <li><a href="#">المشتركين</a></li>
-                    <li><a href="#">التقارير</a></li>
-                    <li><a href="#">التجديد</a></li>
-                    <li><a href="#">الإعدادات</a></li>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="members.html">إدارة الأعضاء</a></li>
+                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
                 </ul>
             </nav>
         </div>
+
         <div class="content">
-            <div class="buttons">
-                <button class="button" id="add-subscriber-btn">إضافة مشترك</button>
-                <button class="button" id="renewal-btn">عرض التجديد</button>
+            <h3>إدارة الاشتراكات</h3>
+            <div class="search-bar">
+                <button class="button" id="addMemberBtn">إضافة مشترك جديد</button>
+                <button class="button" id="renewSubscriptionsBtn">تجديد الاشتراك</button>
             </div>
-            <table id="subscriptions-table">
+            <table id="subscriptionsTable">
                 <thead>
                     <tr>
                         <th>اسم المشترك</th>
-                        <th>رقم الهاتف</th>
-                        <th>السن</th>
-                        <th>تاريخ البداية</th>
-                        <th>تاريخ النهاية</th>
-                        <th>الإجراءات</th>
+                        <th>بداية الاشتراك</th>
+                        <th>نهاية الاشتراك</th>
+                        <th>الحالة</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>محمد أحمد</td>
-                        <td>01012345678</td>
-                        <td>25</td>
-                        <td>2024-12-01</td>
-                        <td>2024-12-31</td>
-                        <td>
-                            <button class="button edit-btn">تعديل</button>
-                            <button class="button delete-btn">حذف</button>
-                        </td>
-                    </tr>
+                    <!-- سيتم إدراج البيانات هنا -->
                 </tbody>
             </table>
-
-            <div class="overlay" id="overlay"></div>
-            <div class="modal" id="renewal-modal">
-                <button class="close-btn" id="close-modal">X</button>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>اسم المشترك</th>
-                            <th>رقم الهاتف</th>
-                            <th>السن</th>
-                            <th>تاريخ البداية</th>
-                            <th>تاريخ النهاية</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="renewal-table">
-                        <!-- بيانات التجديد -->
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
 
     <script>
-        $(document).ready(function () {
-            // عرض التجديد
-            $("#renewal-btn").click(function () {
-                $("#overlay, #renewal-modal").fadeIn();
-            });
+        // بيانات الاشتراكات (مثال)
+        const subscriptions = [
+            { name: "أحمد علي", startDate: "2023-12-01", endDate: "2023-12-31", status: "منتهي" },
+            { name: "محمد حسن", startDate: "2023-11-15", endDate: "2023-12-15", status: "ساري" }
+        ];
 
-            $("#close-modal, #overlay").click(function () {
-                $("#overlay, #renewal-modal").fadeOut();
+        function loadSubscriptions() {
+            const tbody = document.querySelector("#subscriptionsTable tbody");
+            tbody.innerHTML = "";
+            subscriptions.forEach(sub => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${sub.name}</td>
+                    <td>${sub.startDate}</td>
+                    <td>${sub.endDate}</td>
+                    <td>${sub.status}</td>
+                `;
+                tbody.appendChild(row);
             });
+        }
 
-            // إضافة مشترك
-            $("#add-subscriber-btn").click(function () {
-                Swal.fire("إضافة مشترك", "تم الإضافة بنجاح!", "success");
-            });
+        document.querySelector("#renewSubscriptionsBtn").addEventListener("click", () => {
+            const expiredSubscriptions = subscriptions.filter(sub => sub.status === "منتهي");
+            if (expiredSubscriptions.length === 0) {
+                Swal.fire("لا توجد اشتراكات بحاجة للتجديد.");
+                return;
+            }
 
-            // حذف العضو
-            $(".delete-btn").click(function () {
-                $(this).closest("tr").remove();
+            const table = expiredSubscriptions.map(sub => `
+                <tr>
+                    <td>${sub.name}</td>
+                    <td>${sub.endDate}</td>
+                    <td><button class="button" onclick="renewSubscription('${sub.name}')">تجديد</button></td>
+                </tr>
+            `).join("");
+
+            Swal.fire({
+                title: "تجديد الاشتراكات",
+                html: `
+                    <table style="width: 100%; text-align: center;">
+                        <tr>
+                            <th>اسم المشترك</th>
+                            <th>نهاية الاشتراك</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                        ${table}
+                    </table>
+                `,
+                showConfirmButton: false
             });
         });
+
+        function renewSubscription(name) {
+            const sub = subscriptions.find(sub => sub.name === name);
+            if (sub) {
+                sub.startDate = new Date().toISOString().split("T")[0];
+                sub.endDate = new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split("T")[0];
+                sub.status = "ساري";
+                loadSubscriptions();
+                Swal.close();
+                Swal.fire("تم التجديد!", `تم تجديد اشتراك ${name}.`, "success");
+            }
+        }
+
+        loadSubscriptions();
     </script>
 </body>
 </html>
