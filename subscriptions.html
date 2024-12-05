@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الاشتراكات</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -102,6 +103,7 @@
         }
 
         .button:hover {
+            background-color: #45a049;
             transform: scale(1.05);
         }
 
@@ -118,28 +120,16 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             padding: 20px;
-            animation: slide-down 0.4s ease-in-out;
+            animation: fade-in 0.4s ease-in-out;
         }
 
-        @keyframes slide-down {
+        @keyframes fade-in {
             from {
-                transform: translate(-50%, -60%);
                 opacity: 0;
             }
             to {
-                transform: translate(-50%, -50%);
                 opacity: 1;
             }
-        }
-
-        .notification {
-            display: inline-block;
-            background: red;
-            color: white;
-            font-size: 14px;
-            border-radius: 50%;
-            padding: 5px 10px;
-            margin-left: 10px;
         }
 
         .close-btn {
@@ -150,6 +140,16 @@
             padding: 5px 10px;
             cursor: pointer;
             float: right;
+        }
+
+        .notification {
+            display: inline-block;
+            background: red;
+            color: white;
+            font-size: 14px;
+            border-radius: 50%;
+            padding: 5px 10px;
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -166,7 +166,8 @@
         </div>
         <div class="content">
             <button class="button" id="show-renewals-btn">
-                تجديد <span id="notification" class="notification" style="display: none;">1</span>
+                جدول التجديد 
+                <span id="notification" class="notification" style="display: none;">1</span>
             </button>
 
             <!-- جدول إدارة الاشتراكات -->
@@ -215,23 +216,19 @@
     </div>
 
     <script>
-        // عرض جدول التجديد
         document.getElementById('show-renewals-btn').addEventListener('click', function () {
             document.getElementById('renewals-modal').style.display = 'block';
         });
 
-        // إغلاق جدول التجديد
         document.getElementById('close-renewals-btn').addEventListener('click', function () {
             document.getElementById('renewals-modal').style.display = 'none';
         });
 
-        // تجديد الاشتراك
         function renewSubscription(button) {
             const row = button.closest('tr');
             const name = row.cells[0].textContent;
             const id = row.cells[1].textContent;
 
-            // نقل العضو إلى جدول الاشتراكات
             const newRow = document.createElement('tr');
             newRow.innerHTML = `
                 <td>${name}</td>
@@ -241,10 +238,8 @@
             `;
             document.getElementById('subscriptions-table').appendChild(newRow);
 
-            // حذف العضو من جدول التجديد
             row.remove();
 
-            // تحديث الإشعار
             const notification = document.getElementById('notification');
             if (document.getElementById('renewals-table').rows.length === 0) {
                 notification.style.display = 'none';
@@ -253,7 +248,6 @@
             Swal.fire('تم التجديد بنجاح!', `${name} تم تجديد اشتراكه`, 'success');
         }
 
-        // إظهار الإشعار إذا كان هناك أعضاء بحاجة للتجديد
         if (document.getElementById('renewals-table').rows.length > 0) {
             document.getElementById('notification').style.display = 'inline-block';
         }
