@@ -270,7 +270,11 @@
         }
 
         // إضافة اشتراك جديد
-        function addSubscription(name, type, startDate, endDate) {
+        function addSubscription() {
+            const name = prompt("أدخل اسم المشترك");
+            const type = prompt("أدخل نوع الاشتراك");
+            const startDate = prompt("أدخل تاريخ بدء الاشتراك (مثال: 2024-12-01)");
+            const endDate = prompt("أدخل تاريخ انتهاء الاشتراك (مثال: 2025-12-01)");
             const subscriptions = loadSubscriptions();
             subscriptions.push({ name, type, startDate, endDate });
             saveSubscriptions(subscriptions);
@@ -281,15 +285,13 @@
         function editSubscription(index) {
             const subscriptions = loadSubscriptions();
             const subscription = subscriptions[index];
-            const newName = prompt("تعديل الاسم:", subscription.name);
-            const newType = prompt("تعديل نوع الاشتراك:", subscription.type);
-            const newStartDate = prompt("تعديل تاريخ البدء:", subscription.startDate);
-            const newEndDate = prompt("تعديل تاريخ الانتهاء:", subscription.endDate);
-            if (newName && newType && newStartDate && newEndDate) {
-                subscriptions[index] = { name: newName, type: newType, startDate: newStartDate, endDate: newEndDate };
-                saveSubscriptions(subscriptions);
-                renderSubscriptions();
-            }
+            const newName = prompt("أدخل اسم المشترك", subscription.name);
+            const newType = prompt("أدخل نوع الاشتراك", subscription.type);
+            const newStartDate = prompt("أدخل تاريخ بدء الاشتراك", subscription.startDate);
+            const newEndDate = prompt("أدخل تاريخ انتهاء الاشتراك", subscription.endDate);
+            subscriptions[index] = { name: newName, type: newType, startDate: newStartDate, endDate: newEndDate };
+            saveSubscriptions(subscriptions);
+            renderSubscriptions();
         }
 
         // حذف اشتراك
@@ -300,61 +302,56 @@
             renderSubscriptions();
         }
 
-        // البحث عن اشتراك
-        document.getElementById("searchInput").addEventListener("input", (e) => {
-            const query = e.target.value.toLowerCase();
-            const subscriptions = loadSubscriptions();
-            const filteredSubscriptions = subscriptions.filter(subscription =>
-                subscription.name.toLowerCase().includes(query) ||
-                subscription.type.toLowerCase().includes(query)
-            );
-            renderFilteredSubscriptions(filteredSubscriptions);
-        });
-
-        // عرض الاشتراكات المفلترة
-        function renderFilteredSubscriptions(filteredSubscriptions) {
-            const tableBody = document.querySelector("#subscriptionsTable tbody");
-            tableBody.innerHTML = "";
-            filteredSubscriptions.forEach((subscription, index) => {
+        // عرض نافذة تجديد الاشتراك
+        function showRenewalModal() {
+            const modal = document.getElementById("renewModal");
+            const closeBtn = modal.querySelector(".close");
+            const renewals = loadSubscriptions();
+            const renewalTableBody = document.querySelector("#renewalTable tbody");
+            renewalTableBody.innerHTML = "";
+            renewals.forEach((subscription, index) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${subscription.name}</td>
                     <td>${subscription.type}</td>
-                    <td>${subscription.startDate}</td>
                     <td>${subscription.endDate}</td>
                     <td>
-                        <button class="button" onclick="editSubscription(${index})">تعديل</button>
-                        <button class="button button-red" onclick="deleteSubscription(${index})">حذف</button>
+                        <button class="button" onclick="renewSubscription(${index})">تجديد</button>
                     </td>
                 `;
-                tableBody.appendChild(row);
+                renewalTableBody.appendChild(row);
             });
+
+            modal.style.display = "block";
+
+            closeBtn.onclick = function() {
+                modal.style.display = "none";
+            };
+
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            };
         }
 
-        // فتح نافذة تجديد الاشتراك
-        document.getElementById("renewSubscriptionBtn").addEventListener("click", () => {
-            const renewModal = document.getElementById("renewModal");
-            renewModal.style.display = "block";
-        });
-
-        // إغلاق نافذة تجديد الاشتراك
-        document.querySelector(".close").addEventListener("click", () => {
+        // تجديد اشتراك
+        function renewSubscription(index) {
+            const subscriptions = loadSubscriptions();
+            const subscription = subscriptions[index];
+            const newEndDate = prompt("أدخل تاريخ انتهاء الاشتراك الجديد (مثال: 2026-12-01)");
+            subscriptions[index].endDate = newEndDate;
+            saveSubscriptions(subscriptions);
+            renderSubscriptions();
             document.getElementById("renewModal").style.display = "none";
-        });
+        }
 
-        // إضافة اشتراك
-        document.getElementById("addSubscriptionBtn").addEventListener("click", () => {
-            const name = prompt("اسم المشترك:");
-            const type = prompt("نوع الاشتراك:");
-            const startDate = prompt("تاريخ البدء:");
-            const endDate = prompt("تاريخ الانتهاء:");
-            if (name && type && startDate && endDate) {
-                addSubscription(name, type, startDate, endDate);
-            }
-        });
+        // التفاعل مع الأزرار
+        document.getElementById("addSubscriptionBtn").addEventListener("click", addSubscription);
+        document.getElementById("renewSubscriptionBtn").addEventListener("click", showRenewalModal);
 
         // تحميل البيانات عند تحميل الصفحة
-        window.onload = renderSubscriptions;
+        renderSubscriptions();
     </script>
 </body>
 </html>
