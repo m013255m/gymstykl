@@ -211,10 +211,10 @@
                 Swal.fire({
                     title: "إضافة اشتراك جديد",
                     html: 
-                         <input type="text" id="memberName" class="swal2-input" placeholder="اسم العضو">  +
-                         <input type="text" id="subscriptionType" class="swal2-input" placeholder="نوع الاشتراك">  +
-                         <input type="date" id="startDate" class="swal2-input" placeholder="تاريخ البداية">  +
-                         <input type="date" id="endDate" class="swal2-input" placeholder="تاريخ النهاية"> ,
+                        '<input type="text" id="memberName" class="swal2-input" placeholder="اسم العضو">' +
+                        '<input type="text" id="subscriptionType" class="swal2-input" placeholder="نوع الاشتراك">' +
+                        '<input type="date" id="startDate" class="swal2-input" placeholder="تاريخ البداية">' +
+                        '<input type="date" id="endDate" class="swal2-input" placeholder="تاريخ النهاية">',
                     confirmButtonText: "حفظ",
                     showCancelButton: true,
                     cancelButtonText: "إلغاء",
@@ -277,12 +277,8 @@
                     }
                 });
             });
-        });
 
-        function removeSubscription(button) {
-            $(button).closest("tr").remove();
-            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-        }
+        });
 
         function editSubscription(button) {
             const row = $(button).closest("tr");
@@ -294,31 +290,39 @@
             Swal.fire({
                 title: "تعديل الاشتراك",
                 html: 
-                    `<input type="text" id="editMemberName" class="swal2-input" value="${memberName}" placeholder="اسم العضو">` +
-                    `<input type="text" id="editSubscriptionType" class="swal2-input" value="${subscriptionType}" placeholder="نوع الاشتراك">` +
-                    `<input type="date" id="editStartDate" class="swal2-input" value="${startDate}" placeholder="تاريخ البداية">` +
-                    `<input type="date" id="editEndDate" class="swal2-input" value="${endDate}" placeholder="تاريخ النهاية">`,
-                confirmButtonText: "حفظ",
+                    `<input type="text" id="memberName" class="swal2-input" value="${memberName}" placeholder="اسم العضو">` +
+                    `<input type="text" id="subscriptionType" class="swal2-input" value="${subscriptionType}" placeholder="نوع الاشتراك">` +
+                    `<input type="date" id="startDate" class="swal2-input" value="${startDate}" placeholder="تاريخ البداية">` +
+                    `<input type="date" id="endDate" class="swal2-input" value="${endDate}" placeholder="تاريخ النهاية">`,
+                confirmButtonText: "تحديث",
                 showCancelButton: true,
                 cancelButtonText: "إلغاء",
                 preConfirm: () => {
-                    const newMemberName = $("#editMemberName").val();
-                    const newSubscriptionType = $("#editSubscriptionType").val();
-                    const newStartDate = $("#editStartDate").val();
-                    const newEndDate = $("#editEndDate").val();
+                    const newMemberName = $("#memberName").val();
+                    const newSubscriptionType = $("#subscriptionType").val();
+                    const newStartDate = $("#startDate").val();
+                    const newEndDate = $("#endDate").val();
 
                     if (newMemberName && newSubscriptionType && newStartDate && newEndDate) {
                         row.find("td").eq(0).text(newMemberName);
                         row.find("td").eq(1).text(newSubscriptionType);
                         row.find("td").eq(2).text(newStartDate);
                         row.find("td").eq(3).text(newEndDate);
+
                         localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                        Swal.fire("تم!", "تم تحديث الاشتراك بنجاح.", "success");
+                        Swal.fire("تم!", "تم تعديل الاشتراك بنجاح.", "success");
                     } else {
                         Swal.showValidationMessage("الرجاء ملء جميع الحقول");
                     }
                 }
             });
+        }
+
+        function removeSubscription(button) {
+            const row = $(button).closest("tr");
+            row.remove();
+            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+            Swal.fire("تم!", "تم حذف الاشتراك بنجاح.", "success");
         }
     </script>
 </body>
