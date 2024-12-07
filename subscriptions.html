@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js"></script>
     <style>
         /* التنسيق كما هو */
         body {
@@ -202,6 +203,11 @@
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
 
+            // دالة لحساب التاريخ الحالي بتوقيت مصر
+            function getEgyptTime() {
+                return luxon.DateTime.now().setZone("Africa/Cairo").toISODate();
+            }
+
             $("#addSubscriptionBtn").click(function () {
                 Swal.fire({
                     title: "إضافة اشتراك جديد",
@@ -244,39 +250,37 @@
             $("#renewSubscriptionBtn").click(function () {
                 Swal.fire({
                     title: "انتظار...",
-                    text: "التحقق من تاريخ الاشتراكات... سيتم تحميل بيانات الاشتراك بعد قليل.",
-                    timer: 5000,
-                    onBeforeOpen: () => {
+                    text: "التحقق من الاشتراكات المنتهية",
+                    didOpen: () => {
                         Swal.showLoading();
-                    },
-                    willClose: () => {
-                        const expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
-                            const endDate = $(this).find("td").eq(3).text();
-                            const currentDate = new Date().toISOString().split("T")[0];
-                            return new Date(endDate) < new Date(currentDate);
-                        });
-
-                        expiredSubscriptions.each(function () {
-                            $(this).remove(); // إزالة الاشتراكات المنتهية
-                        });
-
-                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-
-                        if (expiredSubscriptions.length > 0) {
-                            Swal.fire({
-                                title: "تمت معالجة الاشتراكات",
-                                text: "تم حذف الاشتراكات المنتهية.",
-                                icon: "success"
-                            });
-                        } else {
-                            Swal.fire({
-                                title: "لا توجد اشتراكات منتهية",
-                                text: "كل الاشتراكات الحالية صالحة.",
-                                icon: "info"
-                            });
-                        }
                     }
                 });
+
+                let expiredSubscriptionsFound = false;
+                const currentDate = getEgyptTime(); // استخدم توقيت مصر
+
+                $("#subscriptionsTable tbody tr").each(function () {
+                    const endDate = $(this).find("td").eq(3).text();
+                    if (new Date(endDate) < new Date(currentDate)) {
+                        expiredSubscriptionsFound = true;
+                    }
+                });
+
+                Swal.close();
+
+                if (expiredSubscriptionsFound) {
+                    Swal.fire({
+                        title: "تم العثور على اشتراكات منتهية",
+                        icon: "info",
+                        confirmButtonText: "موافق"
+                    });
+                } else {
+                    Swal.fire({
+                        title: "لا توجد اشتراكات منتهية",
+                        text: "لا يوجد اشتراكات انتهت صلاحيتها في الوقت الحالي.",
+                        icon: "info"
+                    });
+                }
             });
         });
 
