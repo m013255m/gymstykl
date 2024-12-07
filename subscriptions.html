@@ -249,10 +249,10 @@
 
     <script>
         $(document).ready(function () {
-            $( #subscriptionsTable ).DataTable();
+            $('#subscriptionsTable').DataTable();
 
             // إظهار جدول الاشتراكات المنتهية
-            $( #renewSubscriptionBtn ).click(function () {
+            $('#renewSubscriptionBtn').click(function () {
                 const expiredSubscriptions = [];
                 $("#subscriptionsTable tbody tr").each(function () {
                     const endDate = $(this).find("td").eq(3).text();
@@ -263,8 +263,8 @@
                 });
 
                 if (expiredSubscriptions.length > 0) {
-                    $( #expiredSubscriptionsTable tbody ).html(expiredSubscriptions);
-                    $( #subscriptionModal ).fadeIn();  // فتح النافذة المنبثقة مع التأثير
+                    $('#expiredSubscriptionsTable tbody').html(expiredSubscriptions);
+                    $('#subscriptionModal').fadeIn();  // فتح النافذة المنبثقة مع التأثير
                 } else {
                     Swal.fire({
                         title: "لا توجد اشتراكات منتهية",
@@ -276,7 +276,7 @@
 
             // إغلاق النافذة المنبثقة
             $(".close").click(function () {
-                $( #subscriptionModal ).fadeOut();  // إغلاق النافذة مع التأثير
+                $('#subscriptionModal').fadeOut();  // إغلاق النافذة مع التأثير
             });
 
         });
