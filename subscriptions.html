@@ -117,7 +117,7 @@
         }
 
         .swal2-popup {
-            font-family:  Arial , sans-serif;
+            font-family: Arial, sans-serif;
         }
 
         .search-bar {
@@ -249,36 +249,45 @@
 
     <script>
         $(document).ready(function () {
-            $( #subscriptionsTable ).DataTable();
+            $('#subscriptionsTable').DataTable();
 
             // إظهار جدول الاشتراكات المنتهية
-            $( #renewSubscriptionBtn ).click(function () {
-                const expiredSubscriptions = [];
-                $("#subscriptionsTable tbody tr").each(function () {
-                    const endDate = $(this).find("td").eq(3).text();
-                    const currentDate = new Date().toISOString().split("T")[0];
-                    if (endDate < currentDate) {
-                        expiredSubscriptions.push($(this).html());
+            $('#renewSubscriptionBtn').click(function () {
+                Swal.fire({
+                    title: 'انتظر...',
+                    text: 'جارٍ تحميل البيانات...',
+                    didOpen: () => {
+                        Swal.showLoading()
                     }
                 });
 
-                if (expiredSubscriptions.length > 0) {
-                    $( #expiredSubscriptionsTable tbody ).html(expiredSubscriptions);
-                    $( #subscriptionModal ).fadeIn();  // فتح النافذة المنبثقة مع التأثير
-                } else {
-                    Swal.fire({
-                        title: "لا توجد اشتراكات منتهية",
-                        text: "لا توجد اشتراكات منتهية حالياً.",
-                        icon: "info"
+                setTimeout(function() {
+                    const expiredSubscriptions = [];
+                    $("#subscriptionsTable tbody tr").each(function () {
+                        const endDate = $(this).find("td").eq(3).text();
+                        const currentDate = new Date().toISOString().split("T")[0];
+                        if (endDate < currentDate) {
+                            expiredSubscriptions.push($(this).html());
+                        }
                     });
-                }
+
+                    if (expiredSubscriptions.length > 0) {
+                        $('#expiredSubscriptionsTable tbody').html(expiredSubscriptions);
+                        $('#subscriptionModal').fadeIn();  // فتح النافذة المنبثقة مع التأثير
+                    } else {
+                        Swal.fire({
+                            title: "لا توجد اشتراكات منتهية",
+                            text: "لا توجد اشتراكات منتهية حالياً.",
+                            icon: "info"
+                        });
+                    }
+                }, 5000);  // تأخير 5 ثواني قبل عرض الجدول
             });
 
             // إغلاق النافذة المنبثقة
             $(".close").click(function () {
-                $( #subscriptionModal ).fadeOut();  // إغلاق النافذة مع التأثير
+                $('#subscriptionModal').fadeOut();  // إغلاق النافذة مع التأثير
             });
-
         });
     </script>
 </body>
