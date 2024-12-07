@@ -247,6 +247,25 @@
         </div>
     </div>
 
+    <!-- نافذة منبثقة لإضافة اشتراك جديد -->
+    <div id="addSubscriptionModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>إضافة اشتراك جديد</h3>
+            <form id="addSubscriptionForm">
+                <label for="memberName">اسم العضو:</label>
+                <input type="text" id="memberName" required><br><br>
+                <label for="subscriptionType">نوع الاشتراك:</label>
+                <input type="text" id="subscriptionType" required><br><br>
+                <label for="startDate">تاريخ البداية:</label>
+                <input type="date" id="startDate" required><br><br>
+                <label for="endDate">تاريخ النهاية:</label>
+                <input type="date" id="endDate" required><br><br>
+                <button type="submit" class="button">إضافة الاشتراك</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function () {
             $('#subscriptionsTable').DataTable();
@@ -276,7 +295,27 @@
 
             // إغلاق النافذة المنبثقة
             $(".close").click(function () {
-                $('#subscriptionModal').fadeOut();  // إغلاق النافذة مع التأثير
+                $('.modal').fadeOut();  // إغلاق النافذة مع التأثير
+            });
+
+            // إضافة اشتراك جديد
+            $('#addSubscriptionBtn').click(function () {
+                $('#addSubscriptionModal').fadeIn();
+            });
+
+            $('#addSubscriptionForm').submit(function (e) {
+                e.preventDefault();
+                const memberName = $('#memberName').val();
+                const subscriptionType = $('#subscriptionType').val();
+                const startDate = $('#startDate').val();
+                const endDate = $('#endDate').val();
+
+                $('#subscriptionsTable').DataTable().row.add([
+                    memberName, subscriptionType, startDate, endDate, 
+                    '<button class="button red-button">حذف</button>'
+                ]).draw();
+
+                $('#addSubscriptionModal').fadeOut();
             });
 
         });
