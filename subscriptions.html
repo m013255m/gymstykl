@@ -9,7 +9,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* التنسيق كما هو */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -30,7 +29,7 @@
         }
 
         .sidebar h2 {
-            font-size: 24px; /* تم تصغير حجم الخط */
+            font-size: 24px;
             text-align: center;
             margin-bottom: 20px;
         }
@@ -47,7 +46,7 @@
         .sidebar ul li a {
             color: white;
             text-decoration: none;
-            font-size: 18px; /* تم تصغير حجم الخط */
+            font-size: 18px;
             transition: background-color 0.3s ease;
         }
 
@@ -116,7 +115,7 @@
         }
 
         .swal2-popup {
-            font-family: 'Arial', sans-serif;
+            font-family:  Arial , sans-serif;
         }
 
         .search-bar {
@@ -142,11 +141,6 @@
         .button-container {
             display: flex;
             gap: 10px;
-        }
-
-        /* تفعيل الأيقونة في SweetAlert */
-        .swal2-loading {
-            display: none;
         }
 
     </style>
@@ -211,10 +205,10 @@
                 Swal.fire({
                     title: 'إضافة اشتراك جديد',
                     html:
-                        '<input type="text" id="memberName" class="swal2-input" placeholder="اسم العضو">' +
-                        '<input type="text" id="subscriptionType" class="swal2-input" placeholder="نوع الاشتراك">' +
-                        '<input type="date" id="startDate" class="swal2-input" placeholder="تاريخ البداية">' +
-                        '<input type="date" id="endDate" class="swal2-input" placeholder="تاريخ النهاية">',
+                        `<input type="text" id="memberName" class="swal2-input" placeholder="اسم العضو">` +
+                        `<input type="text" id="subscriptionType" class="swal2-input" placeholder="نوع الاشتراك">` +
+                        `<input type="date" id="startDate" class="swal2-input" placeholder="تاريخ البداية">` +
+                        `<input type="date" id="endDate" class="swal2-input" placeholder="تاريخ النهاية">`,
                     confirmButtonText: 'حفظ',
                     showCancelButton: true,
                     cancelButtonText: 'إلغاء',
@@ -298,22 +292,22 @@
                     `<input type="text" id="editSubscriptionType" class="swal2-input" value="${subscriptionType}" placeholder="نوع الاشتراك">` +
                     `<input type="date" id="editStartDate" class="swal2-input" value="${startDate}" placeholder="تاريخ البداية">` +
                     `<input type="date" id="editEndDate" class="swal2-input" value="${endDate}" placeholder="تاريخ النهاية">`,
-                confirmButtonText: 'تحديث',
+                confirmButtonText: 'حفظ',
                 showCancelButton: true,
                 cancelButtonText: 'إلغاء',
                 preConfirm: () => {
-                    const updatedMemberName = $('#editMemberName').val();
-                    const updatedSubscriptionType = $('#editSubscriptionType').val();
-                    const updatedStartDate = $('#editStartDate').val();
-                    const updatedEndDate = $('#editEndDate').val();
+                    const newMemberName = $('#editMemberName').val();
+                    const newSubscriptionType = $('#editSubscriptionType').val();
+                    const newStartDate = $('#editStartDate').val();
+                    const newEndDate = $('#editEndDate').val();
 
-                    if (updatedMemberName && updatedSubscriptionType && updatedStartDate && updatedEndDate) {
-                        row.find('td').eq(0).text(updatedMemberName);
-                        row.find('td').eq(1).text(updatedSubscriptionType);
-                        row.find('td').eq(2).text(updatedStartDate);
-                        row.find('td').eq(3).text(updatedEndDate);
+                    if (newMemberName && newSubscriptionType && newStartDate && newEndDate) {
+                        row.find('td').eq(0).text(newMemberName);
+                        row.find('td').eq(1).text(newSubscriptionType);
+                        row.find('td').eq(2).text(newStartDate);
+                        row.find('td').eq(3).text(newEndDate);
                         localStorage.setItem('subscriptions', $('#subscriptionsTable tbody').html());
-                        Swal.fire('تم!', 'تم تحديث الاشتراك بنجاح.', 'success');
+                        Swal.fire('تم!', 'تم تعديل الاشتراك بنجاح.', 'success');
                     } else {
                         Swal.showValidationMessage('الرجاء ملء جميع الحقول');
                     }
