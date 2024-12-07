@@ -163,7 +163,7 @@
             padding: 20px;
             border-radius: 8px;
             width: 80%;
-            max-width: 800px;
+            max-width: 600px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
@@ -174,6 +174,15 @@
             font-size: 24px;
             cursor: pointer;
         }
+
+        .modal input, .modal select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
     </style>
 </head>
 
@@ -226,6 +235,28 @@
         </div>
     </div>
 
+    <!-- جدول منبثق لملئ بيانات اشتراك جديد -->
+    <div id="addSubscriptionModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>إضافة اشتراك جديد</h3>
+            <form id="addSubscriptionForm">
+                <label for="memberName">اسم العضو:</label>
+                <input type="text" id="memberName" required>
+                <label for="subscriptionType">نوع الاشتراك:</label>
+                <select id="subscriptionType" required>
+                    <option value="شهري">شهري</option>
+                    <option value="سنوي">سنوي</option>
+                </select>
+                <label for="startDate">تاريخ البداية:</label>
+                <input type="date" id="startDate" required>
+                <label for="endDate">تاريخ النهاية:</label>
+                <input type="date" id="endDate" required>
+                <button type="submit" class="button">إضافة الاشتراك</button>
+            </form>
+        </div>
+    </div>
+
     <!-- جدول منبثق لعرض التفاصيل -->
     <div id="subscriptionModal" class="modal">
         <div class="modal-content">
@@ -249,10 +280,47 @@
 
     <script>
         $(document).ready(function () {
-            $( #subscriptionsTable ).DataTable();
+            $("#subscriptionsTable").DataTable();
+
+            // إظهار نافذة إضافة الاشتراك الجديد
+            $("#addSubscriptionBtn").click(function () {
+                $("#addSubscriptionModal").fadeIn();
+            });
+
+            // إغلاق نافذة إضافة الاشتراك الجديد
+            $(".close").click(function () {
+                $("#addSubscriptionModal").fadeOut();
+                $("#subscriptionModal").fadeOut();
+            });
+
+            // إضافة اشتراك جديد عند إرسال النموذج
+            $("#addSubscriptionForm").submit(function (e) {
+                e.preventDefault();
+                const memberName = $("#memberName").val();
+                const subscriptionType = $("#subscriptionType").val();
+                const startDate = $("#startDate").val();
+                const endDate = $("#endDate").val();
+
+                const newRow = `
+                    <tr>
+                        <td>${memberName}</td>
+                        <td>${subscriptionType}</td>
+                        <td>${startDate}</td>
+                        <td>${endDate}</td>
+                        <td><button class="button red-button">تجديد الاشتراك</button></td>
+                    </tr>
+                `;
+                $("#subscriptionsTable tbody").append(newRow);
+                $("#addSubscriptionModal").fadeOut();
+                Swal.fire({
+                    title: "تم إضافة الاشتراك",
+                    text: "تم إضافة الاشتراك بنجاح.",
+                    icon: "success"
+                });
+            });
 
             // إظهار جدول الاشتراكات المنتهية
-            $( #renewSubscriptionBtn ).click(function () {
+            $("#renewSubscriptionBtn").click(function () {
                 const expiredSubscriptions = [];
                 $("#subscriptionsTable tbody tr").each(function () {
                     const endDate = $(this).find("td").eq(3).text();
@@ -263,8 +331,10 @@
                 });
 
                 if (expiredSubscriptions.length > 0) {
-                    $( #expiredSubscriptionsTable tbody ).html(expiredSubscriptions);
-                    $( #subscriptionModal ).fadeIn();  // فتح النافذة المنبثقة مع التأثير
+                    setTimeout(function () {
+                        $("#expiredSubscriptionsTable tbody").html(expiredSubscriptions);
+                        $("#subscriptionModal").fadeIn();  // فتح النافذة المنبثقة مع التأثير
+                    }, 5000); // 5 ثواني انتظار
                 } else {
                     Swal.fire({
                         title: "لا توجد اشتراكات منتهية",
@@ -273,12 +343,6 @@
                     });
                 }
             });
-
-            // إغلاق النافذة المنبثقة
-            $(".close").click(function () {
-                $( #subscriptionModal ).fadeOut();  // إغلاق النافذة مع التأثير
-            });
-
         });
     </script>
 </body>
