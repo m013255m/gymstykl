@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الاشتراكات</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -221,6 +220,26 @@
                 </thead>
                 <tbody>
                     <!-- الاشتراكات سيتم إضافتها هنا -->
+                    <tr>
+                        <td>أحمد محمد</td>
+                        <td>اشتراك شهري</td>
+                        <td>01/01/2024</td>
+                        <td>01/03/2024</td>
+                        <td>
+                            <button class="button edit-btn">تعديل</button>
+                            <button class="button red-button delete-btn">حذف</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>مريم علي</td>
+                        <td>اشتراك سنوي</td>
+                        <td>01/01/2023</td>
+                        <td>01/01/2024</td>
+                        <td>
+                            <button class="button edit-btn">تعديل</button>
+                            <button class="button red-button delete-btn">حذف</button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -267,26 +286,43 @@
                         const endDate = $(this).find("td").eq(3).text();
                         const currentDate = new Date().toISOString().split("T")[0];
                         if (endDate < currentDate) {
-                            expiredSubscriptions.push($(this).html());
+                            expiredSubscriptions.push({
+                                memberName: $(this).find("td").eq(0).text(),
+                                subscriptionType: $(this).find("td").eq(1).text(),
+                                startDate: $(this).find("td").eq(2).text(),
+                                endDate: endDate
+                            });
                         }
                     });
 
                     if (expiredSubscriptions.length > 0) {
-                        $('#expiredSubscriptionsTable tbody').html(expiredSubscriptions);
-                        $('#subscriptionModal').fadeIn();  // فتح النافذة المنبثقة مع التأثير
-                    } else {
-                        Swal.fire({
-                            title: "لا توجد اشتراكات منتهية",
-                            text: "لا توجد اشتراكات منتهية حالياً.",
-                            icon: "info"
+                        let rows = '';
+                        expiredSubscriptions.forEach(function(subscription) {
+                            rows += `<tr>
+                                        <td>${subscription.memberName}</td>
+                                        <td>${subscription.subscriptionType}</td>
+                                        <td>${subscription.startDate}</td>
+                                        <td>${subscription.endDate}</td>
+                                    </tr>`;
                         });
+                        $('#expiredSubscriptionsTable tbody').html(rows);
+                    } else {
+                        Swal.fire(
+                            'لا توجد اشتراكات منتهية',
+                            'لا توجد اشتراكات انتهت بعد.',
+                            'info'
+                        );
                     }
-                }, 5000);  // تأخير 5 ثواني قبل عرض الجدول
+
+                    // إغلاق SweetAlert
+                    Swal.close();
+                    $('#subscriptionModal').fadeIn();
+                }, 1000);
             });
 
-            // إغلاق النافذة المنبثقة
-            $(".close").click(function () {
-                $('#subscriptionModal').fadeOut();  // إغلاق النافذة مع التأثير
+            // إغلاق جدول منبثق
+            $('.close').click(function() {
+                $('#subscriptionModal').fadeOut();
             });
         });
     </script>
