@@ -9,7 +9,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* التنسيق كما هو */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -263,33 +262,46 @@
                         });
 
                         if (expiredSubscriptions.length > 0) {
-                            let expiredTable = `<table>
+                            let expiredTable = `<table style="width: 100%; border: 1px solid #ddd; padding: 10px;">
                                 <thead>
                                     <tr>
                                         <th>اسم العضو</th>
                                         <th>نوع الاشتراك</th>
                                         <th>تاريخ البداية</th>
                                         <th>تاريخ النهاية</th>
+                                        <th>الإجراءات</th>
                                     </tr>
                                 </thead>
                                 <tbody>`;
 
                             expiredSubscriptions.each(function () {
-                                const row = $(this);
-                                expiredTable += `<tr>
-                                    <td>${row.find("td").eq(0).text()}</td>
-                                    <td>${row.find("td").eq(1).text()}</td>
-                                    <td>${row.find("td").eq(2).text()}</td>
-                                    <td>${row.find("td").eq(3).text()}</td>
-                                </tr>`;
+                                expiredTable += `<tr>${$(this).html()}</tr>`;
                             });
 
                             expiredTable += `</tbody></table>`;
-                            Swal.fire("الاشتراكات المنتهية", expiredTable, "info");
+
+                            Swal.fire({
+                                title: 'الاشتراكات المنتهية',
+                                html: expiredTable,
+                                showCancelButton: true,
+                                confirmButtonText: 'تجديد الاشتراكات',
+                                cancelButtonText: 'إلغاء',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire("تم!", "تم تجديد الاشتراكات بنجاح.", "success");
+                                }
+                            });
                         } else {
-                            Swal.fire("لا توجد اشتراكات منتهية", "لا توجد اشتراكات منتهية لإعادة تجديدها.", "info");
+                            Swal.fire("لا توجد اشتراكات منتهية", "", "info");
                         }
                     }
+                });
+            });
+
+            $("#searchInput").on("keyup", function () {
+                const value = $(this).val().toLowerCase();
+                $("#subscriptionsTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
                 });
             });
         });
@@ -304,24 +316,24 @@
             Swal.fire({
                 title: "تعديل الاشتراك",
                 html:
-                    `<input type="text" id="memberNameEdit" class="swal2-input" value="${memberName}">` +
-                    `<input type="text" id="subscriptionTypeEdit" class="swal2-input" value="${subscriptionType}">` +
-                    `<input type="date" id="startDateEdit" class="swal2-input" value="${startDate}">` +
-                    `<input type="date" id="endDateEdit" class="swal2-input" value="${endDate}">`,
-                confirmButtonText: "حفظ التعديلات",
+                    `<input type="text" id="memberName" class="swal2-input" value="${memberName}">` +
+                    `<input type="text" id="subscriptionType" class="swal2-input" value="${subscriptionType}">` +
+                    `<input type="date" id="startDate" class="swal2-input" value="${startDate}">` +
+                    `<input type="date" id="endDate" class="swal2-input" value="${endDate}">`,
+                confirmButtonText: "تحديث",
                 showCancelButton: true,
                 cancelButtonText: "إلغاء",
                 preConfirm: () => {
-                    const newMemberName = $("#memberNameEdit").val();
-                    const newSubscriptionType = $("#subscriptionTypeEdit").val();
-                    const newStartDate = $("#startDateEdit").val();
-                    const newEndDate = $("#endDateEdit").val();
+                    const updatedMemberName = $("#memberName").val();
+                    const updatedSubscriptionType = $("#subscriptionType").val();
+                    const updatedStartDate = $("#startDate").val();
+                    const updatedEndDate = $("#endDate").val();
 
-                    if (newMemberName && newSubscriptionType && newStartDate && newEndDate) {
-                        row.find("td").eq(0).text(newMemberName);
-                        row.find("td").eq(1).text(newSubscriptionType);
-                        row.find("td").eq(2).text(newStartDate);
-                        row.find("td").eq(3).text(newEndDate);
+                    if (updatedMemberName && updatedSubscriptionType && updatedStartDate && updatedEndDate) {
+                        row.find("td").eq(0).text(updatedMemberName);
+                        row.find("td").eq(1).text(updatedSubscriptionType);
+                        row.find("td").eq(2).text(updatedStartDate);
+                        row.find("td").eq(3).text(updatedEndDate);
                         localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                         Swal.fire("تم!", "تم تعديل الاشتراك بنجاح.", "success");
                     } else {
@@ -333,9 +345,20 @@
 
         function removeSubscription(button) {
             const row = $(button).closest("tr");
-            row.remove();
-            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-            Swal.fire("تم!", "تم حذف الاشتراك بنجاح.", "success");
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "سيتم حذف هذا الاشتراك بشكل دائم.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، حذف!',
+                cancelButtonText: 'إلغاء',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    row.remove();
+                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                    Swal.fire("تم!", "تم حذف الاشتراك.", "success");
+                }
+            });
         }
     </script>
 </body>
