@@ -1,167 +1,234 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الاشتراكات</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 40%;
+        }
+
+        .modal-header, .modal-footer {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .input-field {
+            margin: 10px 0;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
 </head>
-<body dir="rtl" class="container mt-5">
+<body>
 
+<div class="container">
     <h2>إدارة الاشتراكات</h2>
-    <button id="showExpiredSubscriptions" class="btn btn-warning mb-3">عرض الاشتراكات المنتهية</button>
 
-    <table id="subscriptionsTable" class="table table-striped">
+    <!-- زر تجديد الاشتراكات -->
+    <button class="button" id="renewButton">تجديد الاشتراكات</button>
+
+    <!-- الجدول الأساسي للمشتركين -->
+    <h3>الاشتراكات الحالية</h3>
+    <table id="subscriptionsTable" class="display">
         <thead>
             <tr>
-                <th>اسم العضو</th>
-                <th>نوع الاشتراك</th>
+                <th>الاسم</th>
                 <th>تاريخ البداية</th>
                 <th>تاريخ النهاية</th>
-                <th>الإجراءات</th>
+                <th>الاشتراك انتهى؟</th>
+                <th>تجديد الاشتراك</th>
             </tr>
         </thead>
         <tbody>
-            <!-- البيانات ستتم إضافتها ديناميكيًا -->
+            <tr data-id="1">
+                <td>أحمد</td>
+                <td>2023-01-01</td>
+                <td>2023-12-31</td>
+                <td class="expired">نعم</td>
+                <td><button class="renewMemberButton">تجديد</button></td>
+            </tr>
+            <tr data-id="2">
+                <td>مريم</td>
+                <td>2022-11-01</td>
+                <td>2023-11-01</td>
+                <td class="expired">نعم</td>
+                <td><button class="renewMemberButton">تجديد</button></td>
+            </tr>
+            <tr data-id="3">
+                <td>سامي</td>
+                <td>2024-01-01</td>
+                <td>2024-12-31</td>
+                <td class="expired">لا</td>
+                <td><button class="renewMemberButton" disabled>تجديد</button></td>
+            </tr>
         </tbody>
     </table>
 
-    <script>
-        $(document).ready(function () {
-            // بيانات تجريبية
-            const demoData = [
-                { memberName: "محمد أحمد", subscriptionType: "شهري", startDate: "2024-11-01", endDate: "2024-12-01" },
-                { memberName: "سارة علي", subscriptionType: "سنوي", startDate: "2023-12-01", endDate: "2024-11-30" },
-                { memberName: "أحمد علي", subscriptionType: "شهري", startDate: "2024-10-01", endDate: "2024-11-05" }
-            ];
+    <!-- الجدول المنبثق الذي يعرض الأعضاء الذين انتهت اشتراكاتهم -->
+    <h3>الاشتراكات المنتهية</h3>
+    <table id="expiredSubscriptionsTable" class="display">
+        <thead>
+            <tr>
+                <th>الاسم</th>
+                <th>تاريخ النهاية</th>
+                <th>تجديد الاشتراك</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- بيانات الأعضاء الذين انتهت اشتراكاتهم ستضاف هنا ديناميكياً -->
+        </tbody>
+    </table>
+</div>
 
-            // تحميل البيانات في الجدول
-            function loadTableData(data) {
-                const tbody = $("#subscriptionsTable tbody");
-                tbody.empty();
-                data.forEach((item, index) => {
-                    const row = `<tr data-index="${index}">
-                        <td>${item.memberName}</td>
-                        <td>${item.subscriptionType}</td>
-                        <td>${item.startDate}</td>
-                        <td>${item.endDate}</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm editSubscription">تعديل</button>
-                        </td>
-                    </tr>`;
-                    tbody.append(row);
-                });
-            }
+<!-- نافذة التجديد -->
+<div id="renewModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>تجديد الاشتراك</h2>
+        </div>
+        <div class="modal-body">
+            <label for="startDate">تاريخ البداية</label>
+            <input type="date" id="startDate" class="input-field">
+            <label for="endDate">تاريخ النهاية</label>
+            <input type="date" id="endDate" class="input-field">
+        </div>
+        <div class="modal-footer">
+            <button class="button" id="saveRenewal">تحديث الاشتراك</button>
+            <button class="button" id="closeModal">إغلاق</button>
+        </div>
+    </div>
+</div>
 
-            // استدعاء لتحميل البيانات
-            loadTableData(demoData);
+<script>
+    $(document).ready(function() {
+        // تهيئة DataTables
+        var table = $('#subscriptionsTable').DataTable({
+            "paging": false,
+            "info": false
+        });
 
-            // عرض الاشتراكات المنتهية
-            $("#showExpiredSubscriptions").click(function () {
-                const today = new Date().toISOString().split("T")[0];
-                const expiredSubscriptions = demoData.filter(sub => sub.endDate < today);
+        // إظهار الأعضاء الذين انتهت اشتراكاتهم فقط في الجدول المنبثق
+        function updateExpiredSubscriptions() {
+            var expiredTable = $('#expiredSubscriptionsTable').DataTable({
+                "paging": false,
+                "info": false
+            });
 
-                if (expiredSubscriptions.length > 0) {
-                    let expiredTable = `
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>اسم العضو</th>
-                                    <th>نوع الاشتراك</th>
-                                    <th>تاريخ البداية</th>
-                                    <th>تاريخ النهاية</th>
-                                </tr>
-                            </thead>
-                            <tbody>`;
+            // إفراغ البيانات السابقة
+            expiredTable.clear().draw();
 
-                    expiredSubscriptions.forEach((sub, index) => {
-                        expiredTable += `
-                            <tr data-index="${index}">
-                                <td contenteditable="true">${sub.memberName}</td>
-                                <td contenteditable="true">${sub.subscriptionType}</td>
-                                <td contenteditable="true">${sub.startDate}</td>
-                                <td contenteditable="true">${sub.endDate}</td>
-                            </tr>`;
-                    });
-
-                    expiredTable += `</tbody></table>`;
-
-                    Swal.fire({
-                        title: "الاشتراكات المنتهية",
-                        html: expiredTable,
-                        confirmButtonText: "حفظ التعديلات",
-                        showCancelButton: true,
-                        cancelButtonText: "إغلاق",
-                        preConfirm: () => {
-                            const updatedData = [];
-                            Swal.getHtmlContainer().querySelectorAll("tbody tr").forEach(row => {
-                                const cells = row.querySelectorAll("td");
-                                const updatedRow = {
-                                    memberName: cells[0].innerText,
-                                    subscriptionType: cells[1].innerText,
-                                    startDate: cells[2].innerText,
-                                    endDate: cells[3].innerText
-                                };
-                                updatedData.push(updatedRow);
-                            });
-
-                            // تحديث البيانات الأصلية
-                            updatedData.forEach((sub, index) => {
-                                const originalIndex = expiredSubscriptions[index].originalIndex;
-                                demoData[originalIndex] = sub;
-                            });
-
-                            // إعادة تحميل الجدول الرئيسي
-                            loadTableData(demoData);
-                            Swal.fire("تم حفظ التعديلات!", "", "success");
-                        }
-                    });
-                } else {
-                    Swal.fire("لا توجد اشتراكات منتهية", "", "info");
+            // إضافة الأعضاء الذين انتهت اشتراكاتهم
+            $('#subscriptionsTable tbody tr').each(function() {
+                var row = $(this);
+                var expired = row.find('td:eq(3)').text().trim() === "نعم";
+                if (expired) {
+                    var name = row.find('td:eq(0)').text();
+                    var endDate = row.find('td:eq(2)').text();
+                    var rowData = [
+                        name,
+                        endDate,
+                        `<button class="renewMemberButton" data-id="${row.data('id')}">تجديد</button>`
+                    ];
+                    expiredTable.row.add(rowData).draw();
                 }
             });
+        }
 
-            // تعديل الاشتراك في الجدول الرئيسي
-            $(document).on("click", ".editSubscription", function () {
-                const row = $(this).closest("tr");
-                const index = row.data("index");
-                const subscription = demoData[index];
-
-                Swal.fire({
-                    title: "تعديل الاشتراك",
-                    html: `
-                        <input type="text" id="editMemberName" class="swal2-input" value="${subscription.memberName}" placeholder="اسم العضو">
-                        <input type="text" id="editSubscriptionType" class="swal2-input" value="${subscription.subscriptionType}" placeholder="نوع الاشتراك">
-                        <input type="date" id="editStartDate" class="swal2-input" value="${subscription.startDate}" placeholder="تاريخ البداية">
-                        <input type="date" id="editEndDate" class="swal2-input" value="${subscription.endDate}" placeholder="تاريخ النهاية">`,
-                    confirmButtonText: "حفظ التعديلات",
-                    showCancelButton: true,
-                    cancelButtonText: "إلغاء",
-                    preConfirm: () => {
-                        const newMemberName = $("#editMemberName").val();
-                        const newSubscriptionType = $("#editSubscriptionType").val();
-                        const newStartDate = $("#editStartDate").val();
-                        const newEndDate = $("#editEndDate").val();
-
-                        if (newMemberName && newSubscriptionType && newStartDate && newEndDate) {
-                            // تحديث البيانات
-                            demoData[index] = {
-                                memberName: newMemberName,
-                                subscriptionType: newSubscriptionType,
-                                startDate: newStartDate,
-                                endDate: newEndDate
-                            };
-                            loadTableData(demoData);
-                            Swal.fire("تم!", "تم تحديث الاشتراك بنجاح.", "success");
-                        } else {
-                            Swal.showValidationMessage("الرجاء ملء جميع الحقول");
-                        }
-                    }
-                });
-            });
+        // تحديث الجدول المنبثق عند الضغط على زر "تجديد الاشتراكات"
+        $('#renewButton').click(function() {
+            updateExpiredSubscriptions();
         });
-    </script>
+
+        // فتح نافذة التجديد عند الضغط على زر "تجديد" في الجدول المنبثق
+        $('#expiredSubscriptionsTable').on('click', '.renewMemberButton', function() {
+            var memberId = $(this).data('id');
+            var row = $('#subscriptionsTable').find('tr[data-id="'+memberId+'"]');
+            var startDate = row.find('td:eq(1)').text();
+            var endDate = row.find('td:eq(2)').text();
+
+            // تعيين التواريخ الحالية في المدخلات
+            $('#startDate').val(startDate);
+            $('#endDate').val(endDate);
+
+            // فتح نافذة التجديد
+            $('#renewModal').fadeIn();
+            $('#saveRenewal').data('id', memberId);  // حفظ ID العضو في زر الحفظ
+        });
+
+        // تحديث تاريخ الاشتراك عند الضغط على زر "تحديث الاشتراك"
+        $('#saveRenewal').click(function() {
+            var memberId = $(this).data('id');
+            var newStartDate = $('#startDate').val();
+            var newEndDate = $('#endDate').val();
+
+            // العثور على الصف المناسب وتحديث التواريخ في الجدول الأساسي
+            var row = $('#subscriptionsTable').find('tr[data-id="'+memberId+'"]');
+            row.find('td:eq(1)').text(newStartDate);
+            row.find('td:eq(2)').text(newEndDate);
+
+            // إغلاق النافذة بعد التحديث
+            $('#renewModal').fadeOut();
+        });
+
+        // إغلاق النافذة عند الضغط على زر "إغلاق"
+        $('#closeModal').click(function() {
+            $('#renewModal').fadeOut();
+        });
+    });
+</script>
+
 </body>
 </html>
