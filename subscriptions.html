@@ -159,6 +159,48 @@
             padding: 8px 16px;
             font-size: 14px;
         }
+
+        .subscriptions-popup {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.7);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .subscriptions-popup .popup-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .subscriptions-popup .popup-content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .subscriptions-popup .popup-content th,
+        .subscriptions-popup .popup-content td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -211,6 +253,28 @@
         </div>
     </div>
 
+    <!-- نافذة الاشتراكات المنتهية -->
+    <div class="subscriptions-popup" id="subscriptionsPopup">
+        <div class="popup-content">
+            <span class="close-popup" id="closePopup">&times;</span>
+            <h3>الاشتراكات المنتهية</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>نوع الاشتراك</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function () {
             if (localStorage.getItem("subscriptions")) {
@@ -247,42 +311,64 @@
                             </tr>`;
                             $("#subscriptionsTable tbody").append(row);
                             localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                            Swal.fire("تم!", "تم إضافة الاشتراك بنجاح.", "success");
+                            Swal.fire("تم إضافة الاشتراك!", "", "success");
                         } else {
-                            Swal.showValidationMessage("الرجاء ملء جميع الحقول");
+                            Swal.showValidationMessage("يرجى ملء جميع الحقول");
                         }
                     }
                 });
             });
 
-            $("#subscriptionsTable").on("click", ".edit-btn", function () {
+            // تجديد الاشتراكات
+            $("#renewSubscriptionBtn").click(function () {
+                $("#subscriptionsPopup").fadeIn();
+            });
+
+            // إغلاق نافذة الاشتراكات المنتهية
+            $("#closePopup").click(function () {
+                $("#subscriptionsPopup").fadeOut();
+            });
+
+            // تعديل الاشتراك
+            $(document).on("click", ".edit-btn", function () {
                 const row = $(this).closest("tr");
-                const memberName = row.find("td").eq(0).text();
-                const subscriptionType = row.find("td").eq(1).text();
-                const startDate = row.find("td").eq(2).text();
-                const endDate = row.find("td").eq(3).text();
+                const memberName = row.find("td:eq(0)").text();
+                const subscriptionType = row.find("td:eq(1)").text();
+                const startDate = row.find("td:eq(2)").text();
+                const endDate = row.find("td:eq(3)").text();
 
                 Swal.fire({
                     title: "تعديل الاشتراك",
                     html:
-                        `<input type="text" id="memberName" class="swal2-input" value="${memberName}" placeholder="اسم العضو">` +
-                        `<input type="text" id="subscriptionType" class="swal2-input" value="${subscriptionType}" placeholder="نوع الاشتراك">` +
-                        `<input type="date" id="startDate" class="swal2-input" value="${startDate}" placeholder="تاريخ البداية">` +
-                        `<input type="date" id="endDate" class="swal2-input" value="${endDate}" placeholder="تاريخ النهاية">`,
+                        `<input type="text" id="editMemberName" class="swal2-input" value="${memberName}" placeholder="اسم العضو">` +
+                        `<input type="text" id="editSubscriptionType" class="swal2-input" value="${subscriptionType}" placeholder="نوع الاشتراك">` +
+                        `<input type="date" id="editStartDate" class="swal2-input" value="${startDate}" placeholder="تاريخ البداية">` +
+                        `<input type="date" id="editEndDate" class="swal2-input" value="${endDate}" placeholder="تاريخ النهاية">`,
                     confirmButtonText: "حفظ التعديلات",
                     showCancelButton: true,
                     cancelButtonText: "إلغاء",
                     preConfirm: () => {
-                        row.find("td").eq(0).text($("#memberName").val());
-                        row.find("td").eq(1).text($("#subscriptionType").val());
-                        row.find("td").eq(2).text($("#startDate").val());
-                        row.find("td").eq(3).text($("#endDate").val());
-                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                        const newMemberName = $("#editMemberName").val();
+                        const newSubscriptionType = $("#editSubscriptionType").val();
+                        const newStartDate = $("#editStartDate").val();
+                        const newEndDate = $("#editEndDate").val();
+
+                        if (newMemberName && newSubscriptionType && newStartDate && newEndDate) {
+                            row.find("td:eq(0)").text(newMemberName);
+                            row.find("td:eq(1)").text(newSubscriptionType);
+                            row.find("td:eq(2)").text(newStartDate);
+                            row.find("td:eq(3)").text(newEndDate);
+                            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                            Swal.fire("تم تعديل الاشتراك!", "", "success");
+                        } else {
+                            Swal.showValidationMessage("يرجى ملء جميع الحقول");
+                        }
                     }
                 });
             });
 
-            $("#subscriptionsTable").on("click", ".delete-btn", function () {
+            // حذف الاشتراك
+            $(document).on("click", ".delete-btn", function () {
                 const row = $(this).closest("tr");
                 Swal.fire({
                     title: "هل أنت متأكد؟",
@@ -300,6 +386,7 @@
                 });
             });
 
+            // البحث عن الاشتراك
             $("#searchInput").on("input", function () {
                 const searchTerm = $(this).val().toLowerCase();
                 $("#subscriptionsTable tbody tr").each(function () {
