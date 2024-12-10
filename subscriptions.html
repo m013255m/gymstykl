@@ -18,9 +18,6 @@
 
         .container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            padding: 20px;
         }
 
         .sidebar {
@@ -63,36 +60,34 @@
             flex: 1;
             padding: 20px;
             background-color: white;
-            margin-left: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
             border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #333;
-        }
-
-        .search-bar {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .search-bar input {
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
+        table, th, td {
             border: 1px solid #ddd;
-            border-radius: 5px;
         }
 
-        .button-container {
-            display: flex;
-            gap: 10px;
+        th, td {
+            padding: 14px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
 
         .button {
@@ -119,58 +114,50 @@
             background-color: darkred;
         }
 
-        .table-container {
-            margin-top: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: center;
-            font-size: 16px;
-        }
-
-        th {
-            background-color: #333;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        td button {
-            background-color: #ff9800;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        td button:hover {
-            background-color: #e68900;
-        }
-
         .swal2-popup {
-            font-family: Arial, sans-serif;
+            font-family: Arial , sans-serif;
             width: 600px !important;
             padding: 20px;
         }
 
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
         .swal2-loading {
             display: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .action-buttons button {
+            padding: 8px 16px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -207,41 +194,20 @@
                     <button class="button red-button" id="renewSubscriptionBtn">الاشتراكات المنتهية</button>
                 </div>
             </div>
-
-            <div class="table-container">
-                <h4>الاشتراكات الحالية</h4>
-                <table id="subscriptionsTable">
-                    <thead>
-                        <tr>
-                            <th>اسم العضو</th>
-                            <th>نوع الاشتراك</th>
-                            <th>تاريخ البداية</th>
-                            <th>تاريخ النهاية</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- الاشتراكات سيتم إضافتها هنا -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="table-container">
-                <h4>الاشتراكات المنتهية</h4>
-                <table id="expiredSubscriptionsTable">
-                    <thead>
-                        <tr>
-                            <th>اسم العضو</th>
-                            <th>نوع الاشتراك</th>
-                            <th>تاريخ البداية</th>
-                            <th>تاريخ النهاية</th>
-                            <th>إجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
-                    </tbody>
-                </table>
-            </div>
+            <table id="subscriptionsTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>نوع الاشتراك</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- الاشتراكات سيتم إضافتها هنا -->
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -269,14 +235,17 @@
                         const endDate = $("#endDate").val();
 
                         if (memberName && subscriptionType && startDate && endDate) {
-                            $("#subscriptionsTable tbody").append(
-                                `<tr>
-                                    <td>${memberName}</td>
-                                    <td>${subscriptionType}</td>
-                                    <td>${startDate}</td>
-                                    <td>${endDate}</td>
-                                </tr>`
-                            );
+                            const row = `<tr>
+                                <td>${memberName}</td>
+                                <td>${subscriptionType}</td>
+                                <td>${startDate}</td>
+                                <td>${endDate}</td>
+                                <td class="action-buttons">
+                                    <button class="button edit-btn">تعديل</button>
+                                    <button class="button red-button delete-btn">حذف</button>
+                                </td>
+                            </tr>`;
+                            $("#subscriptionsTable tbody").append(row);
                             localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                             Swal.fire("تم!", "تم إضافة الاشتراك بنجاح.", "success");
                         } else {
@@ -286,53 +255,59 @@
                 });
             });
 
-            $("#renewSubscriptionBtn").click(function () {
+            $("#subscriptionsTable").on("click", ".edit-btn", function () {
+                const row = $(this).closest("tr");
+                const memberName = row.find("td").eq(0).text();
+                const subscriptionType = row.find("td").eq(1).text();
+                const startDate = row.find("td").eq(2).text();
+                const endDate = row.find("td").eq(3).text();
+
                 Swal.fire({
-                    title: "الاشتراكات المنتهية",
-                    html: generateExpiredTable(),
+                    title: "تعديل الاشتراك",
+                    html:
+                        `<input type="text" id="memberName" class="swal2-input" value="${memberName}" placeholder="اسم العضو">` +
+                        `<input type="text" id="subscriptionType" class="swal2-input" value="${subscriptionType}" placeholder="نوع الاشتراك">` +
+                        `<input type="date" id="startDate" class="swal2-input" value="${startDate}" placeholder="تاريخ البداية">` +
+                        `<input type="date" id="endDate" class="swal2-input" value="${endDate}" placeholder="تاريخ النهاية">`,
+                    confirmButtonText: "حفظ التعديلات",
                     showCancelButton: true,
                     cancelButtonText: "إلغاء",
-                    confirmButtonText: "تجديد الاشتراك",
                     preConfirm: () => {
-                        const expiredSubscriptions = $("#expiredSubscriptionsTable tbody tr").filter(function () {
-                            const newEndDate = $(this).find("td").eq(3).find("input").val();
-                            const rowIndex = $(this).index();
-                            const memberRow = $("#subscriptionsTable tbody tr").eq(rowIndex);
-
-                            if (newEndDate) {
-                                memberRow.find("td").eq(3).text(newEndDate);
-                                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                            }
-                        });
+                        row.find("td").eq(0).text($("#memberName").val());
+                        row.find("td").eq(1).text($("#subscriptionType").val());
+                        row.find("td").eq(2).text($("#startDate").val());
+                        row.find("td").eq(3).text($("#endDate").val());
+                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                     }
                 });
             });
-        });
 
-        function generateExpiredTable() {
-            let expiredTable = '<table id="expiredSubscriptionsTable" style="width: 100%; border: 1px solid #ddd; padding: 10px;">' +
-                '<thead><tr><th>اسم العضو</th><th>نوع الاشتراك</th><th>تاريخ البداية</th><th>تاريخ النهاية</th><th>الإجراءات</th></tr></thead><tbody>';
-
-            $("#subscriptionsTable tbody tr").each(function () {
-                const endDate = $(this).find("td").eq(3).text();
-                if (new Date(endDate) < new Date()) {
-                    const memberName = $(this).find("td").eq(0).text();
-                    const subscriptionType = $(this).find("td").eq(1).text();
-                    const startDate = $(this).find("td").eq(2).text();
-
-                    expiredTable += `<tr>
-                        <td>${memberName}</td>
-                        <td>${subscriptionType}</td>
-                        <td>${startDate}</td>
-                        <td><input type="date" value="${endDate}"></td>
-                        <td><button class="renewBtn">تجديد</button></td>
-                    </tr>`;
-                }
+            $("#subscriptionsTable").on("click", ".delete-btn", function () {
+                const row = $(this).closest("tr");
+                Swal.fire({
+                    title: "هل أنت متأكد؟",
+                    text: "لن تتمكن من استرجاع هذا الاشتراك.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "نعم، حذف",
+                    cancelButtonText: "إلغاء"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        row.remove();
+                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                        Swal.fire("تم الحذف!", "تم حذف الاشتراك.", "success");
+                    }
+                });
             });
 
-            expiredTable += '</tbody></table>';
-            return expiredTable;
-        }
+            $("#searchInput").on("input", function () {
+                const searchTerm = $(this).val().toLowerCase();
+                $("#subscriptionsTable tbody tr").each(function () {
+                    const rowText = $(this).text().toLowerCase();
+                    $(this).toggle(rowText.includes(searchTerm));
+                });
+            });
+        });
     </script>
 </body>
 </html>
