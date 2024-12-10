@@ -148,59 +148,6 @@
         .swal2-loading {
             display: none;
         }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .action-buttons button {
-            padding: 8px 16px;
-            font-size: 14px;
-        }
-
-        .subscriptions-popup {
-            display: none;
-            background-color: rgba(0, 0, 0, 0.7);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .subscriptions-popup .popup-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            max-width: 600px;
-            width: 90%;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .subscriptions-popup .popup-content table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .subscriptions-popup .popup-content th,
-        .subscriptions-popup .popup-content td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-
-        .close-popup {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 20px;
-            cursor: pointer;
-        }
     </style>
 </head>
 
@@ -253,28 +200,6 @@
         </div>
     </div>
 
-    <!-- نافذة الاشتراكات المنتهية -->
-    <div class="subscriptions-popup" id="subscriptionsPopup">
-        <div class="popup-content">
-            <span class="close-popup" id="closePopup">&times;</span>
-            <h3>الاشتراكات المنتهية</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>اسم العضو</th>
-                        <th>نوع الاشتراك</th>
-                        <th>تاريخ البداية</th>
-                        <th>تاريخ النهاية</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
     <script>
         $(document).ready(function () {
             if (localStorage.getItem("subscriptions")) {
@@ -299,102 +224,67 @@
                         const endDate = $("#endDate").val();
 
                         if (memberName && subscriptionType && startDate && endDate) {
-                            const row = `<tr>
-                                <td>${memberName}</td>
-                                <td>${subscriptionType}</td>
-                                <td>${startDate}</td>
-                                <td>${endDate}</td>
-                                <td class="action-buttons">
-                                    <button class="button edit-btn">تعديل</button>
-                                    <button class="button red-button delete-btn">حذف</button>
-                                </td>
-                            </tr>`;
-                            $("#subscriptionsTable tbody").append(row);
+                            $("#subscriptionsTable tbody").append(
+                                `<tr>
+                                    <td>${memberName}</td>
+                                    <td>${subscriptionType}</td>
+                                    <td>${startDate}</td>
+                                    <td>${endDate}</td>
+                                    <td><button class="button renew-btn">تجديد</button></td>
+                                </tr>`
+                            );
                             localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                            Swal.fire("تم إضافة الاشتراك!", "", "success");
+                            Swal.fire("تم!", "تم إضافة الاشتراك بنجاح.", "success");
                         } else {
-                            Swal.showValidationMessage("يرجى ملء جميع الحقول");
+                            Swal.showValidationMessage("الرجاء ملء جميع الحقول");
                         }
                     }
                 });
             });
 
-            // تجديد الاشتراكات
             $("#renewSubscriptionBtn").click(function () {
-                $("#subscriptionsPopup").fadeIn();
-            });
-
-            // إغلاق نافذة الاشتراكات المنتهية
-            $("#closePopup").click(function () {
-                $("#subscriptionsPopup").fadeOut();
-            });
-
-            // تعديل الاشتراك
-            $(document).on("click", ".edit-btn", function () {
-                const row = $(this).closest("tr");
-                const memberName = row.find("td:eq(0)").text();
-                const subscriptionType = row.find("td:eq(1)").text();
-                const startDate = row.find("td:eq(2)").text();
-                const endDate = row.find("td:eq(3)").text();
-
                 Swal.fire({
-                    title: "تعديل الاشتراك",
-                    html:
-                        `<input type="text" id="editMemberName" class="swal2-input" value="${memberName}" placeholder="اسم العضو">` +
-                        `<input type="text" id="editSubscriptionType" class="swal2-input" value="${subscriptionType}" placeholder="نوع الاشتراك">` +
-                        `<input type="date" id="editStartDate" class="swal2-input" value="${startDate}" placeholder="تاريخ البداية">` +
-                        `<input type="date" id="editEndDate" class="swal2-input" value="${endDate}" placeholder="تاريخ النهاية">`,
-                    confirmButtonText: "حفظ التعديلات",
+                    title: "الاشتراكات المنتهية",
+                    html: generateExpiredTable(),
                     showCancelButton: true,
                     cancelButtonText: "إلغاء",
+                    confirmButtonText: "تجديد الاشتراك",
                     preConfirm: () => {
-                        const newMemberName = $("#editMemberName").val();
-                        const newSubscriptionType = $("#editSubscriptionType").val();
-                        const newStartDate = $("#editStartDate").val();
-                        const newEndDate = $("#editEndDate").val();
+                        const expiredSubscriptions = $("#expiredSubscriptionsTable tbody tr").filter(function () {
+                            const newEndDate = $(this).find("td").eq(3).find("input").val();
+                            const rowIndex = $(this).index();
+                            const memberRow = $("#subscriptionsTable tbody tr").eq(rowIndex);
 
-                        if (newMemberName && newSubscriptionType && newStartDate && newEndDate) {
-                            row.find("td:eq(0)").text(newMemberName);
-                            row.find("td:eq(1)").text(newSubscriptionType);
-                            row.find("td:eq(2)").text(newStartDate);
-                            row.find("td:eq(3)").text(newEndDate);
-                            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                            Swal.fire("تم تعديل الاشتراك!", "", "success");
-                        } else {
-                            Swal.showValidationMessage("يرجى ملء جميع الحقول");
-                        }
+                            if (newEndDate) {
+                                memberRow.find("td").eq(3).text(newEndDate);
+                                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                            }
+                        });
                     }
-                });
-            });
-
-            // حذف الاشتراك
-            $(document).on("click", ".delete-btn", function () {
-                const row = $(this).closest("tr");
-                Swal.fire({
-                    title: "هل أنت متأكد؟",
-                    text: "لن تتمكن من استرجاع هذا الاشتراك.",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "نعم، حذف",
-                    cancelButtonText: "إلغاء"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        row.remove();
-                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                        Swal.fire("تم الحذف!", "تم حذف الاشتراك.", "success");
-                    }
-                });
-            });
-
-            // البحث عن الاشتراك
-            $("#searchInput").on("input", function () {
-                const searchTerm = $(this).val().toLowerCase();
-                $("#subscriptionsTable tbody tr").each(function () {
-                    const rowText = $(this).text().toLowerCase();
-                    $(this).toggle(rowText.includes(searchTerm));
                 });
             });
         });
+
+        function generateExpiredTable() {
+            let expiredTable = '<table id="expiredSubscriptionsTable" style="width: 100%; border: 1px solid #ddd; padding: 10px;">' +
+                '<thead><tr><th>اسم العضو</th><th>نوع الاشتراك</th><th>تاريخ البداية</th><th>تاريخ النهاية</th><th>الإجراءات</th></tr></thead><tbody>';
+
+            $("#subscriptionsTable tbody tr").each(function () {
+                const endDate = $(this).find("td").eq(3).text();
+                const currentDate = new Date().toISOString().split("T")[0];
+                if (endDate < currentDate) {
+                    expiredTable += `<tr>
+                        <td>${$(this).find("td").eq(0).text()}</td>
+                        <td>${$(this).find("td").eq(1).text()}</td>
+                        <td>${$(this).find("td").eq(2).text()}</td>
+                        <td><input type="date" value="${currentDate}"></td>
+                        <td><button class="button renew-btn">تجديد</button></td>
+                    </tr>`;
+                }
+            });
+            expiredTable += '</tbody></table>';
+            return expiredTable;
+        }
     </script>
 </body>
 </html>
