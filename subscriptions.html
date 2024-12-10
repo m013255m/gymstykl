@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        /* استايلات التنسيق (بدون تغييرات) */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -225,13 +226,13 @@
 
                         if (memberName && subscriptionType && startDate && endDate) {
                             $("#subscriptionsTable tbody").append(
-                                <tr>
+                                `<tr>
                                     <td>${memberName}</td>
                                     <td>${subscriptionType}</td>
                                     <td>${startDate}</td>
                                     <td>${endDate}</td>
-                                    <td><button class="button renew-btn">تجديد</button></td>
-                                </tr>
+                                    <td><button class="button renew-btn" onclick="renewSubscription(this)">تجديد</button></td>
+                                </tr>`
                             );
                             localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                             Swal.fire("تم!", "تم إضافة الاشتراك بنجاح.", "success");
@@ -273,17 +274,24 @@
                 const endDate = $(this).find("td").eq(3).text();
                 const currentDate = new Date().toISOString().split("T")[0];
                 if (endDate < currentDate) {
-                    expiredTable += <tr>
+                    expiredTable += `<tr>
                         <td>${$(this).find("td").eq(0).text()}</td>
                         <td>${$(this).find("td").eq(1).text()}</td>
                         <td>${$(this).find("td").eq(2).text()}</td>
                         <td><input type="date" value="${currentDate}"></td>
-                        <td><button class="button renew-btn">تجديد</button></td>
-                    </tr>;
+                        <td><button class="button renew-btn" onclick="renewSubscription(this)">تجديد</button></td>
+                    </tr>`;
                 }
             });
             expiredTable += '</tbody></table>';
             return expiredTable;
+        }
+
+        function renewSubscription(button) {
+            const row = $(button).closest("tr");
+            const newEndDate = row.find("input[type='date']").val();
+            row.find("td").eq(3).text(newEndDate); // تحديث تاريخ النهاية
+            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
         }
     </script>
 </body>
