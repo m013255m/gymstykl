@@ -230,8 +230,8 @@
                                     <td>${memberName}</td>
                                     <td>${subscriptionType}</td>
                                     <td>${startDate}</td>
-                                    <td>${endDate}</td>
-                                    <td><button class="button renew-btn" onclick="renewSubscription(this)">تجديد</button></td>
+                                    <td class="end-date">${endDate}</td>
+                                    <td><button class="button renew-btn" onclick="showRenewModal(this)">تجديد</button></td>
                                 </tr>`
                             );
                             localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
@@ -272,26 +272,36 @@
 
             $("#subscriptionsTable tbody tr").each(function () {
                 const endDate = $(this).find("td").eq(3).text();
-                const currentDate = new Date().toISOString().split("T")[0];
-                if (endDate < currentDate) {
+                const today = new Date();
+                const endDateObj = new Date(endDate);
+                if (endDateObj < today) {
                     expiredTable += `<tr>
                         <td>${$(this).find("td").eq(0).text()}</td>
                         <td>${$(this).find("td").eq(1).text()}</td>
                         <td>${$(this).find("td").eq(2).text()}</td>
-                        <td><input type="date" value="${currentDate}"></td>
-                        <td><button class="button renew-btn" onclick="renewSubscription(this)">تجديد</button></td>
+                        <td><input type="date" class="newEndDate"></td>
+                        <td><button class="button" onclick="updateSubscriptionEndDate(this)">تجديد</button></td>
                     </tr>`;
                 }
             });
+
             expiredTable += '</tbody></table>';
             return expiredTable;
         }
 
-        function renewSubscription(button) {
+        function updateSubscriptionEndDate(button) {
             const row = $(button).closest("tr");
-            const newEndDate = row.find("input[type='date']").val();
-            row.find("td").eq(3).text(newEndDate); // تحديث تاريخ النهاية
-            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+            const newEndDate = row.find(".newEndDate").val();
+            const rowIndex = row.index();
+
+            if (newEndDate) {
+                const memberRow = $("#subscriptionsTable tbody tr").eq(rowIndex);
+                memberRow.find("td").eq(3).text(newEndDate);
+                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                Swal.fire("تم!", "تم تجديد الاشتراك بنجاح.", "success");
+            } else {
+                Swal.fire("تحذير", "الرجاء تحديد تاريخ النهاية الجديد", "warning");
+            }
         }
     </script>
 </body>
