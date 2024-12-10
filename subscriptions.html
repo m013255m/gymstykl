@@ -157,8 +157,10 @@
         <div class="content">
             <h3>إدارة الاشتراكات</h3>
             <div class="button-container">
-                <button class="button red-button" id="showExpiredSubscriptionsBtn">الاشتراكات المنتهية</button>
+                <button class="button red-button" id="addSubscriptionBtn">إضافة اشتراك</button>
+                <button class="button" id="showExpiredSubscriptionsBtn">الاشتراكات المنتهية</button>
             </div>
+
             <table id="subscriptionsTable">
                 <thead>
                     <tr>
@@ -197,6 +199,20 @@
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
 
+            // زر إضافة اشتراك
+            $("#addSubscriptionBtn").click(function () {
+                // إضافة اشتراك جديد
+                const newRow = `<tr>
+                    <td>عضو جديد</td>
+                    <td>عضوية شهرية</td>
+                    <td>01/01/2024</td>
+                    <td>01/02/2024</td>
+                    <td><button class="button" onclick="addSubscription()">إضافة</button></td>
+                </tr>`;
+                $("#subscriptionsTable tbody").append(newRow);
+                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+            });
+
             // زر عرض الاشتراكات المنتهية
             $("#showExpiredSubscriptionsBtn").click(function () {
                 $("#expiredSubscriptionsTable tbody").empty();
@@ -212,7 +228,7 @@
                             <td>${memberName}</td>
                             <td>${subscriptionType}</td>
                             <td>${startDate}</td>
-                            <td><input type="date" class="newEndDate"></td>
+                            <td>${endDate}</td>
                             <td><button class="button renew-btn" onclick="showRenewModal(this)">تجديد</button></td>
                         </tr>`;
                         $("#expiredSubscriptionsTable tbody").append(expiredRow);
