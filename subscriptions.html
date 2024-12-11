@@ -225,7 +225,7 @@
 
                         if (memberName && subscriptionType && startDate && endDate) {
                             $("#subscriptionsTable tbody").append(
-                                <tr>
+                                `<tr>
                                     <td>${memberName}</td>
                                     <td>${subscriptionType}</td>
                                     <td>${startDate}</td>
@@ -233,7 +233,7 @@
                                     <td>
                                         <button class="button red-button" onclick="renewSubscription(this)">تجديد المدة</button>
                                     </td>
-                                </tr>
+                                </tr>`
                             );
                             localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                             Swal.fire("تم!", "تم إضافة الاشتراك بنجاح.", "success");
@@ -260,7 +260,7 @@
                         });
 
                         if (expiredSubscriptions.length > 0) {
-                            let expiredTable = <table style="width: 100%; border: 1px solid #ddd; padding: 10px;">
+                            let expiredTable = `<table style="width: 100%; border: 1px solid #ddd; padding: 10px;">
                                 <thead>
                                     <tr>
                                         <th>اسم العضو</th>
@@ -270,19 +270,19 @@
                                         <th>الإجراءات</th>
                                     </tr>
                                 </thead>
-                                <tbody>;
+                                <tbody>`;
 
                             expiredSubscriptions.each(function () {
-                                expiredTable += <tr>
+                                expiredTable += `<tr>
                                     <td>${$(this).find("td").eq(0).text()}</td>
                                     <td>${$(this).find("td").eq(1).text()}</td>
                                     <td>${$(this).find("td").eq(2).text()}</td>
                                     <td>${$(this).find("td").eq(3).text()}</td>
                                     <td><button class="button" onclick="renewSubscription(this)">تجديد المدة</button></td>
-                                </tr>;
+                                </tr>`;
                             });
 
-                            expiredTable += </tbody></table>;
+                            expiredTable += `</tbody></table>`;
 
                             Swal.fire({
                                 title: "الاشتراكات المنتهية",
@@ -298,16 +298,23 @@
 
         function renewSubscription(button) {
             const row = $(button).closest("tr");
-            const currentStartDate = row.find("td").eq(2).text();
             const currentEndDate = row.find("td").eq(3).text();
 
-            const newEndDate = new Date(currentEndDate);
-            newEndDate.setMonth(newEndDate.getMonth() + 1); // تمديد الاشتراك لمدة شهر
-
-            row.find("td").eq(3).text(newEndDate.toISOString().split("T")[0]);
-            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-
-            Swal.fire("تم التجديد", "تم تجديد اشتراك العضو بنجاح.", "success");
+            Swal.fire({
+                title: "تجديد الاشتراك",
+                html: `<input type="date" id="newEndDate" class="swal2-input" value="${currentEndDate}">`,
+                confirmButtonText: "تحديث",
+                preConfirm: () => {
+                    const newEndDate = $("#newEndDate").val();
+                    if (newEndDate) {
+                        row.find("td").eq(3).text(newEndDate);
+                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                        Swal.fire("تم!", "تم تجديد الاشتراك بنجاح.", "success");
+                    } else {
+                        Swal.showValidationMessage("الرجاء اختيار تاريخ جديد");
+                    }
+                }
+            });
         }
     </script>
 </body>
