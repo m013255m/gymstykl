@@ -383,22 +383,31 @@
 
         function renewSubscription(button) {
             const row = $(button).closest("tr");
-            const memberName = row.find("td").eq(0).text();
             const currentEndDate = row.find("td").eq(3).text();
+            const currentDate = new Date().toISOString().split("T")[0];
 
-            Swal.fire({
-                title: `تجديد الاشتراك لـ ${memberName}`,
-                html: `<input type="date" id="newEndDate" class="swal2-input" value="${currentEndDate}" placeholder="تاريخ النهاية الجديد">`,
-                confirmButtonText: "تجديد الاشتراك",
-                showCancelButton: true,
-                cancelButtonText: "إلغاء",
-                preConfirm: () => {
-                    const newEndDate = $("#newEndDate").val();
-                    row.find("td").eq(3).text(newEndDate);
-                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    Swal.fire("تم تجديد الاشتراك!", "تم تجديد مدة الاشتراك بنجاح.", "success");
-                }
-            });
+            if (currentEndDate < currentDate) {
+                Swal.fire({
+                    title: "تجديد الاشتراك",
+                    html:
+                        `<input type="date" id="newEndDate" class="swal2-input" placeholder="تاريخ النهاية الجديد">`,
+                    confirmButtonText: "تجديد الاشتراك",
+                    showCancelButton: true,
+                    cancelButtonText: "إلغاء",
+                    preConfirm: () => {
+                        const newEndDate = $("#newEndDate").val();
+                        if (newEndDate) {
+                            row.find("td").eq(3).text(newEndDate);
+                            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                            Swal.fire("تم!", "تم تجديد الاشتراك بنجاح.", "success");
+                        } else {
+                            Swal.showValidationMessage("الرجاء تحديد تاريخ النهاية الجديد");
+                        }
+                    }
+                });
+            } else {
+                Swal.fire("لا يمكن التجديد", "لا يمكن تجديد الاشتراك لأن تاريخ النهاية مازال ساريًا.", "warning");
+            }
         }
     </script>
 </body>
