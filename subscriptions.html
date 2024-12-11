@@ -149,14 +149,6 @@
         .swal2-loading {
             display: none;
         }
-
-        .expired-button {
-            background-color: orange;
-        }
-
-        .expired-button:hover {
-            background-color: darkorange;
-        }
     </style>
 </head>
 
@@ -189,11 +181,8 @@
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <div class="button-container">
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-                    <button class="button expired-button" id="expiredSubscriptionsBtn">الاشتراكات المنتهية</button>
                 </div>
             </div>
-
-            <h3>الاشتراكات الحالية</h3>
             <table id="subscriptionsTable">
                 <thead>
                     <tr>
@@ -208,30 +197,13 @@
                     <!-- الاشتراكات سيتم إضافتها هنا -->
                 </tbody>
             </table>
-
-            <h3>الاشتراكات المنتهية</h3>
-            <table id="expiredSubscriptionsTable">
-                <thead>
-                    <tr>
-                        <th>اسم العضو</th>
-                        <th>نوع الاشتراك</th>
-                        <th>تاريخ البداية</th>
-                        <th>تاريخ النهاية</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
-                </tbody>
-            </table>
         </div>
     </div>
 
     <script>
         $(document).ready(function () {
             if (localStorage.getItem("subscriptions")) {
-                const subscriptions = JSON.parse(localStorage.getItem("subscriptions"));
-                loadSubscriptions(subscriptions);
+                $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
 
             // إضافة اشتراك جديد
@@ -253,18 +225,19 @@
                         const endDate = $("#endDate").val();
 
                         if (memberName && subscriptionType && startDate && endDate) {
-                            const subscription = {
-                                memberName,
-                                subscriptionType,
-                                startDate,
-                                endDate
-                            };
-
-                            const subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
-                            subscriptions.push(subscription);
-                            localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
-
-                            loadSubscriptions(subscriptions);
+                            $("#subscriptionsTable tbody").append(
+                                `<tr>
+                                    <td>${memberName}</td>
+                                    <td>${subscriptionType}</td>
+                                    <td>${startDate}</td>
+                                    <td>${endDate}</td>
+                                    <td>
+                                        <button class="button" onclick="editSubscription(this)">تعديل</button>
+                                        <button class="button red-button" onclick="deleteSubscription(this)">حذف</button>
+                                    </td>
+                                </tr>`
+                            );
+                            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                             Swal.fire("تم!", "تم إضافة الاشتراك بنجاح.", "success");
                         } else {
                             Swal.showValidationMessage("الرجاء ملء جميع الحقول");
@@ -273,72 +246,42 @@
                 });
             });
 
-            // تحميل الاشتراكات في الجداول
-            function loadSubscriptions(subscriptions) {
-                const currentDate = new Date();
-                const currentSubscriptions = subscriptions.filter(sub => new Date(sub.endDate) >= currentDate);
-                const expiredSubscriptions = subscriptions.filter(sub => new Date(sub.endDate) < currentDate);
-
-                $("#subscriptionsTable tbody").html("");
-                currentSubscriptions.forEach(sub => {
-                    $("#subscriptionsTable tbody").append(
-                        `<tr>
-                            <td>${sub.memberName}</td>
-                            <td>${sub.subscriptionType}</td>
-                            <td>${sub.startDate}</td>
-                            <td>${sub.endDate}</td>
-                            <td>
-                                <button class="button" onclick="editSubscription(this)">تعديل</button>
-                                <button class="button red-button" onclick="deleteSubscription(this)">حذف</button>
-                            </td>
-                        </tr>`
-                    );
-                });
-
-                $("#expiredSubscriptionsTable tbody").html("");
-                expiredSubscriptions.forEach(sub => {
-                    $("#expiredSubscriptionsTable tbody").append(
-                        `<tr>
-                            <td>${sub.memberName}</td>
-                            <td>${sub.subscriptionType}</td>
-                            <td>${sub.startDate}</td>
-                            <td>${sub.endDate}</td>
-                            <td>
-                                <button class="button" onclick="extendSubscription(this)">تجديد المدة</button>
-                            </td>
-                        </tr>`
-                    );
-                });
-            }
-
-            // تجديد المدة للاشتراك
-            window.extendSubscription = function(button) {
+            // تعديل الاشتراك
+            window.editSubscription = function(button) {
                 const row = $(button).closest("tr");
-                Swal.fire({
-                    title: "تجديد المدة",
-                    html: '<input type="date" id="newEndDate" class="swal2-input" placeholder="تاريخ النهاية الجديد">',
-                    confirmButtonText: "تجديد",
-                    preConfirm: () => {
-                        const newEndDate = $("#newEndDate").val();
-                        if (newEndDate) {
-                            // تحديث تاريخ النهاية للاشتراك
-                            const subscriptions = JSON.parse(localStorage.getItem("subscriptions"));
-                            const index = $(button).closest("tr").index();
-                            subscriptions[index].endDate = newEndDate;
+                const memberName = row.find("td").eq(0).text();
+                const subscriptionType = row.find("td").eq(1).text();
+                const startDate = row.find("td").eq(2).text();
+                const endDate = row.find("td").eq(3).text();
 
-                            localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
-                            loadSubscriptions(subscriptions);
-                            Swal.fire("تم!", "تم تجديد الاشتراك بنجاح.", "success");
+                Swal.fire({
+                    title: "تعديل الاشتراك",
+                    html:
+                          `<input type="text" id="editMemberName" class="swal2-input" value="${memberName}" placeholder="اسم العضو">` +
+                          `<input type="text" id="editSubscriptionType" class="swal2-input" value="${subscriptionType}" placeholder="نوع الاشتراك">` +
+                          `<input type="date" id="editStartDate" class="swal2-input" value="${startDate}" placeholder="تاريخ البداية">` +
+                          `<input type="date" id="editEndDate" class="swal2-input" value="${endDate}" placeholder="تاريخ النهاية">`,
+                    confirmButtonText: "حفظ التعديلات",
+                    showCancelButton: true,
+                    cancelButtonText: "إلغاء",
+                    preConfirm: () => {
+                        const newMemberName = $("#editMemberName").val();
+                        const newSubscriptionType = $("#editSubscriptionType").val();
+                        const newStartDate = $("#editStartDate").val();
+                        const newEndDate = $("#editEndDate").val();
+
+                        if (newMemberName && newSubscriptionType && newStartDate && newEndDate) {
+                            row.find("td").eq(0).text(newMemberName);
+                            row.find("td").eq(1).text(newSubscriptionType);
+                            row.find("td").eq(2).text(newStartDate);
+                            row.find("td").eq(3).text(newEndDate);
+                            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                            Swal.fire("تم!", "تم تعديل الاشتراك بنجاح.", "success");
                         } else {
-                            Swal.showValidationMessage("الرجاء تحديد تاريخ النهاية");
+                            Swal.showValidationMessage("الرجاء ملء جميع الحقول");
                         }
                     }
                 });
-            };
-
-            // تعديل الاشتراك
-            window.editSubscription = function(button) {
-                // تنفيذ منطق التعديل هنا
             };
 
             // حذف الاشتراك
@@ -354,8 +297,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         row.remove();
-                        const subscriptions = JSON.parse(localStorage.getItem("subscriptions")) || [];
-                        localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
+                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                         Swal.fire("تم الحذف!", "تم حذف الاشتراك بنجاح.", "success");
                     }
                 });
@@ -367,11 +309,6 @@
                 $("#subscriptionsTable tbody tr").filter(function() {
                     $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
                 });
-            });
-
-            // عرض الاشتراكات المنتهية
-            $("#expiredSubscriptionsBtn").click(function () {
-                $(".content").animate({ scrollTop: $("#expiredSubscriptionsTable").offset().top }, 500);
             });
         });
     </script>
