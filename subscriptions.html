@@ -149,6 +149,37 @@
             display: none;
         }
 
+        /* أسلوب الجدول المنبثق */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            overflow-y: auto;
+        }
+
+        .close {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 
@@ -181,6 +212,7 @@
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <div class="button-container">
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+                    <button class="button" id="showExpiredSubscriptionsBtn">تجديد الاشتراكات</button>
                 </div>
             </div>
             <table id="subscriptionsTable">
@@ -197,6 +229,13 @@
                     <!-- الاشتراكات سيتم إضافتها هنا -->
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <!-- جدول الاشتراكات المنتهية (المنبثق) -->
+    <div id="expiredSubscriptionsModal" class="modal">
+        <div class="modal-content">
+            <button class="close" id="closeModalBtn">&times;</button>
             <h3>الاشتراكات المنتهية</h3>
             <table id="expiredSubscriptionsTable">
                 <thead>
@@ -262,6 +301,17 @@
                 });
             });
 
+            // عرض الاشتراكات المنتهية عند الضغط على زر "تجديد الاشتراكات"
+            $("#showExpiredSubscriptionsBtn").click(function () {
+                showExpiredSubscriptions();
+                $("#expiredSubscriptionsModal").fadeIn();
+            });
+
+            // إغلاق الجدول المنبثق
+            $("#closeModalBtn").click(function () {
+                $("#expiredSubscriptionsModal").fadeOut();
+            });
+
             // عرض الاشتراكات المنتهية
             function showExpiredSubscriptions() {
                 const expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
@@ -288,7 +338,6 @@
                 }
             }
 
-            showExpiredSubscriptions();
         });
 
         function editSubscription(button) {
@@ -347,7 +396,6 @@
                     const newEndDate = $("#newEndDate").val();
                     row.find("td").eq(3).text(newEndDate);
                     localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    showExpiredSubscriptions();  // تحديث قائمة الاشتراكات المنتهية
                     Swal.fire("تم تجديد الاشتراك!", "تم تجديد مدة الاشتراك بنجاح.", "success");
                 }
             });
