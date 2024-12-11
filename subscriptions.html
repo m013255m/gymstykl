@@ -6,7 +6,6 @@
     <title>إدارة الاشتراكات</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         table {
             width: 100%;
@@ -64,48 +63,20 @@
     </table>
 
     <script>
-        $(document).ready(function () {
-            // زر تجديد الاشتراكات المنتهية
-            $("#renewExpired").click(function () {
-                const expiredRows = [];
-                $("#subscriptionsTable tbody tr").each(function () {
-                    const endDate = new Date($(this).find("td").eq(3).text());
-                    const today = new Date();
+        // زر تجديد الاشتراكات المنتهية
+        $("#renewExpired").click(function () {
+            $("#subscriptionsTable tbody tr").each(function () {
+                const endDate = new Date($(this).find("td").eq(3).text());
+                const today = new Date();
 
-                    if (endDate < today) {
-                        const memberName = $(this).find("td").eq(0).text();
-                        expiredRows.push(memberName);
-                    }
-                });
-
-                if (expiredRows.length > 0) {
-                    Swal.fire({
-                        title: "تجديد الاشتراكات المنتهية",
-                        text: `تم العثور على اشتراكات منتهية: ${expiredRows.join(", ")}`,
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "تجديد الآن",
-                        cancelButtonText: "إلغاء",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $("#subscriptionsTable tbody tr").each(function () {
-                                const endDate = new Date($(this).find("td").eq(3).text());
-                                const today = new Date();
-
-                                if (endDate < today) {
-                                    const newEndDate = new Date();
-                                    newEndDate.setMonth(newEndDate.getMonth() + 1);
-                                    const formattedEndDate = newEndDate.toISOString().split("T")[0];
-                                    $(this).find("td").eq(3).text(formattedEndDate);
-                                }
-                            });
-                            Swal.fire("تم!", "تم تجديد جميع الاشتراكات المنتهية بنجاح", "success");
-                        }
-                    });
-                } else {
-                    Swal.fire("لا توجد اشتراكات منتهية", "كل الاشتراكات سارية", "info");
+                if (endDate < today) {
+                    const newEndDate = new Date();
+                    newEndDate.setMonth(newEndDate.getMonth() + 1);
+                    const formattedEndDate = newEndDate.toISOString().split("T")[0];
+                    $(this).find("td").eq(3).text(formattedEndDate);
                 }
             });
+            Swal.fire("تم!", "تم تجديد جميع الاشتراكات المنتهية بنجاح", "success");
         });
 
         // زر تعديل الاشتراك
