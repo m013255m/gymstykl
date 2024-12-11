@@ -9,7 +9,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* إضافة التنسيقات هنا */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -181,6 +180,7 @@
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <div class="button-container">
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
                 </div>
             </div>
             <table id="subscriptionsTable">
@@ -206,7 +206,6 @@
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
 
-            // إضافة اشتراك جديد
             $("#addSubscriptionBtn").click(function () {
                 Swal.fire({
                     title: "إضافة اشتراك جديد",
@@ -226,16 +225,15 @@
 
                         if (memberName && subscriptionType && startDate && endDate) {
                             $("#subscriptionsTable tbody").append(
-                                `<tr>
+                                <tr>
                                     <td>${memberName}</td>
                                     <td>${subscriptionType}</td>
                                     <td>${startDate}</td>
                                     <td>${endDate}</td>
                                     <td>
-                                        <button class="button" onclick="editSubscription(this)">تعديل</button>
-                                        <button class="button red-button" onclick="deleteSubscription(this)">حذف</button>
+                                        <button class="button red-button" onclick="renewSubscription(this)">تجديد المدة</button>
                                     </td>
-                                </tr>`
+                                </tr>
                             );
                             localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                             Swal.fire("تم!", "تم إضافة الاشتراك بنجاح.", "success");
@@ -246,71 +244,71 @@
                 });
             });
 
-            // تعديل الاشتراك
-            window.editSubscription = function(button) {
-                const row = $(button).closest("tr");
-                const memberName = row.find("td").eq(0).text();
-                const subscriptionType = row.find("td").eq(1).text();
-                const startDate = row.find("td").eq(2).text();
-                const endDate = row.find("td").eq(3).text();
-
+            $("#renewSubscriptionBtn").click(function () {
                 Swal.fire({
-                    title: "تعديل الاشتراك",
-                    html:
-                          `<input type="text" id="editMemberName" class="swal2-input" value="${memberName}" placeholder="اسم العضو">` +
-                          `<input type="text" id="editSubscriptionType" class="swal2-input" value="${subscriptionType}" placeholder="نوع الاشتراك">` +
-                          `<input type="date" id="editStartDate" class="swal2-input" value="${startDate}" placeholder="تاريخ البداية">` +
-                          `<input type="date" id="editEndDate" class="swal2-input" value="${endDate}" placeholder="تاريخ النهاية">`,
-                    confirmButtonText: "حفظ التعديلات",
-                    showCancelButton: true,
-                    cancelButtonText: "إلغاء",
-                    preConfirm: () => {
-                        const newMemberName = $("#editMemberName").val();
-                        const newSubscriptionType = $("#editSubscriptionType").val();
-                        const newStartDate = $("#editStartDate").val();
-                        const newEndDate = $("#editEndDate").val();
+                    title: "انتظار...",
+                    text: "يتم تحميل بيانات الاشتراك بعد قليل.",
+                    timer: 5000,
+                    onBeforeOpen: () => {
+                        Swal.showLoading();
+                    },
+                    willClose: () => {
+                        const expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
+                            const endDate = $(this).find("td").eq(3).text();
+                            const currentDate = new Date().toISOString().split("T")[0];
+                            return endDate < currentDate;
+                        });
 
-                        if (newMemberName && newSubscriptionType && newStartDate && newEndDate) {
-                            row.find("td").eq(0).text(newMemberName);
-                            row.find("td").eq(1).text(newSubscriptionType);
-                            row.find("td").eq(2).text(newStartDate);
-                            row.find("td").eq(3).text(newEndDate);
-                            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                            Swal.fire("تم!", "تم تعديل الاشتراك بنجاح.", "success");
+                        if (expiredSubscriptions.length > 0) {
+                            let expiredTable = <table style="width: 100%; border: 1px solid #ddd; padding: 10px;">
+                                <thead>
+                                    <tr>
+                                        <th>اسم العضو</th>
+                                        <th>نوع الاشتراك</th>
+                                        <th>تاريخ البداية</th>
+                                        <th>تاريخ النهاية</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>;
+
+                            expiredSubscriptions.each(function () {
+                                expiredTable += <tr>
+                                    <td>${$(this).find("td").eq(0).text()}</td>
+                                    <td>${$(this).find("td").eq(1).text()}</td>
+                                    <td>${$(this).find("td").eq(2).text()}</td>
+                                    <td>${$(this).find("td").eq(3).text()}</td>
+                                    <td><button class="button" onclick="renewSubscription(this)">تجديد المدة</button></td>
+                                </tr>;
+                            });
+
+                            expiredTable += </tbody></table>;
+
+                            Swal.fire({
+                                title: "الاشتراكات المنتهية",
+                                html: expiredTable
+                            });
                         } else {
-                            Swal.showValidationMessage("الرجاء ملء جميع الحقول");
+                            Swal.fire("لا يوجد اشتراكات منتهية", "", "info");
                         }
                     }
                 });
-            };
-
-            // حذف الاشتراك
-            window.deleteSubscription = function(button) {
-                const row = $(button).closest("tr");
-                Swal.fire({
-                    title: "هل أنت متأكد؟",
-                    text: "لا يمكنك التراجع عن هذا الإجراء!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "نعم، احذف!",
-                    cancelButtonText: "إلغاء",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        row.remove();
-                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                        Swal.fire("تم الحذف!", "تم حذف الاشتراك بنجاح.", "success");
-                    }
-                });
-            };
-
-            // البحث عن اشتراك
-            $("#searchInput").on("keyup", function() {
-                const searchValue = $(this).val().toLowerCase();
-                $("#subscriptionsTable tbody tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
-                });
             });
         });
+
+        function renewSubscription(button) {
+            const row = $(button).closest("tr");
+            const currentStartDate = row.find("td").eq(2).text();
+            const currentEndDate = row.find("td").eq(3).text();
+
+            const newEndDate = new Date(currentEndDate);
+            newEndDate.setMonth(newEndDate.getMonth() + 1); // تمديد الاشتراك لمدة شهر
+
+            row.find("td").eq(3).text(newEndDate.toISOString().split("T")[0]);
+            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+
+            Swal.fire("تم التجديد", "تم تجديد اشتراك العضو بنجاح.", "success");
+        }
     </script>
 </body>
 </html>
