@@ -299,22 +299,12 @@
         function renewSubscription(button) {
             const row = $(button).closest("tr");
             const currentEndDate = row.find("td").eq(3).text();
-
-            Swal.fire({
-                title: "تجديد الاشتراك",
-                html: `<input type="date" id="newEndDate" class="swal2-input" value="${currentEndDate}">`,
-                confirmButtonText: "تحديث",
-                preConfirm: () => {
-                    const newEndDate = $("#newEndDate").val();
-                    if (newEndDate) {
-                        row.find("td").eq(3).text(newEndDate);
-                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                        Swal.fire("تم!", "تم تجديد الاشتراك بنجاح.", "success");
-                    } else {
-                        Swal.showValidationMessage("الرجاء اختيار تاريخ جديد");
-                    }
-                }
-            });
+            const newEndDate = new Date();
+            newEndDate.setFullYear(newEndDate.getFullYear() + 1);
+            const updatedEndDate = newEndDate.toISOString().split("T")[0];
+            row.find("td").eq(3).text(updatedEndDate);
+            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+            Swal.fire("تم تجديد الاشتراك!", "تم تجديد مدة الاشتراك بنجاح.", "success");
         }
     </script>
 </body>
