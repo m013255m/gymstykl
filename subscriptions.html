@@ -143,10 +143,6 @@
             gap: 10px;
         }
 
-        .swal2-loading {
-            display: none;
-        }
-
         .waiting-popup {
             font-size: 18px;
             font-weight: bold;
@@ -155,6 +151,23 @@
             background-color: #4CAF50;
             color: white;
             border-radius: 8px;
+        }
+
+        /* تحسين المربع المنبثق */
+        .swal2-loading {
+            display: block !important;
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #4CAF50;
+        }
+
+        /* زيادة حجم الجدول */
+        .subscriptions-table-container {
+            width: 120%;
+            margin-top: 20px;
+            overflow-x: auto;
         }
 
     </style>
@@ -192,20 +205,22 @@
                     <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
                 </div>
             </div>
-            <table id="subscriptionsTable">
-                <thead>
-                    <tr>
-                        <th>اسم العضو</th>
-                        <th>نوع الاشتراك</th>
-                        <th>تاريخ البداية</th>
-                        <th>تاريخ النهاية</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- الاشتراكات سيتم إضافتها هنا -->
-                </tbody>
-            </table>
+            <div class="subscriptions-table-container">
+                <table id="subscriptionsTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>نوع الاشتراك</th>
+                            <th>تاريخ البداية</th>
+                            <th>تاريخ النهاية</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- الاشتراكات سيتم إضافتها هنا -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -222,7 +237,7 @@
                          `<input type="text" id="memberName" class="swal2-input" placeholder="اسم العضو">` +
                          `<input type="text" id="subscriptionType" class="swal2-input" placeholder="نوع الاشتراك">` +
                          `<input type="date" id="startDate" class="swal2-input" placeholder="تاريخ البداية">` +
-                         `<input type="date" id="endDate" class="swal2-input" placeholder="تاريخ النهاية">`,
+                         `<input type="date" id="endDate" class="swal2-input" placeholder="تاريخ النهاية">` ,
                     confirmButtonText: "حفظ",
                     showCancelButton: true,
                     cancelButtonText: "إلغاء",
