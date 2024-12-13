@@ -157,11 +157,7 @@
         .button-container {
             display: flex;
             gap: 10px;
-            justify-content: flex-end; /* تم تعديل الأزرار لتكون في الاتجاه الأيمن */
-        }
-
-        .swal2-loading {
-            display: none;
+            justify-content: flex-end;
         }
 
         .waiting-popup {
@@ -172,6 +168,18 @@
             background-color: #4CAF50;
             color: white;
             border-radius: 8px;
+        }
+
+        .expired-subscriptions-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .expired-subscriptions-header i {
+            color: red;
+            font-size: 20px;
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -204,11 +212,17 @@
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <div class="button-container">
-                    <!-- ترتيب الأزرار الآن في الاتجاه الأيمن -->
                     <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
                 </div>
             </div>
+
+            <!-- الاشتراكات المنتهية -->
+            <div class="expired-subscriptions-header">
+                <h3>الاشتراكات المنتهية</h3>
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+
             <table id="subscriptionsTable">
                 <thead>
                     <tr>
@@ -226,20 +240,6 @@
         </div>
     </div>
 
-    <!-- المربع المنبثق لإضافة اشتراك -->
-    <div class="overlay" id="addSubscriptionPopupOverlay"></div>
-    <div class="popup" id="addSubscriptionPopup">
-        <div class="popup-content">
-            <h2>إضافة اشتراك جديد</h2>
-            <input type="text" id="memberName" placeholder="اسم العضو">
-            <input type="text" id="subscriptionType" placeholder="نوع الاشتراك">
-            <input type="date" id="startDate" placeholder="تاريخ البداية">
-            <input type="date" id="endDate" placeholder="تاريخ النهاية">
-            <button class="button" id="saveSubscriptionBtn">حفظ</button>
-            <button class="button" id="cancelAddBtn">إلغاء</button>
-        </div>
-    </div>
-
     <!-- المربع المنبثق لتجديد الاشتراك -->
     <div class="popup" id="renewSubscriptionPopup">
         <div class="popup-content" id="renewSubscriptionContent">
@@ -247,49 +247,19 @@
         </div>
     </div>
 
+    <!-- المربع المنبثق لتحديث تاريخ النهاية -->
+    <div class="popup" id="updateEndDatePopup">
+        <div class="popup-content">
+            <h2>تحديث تاريخ النهاية</h2>
+            <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
+            <button class="button" onclick="updateEndDate()">تحديث</button>
+            <button class="button" onclick="closeUpdatePopup()">إلغاء</button>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function () {
-            if (localStorage.getItem("subscriptions")) {
-                $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
-            }
-
-            $("#addSubscriptionBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeIn();
-                $("#addSubscriptionPopup").fadeIn();
-            });
-
-            $("#saveSubscriptionBtn").click(function () {
-                const memberName = $("#memberName").val();
-                const subscriptionType = $("#subscriptionType").val();
-                const startDate = $("#startDate").val();
-                const endDate = $("#endDate").val();
-
-                if (memberName && subscriptionType && startDate && endDate) {
-                    $("#subscriptionsTable tbody").append(
-                        `<tr>
-                            <td>${memberName}</td>
-                            <td>${subscriptionType}</td>
-                            <td>${startDate}</td>
-                            <td>${endDate}</td>
-                            <td>
-                                <button class="button" onclick="editSubscription(this)">تعديل</button>
-                                <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
-                            </td>
-                        </tr>`
-                    );
-                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    $("#addSubscriptionPopupOverlay").fadeOut();
-                    $("#addSubscriptionPopup").fadeOut();
-                } else {
-                    alert("الرجاء ملء جميع الحقول.");
-                }
-            });
-
-            $("#cancelAddBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeOut();
-                $("#addSubscriptionPopup").fadeOut();
-            });
-
+            // إظهار المربع المنبثق لتجديد الاشتراكات
             $("#renewSubscriptionBtn").click(function () {
                 let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
@@ -318,7 +288,7 @@
                             <td>${row.find("td").eq(2).text()}</td>
                             <td>${row.find("td").eq(3).text()}</td>
                             <td>
-                                <button class="button" onclick="showRenewPopup(this)">تجديد</button>
+                                <button class="button" onclick="showUpdateEndDatePopup(this)">تجديد</button>
                             </td>
                         </tr>`;
                     });
@@ -331,77 +301,46 @@
                 }
             });
 
-            $("#cancelRenewBtn").click(function () {
-                $("#renewSubscriptionPopup").fadeOut();
-            });
+            // إظهار مربع التحديث لتاريخ النهاية
+            function showUpdateEndDatePopup(button) {
+                const row = $(button).closest("tr");
+                const endDate = row.find("td").eq(3).text();
+
+                $("#newEndDate").val(endDate);
+                $("#updateEndDatePopup").fadeIn();
+            }
+
+            // تحديث تاريخ النهاية في الجدول
+            function updateEndDate() {
+                const newEndDate = $("#newEndDate").val();
+                if (newEndDate) {
+                    $("#subscriptionsTable tbody tr").each(function () {
+                        const row = $(this);
+                        if (row.find("td").eq(3).text() === newEndDate) {
+                            row.find("td").eq(3).text(newEndDate);  // التحديث في الجدول الأساسي
+                        }
+                    });
+
+                    // تحديث الجدول في المربع المنبثق
+                    $("#renewSubscriptionPopup table tbody tr").each(function () {
+                        const row = $(this);
+                        if (row.find("td").eq(3).text() === newEndDate) {
+                            row.find("td").eq(3).text(newEndDate);  // التحديث في الجدول المنبثق
+                        }
+                    });
+
+                    $("#updateEndDatePopup").fadeOut();
+                    alert("تم تحديث تاريخ النهاية بنجاح.");
+                } else {
+                    alert("الرجاء إدخال تاريخ النهاية الجديد.");
+                }
+            }
+
+            // إغلاق المربع المنبثق
+            function closeUpdatePopup() {
+                $("#updateEndDatePopup").fadeOut();
+            }
         });
-
-        function showRenewPopup(button) {
-            const row = $(button).closest("tr");
-            const memberName = row.find("td").eq(0).text();
-            const subscriptionType = row.find("td").eq(1).text();
-            const endDate = row.find("td").eq(3).text();
-
-            const renewPopupContent = `
-                <h2>تجديد الاشتراك</h2>
-                <p>العضو: ${memberName}</p>
-                <p>نوع الاشتراك: ${subscriptionType}</p>
-                <p>تاريخ النهاية الحالي: ${endDate}</p>
-                <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-                <button class="button" onclick="renewSubscription(this)">تجديد</button>
-                <button class="button" id="cancelRenewBtn">إلغاء</button>
-            `;
-            $("#renewSubscriptionPopup .popup-content").html(renewPopupContent);
-            $("#renewSubscriptionPopup").fadeIn();
-        }
-
-        function renewSubscription(button) {
-            const newEndDate = $("#newEndDate").val();
-            const row = $(button).closest("tr");
-            if (newEndDate) {
-                row.find("td").eq(3).text(newEndDate);
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                alert("تم تجديد الاشتراك بنجاح.");
-                $("#renewSubscriptionPopup").fadeOut();
-            } else {
-                alert("الرجاء إدخال تاريخ النهاية الجديد.");
-            }
-        }
-
-        function removeSubscription(button) {
-            if (confirm("هل أنت متأكد من حذف هذا الاشتراك؟")) {
-                $(button).closest("tr").remove();
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                alert("تم حذف الاشتراك بنجاح.");
-            }
-        }
-
-        function editSubscription(button) {
-            const row = $(button).closest("tr");
-            const memberName = row.find("td").eq(0).text();
-            const subscriptionType = row.find("td").eq(1).text();
-            const startDate = row.find("td").eq(2).text();
-            const endDate = row.find("td").eq(3).text();
-
-            $("#memberName").val(memberName);
-            $("#subscriptionType").val(subscriptionType);
-            $("#startDate").val(startDate);
-            $("#endDate").val(endDate);
-
-            $("#addSubscriptionPopupOverlay").fadeIn();
-            $("#addSubscriptionPopup").fadeIn();
-
-            $("#saveSubscriptionBtn").click(function () {
-                row.find("td").eq(0).text($("#memberName").val());
-                row.find("td").eq(1).text($("#subscriptionType").val());
-                row.find("td").eq(2).text($("#startDate").val());
-                row.find("td").eq(3).text($("#endDate").val());
-
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                $("#addSubscriptionPopupOverlay").fadeOut();
-                $("#addSubscriptionPopup").fadeOut();
-            });
-        }
     </script>
 </body>
 </html>
