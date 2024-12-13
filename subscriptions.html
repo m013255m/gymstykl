@@ -167,6 +167,7 @@
             display: flex;
             gap: 10px;
             justify-content: flex-start;
+            margin-bottom: 20px;
         }
 
         .swal2-loading {
@@ -181,6 +182,26 @@
             background-color: #4CAF50;
             color: white;
             border-radius: 8px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-header h3 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .table-header i {
+            font-size: 20px;
+        }
+
+        .subscriptions-table-wrapper {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -209,28 +230,32 @@
         </div>
 
         <div class="content">
-            <h3>إدارة الاشتراكات</h3>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
-                <div class="button-container">
-                    <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
-                </div>
+            <div class="button-container">
+                <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+                <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
             </div>
-            <table id="subscriptionsTable">
-                <thead>
-                    <tr>
-                        <th>اسم العضو</th>
-                        <th>نوع الاشتراك</th>
-                        <th>تاريخ البداية</th>
-                        <th>تاريخ النهاية</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- الاشتراكات سيتم إضافتها هنا -->
-                </tbody>
-            </table>
+
+            <div class="table-header">
+                <h3>الاشتراكات الحالية</h3>
+                <i class="fas fa-table"></i>
+            </div>
+
+            <div class="subscriptions-table-wrapper">
+                <table id="subscriptionsTable">
+                    <thead>
+                        <tr>
+                            <th>اسم العضو</th>
+                            <th>نوع الاشتراك</th>
+                            <th>تاريخ البداية</th>
+                            <th>تاريخ النهاية</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- الاشتراكات سيتم إضافتها هنا -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -264,6 +289,7 @@
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
 
+            // إضافة اشتراك جديد
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
                 $("#addSubscriptionPopup").fadeIn();
@@ -301,6 +327,7 @@
                 $("#addSubscriptionPopup").fadeOut();
             });
 
+            // تجديد الاشتراكات
             $("#renewSubscriptionBtn").click(function () {
                 let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
