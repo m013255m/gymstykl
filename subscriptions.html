@@ -160,6 +160,10 @@
             justify-content: flex-end; /* تم تعديل الأزرار لتكون في الاتجاه الأيمن */
         }
 
+        .swal2-loading {
+            display: none;
+        }
+
         .waiting-popup {
             font-size: 18px;
             font-weight: bold;
@@ -200,6 +204,7 @@
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <div class="button-container">
+                    <!-- ترتيب الأزرار الآن في الاتجاه الأيمن -->
                     <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
                 </div>
@@ -269,46 +274,52 @@
                             <td>${subscriptionType}</td>
                             <td>${startDate}</td>
                             <td>${endDate}</td>
-                            <td>
-                                <button class="button red-button renew-btn">تجديد</button>
-                            </td>
+                            <td><button class="button renewBtn">تجديد</button></td>
                         </tr>`
                     );
                     localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    $("#addSubscriptionPopupOverlay").fadeOut();
                     $("#addSubscriptionPopup").fadeOut();
-                    clearAddSubscriptionForm();
+                    $("#addSubscriptionPopupOverlay").fadeOut();
+                } else {
+                    alert("يرجى ملء جميع الحقول");
                 }
             });
 
             $("#cancelAddBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeOut();
                 $("#addSubscriptionPopup").fadeOut();
+                $("#addSubscriptionPopupOverlay").fadeOut();
             });
 
-            $(document).on("click", ".renew-btn", function () {
+            $(document).on("click", ".renewBtn", function () {
+                const row = $(this).closest("tr");
                 $("#renewSubscriptionPopup").fadeIn();
-            });
+                $("#renewSubscriptionPopupOverlay").fadeIn();
 
-            $("#saveRenewalBtn").click(function () {
-                const newEndDate = $("#newEndDate").val();
-                if (newEndDate) {
-                    alert("تم تجديد الاشتراك بنجاح");
+                $("#saveRenewalBtn").click(function () {
+                    const newEndDate = $("#newEndDate").val();
+                    if (newEndDate) {
+                        row.find("td:nth-child(4)").text(newEndDate);
+                        $("#renewSubscriptionPopup").fadeOut();
+                        $("#renewSubscriptionPopupOverlay").fadeOut();
+                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                    } else {
+                        alert("يرجى إدخال تاريخ النهاية الجديد");
+                    }
+                });
+
+                $("#cancelRenewBtn").click(function () {
                     $("#renewSubscriptionPopup").fadeOut();
-                }
+                    $("#renewSubscriptionPopupOverlay").fadeOut();
+                });
             });
 
-            $("#cancelRenewBtn").click(function () {
-                $("#renewSubscriptionPopup").fadeOut();
+            $("#searchInput").on("keyup", function () {
+                const value = $(this).val().toLowerCase();
+                $("#subscriptionsTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
             });
         });
-
-        function clearAddSubscriptionForm() {
-            $("#memberName").val("");
-            $("#subscriptionType").val("");
-            $("#startDate").val("");
-            $("#endDate").val("");
-        }
     </script>
 </body>
 </html>
