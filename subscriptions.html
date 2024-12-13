@@ -120,10 +120,19 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: #fff;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
             z-index: 1000;
+            width: 400px;
+            max-width: 90%;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+
+        .popup.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
         }
 
         .popup .popup-content {
@@ -131,16 +140,17 @@
         }
 
         .popup input {
-            padding: 10px;
+            padding: 12px;
             font-size: 16px;
             width: 100%;
-            margin: 10px 0;
-            border-radius: 5px;
+            margin: 15px 0;
+            border-radius: 8px;
             border: 1px solid #ddd;
+            box-sizing: border-box;
         }
 
         .popup button {
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .overlay {
@@ -154,14 +164,8 @@
             z-index: 999;
         }
 
-        .button-container {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end; /* تم تعديل الأزرار لتكون في الاتجاه الأيمن */
-        }
-
-        .swal2-loading {
-            display: none;
+        .overlay.show {
+            display: block;
         }
 
         .waiting-popup {
@@ -204,7 +208,6 @@
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <div class="button-container">
-                    <!-- ترتيب الأزرار الآن في الاتجاه الأيمن -->
                     <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
                 </div>
@@ -254,8 +257,8 @@
             }
 
             $("#addSubscriptionBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeIn();
-                $("#addSubscriptionPopup").fadeIn();
+                $("#addSubscriptionPopupOverlay").fadeIn().addClass('show');
+                $("#addSubscriptionPopup").fadeIn().addClass('show');
             });
 
             $("#saveSubscriptionBtn").click(function () {
@@ -278,16 +281,16 @@
                         </tr>`
                     );
                     localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    $("#addSubscriptionPopupOverlay").fadeOut();
-                    $("#addSubscriptionPopup").fadeOut();
+                    $("#addSubscriptionPopupOverlay").fadeOut().removeClass('show');
+                    $("#addSubscriptionPopup").fadeOut().removeClass('show');
                 } else {
                     alert("الرجاء ملء جميع الحقول.");
                 }
             });
 
             $("#cancelAddBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeOut();
-                $("#addSubscriptionPopup").fadeOut();
+                $("#addSubscriptionPopupOverlay").fadeOut().removeClass('show');
+                $("#addSubscriptionPopup").fadeOut().removeClass('show');
             });
 
             $("#renewSubscriptionBtn").click(function () {
@@ -325,14 +328,14 @@
 
                     expiredTable += `</tbody></table>`;
                     $("#renewSubscriptionContent").html(expiredTable);
-                    $("#renewSubscriptionPopup").fadeIn();
+                    $("#renewSubscriptionPopup").fadeIn().addClass('show');
                 } else {
                     alert("لا توجد اشتراكات منتهية لتجديدها.");
                 }
             });
 
             $("#cancelRenewBtn").click(function () {
-                $("#renewSubscriptionPopup").fadeOut();
+                $("#renewSubscriptionPopup").fadeOut().removeClass('show');
             });
         });
 
@@ -352,7 +355,7 @@
                 <button class="button" id="cancelRenewBtn">إلغاء</button>
             `;
             $("#renewSubscriptionPopup .popup-content").html(renewPopupContent);
-            $("#renewSubscriptionPopup").fadeIn();
+            $("#renewSubscriptionPopup").fadeIn().addClass('show');
         }
 
         function renewSubscription(button) {
@@ -362,7 +365,7 @@
                 row.find("td").eq(3).text(newEndDate);
                 localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                 alert("تم تجديد الاشتراك بنجاح.");
-                $("#renewSubscriptionPopup").fadeOut();
+                $("#renewSubscriptionPopup").fadeOut().removeClass('show');
             } else {
                 alert("الرجاء إدخال تاريخ النهاية الجديد.");
             }
@@ -388,8 +391,8 @@
             $("#startDate").val(startDate);
             $("#endDate").val(endDate);
 
-            $("#addSubscriptionPopupOverlay").fadeIn();
-            $("#addSubscriptionPopup").fadeIn();
+            $("#addSubscriptionPopupOverlay").fadeIn().addClass('show');
+            $("#addSubscriptionPopup").fadeIn().addClass('show');
 
             $("#saveSubscriptionBtn").click(function () {
                 row.find("td").eq(0).text($("#memberName").val());
@@ -398,8 +401,8 @@
                 row.find("td").eq(3).text($("#endDate").val());
 
                 localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                $("#addSubscriptionPopupOverlay").fadeOut();
-                $("#addSubscriptionPopup").fadeOut();
+                $("#addSubscriptionPopupOverlay").fadeOut().removeClass('show');
+                $("#addSubscriptionPopup").fadeOut().removeClass('show');
             });
         }
     </script>
