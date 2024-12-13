@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الاشتراكات</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -16,8 +17,6 @@
 
         .container {
             display: flex;
-            justify-content: space-between;
-            padding: 20px;
         }
 
         .sidebar {
@@ -60,13 +59,34 @@
             flex: 1;
             padding: 20px;
             background-color: white;
-            border-radius: 8px;
         }
 
-        .button-container {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
 
         .button {
@@ -93,34 +113,6 @@
             background-color: darkred;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            font-size: 16px;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            padding: 14px;
-            text-align: center;
-        }
-
-        th {
-            background-color: #333;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
         .popup {
             display: none;
             position: fixed;
@@ -130,17 +122,8 @@
             background-color: #fff;
             border-radius: 10px;
             padding: 30px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             z-index: 1000;
-            width: 500px;
-            max-width: 90%;
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-        }
-
-        .popup.show {
-            display: block;
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
         }
 
         .popup .popup-content {
@@ -148,17 +131,16 @@
         }
 
         .popup input {
-            padding: 12px;
+            padding: 10px;
             font-size: 16px;
             width: 100%;
-            margin: 15px 0;
-            border-radius: 8px;
+            margin: 10px 0;
+            border-radius: 5px;
             border: 1px solid #ddd;
-            box-sizing: border-box;
         }
 
         .popup button {
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .overlay {
@@ -172,8 +154,14 @@
             z-index: 999;
         }
 
-        .overlay.show {
-            display: block;
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end; /* تم تعديل الأزرار لتكون في الاتجاه الأيمن */
+        }
+
+        .swal2-loading {
+            display: none;
         }
 
         .waiting-popup {
@@ -187,6 +175,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="sidebar">
@@ -212,11 +201,14 @@
 
         <div class="content">
             <h3>إدارة الاشتراكات</h3>
-            <div class="button-container">
-                <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
-                <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
+                <div class="button-container">
+                    <!-- ترتيب الأزرار الآن في الاتجاه الأيمن -->
+                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
+                    <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+                </div>
             </div>
-
             <table id="subscriptionsTable">
                 <thead>
                     <tr>
@@ -231,7 +223,6 @@
                     <!-- الاشتراكات سيتم إضافتها هنا -->
                 </tbody>
             </table>
-
         </div>
     </div>
 
@@ -263,8 +254,8 @@
             }
 
             $("#addSubscriptionBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeIn().addClass('show');
-                $("#addSubscriptionPopup").fadeIn().addClass('show');
+                $("#addSubscriptionPopupOverlay").fadeIn();
+                $("#addSubscriptionPopup").fadeIn();
             });
 
             $("#saveSubscriptionBtn").click(function () {
@@ -287,16 +278,16 @@
                         </tr>`
                     );
                     localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    $("#addSubscriptionPopupOverlay").fadeOut().removeClass('show');
-                    $("#addSubscriptionPopup").fadeOut().removeClass('show');
+                    $("#addSubscriptionPopupOverlay").fadeOut();
+                    $("#addSubscriptionPopup").fadeOut();
                 } else {
                     alert("الرجاء ملء جميع الحقول.");
                 }
             });
 
             $("#cancelAddBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeOut().removeClass('show');
-                $("#addSubscriptionPopup").fadeOut().removeClass('show');
+                $("#addSubscriptionPopupOverlay").fadeOut();
+                $("#addSubscriptionPopup").fadeOut();
             });
 
             $("#renewSubscriptionBtn").click(function () {
@@ -334,14 +325,14 @@
 
                     expiredTable += `</tbody></table>`;
                     $("#renewSubscriptionContent").html(expiredTable);
-                    $("#renewSubscriptionPopup").fadeIn().addClass('show');
+                    $("#renewSubscriptionPopup").fadeIn();
                 } else {
                     alert("لا توجد اشتراكات منتهية لتجديدها.");
                 }
             });
 
             $("#cancelRenewBtn").click(function () {
-                $("#renewSubscriptionPopup").fadeOut().removeClass('show');
+                $("#renewSubscriptionPopup").fadeOut();
             });
         });
 
@@ -361,7 +352,7 @@
                 <button class="button" id="cancelRenewBtn">إلغاء</button>
             `;
             $("#renewSubscriptionPopup .popup-content").html(renewPopupContent);
-            $("#renewSubscriptionPopup").fadeIn().addClass('show');
+            $("#renewSubscriptionPopup").fadeIn();
         }
 
         function renewSubscription(button) {
@@ -371,7 +362,7 @@
                 row.find("td").eq(3).text(newEndDate);
                 localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                 alert("تم تجديد الاشتراك بنجاح.");
-                $("#renewSubscriptionPopup").fadeOut().removeClass('show');
+                $("#renewSubscriptionPopup").fadeOut();
             } else {
                 alert("الرجاء إدخال تاريخ النهاية الجديد.");
             }
@@ -397,17 +388,18 @@
             $("#startDate").val(startDate);
             $("#endDate").val(endDate);
 
-            $("#addSubscriptionPopupOverlay").fadeIn().addClass('show');
-            $("#addSubscriptionPopup").fadeIn().addClass('show');
+            $("#addSubscriptionPopupOverlay").fadeIn();
+            $("#addSubscriptionPopup").fadeIn();
 
             $("#saveSubscriptionBtn").click(function () {
                 row.find("td").eq(0).text($("#memberName").val());
                 row.find("td").eq(1).text($("#subscriptionType").val());
                 row.find("td").eq(2).text($("#startDate").val());
                 row.find("td").eq(3).text($("#endDate").val());
+
                 localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                $("#addSubscriptionPopupOverlay").fadeOut().removeClass('show');
-                $("#addSubscriptionPopup").fadeOut().removeClass('show');
+                $("#addSubscriptionPopupOverlay").fadeOut();
+                $("#addSubscriptionPopup").fadeOut();
             });
         }
     </script>
