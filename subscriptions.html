@@ -97,7 +97,7 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            transition: transform 0.2s ease-in-out, background-color 0.3s ease;
+            transition: transform 0.2s ease-in-out;
         }
 
         .button:hover {
@@ -124,8 +124,6 @@
             padding: 30px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             z-index: 1000;
-            max-width: 400px;
-            width: 100%;
         }
 
         .popup .popup-content {
@@ -133,23 +131,16 @@
         }
 
         .popup input {
-            padding: 12px;
+            padding: 10px;
             font-size: 16px;
             width: 100%;
             margin: 10px 0;
             border-radius: 5px;
             border: 1px solid #ddd;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-
-        .popup input:focus {
-            border-color: #4CAF50;
         }
 
         .popup button {
             margin-top: 10px;
-            width: 100%;
         }
 
         .overlay {
@@ -166,8 +157,7 @@
         .button-container {
             display: flex;
             gap: 10px;
-            justify-content: flex-start;
-            margin-bottom: 20px;
+            justify-content: flex-start; /* هنا تم تعديل ترتيب الأزرار ليكونوا على اليسار */
         }
 
         .swal2-loading {
@@ -182,26 +172,6 @@
             background-color: #4CAF50;
             color: white;
             border-radius: 8px;
-        }
-
-        .table-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .table-header h3 {
-            margin: 0;
-            font-size: 20px;
-        }
-
-        .table-header i {
-            font-size: 20px;
-        }
-
-        .subscriptions-table-wrapper {
-            margin-top: 20px;
         }
     </style>
 </head>
@@ -230,32 +200,29 @@
         </div>
 
         <div class="content">
-            <div class="button-container">
-                <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-                <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
+            <h3>إدارة الاشتراكات</h3>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
+                <div class="button-container">
+                    <!-- ترتيب الأزرار على اليسار -->
+                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
+                    <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+                </div>
             </div>
-
-            <div class="table-header">
-                <h3>الاشتراكات الحالية</h3>
-                <i class="fas fa-table"></i>
-            </div>
-
-            <div class="subscriptions-table-wrapper">
-                <table id="subscriptionsTable">
-                    <thead>
-                        <tr>
-                            <th>اسم العضو</th>
-                            <th>نوع الاشتراك</th>
-                            <th>تاريخ البداية</th>
-                            <th>تاريخ النهاية</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- الاشتراكات سيتم إضافتها هنا -->
-                    </tbody>
-                </table>
-            </div>
+            <table id="subscriptionsTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>نوع الاشتراك</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- الاشتراكات سيتم إضافتها هنا -->
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -289,7 +256,6 @@
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
 
-            // إضافة اشتراك جديد
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
                 $("#addSubscriptionPopup").fadeIn();
@@ -327,8 +293,8 @@
                 $("#addSubscriptionPopup").fadeOut();
             });
 
-            // تجديد الاشتراكات
             $("#renewSubscriptionBtn").click(function () {
+                // عرض الجدول المنبثق لتجديد الاشتراكات المنتهية
                 let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
                     const currentDate = new Date().toISOString().split("T")[0];
