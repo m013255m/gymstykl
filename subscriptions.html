@@ -235,7 +235,11 @@
                         <td>شهر</td>
                         <td>2024-11-01</td>
                         <td>2024-12-01</td>
-                        <td><button class="button" onclick="openRenewPopup(this)">تجديد</button></td>
+                        <td>
+                            <button class="button" onclick="openRenewPopup(this)">تجديد</button>
+                            <button class="button" onclick="editSubscription(this)">تعديل</button>
+                            <button class="button red-button" onclick="deleteSubscription(this)">حذف</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -283,6 +287,22 @@
                 $("#cancelRenewBtn").click(function () {
                     $("#renewSubscriptionPopup").fadeOut(); // إغلاق المربع المنبثق
                 });
+            };
+
+            // حذف الاشتراك
+            window.deleteSubscription = function(button) {
+                const row = $(button).closest("tr");
+                row.remove();
+            };
+
+            // تعديل الاشتراك
+            window.editSubscription = function(button) {
+                const row = $(button).closest("tr");
+                const memberName = row.find("td").eq(0).text();
+                const subscriptionType = row.find("td").eq(1).text();
+                const startDate = row.find("td").eq(2).text();
+                const endDate = row.find("td").eq(3).text();
+                alert(`تعديل الاشتراك: \n الاسم: ${memberName} \n النوع: ${subscriptionType} \n البداية: ${startDate} \n النهاية: ${endDate}`);
             };
         });
     </script>
