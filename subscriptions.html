@@ -124,6 +124,8 @@
             padding: 30px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             z-index: 1000;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
         }
 
         .popup .popup-content {
@@ -152,12 +154,12 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 999;
+            opacity: 0;
+            animation: fadeInOverlay 0.3s forwards;
         }
 
-        .button-container {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
+        .swal2-loading {
+            display: none;
         }
 
         .waiting-popup {
@@ -170,17 +172,25 @@
             border-radius: 8px;
         }
 
-        .expired-subscriptions-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
-        .expired-subscriptions-header i {
-            color: red;
-            font-size: 20px;
-            margin-left: 10px;
+        @keyframes fadeInOverlay {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
+
     </style>
 </head>
 
@@ -208,22 +218,11 @@
         </div>
 
         <div class="content">
-            <h3>إدارة الاشتراكات</h3>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
-                <div class="button-container">
-                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
-                    <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-                </div>
+            <h3>الاشتراكات المنتهية</h3>
+            <div class="button-container">
+                <button class="button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
             </div>
-
-            <!-- الاشتراكات المنتهية -->
-            <div class="expired-subscriptions-header">
-                <h3>الاشتراكات المنتهية</h3>
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-
-            <table id="subscriptionsTable">
+            <table id="expiredSubscriptionsTable">
                 <thead>
                     <tr>
                         <th>اسم العضو</th>
@@ -234,32 +233,26 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- الاشتراكات سيتم إضافتها هنا -->
+                    <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
                 </tbody>
             </table>
         </div>
     </div>
 
     <!-- المربع المنبثق لتجديد الاشتراك -->
+    <div class="overlay" id="renewSubscriptionOverlay"></div>
     <div class="popup" id="renewSubscriptionPopup">
-        <div class="popup-content" id="renewSubscriptionContent">
-            <!-- الجدول الخاص بالاشتراكات المنتهية سيتم إضافته هنا -->
-        </div>
-    </div>
-
-    <!-- المربع المنبثق لتحديث تاريخ النهاية -->
-    <div class="popup" id="updateEndDatePopup">
         <div class="popup-content">
-            <h2>تحديث تاريخ النهاية</h2>
+            <h2>تجديد الاشتراك</h2>
             <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" onclick="updateEndDate()">تحديث</button>
-            <button class="button" onclick="closeUpdatePopup()">إلغاء</button>
+            <button class="button" id="renewSubscriptionConfirmBtn">تجديد</button>
+            <button class="button" id="cancelRenewBtn">إلغاء</button>
         </div>
     </div>
 
     <script>
         $(document).ready(function () {
-            // إظهار المربع المنبثق لتجديد الاشتراكات
+            // لعرض الاشتراكات المنتهية عند تحميل الصفحة
             $("#renewSubscriptionBtn").click(function () {
                 let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
@@ -288,57 +281,56 @@
                             <td>${row.find("td").eq(2).text()}</td>
                             <td>${row.find("td").eq(3).text()}</td>
                             <td>
-                                <button class="button" onclick="showUpdateEndDatePopup(this)">تجديد</button>
+                                <button class="button" onclick="showRenewPopup(this)">تجديد</button>
                             </td>
                         </tr>`;
                     });
 
                     expiredTable += `</tbody></table>`;
-                    $("#renewSubscriptionContent").html(expiredTable);
+                    $("#renewSubscriptionPopup .popup-content").html(expiredTable);
                     $("#renewSubscriptionPopup").fadeIn();
+                    $("#renewSubscriptionOverlay").fadeIn();
                 } else {
                     alert("لا توجد اشتراكات منتهية لتجديدها.");
                 }
             });
 
-            // إظهار مربع التحديث لتاريخ النهاية
-            function showUpdateEndDatePopup(button) {
+            $("#cancelRenewBtn").click(function () {
+                $("#renewSubscriptionPopup").fadeOut();
+                $("#renewSubscriptionOverlay").fadeOut();
+            });
+
+            function showRenewPopup(button) {
                 const row = $(button).closest("tr");
+                const memberName = row.find("td").eq(0).text();
+                const subscriptionType = row.find("td").eq(1).text();
                 const endDate = row.find("td").eq(3).text();
 
-                $("#newEndDate").val(endDate);
-                $("#updateEndDatePopup").fadeIn();
+                const renewPopupContent = `
+                    <h2>تجديد الاشتراك</h2>
+                    <p>العضو: ${memberName}</p>
+                    <p>نوع الاشتراك: ${subscriptionType}</p>
+                    <p>تاريخ النهاية الحالي: ${endDate}</p>
+                    <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
+                    <button class="button" onclick="renewSubscription(this)">تجديد</button>
+                    <button class="button" id="cancelRenewBtn">إلغاء</button>
+                `;
+                $("#renewSubscriptionPopup .popup-content").html(renewPopupContent);
+                $("#renewSubscriptionPopup").fadeIn();
+                $("#renewSubscriptionOverlay").fadeIn();
             }
 
-            // تحديث تاريخ النهاية في الجدول
-            function updateEndDate() {
+            function renewSubscription(button) {
                 const newEndDate = $("#newEndDate").val();
+                const row = $(button).closest("tr");
                 if (newEndDate) {
-                    $("#subscriptionsTable tbody tr").each(function () {
-                        const row = $(this);
-                        if (row.find("td").eq(3).text() === newEndDate) {
-                            row.find("td").eq(3).text(newEndDate);  // التحديث في الجدول الأساسي
-                        }
-                    });
-
-                    // تحديث الجدول في المربع المنبثق
-                    $("#renewSubscriptionPopup table tbody tr").each(function () {
-                        const row = $(this);
-                        if (row.find("td").eq(3).text() === newEndDate) {
-                            row.find("td").eq(3).text(newEndDate);  // التحديث في الجدول المنبثق
-                        }
-                    });
-
-                    $("#updateEndDatePopup").fadeOut();
-                    alert("تم تحديث تاريخ النهاية بنجاح.");
+                    row.find("td").eq(3).text(newEndDate);
+                    alert("تم تجديد الاشتراك بنجاح.");
+                    $("#renewSubscriptionPopup").fadeOut();
+                    $("#renewSubscriptionOverlay").fadeOut();
                 } else {
                     alert("الرجاء إدخال تاريخ النهاية الجديد.");
                 }
-            }
-
-            // إغلاق المربع المنبثق
-            function closeUpdatePopup() {
-                $("#updateEndDatePopup").fadeOut();
             }
         });
     </script>
