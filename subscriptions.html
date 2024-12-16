@@ -168,6 +168,12 @@
             background-color: #4CAF50;
             color: white;
             border-radius: 8px;
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
@@ -235,16 +241,6 @@
         </div>
     </div>
 
-    <!-- المربع المنبثق لتجديد الاشتراك -->
-    <div class="popup" id="renewSubscriptionPopup">
-        <div class="popup-content">
-            <h2>تجديد الاشتراك</h2>
-            <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" id="saveRenewalBtn">تجديد</button>
-            <button class="button" id="cancelRenewBtn">إلغاء</button>
-        </div>
-    </div>
-
     <script>
         $(document).ready(function () {
             if (localStorage.getItem("subscriptions")) {
@@ -254,4 +250,61 @@
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
                 $("#addSubscriptionPopup").fadeIn();
-           
+            });
+
+            $("#cancelAddBtn").click(function () {
+                $("#addSubscriptionPopupOverlay").fadeOut();
+                $("#addSubscriptionPopup").fadeOut();
+            });
+
+            $("#saveSubscriptionBtn").click(function () {
+                const memberName = $("#memberName").val();
+                const subscriptionType = $("#subscriptionType").val();
+                const startDate = $("#startDate").val();
+                const endDate = $("#endDate").val();
+
+                if (memberName && subscriptionType && startDate && endDate) {
+                    const newRow = `
+                        <tr>
+                            <td>${memberName}</td>
+                            <td>${subscriptionType}</td>
+                            <td>${startDate}</td>
+                            <td>${endDate}</td>
+                            <td>
+                                <button class="button red-button deleteBtn">حذف</button>
+                            </td>
+                        </tr>`;
+                    $("#subscriptionsTable tbody").append(newRow);
+                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+
+                    const alertBox = $("<div class='waiting-popup'>تم إضافة الاشتراك بنجاح!</div>");
+                    $("body").append(alertBox);
+                    setTimeout(() => {
+                        alertBox.fadeOut(500, () => alertBox.remove());
+                    }, 3000);
+
+                    $("#addSubscriptionPopupOverlay").fadeOut();
+                    $("#addSubscriptionPopup").fadeOut();
+
+                    $("#memberName").val("");
+                    $("#subscriptionType").val("");
+                    $("#startDate").val("");
+                    $("#endDate").val("");
+                } else {
+                    alert("يرجى ملء جميع الحقول.");
+                }
+            });
+
+            $(document).on("click", ".deleteBtn", function () {
+                $(this).closest("tr").remove();
+                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+            });
+
+            $("#addSubscriptionPopupOverlay").click(function () {
+                $(this).fadeOut();
+                $("#addSubscriptionPopup").fadeOut();
+            });
+        });
+    </script>
+</body>
+</html>
