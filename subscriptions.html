@@ -262,10 +262,15 @@
 
     <script>
         $(document).ready(function () {
+            // تحميل البيانات من localStorage إذا كانت موجودة
+            if (localStorage.getItem("subscriptions")) {
+                $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
+            }
+
             // فتح المربع المنبثق لتجديد الاشتراك
             $(document).on("click", ".renewBtn", function () {
                 const currentEndDate = $(this).closest("tr").find("td:nth-child(4)").text();
-                $("#newEndDate").val(currentEndDate); // وضع تاريخ النهاية الحالي
+                $("#newEndDate").val(currentEndDate);
                 $("#renewSubscriptionPopupOverlay").fadeIn();
                 $("#renewSubscriptionPopup").fadeIn();
 
@@ -291,6 +296,12 @@
                 } else {
                     alert("يرجى إدخال تاريخ النهاية.");
                 }
+            });
+
+            // إغلاق المربعات المنبثقة عند النقر خارجها
+            $("#renewSubscriptionPopupOverlay").click(function () {
+                $(this).fadeOut();
+                $("#renewSubscriptionPopup").fadeOut();
             });
         });
     </script>
