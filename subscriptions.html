@@ -175,6 +175,14 @@
             z-index: 1001;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
+
+        .expired-popup {
+            width: 80%;
+            height: 80%;
+            overflow: auto;
+            padding: 20px;
+            max-height: 80vh;
+        }
     </style>
 </head>
 
@@ -241,19 +249,32 @@
         </div>
     </div>
 
-    <!-- المربع المنبثق لتجديد الاشتراك -->
-    <div class="overlay" id="renewSubscriptionPopupOverlay"></div>
-    <div class="popup" id="renewSubscriptionPopup">
+    <!-- المربع المنبثق للاشتراكات المنتهية -->
+    <div class="overlay" id="expiredSubscriptionsPopupOverlay"></div>
+    <div class="popup expired-popup" id="expiredSubscriptionsPopup">
         <div class="popup-content">
-            <h2>تجديد الاشتراك</h2>
-            <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" id="updateEndDateBtn">تحديث</button>
-            <button class="button" id="cancelRenewBtn">إلغاء</button>
+            <h2>الاشتراكات المنتهية</h2>
+            <table id="expiredSubscriptionsTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>نوع الاشتراك</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
+                </tbody>
+            </table>
+            <button class="button" id="closeExpiredSubscriptionsBtn">إغلاق</button>
         </div>
     </div>
 
     <script>
         $(document).ready(function () {
+            // تحميل البيانات من localStorage إذا كانت موجودة
             if (localStorage.getItem("subscriptions")) {
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
@@ -292,7 +313,7 @@
                     $("#subscriptionsTable tbody").append(newRow);
                     localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
 
-                    const alertBox = $("<div class= waiting-popup >تم إضافة الاشتراك بنجاح!</div>");
+                    const alertBox = $("<div class='waiting-popup'>تم إضافة الاشتراك بنجاح!</div>");
                     $("body").append(alertBox);
                     setTimeout(() => {
                         alertBox.fadeOut(500, () => alertBox.remove());
@@ -352,6 +373,44 @@
             $("#renewSubscriptionPopupOverlay").click(function () {
                 $(this).fadeOut();
                 $("#renewSubscriptionPopup").fadeOut();
+            });
+
+            // إضافة وظيفة لزر "تجديد الاشتراكات" لعرض الاشتراكات المنتهية فقط
+            $("#renewSubscriptionBtn").click(function () {
+                const currentDate = new Date().toISOString().split('T')[0];  // تاريخ اليوم بصيغة YYYY-MM-DD
+                const expiredSubscriptions = [];
+
+                $("#subscriptionsTable tbody tr").each(function () {
+                    const endDate = $(this).find("td:nth-child(4)").text();
+                    if (endDate && endDate < currentDate) {
+                        expiredSubscriptions.push($(this));
+                    }
+                });
+
+                // إخفاء جميع الاشتراكات
+                $("#subscriptionsTable tbody tr").hide();
+
+                // عرض الاشتراكات المنتهية فقط
+                expiredSubscriptions.forEach(function (row) {
+                    row.show();
+                });
+
+                // فتح المربع المنبثق لعرض الاشتراكات المنتهية
+                $("#expiredSubscriptionsPopupOverlay").fadeIn();
+                $("#expiredSubscriptionsPopup").fadeIn();
+
+                // إضافة الاشتراكات المنتهية في الجدول
+                const expiredTableBody = $("#expiredSubscriptionsTable tbody");
+                expiredTableBody.empty();
+                expiredSubscriptions.forEach(function (row) {
+                    expiredTableBody.append(row.clone());
+                });
+            });
+
+            // إغلاق المربع المنبثق للاشتراكات المنتهية
+            $("#closeExpiredSubscriptionsBtn").click(function () {
+                $("#expiredSubscriptionsPopupOverlay").fadeOut();
+                $("#expiredSubscriptionsPopup").fadeOut();
             });
         });
     </script>
