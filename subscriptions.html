@@ -241,6 +241,17 @@
         </div>
     </div>
 
+    <!-- المربع المنبثق لتجديد الاشتراك -->
+    <div class="overlay" id="renewSubscriptionPopupOverlay"></div>
+    <div class="popup" id="renewSubscriptionPopup">
+        <div class="popup-content">
+            <h2>تجديد الاشتراك</h2>
+            <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
+            <button class="button" id="updateEndDateBtn">تحديث</button>
+            <button class="button" id="cancelRenewBtn">إلغاء</button>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function () {
             if (localStorage.getItem("subscriptions")) {
@@ -272,12 +283,13 @@
                             <td>${endDate}</td>
                             <td>
                                 <button class="button red-button deleteBtn">حذف</button>
+                                <button class="button" class="renewBtn">تجديد</button>
                             </td>
                         </tr>`;
                     $("#subscriptionsTable tbody").append(newRow);
                     localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
 
-                    const alertBox = $("<div class='waiting-popup'>تم إضافة الاشتراك بنجاح!</div>");
+                    const alertBox = $("<div class= waiting-popup >تم إضافة الاشتراك بنجاح!</div>");
                     $("body").append(alertBox);
                     setTimeout(() => {
                         alertBox.fadeOut(500, () => alertBox.remove());
@@ -300,9 +312,37 @@
                 localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
             });
 
+            $(document).on("click", ".renewBtn", function () {
+                $("#renewSubscriptionPopupOverlay").fadeIn();
+                $("#renewSubscriptionPopup").fadeIn();
+            });
+
+            $("#cancelRenewBtn").click(function () {
+                $("#renewSubscriptionPopupOverlay").fadeOut();
+                $("#renewSubscriptionPopup").fadeOut();
+            });
+
+            $("#updateEndDateBtn").click(function () {
+                const newEndDate = $("#newEndDate").val();
+
+                if (newEndDate) {
+                    $(this).closest("tr").find("td:nth-child(4)").text(newEndDate);
+                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                    $("#renewSubscriptionPopupOverlay").fadeOut();
+                    $("#renewSubscriptionPopup").fadeOut();
+                } else {
+                    alert("يرجى إدخال تاريخ النهاية.");
+                }
+            });
+
             $("#addSubscriptionPopupOverlay").click(function () {
                 $(this).fadeOut();
                 $("#addSubscriptionPopup").fadeOut();
+            });
+
+            $("#renewSubscriptionPopupOverlay").click(function () {
+                $(this).fadeOut();
+                $("#renewSubscriptionPopup").fadeOut();
             });
         });
     </script>
