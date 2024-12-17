@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- إضافة مكتبة Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -107,10 +109,6 @@
             transform: scale(1.05);
         }
 
-        .swal2-popup {
-            font-family: 'Arial', sans-serif;
-        }
-
         .search-bar {
             margin-bottom: 20px;
             display: flex;
@@ -178,6 +176,8 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <script>
         const schedulesKey = "gymAdvancedSchedules";
 
@@ -186,11 +186,11 @@
             const storedSchedules = localStorage.getItem(schedulesKey);
             const schedules = storedSchedules ? JSON.parse(storedSchedules) : [];
 
-            const schedulesTable = document.querySelector('#schedulesTable tbody');
-            schedulesTable.innerHTML = ''; // مسح الجدول قبل الإضافة
+            const schedulesTable = document.querySelector("#schedulesTable tbody");
+            schedulesTable.innerHTML = ""; // مسح الجدول قبل الإضافة
 
             schedules.forEach((schedule, index) => {
-                const row = document.createElement('tr');
+                const row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${schedule.name}</td>
                     <td>${schedule.details}</td>
@@ -206,9 +206,9 @@
 
         // إضافة جدول جديد
         function addSchedule() {
-            const name = prompt('أدخل اسم الجدول:');
-            const details = prompt('أدخل تفاصيل الجدول:');
-            const datetime = prompt('أدخل التاريخ والوقت (مثال: 2024-11-28 15:00):');
+            const name = prompt("أدخل اسم الجدول:");
+            const details = prompt("أدخل تفاصيل الجدول:");
+            const datetime = prompt("أدخل التاريخ والوقت (مثال: 2024-11-28 15:00):");
 
             if (name && details && datetime) {
                 const schedules = JSON.parse(localStorage.getItem(schedulesKey)) || [];
@@ -223,9 +223,9 @@
             const schedules = JSON.parse(localStorage.getItem(schedulesKey));
             const schedule = schedules[index];
 
-            const newName = prompt('تعديل اسم الجدول:', schedule.name);
-            const newDetails = prompt('تعديل تفاصيل الجدول:', schedule.details);
-            const newDatetime = prompt('تعديل التاريخ والوقت:', schedule.datetime);
+            const newName = prompt("تعديل اسم الجدول:", schedule.name);
+            const newDetails = prompt("تعديل تفاصيل الجدول:", schedule.details);
+            const newDatetime = prompt("تعديل التاريخ والوقت:", schedule.datetime);
 
             if (newName && newDetails && newDatetime) {
                 schedule.name = newName;
@@ -238,34 +238,30 @@
 
         // حذف جدول
         function deleteSchedule(index) {
-            Swal.fire({
-                title: 'هل أنت متأكد؟',
-                text: "لن تتمكن من استرجاع هذا الجدول بعد الحذف!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'نعم، حذف الجدول!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const schedules = JSON.parse(localStorage.getItem(schedulesKey));
-                    schedules.splice(index, 1);
-                    localStorage.setItem(schedulesKey, JSON.stringify(schedules));
-                    loadSchedules();
-                    Swal.fire(
-                        'تم الحذف!',
-                        'تم حذف الجدول بنجاح.',
-                        'success'
-                    );
-                }
-            });
+            const schedules = JSON.parse(localStorage.getItem(schedulesKey));
+            schedules.splice(index, 1);
+            localStorage.setItem(schedulesKey, JSON.stringify(schedules));
+            loadSchedules();
+
+            // استخدام Toastr لعرض رسالة تنبيه بنجاح الحذف
+            toastr.success("تم حذف الجدول بنجاح", "عملية الحذف");
         }
 
         // البحث عن جدول
-        document.getElementById('searchInput').addEventListener('input', function () {
+        document.getElementById("searchInput").addEventListener("input", function() {
             const searchQuery = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#schedulesTable tbody tr');
+            const rows = document.querySelectorAll("#schedulesTable tbody tr");
             rows.forEach(row => {
                 const name = row.cells[0].textContent.toLowerCase();
                 const details = row.cells[1].textContent.toLowerCase();
-                const datetime = row.cells[2].textContent.toLower
+                const datetime = row.cells[2].textContent.toLowerCase();
+                const isMatch = name.includes(searchQuery) || details.includes(searchQuery) || datetime.includes(searchQuery);
+                row.style.display = isMatch ? "" : "none";
+            });
+        });
+
+        // تحميل البيانات عند تحميل الصفحة
+        loadSchedules();
+    </script>
+</body>
+</html>
