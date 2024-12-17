@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الجدولة المتقدمة</title>
-    <!-- إضافة مكتبة Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- إضافة مكتبة Toastr CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -107,6 +104,47 @@
             transform: scale(1.05);
         }
 
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 400px;
+        }
+
+        .popup input,
+        .popup textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .popup button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .popup button.cancel {
+            background-color: #f44336;
+        }
+
+        .popup button:hover {
+            transform: scale(1.05);
+        }
+
         .search-bar {
             margin-bottom: 20px;
             display: flex;
@@ -156,7 +194,7 @@
             <h3>إدارة الجدولة المتقدمة</h3>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن جدول...">
-                <button class="button" data-bs-toggle="modal" data-bs-target="#dataModal">إضافة جدول</button>
+                <button class="button" id="addScheduleBtn">إضافة جدول</button>
             </div>
             <table id="schedulesTable">
                 <thead>
@@ -174,51 +212,25 @@
         </div>
     </div>
 
-    <!-- Modal لإضافة الجدول -->
-    <div class="modal fade" id="dataModal" tabindex="-1" aria-labelledby="dataModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="dataModalLabel">إضافة جدول جديد</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- نموذج إضافة جدول -->
-                    <form id="addScheduleForm">
-                        <div class="mb-3">
-                            <label for="scheduleName" class="form-label">اسم الجدول</label>
-                            <input type="text" class="form-control" id="scheduleName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="scheduleDetails" class="form-label">تفاصيل الجدول</label>
-                            <input type="text" class="form-control" id="scheduleDetails" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="scheduleDatetime" class="form-label">التاريخ والوقت</label>
-                            <input type="datetime-local" class="form-control" id="scheduleDatetime" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">إضافة</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <!-- نافذة منبثقة لإضافة/تعديل الجدول -->
+    <div id="schedulePopup" class="popup">
+        <h3 id="popupTitle">إضافة جدول</h3>
+        <input type="text" id="scheduleName" placeholder="اسم الجدول" required>
+        <textarea id="scheduleDetails" placeholder="تفاصيل الجدول" required></textarea>
+        <input type="datetime-local" id="scheduleDatetime" required>
+        <button id="saveScheduleBtn" class="button">حفظ</button>
+        <button id="cancelPopupBtn" class="button cancel">إلغاء</button>
     </div>
-
-    <!-- إضافة مكتبات Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- إضافة مكتبة Toastr JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
         const schedulesKey = "gymAdvancedSchedules";
 
-        // تحميل البيانات من التخزين المحلي
+        // تحميل الجداول المخزنة في LocalStorage
         function loadSchedules() {
             const storedSchedules = localStorage.getItem(schedulesKey);
             const schedules = storedSchedules ? JSON.parse(storedSchedules) : [];
-
             const schedulesTable = document.querySelector("#schedulesTable tbody");
-            schedulesTable.innerHTML = ""; // مسح الجدول قبل الإضافة
+            schedulesTable.innerHTML =   ; // مسح الجدول الحالي
 
             schedules.forEach((schedule, index) => {
                 const row = document.createElement("tr");
@@ -235,10 +247,18 @@
             });
         }
 
-        // إضافة جدول جديد عبر Modal
-        document.getElementById("addScheduleForm").addEventListener("submit", function(event) {
-            event.preventDefault();
+        // فتح نافذة إضافة الجدول
+        document.getElementById("addScheduleBtn").addEventListener("click", function () {
+            document.getElementById("popupTitle").textContent = "إضافة جدول";
+            document.getElementById("scheduleName").value =   ;
+            document.getElementById("scheduleDetails").value =   ;
+            document.getElementById("scheduleDatetime").value =   ;
+            document.getElementById("schedulePopup").style.display = "block";
+            document.getElementById("saveScheduleBtn").onclick = saveNewSchedule;
+        });
 
+        // حفظ الجدول الجديد
+        function saveNewSchedule() {
             const name = document.getElementById("scheduleName").value;
             const details = document.getElementById("scheduleDetails").value;
             const datetime = document.getElementById("scheduleDatetime").value;
@@ -248,62 +268,57 @@
                 schedules.push({ name, details, datetime });
                 localStorage.setItem(schedulesKey, JSON.stringify(schedules));
                 loadSchedules();
-
-                // إغلاق Modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById("dataModal"));
-                modal.hide();
-
-                // مسح البيانات المدخلة
-                document.getElementById("addScheduleForm").reset();
-
-                // عرض رسالة نجاح باستخدام Toastr
-                toastr.success("تم إضافة الجدول بنجاح", "عملية الإضافة");
+                closePopup();
             }
-        });
+        }
 
-        // تعديل جدول
+        // تعديل الجدول
         function editSchedule(index) {
             const schedules = JSON.parse(localStorage.getItem(schedulesKey));
             const schedule = schedules[index];
+            document.getElementById("popupTitle").textContent = "تعديل جدول";
+            document.getElementById("scheduleName").value = schedule.name;
+            document.getElementById("scheduleDetails").value = schedule.details;
+            document.getElementById("scheduleDatetime").value = schedule.datetime;
+            document.getElementById("schedulePopup").style.display = "block";
 
-            const newName = prompt("تعديل اسم الجدول:", schedule.name);
-            const newDetails = prompt("تعديل تفاصيل الجدول:", schedule.details);
-            const newDatetime = prompt("تعديل التاريخ والوقت:", schedule.datetime);
+            document.getElementById("saveScheduleBtn").onclick = function () {
+                saveEditedSchedule(index);
+            };
+        }
 
-            if (newName && newDetails && newDatetime) {
-                schedule.name = newName;
-                schedule.details = newDetails;
-                schedule.datetime = newDatetime;
+        // حفظ التعديلات على الجدول
+        function saveEditedSchedule(index) {
+            const name = document.getElementById("scheduleName").value;
+            const details = document.getElementById("scheduleDetails").value;
+            const datetime = document.getElementById("scheduleDatetime").value;
+
+            if (name && details && datetime) {
+                const schedules = JSON.parse(localStorage.getItem(schedulesKey));
+                schedules[index] = { name, details, datetime };
+                localStorage.setItem(schedulesKey, JSON.stringify(schedules));
+                loadSchedules();
+                closePopup();
+            }
+        }
+
+        // حذف الجدول
+        function deleteSchedule(index) {
+            if (confirm("هل أنت متأكد من حذف هذا الجدول؟")) {
+                const schedules = JSON.parse(localStorage.getItem(schedulesKey));
+                schedules.splice(index, 1);
                 localStorage.setItem(schedulesKey, JSON.stringify(schedules));
                 loadSchedules();
             }
         }
 
-        // حذف جدول
-        function deleteSchedule(index) {
-            const schedules = JSON.parse(localStorage.getItem(schedulesKey));
-            schedules.splice(index, 1);
-            localStorage.setItem(schedulesKey, JSON.stringify(schedules));
-            loadSchedules();
-
-            // عرض رسالة تنبيه باستخدام Toastr
-            toastr.success("تم حذف الجدول بنجاح", "عملية الحذف");
+        // إغلاق النافذة المنبثقة
+        document.getElementById("cancelPopupBtn").addEventListener("click", closePopup);
+        function closePopup() {
+            document.getElementById("schedulePopup").style.display = "none";
         }
 
-        // البحث عن جدول
-        document.getElementById("searchInput").addEventListener("input", function() {
-            const searchQuery = this.value.toLowerCase();
-            const rows = document.querySelectorAll("#schedulesTable tbody tr");
-            rows.forEach(row => {
-                const name = row.cells[0].textContent.toLowerCase();
-                const details = row.cells[1].textContent.toLowerCase();
-                const datetime = row.cells[2].textContent.toLowerCase();
-                const isMatch = name.includes(searchQuery) || details.includes(searchQuery) || datetime.includes(searchQuery);
-                row.style.display = isMatch ? "" : "none";
-            });
-        });
-
-        // تحميل البيانات عند تحميل الصفحة
+        // تحميل الجداول عند تحميل الصفحة
         loadSchedules();
     </script>
 </body>
