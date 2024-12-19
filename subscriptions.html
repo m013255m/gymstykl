@@ -106,6 +106,13 @@
             padding: 30px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             z-index: 1000;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+            transition: all 0.3s ease-out;
+        }
+        .popup.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
         }
         .popup .popup-content {
             text-align: center;
@@ -130,6 +137,9 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 999;
+        }
+        .overlay.active {
+            display: block;
         }
         .button-container {
             display: flex;
@@ -195,12 +205,15 @@
         </div>
     </div>
     <!-- المربع المنبثق لتجديد الاشتراك -->
+    <div class="overlay" id="overlay"></div>
     <div class="popup" id="renewSubscriptionPopup">
         <div class="popup-content">
             <h2>تجديد الاشتراك</h2>
             <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" id="saveRenewalBtn">تجديد</button>
-            <button class="button" id="cancelRenewBtn">إلغاء</button>
+            <div class="button-container">
+                <button class="button" id="saveRenewalBtn">تجديد</button>
+                <button class="button" id="cancelRenewBtn">إلغاء</button>
+            </div>
         </div>
     </div>
     <script>
@@ -240,13 +253,16 @@
                     });
                     expiredTable += `</tbody></table>`;
                     $("#renewSubscriptionPopup .popup-content").html(expiredTable);
-                    $("#renewSubscriptionPopup").fadeIn();
+                    $("#overlay, #renewSubscriptionPopup").addClass("active");
                 } else {
                     alert("لا توجد اشتراكات منتهية لتجديدها.");
                 }
             });
             $("#cancelRenewBtn").click(function () {
-                $("#renewSubscriptionPopup").fadeOut();
+                $("#overlay, #renewSubscriptionPopup").removeClass("active");
+            });
+            $("#overlay").click(function () {
+                $("#overlay, #renewSubscriptionPopup").removeClass("active");
             });
         });
 
@@ -258,7 +274,7 @@
                 saveSubscriptions();
                 alert("تم تجديد الاشتراك بنجاح!");
             }
-            $("#renewSubscriptionPopup").fadeOut();
+            $("#overlay, #renewSubscriptionPopup").removeClass("active");
         }
 
         function saveSubscriptions() {
