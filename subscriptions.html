@@ -124,6 +124,7 @@
             padding: 30px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             z-index: 1000;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
         .popup .popup-content {
@@ -160,10 +161,6 @@
             justify-content: flex-end;
         }
 
-        .swal2-loading {
-            display: none;
-        }
-
         .waiting-popup {
             font-size: 18px;
             font-weight: bold;
@@ -172,6 +169,17 @@
             background-color: #4CAF50;
             color: white;
             border-radius: 8px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
         }
     </style>
 </head>
@@ -225,7 +233,6 @@
         </div>
     </div>
 
-    <!-- المربع المنبثق لإضافة اشتراك -->
     <div class="overlay" id="addSubscriptionPopupOverlay"></div>
     <div class="popup" id="addSubscriptionPopup">
         <div class="popup-content">
@@ -239,7 +246,6 @@
         </div>
     </div>
 
-    <!-- المربع المنبثق لتجديد الاشتراك -->
     <div class="popup" id="renewSubscriptionPopup">
         <div class="popup-content">
             <h2>تجديد الاشتراك</h2>
@@ -274,46 +280,23 @@
                             <td>${startDate}</td>
                             <td>${endDate}</td>
                             <td>
-                                <button class="button red-button renewBtn">تجديد</button>
-                                <button class="button red-button deleteBtn">حذف</button>
+                                <button class="button" onclick="editSubscription(this)">تعديل</button>
+                                <button class="button red-button" onclick="deleteSubscription(this)">حذف</button>
+                                <button class="button" onclick="renewSubscription(this)">تجديد</button>
                             </td>
                         </tr>`
                     );
+
                     localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                     $("#addSubscriptionPopupOverlay").fadeOut();
                     $("#addSubscriptionPopup").fadeOut();
+                    $("#memberName").val('');
+                    $("#subscriptionType").val('');
+                    $("#startDate").val('');
+                    $("#endDate").val('');
                 } else {
-                    alert("من فضلك، قم بملء كافة الحقول.");
+                    alert("الرجاء ملء جميع الحقول");
                 }
-            });
-
-            $(document).on("click", ".deleteBtn", function () {
-                $(this).closest("tr").remove();
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-            });
-
-            $(document).on("click", ".renewBtn", function () {
-                const row = $(this).closest("tr");
-                $("#newEndDate").val(row.find("td:eq(3)").text());
-                $("#renewSubscriptionPopup").fadeIn();
-                $("#renewSubscriptionPopupOverlay").fadeIn();
-
-                $("#saveRenewalBtn").click(function () {
-                    const newEndDate = $("#newEndDate").val();
-                    if (newEndDate) {
-                        row.find("td:eq(3)").text(newEndDate);
-                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                        $("#renewSubscriptionPopup").fadeOut();
-                        $("#renewSubscriptionPopupOverlay").fadeOut();
-                    } else {
-                        alert("من فضلك، اختر تاريخ النهاية الجديد.");
-                    }
-                });
-
-                $("#cancelRenewBtn").click(function () {
-                    $("#renewSubscriptionPopup").fadeOut();
-                    $("#renewSubscriptionPopupOverlay").fadeOut();
-                });
             });
 
             $("#cancelAddBtn").click(function () {
@@ -321,22 +304,61 @@
                 $("#addSubscriptionPopup").fadeOut();
             });
 
-            $("#renewSubscriptionBtn").click(function () {
-                const expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
-                    const endDate = new Date($(this).find("td:eq(3)").text());
-                    return endDate < new Date();
-                });
-
-                if (expiredSubscriptions.length > 0) {
-                    expiredSubscriptions.each(function () {
-                        $(this).find(".renewBtn").show();
-                    });
-                    alert("تم العثور على اشتراكات منتهية. يمكنك تجديدها.");
+            $("#saveRenewalBtn").click(function () {
+                const newEndDate = $("#newEndDate").val();
+                const row = $("#subscriptionsTable tbody").find("tr.selected");
+                if (newEndDate) {
+                    row.find("td:eq(3)").text(newEndDate);
+                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                    $("#renewSubscriptionPopup").fadeOut();
+                    alert("تم تجديد الاشتراك بنجاح!");
                 } else {
-                    alert("لا توجد اشتراكات منتهية.");
+                    alert("يرجى إدخال تاريخ النهاية الجديد.");
                 }
             });
+
+            $("#cancelRenewBtn").click(function () {
+                $("#renewSubscriptionPopup").fadeOut();
+            });
         });
+
+        function deleteSubscription(button) {
+            $(button).closest("tr").remove();
+            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+        }
+
+        function editSubscription(button) {
+            const row = $(button).closest("tr");
+            const memberName = row.find("td:eq(0)").text();
+            const subscriptionType = row.find("td:eq(1)").text();
+            const startDate = row.find("td:eq(2)").text();
+            const endDate = row.find("td:eq(3)").text();
+
+            $("#memberName").val(memberName);
+            $("#subscriptionType").val(subscriptionType);
+            $("#startDate").val(startDate);
+            $("#endDate").val(endDate);
+
+            $("#addSubscriptionPopupOverlay").fadeIn();
+            $("#addSubscriptionPopup").fadeIn();
+
+            $("#saveSubscriptionBtn").click(function () {
+                row.find("td:eq(0)").text($("#memberName").val());
+                row.find("td:eq(1)").text($("#subscriptionType").val());
+                row.find("td:eq(2)").text($("#startDate").val());
+                row.find("td:eq(3)").text($("#endDate").val());
+
+                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                $("#addSubscriptionPopupOverlay").fadeOut();
+                $("#addSubscriptionPopup").fadeOut();
+            });
+        }
+
+        function renewSubscription(button) {
+            const row = $(button).closest("tr");
+            row.addClass("selected");
+            $("#renewSubscriptionPopup").fadeIn();
+        }
     </script>
 </body>
 </html>
