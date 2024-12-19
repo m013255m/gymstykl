@@ -5,9 +5,143 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الاشتراكات</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        /* هنا توضع جميع التنسيقات السابقة */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        .sidebar h2 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #575757;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            background-color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            width: 80%;
+        }
+
+        .popup h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .popup table {
+            margin-top: 0;
+        }
+
+        .popup button {
+            margin-top: 10px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
     </style>
 </head>
 <body>
@@ -25,7 +159,7 @@
         <div class="content">
             <h3>إدارة الاشتراكات</h3>
             <div class="button-container">
-                <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
+                <button class="button" id="renewExpiredSubscriptionsBtn">تجديد الاشتراكات المنتهية</button>
             </div>
             <table id="subscriptionsTable">
                 <thead>
@@ -34,89 +168,74 @@
                         <th>نوع الاشتراك</th>
                         <th>تاريخ البداية</th>
                         <th>تاريخ النهاية</th>
-                        <th>الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- البيانات ستُضاف هنا ديناميكيًا -->
+                    <!-- بيانات الاشتراكات -->
+                    <tr>
+                        <td>محمد علي</td>
+                        <td>شهري</td>
+                        <td>2024-11-01</td>
+                        <td>2024-12-01</td>
+                    </tr>
+                    <tr>
+                        <td>سارة أحمد</td>
+                        <td>سنوي</td>
+                        <td>2023-12-01</td>
+                        <td>2024-11-30</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- مربع منبثق لتعديل تاريخ نهاية الاشتراك -->
-    <div class="popup" id="renewPopup">
-        <div class="popup-content">
-            <h2>إضافة مدة إضافية</h2>
-            <input type="date" id="newEndDateInput">
-            <button class="button" id="saveNewEndDateBtn">حفظ</button>
-            <button class="button red-button" id="cancelRenewPopupBtn">إلغاء</button>
-        </div>
-    </div>
-
     <div class="overlay" id="popupOverlay"></div>
+    <div class="popup" id="popup">
+        <h2>الاشتراكات المنتهية</h2>
+        <table id="expiredTable">
+            <thead>
+                <tr>
+                    <th>اسم العضو</th>
+                    <th>نوع الاشتراك</th>
+                    <th>تاريخ النهاية</th>
+                    <th>تجديد</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- سيتم ملء البيانات ديناميكيًا -->
+            </tbody>
+        </table>
+        <button class="button" id="closePopup">إغلاق</button>
+    </div>
 
     <script>
         $(document).ready(function () {
-            // تحميل البيانات
-            if (localStorage.getItem("subscriptions")) {
-                $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
-            }
-
-            // زر تجديد الاشتراكات
-            $("#renewSubscriptionBtn").click(function () {
-                const expiredMembers = [];
-                $("#subscriptionsTable tbody tr").each(function () {
+            $("#renewExpiredSubscriptionsBtn").click(function () {
+                const expiredRows = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = new Date($(this).find("td:eq(3)").text());
-                    const today = new Date();
-                    if (endDate < today) {
-                        expiredMembers.push($(this).clone());
-                    }
+                    return endDate < new Date();
                 });
 
-                if (expiredMembers.length > 0) {
-                    const popupTable = $("<table></table>").append(
-                        "<thead><tr><th>اسم العضو</th><th>نوع الاشتراك</th><th>تاريخ البداية</th><th>تاريخ النهاية</th><th>إجراء</th></tr></thead>"
-                    );
-                    const popupBody = $("<tbody></tbody>");
-                    expiredMembers.forEach(row => {
-                        const extraButton = $("<button></button>")
-                            .addClass("button")
-                            .text("مدة إضافية")
-                            .click(function () {
-                                const selectedRow = row;
-                                $("#popupOverlay").fadeIn();
-                                $("#renewPopup").fadeIn();
+                $("#expiredTable tbody").empty();
 
-                                $("#saveNewEndDateBtn").off("click").click(function () {
-                                    const newEndDate = $("#newEndDateInput").val();
-                                    if (newEndDate) {
-                                        selectedRow.find("td:eq(3)").text(newEndDate);
-                                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                                        $("#popupOverlay").fadeOut();
-                                        $("#renewPopup").fadeOut();
-                                        alert("تم تجديد الاشتراك!");
-                                    } else {
-                                        alert("يرجى إدخال تاريخ النهاية الجديد.");
-                                    }
-                                });
-                            });
+                expiredRows.each(function () {
+                    const row = $(this).clone();
+                    row.append('<td><button class="button renew-btn">تجديد</button></td>');
+                    $("#expiredTable tbody").append(row);
+                });
 
-                        row.append($("<td></td>").append(extraButton));
-                        popupBody.append(row);
-                    });
-
-                    popupTable.append(popupBody);
-                    $("body").append(popupTable);
-                } else {
-                    alert("لا يوجد أعضاء بحاجة إلى تجديد.");
-                }
+                $("#popupOverlay, #popup").fadeIn();
             });
 
-            // إغلاق مربع المدة الإضافية
-            $("#cancelRenewPopupBtn").click(function () {
-                $("#popupOverlay").fadeOut();
-                $("#renewPopup").fadeOut();
+            $("#closePopup").click(function () {
+                $("#popupOverlay, #popup").fadeOut();
+            });
+
+            $(document).on("click", ".renew-btn", function () {
+                const row = $(this).closest("tr");
+                const memberName = row.find("td:eq(0)").text();
+                alert(`تم تجديد الاشتراك لـ ${memberName}`);
+                row.remove();
             });
         });
     </script>
