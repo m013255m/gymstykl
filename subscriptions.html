@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,20 +114,26 @@
             background-color: darkred;
         }
 
-        .button-container {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 20px;
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            width: 50%;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
-        .update-container {
-            display: none;
-            margin-top: 20px;
+        .popup .popup-content {
             text-align: center;
         }
 
-        .update-container input {
+        .popup input {
             padding: 10px;
             font-size: 16px;
             width: 100%;
@@ -137,8 +142,32 @@
             border: 1px solid #ddd;
         }
 
-    </style>
+        .popup button {
+            margin-top: 10px;
+        }
 
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+    </style>
 </head>
 
 <body>
@@ -170,6 +199,7 @@
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <div class="button-container">
+                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
                 </div>
             </div>
@@ -188,15 +218,22 @@
                     <!-- سيتم إضافة البيانات هنا بشكل ديناميكي -->
                 </tbody>
             </table>
-
-            <!-- حاوية تحديث البيانات -->
-            <div class="update-container" id="updateContainer">
-                <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-                <button class="button" id="updateDateBtn">تحديث البيانات</button>
-            </div>
-
         </div>
     </div>
+
+    <!-- المربع المنبثق لتجديد الاشتراك -->
+    <div class="popup" id="renewSubscriptionPopup">
+        <div class="popup-content">
+            <h2>تجديد الاشتراك</h2>
+            <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
+            <div class="button-container">
+                <button class="button" id="saveRenewalBtn">تحديث البيانات</button>
+                <button class="button" id="cancelRenewBtn">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay"></div>
 
     <script>
         $(document).ready(function () {
@@ -221,7 +258,7 @@
                             <td>${startDate}</td>
                             <td>${endDate}</td>
                             <td>
-                                <button class="button" onclick="showUpdateContainer(this)">تجديد</button>
+                                <button class="button" onclick="showRenewPopup(this)">تجديد</button>
                                 <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
                             </td>
                         </tr>`
@@ -232,34 +269,38 @@
                 }
             });
 
-            // عرض حاوية تحديث البيانات للمشترك الذي انتهت اشتراكاته
-            window.showUpdateContainer = function (btn) {
+            // عرض نافذة تجديد الاشتراك للمشترك المختار
+            window.showRenewPopup = function (btn) {
                 let row = $(btn).closest("tr");
-                let currentEndDate = row.find("td").eq(3).text();
-                $("#newEndDate").val(currentEndDate); // تحديد تاريخ النهاية الحالي
-                $("#updateContainer").show(); // عرض حاوية التحديث
-                $("#updateDateBtn").off("click").click(function () {
+                $("#renewSubscriptionPopup input").val(row.find("td").eq(3).text()); // تحديد تاريخ النهاية الحالي
+                $(".overlay").fadeIn();
+                $("#renewSubscriptionPopup").fadeIn();
+
+                $("#saveRenewalBtn").off("click").click(function () {
                     let newEndDate = $("#newEndDate").val();
                     if (newEndDate) {
-                        row.find("td").eq(3).text(newEndDate);
+                        row.find("td").eq(3).text(newEndDate); // تحديث تاريخ النهاية
                         localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                        alert("تم تحديث تاريخ النهاية بنجاح.");
-                        $("#updateContainer").hide();
+                        $(".overlay").fadeOut();
+                        $("#renewSubscriptionPopup").fadeOut();
                     } else {
                         alert("الرجاء تحديد تاريخ النهاية الجديد.");
                     }
                 });
             };
 
-            // حذف الاشتراك
+            // إغلاق نافذة تجديد الاشتراك
+            $("#cancelRenewBtn").click(function () {
+                $(".overlay").fadeOut();
+                $("#renewSubscriptionPopup").fadeOut();
+            });
+
+            // حذف اشتراك
             window.removeSubscription = function (btn) {
                 $(btn).closest("tr").remove();
                 localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
             };
-
         });
     </script>
-
 </body>
-
 </html>
