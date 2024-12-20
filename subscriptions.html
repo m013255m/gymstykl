@@ -169,6 +169,12 @@
             justify-content: flex-end;
         }
 
+        .update-button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
     </style>
 
 </head>
@@ -221,6 +227,12 @@
                     <!-- سيتم إضافة البيانات هنا بشكل ديناميكي -->
                 </tbody>
             </table>
+
+            <!-- الزر الخاص بتحديث البيانات أسفل الجدول -->
+            <div class="update-button-container">
+                <button class="button" id="updateSubscriptionBtn" style="display: none;">تحديث البيانات</button>
+            </div>
+
         </div>
     </div>
 
@@ -229,7 +241,7 @@
         <div class="popup-content">
             <h2>تجديد الاشتراك</h2>
             <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" id="updateSubscriptionBtn">تحديث البيانات</button>
+            <button class="button" id="applyNewEndDateBtn">تطبيق التاريخ الجديد</button>
             <button class="button" id="cancelRenewBtn">إلغاء</button>
         </div>
     </div>
@@ -271,48 +283,16 @@
             });
 
             // عرض نافذة تجديد الاشتراك
-            $("#renewSubscriptionBtn").click(function () {
-                let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
-                    const endDate = $(this).find("td").eq(3).text();
-                    const currentDate = new Date().toISOString().split("T")[0];
-                    return endDate < currentDate;
-                });
-
-                if (expiredSubscriptions.length > 0) {
-                    let expiredTable = `<table><thead>
-                        <tr><th>اسم العضو</th><th>نوع الاشتراك</th><th>تاريخ البداية</th><th>تاريخ النهاية</th><th>الإجراءات</th></tr>
-                        </thead><tbody>`;
-                    expiredSubscriptions.each(function () {
-                        expiredTable += `<tr>
-                                            <td>${$(this).find("td").eq(0).text()}</td>
-                                            <td>${$(this).find("td").eq(1).text()}</td>
-                                            <td>${$(this).find("td").eq(2).text()}</td>
-                                            <td>${$(this).find("td").eq(3).text()}</td>
-                                            <td>
-                                                <button class="button" onclick="showRenewPopup(this)">تجديد</button>
-                                            </td>
-                                        </tr>`;
-                    });
-                    expiredTable += `</tbody></table>`;
-                    $("#renewSubscriptionPopup").html(expiredTable);
-                    $(".overlay").fadeIn();
-                    $("#renewSubscriptionPopup").fadeIn();
-                } else {
-                    alert("لا يوجد اشتراكات منتهية.");
-                }
-            });
-
-            // عرض نافذة تجديد الاشتراك للمشترك المختار
             window.showRenewPopup = function (btn) {
                 let row = $(btn).closest("tr");
                 $("#renewSubscriptionPopup input").val(""); // إعادة تعيين قيمة التاريخ
-                $("#updateSubscriptionBtn").data("row", row); // حفظ السطر الذي سيتم تحديثه
+                $("#applyNewEndDateBtn").data("row", row); // حفظ السطر الذي سيتم تحديثه
                 $(".overlay").fadeIn();
                 $("#renewSubscriptionPopup").fadeIn();
             };
 
-            // تحديث تاريخ الاشتراك
-            $("#updateSubscriptionBtn").click(function () {
+            // تطبيق تاريخ النهاية الجديد
+            $("#applyNewEndDateBtn").click(function () {
                 let newEndDate = $("#newEndDate").val();
                 if (newEndDate) {
                     let row = $(this).data("row");
@@ -320,6 +300,7 @@
                     localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                     $(".overlay").fadeOut();
                     $("#renewSubscriptionPopup").fadeOut();
+                    $("#updateSubscriptionBtn").show(); // إظهار زر "تحديث البيانات"
                 } else {
                     alert("الرجاء اختيار تاريخ النهاية الجديد.");
                 }
@@ -340,6 +321,7 @@
             };
         });
     </script>
+
 </body>
 
 </html>
