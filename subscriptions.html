@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        /* تنسيق العام */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -114,6 +114,7 @@
             background-color: darkred;
         }
 
+        /* تنسيق المربع المنبثق */
         .popup {
             display: none;
             position: fixed;
@@ -158,32 +159,11 @@
             z-index: 999;
         }
 
-        .button-container {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-
-        .swal2-loading {
-            display: none;
-        }
-
-        .waiting-popup {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            padding: 20px;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 8px;
-        }
-
         /* Animation for popup */
         @keyframes fadeIn {
             from {
                 opacity: 0;
             }
-
             to {
                 opacity: 1;
             }
@@ -261,33 +241,6 @@
                 $("#addSubscriptionPopup").fadeIn();
             });
 
-            $("#saveSubscriptionBtn").click(function () {
-                const memberName = $("#memberName").val();
-                const subscriptionType = $("#subscriptionType").val();
-                const startDate = $("#startDate").val();
-                const endDate = $("#endDate").val();
-
-                if (memberName && subscriptionType && startDate && endDate) {
-                    $("#subscriptionsTable tbody").append(
-                        `<tr>
-                            <td>${memberName}</td>
-                            <td>${subscriptionType}</td>
-                            <td>${startDate}</td>
-                            <td>${endDate}</td>
-                            <td>
-                                <button class="button" onclick="editSubscription(this)">تعديل</button>
-                                <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
-                            </td>
-                        </tr>`
-                    );
-                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    $("#addSubscriptionPopupOverlay").fadeOut();
-                    $("#addSubscriptionPopup").fadeOut();
-                } else {
-                    alert("الرجاء ملء جميع الحقول.");
-                }
-            });
-
             $("#renewSubscriptionBtn").click(function () {
                 let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
@@ -307,7 +260,7 @@
                             </tr>
                         </thead>
                         <tbody>`;
-                    
+
                     expiredSubscriptions.each(function () {
                         expiredTable += `
                             <tr>
@@ -344,20 +297,11 @@
                 if (newEndDate) {
                     row.find("td").eq(3).text(newEndDate);
                     localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                    $("#renewSubscriptionPopup").fadeOut();
+                    $(".overlay").fadeOut();
                 }
-            };
-
-            window.editSubscription = function (button) {
-                // تعديل الاشتراك
-                alert("تعديل الاشتراك");
-            };
-
-            window.removeSubscription = function (button) {
-                $(button).closest("tr").remove();
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
             };
         });
     </script>
 </body>
-
 </html>
