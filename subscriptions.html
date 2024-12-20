@@ -1,328 +1,522 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ar" dir="rtl">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>إدارة الاشتراكات</title>
+
     <link rel="stylesheet" href="styles.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <style>
-        /* ... نفس الكود السابق ... */
 
-        /* المربع المنبثق لتجديد الاشتراك */
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-        }
-
-        .popup .popup-content {
-            text-align: center;
-        }
-
-        .popup input {
-            padding: 10px;
-            font-size: 16px;
-            width: 100%;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        .popup button {
-            margin-top: 10px;
-        }
-
-        /* ... باقي الكود ... */
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div class="sidebar">
-            <h2>إدارة الجيم</h2>
-            <nav>
-                <ul>
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="members.html">إدارة الأعضاء</a></li>
-                    <li><a href="trainers.html">إدارة المدربين</a></li>
-                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
-                    <li><a href="inventory.html">إدارة المخزون</a></li>
-                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
-                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
-                    <li><a href="ratings.html">التقييمات</a></li>
-                    <li><a href="rewards.html">المكافآت</a></li>
-                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
-                    <li><a href="marketing.html">حملات التسويق</a></li>
-                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                    <li><a href="complaints.html">الشكاوي</a></li>
-                </ul>
-            </nav>
-        </div>
-
-        <div class="content">
-            <h3>إدارة الاشتراكات</h3>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
-                <div class="button-container">
-                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
-                    <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-                </div>
-            </div>
-
-            <table id="subscriptionsTable">
-                <thead>
-                    <tr>
-                        <th>اسم العضو</th>
-                        <th>نوع الاشتراك</th>
-                        <th>تاريخ البداية</th>
-                        <th>تاريخ النهاية</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- الاشتراكات سيتم إضافتها هنا -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- المربع المنبثق لإضافة اشتراك -->
-    <div class="overlay" id="addSubscriptionPopupOverlay"></div>
-    <div class="popup" id="addSubscriptionPopup">
-        <div class="popup-content">
-            <h2>إضافة اشتراك جديد</h2>
-            <input type="text" id="memberName" placeholder="اسم العضو">
-            <input type="text" id="subscriptionType" placeholder="نوع الاشتراك">
-            <input type="date" id="startDate" placeholder="تاريخ البداية">
-            <input type="date" id="endDate" placeholder="تاريخ النهاية">
-            <button class="button" id="saveSubscriptionBtn">حفظ</button>
-            <button class="button" id="cancelAddBtn">إلغاء</button>
-        </div>
-    </div>
-
-    <!-- المربع المنبثق لتجديد الاشتراك -->
-    <!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تجديد الاشتراك</title>
-    <style>
-        /* تصميم المربع المنبثق */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1;
-        }
-
-        .popup {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            width: 300px;
-        }
-
-        .popup-content {
-            text-align: center;
-        }
-
-        .button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            margin: 10px;
-        }
-
-        .button.red-button {
-            background-color: red;
-        }
-
-        .button:hover {
-            opacity: 0.8;
-        }
-
-        input[type="date"] {
-            padding: 10px;
-            width: 100%;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- زر تجديد الاشتراك -->
-    <!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تجديد الاشتراك</title>
-    <style>
         body {
+
             font-family: Arial, sans-serif;
-            direction: rtl;
+
             background-color: #f4f4f9;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+        .container {
+
             display: flex;
-            justify-content: center;
-            align-items: center;
+
+        }
+
+        .sidebar {
+
+            width: 250px;
+
+            background-color: #333;
+
+            color: white;
+
+            padding: 20px;
+
             height: 100vh;
+
+        }
+
+        .sidebar h2 {
+
+            font-size: 24px;
+
+            text-align: center;
+
+            margin-bottom: 20px;
+
+        }
+
+        .sidebar ul {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .sidebar ul li {
+
+            margin: 15px 0;
+
+        }
+
+        .sidebar ul li a {
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 18px;
+
+            transition: background-color 0.3s ease;
+
+        }
+
+        .sidebar ul li a:hover {
+
+            background-color: #575757;
+
+            padding: 5px;
+
+            border-radius: 5px;
+
+        }
+
+        .content {
+
+            flex: 1;
+
+            padding: 20px;
+
+            background-color: white;
+
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-top: 20px;
+
+            border-radius: 8px;
+
+            overflow: hidden;
+
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        }
+
+        table, th, td {
+
+            border: 1px solid #ddd;
+
+        }
+
+        th, td {
+
+            padding: 14px;
+
+            text-align: center;
+
+            font-size: 16px;
+
+        }
+
+        th {
+
+            background-color: #333;
+
+            color: white;
+
+        }
+
+        tr:nth-child(even) {
+
+            background-color: #f2f2f2;
+
         }
 
         .button {
-            padding: 12px 20px;
+
             background-color: #4CAF50;
+
             color: white;
+
+            padding: 12px 25px;
+
             border: none;
-            cursor: pointer;
+
             border-radius: 5px;
+
+            cursor: pointer;
+
             font-size: 16px;
-            transition: background-color 0.3s ease;
+
+            transition: transform 0.2s ease-in-out;
+
         }
 
         .button:hover {
+
             background-color: #45a049;
+
+            transform: scale(1.05);
+
         }
 
         .red-button {
-            background-color: #f44336;
+
+            background-color: red;
+
         }
 
         .red-button:hover {
-            background-color: #e53935;
-        }
 
-        /* المربع المنبثق */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: none;
-            z-index: 999;
-            animation: fadeIn 0.3s ease;
+            background-color: darkred;
+
         }
 
         .popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            width: 300px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
             display: none;
-            opacity: 0;
-            animation: slideIn 0.5s forwards ease;
+
+            position: fixed;
+
+            top: 50%;
+
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            background-color: #fff;
+
+            border-radius: 10px;
+
+            padding: 30px;
+
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+
+            z-index: 1000;
+
         }
 
-        .popup h2 {
-            margin-bottom: 20px;
-            font-size: 20px;
+        .popup .popup-content {
+
             text-align: center;
+
         }
 
-        input[type="date"] {
-            width: 100%;
+        .popup input {
+
             padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+
             font-size: 16px;
-            box-sizing: border-box;
+
+            width: 100%;
+
+            margin: 10px 0;
+
+            border-radius: 5px;
+
+            border: 1px solid #ddd;
+
         }
 
-        /* التأثيرات الحركية */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .popup button {
+
+            margin-top: 10px;
+
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
+        .overlay {
+
+            display: none;
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            background-color: rgba(0, 0, 0, 0.5);
+
+            z-index: 999;
+
         }
+
+        .button-container {
+
+            display: flex;
+
+            gap: 10px;
+
+            justify-content: flex-end;
+
+        }
+
+        .swal2-loading {
+
+            display: none;
+
+        }
+
+        .waiting-popup {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            text-align: center;
+
+            padding: 20px;
+
+            background-color: #4CAF50;
+
+            color: white;
+
+            border-radius: 8px;
+
+        }
+
     </style>
+
 </head>
+
 <body>
 
-    <button class="button" id="saveRenewalBtn">تجديد</button>
+    <div class="container">
+
+        <div class="sidebar">
+
+            <h2>إدارة الجيم</h2>
+
+            <nav>
+
+                <ul>
+
+                    <li><a href="index.html">الرئيسية</a></li>
+
+                    <li><a href="members.html">إدارة الأعضاء</a></li>
+
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
+
+                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+
+                    <li><a href="inventory.html">إدارة المخزون</a></li>
+
+                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
+
+                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+
+                    <li><a href="ratings.html">التقييمات</a></li>
+
+                    <li><a href="rewards.html">المكافآت</a></li>
+
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+
+                    <li><a href="complaints.html">الشكاوي</a></li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+        <div class="content">
+
+            <h3>إدارة الاشتراكات</h3>
+
+            <div class="search-bar">
+
+                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
+
+                <div class="button-container">
+
+                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
+
+                    <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+
+                </div>
+
+            </div>
+
+            <table id="subscriptionsTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>اسم العضو</th>
+
+                        <th>نوع الاشتراك</th>
+
+                        <th>تاريخ البداية</th>
+
+                        <th>تاريخ النهاية</th>
+
+                        <th>الإجراءات</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
     <!-- المربع المنبثق لتجديد الاشتراك -->
-    <div class="overlay" id="renewSubscriptionPopupOverlay"></div>
+
     <div class="popup" id="renewSubscriptionPopup">
+
         <div class="popup-content">
+
             <h2>تجديد الاشتراك</h2>
+
             <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" id="saveRenewalActionBtn">تجديد</button>
-            <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
+
+            <button class="button" id="saveRenewalBtn">تجديد</button>
+
+            <button class="button" id="cancelRenewBtn">إلغاء</button>
+
         </div>
+
     </div>
 
     <script>
-        // إظهار المربع المنبثق عند الضغط على زر "تجديد"
-        document.getElementById("saveRenewalBtn").addEventListener("click", function () {
-            document.getElementById("renewSubscriptionPopupOverlay").style.display = "block";
-            document.getElementById("renewSubscriptionPopup").style.display = "block";
+
+        $(document).ready(function () {
+
+            if (localStorage.getItem("subscriptions")) {
+                $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
+            }
+
+            $("#addSubscriptionBtn").click(function () {
+                $("#addSubscriptionPopupOverlay").fadeIn();
+                $("#addSubscriptionPopup").fadeIn();
+            });
+
+            $("#saveSubscriptionBtn").click(function () {
+
+                const memberName = $("#memberName").val();
+                const subscriptionType = $("#subscriptionType").val();
+                const startDate = $("#startDate").val();
+                const endDate = $("#endDate").val();
+
+                if (memberName && subscriptionType && startDate && endDate) {
+                    $("#subscriptionsTable tbody").append(
+                        `<tr>
+                            <td>${memberName}</td>
+                            <td>${subscriptionType}</td>
+                            <td>${startDate}</td>
+                            <td>${endDate}</td>
+                            <td>
+                                <button class="button" onclick="editSubscription(this)">تعديل</button>
+                                <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
+                            </td>
+                        </tr>`
+                    );
+                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                    $("#addSubscriptionPopupOverlay").fadeOut();
+                    $("#addSubscriptionPopup").fadeOut();
+                } else {
+                    alert("الرجاء ملء جميع الحقول.");
+                }
+            });
+
+            $("#renewSubscriptionBtn").click(function () {
+
+                let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
+
+                    const endDate = $(this).find("td").eq(3).text();
+                    const currentDate = new Date().toISOString().split("T")[0];
+                    return endDate < currentDate;
+                });
+
+                if (expiredSubscriptions.length > 0) {
+
+                    let expiredTable = `<table>
+                        <thead>
+                            <tr>
+                                <th>اسم العضو</th>
+                                <th>نوع الاشتراك</th>
+                                <th>تاريخ البداية</th>
+                                <th>تاريخ النهاية</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                    
+                    expiredSubscriptions.each(function () {
+                        expiredTable += `
+                            <tr>
+                                <td>${$(this).find("td").eq(0).text()}</td>
+                                <td>${$(this).find("td").eq(1).text()}</td>
+                                <td>${$(this).find("td").eq(2).text()}</td>
+                                <td>${$(this).find("td").eq(3).text()}</td>
+                                <td>
+                                    <button class="button" onclick="showRenewPopup(this)">تجديد</button>
+                                </td>
+                            </tr>`;
+                    });
+
+                    expiredTable += `</tbody></table>`;
+                    $(".content").html(expiredTable);
+                } else {
+                    alert("لا توجد اشتراكات منتهية.");
+                }
+            });
+
         });
 
-        // عند الضغط على زر "تجديد" داخل المربع المنبثق
-        document.getElementById("saveRenewalActionBtn").addEventListener("click", function () {
-            const newEndDate = document.getElementById("newEndDate").value;
+        function showRenewPopup(button) {
+            $("#renewSubscriptionPopup").fadeIn();
+        }
+
+        $("#saveRenewalBtn").click(function () {
+            const newEndDate = $("#newEndDate").val();
             if (newEndDate) {
-                // من هنا يمكن تحديث الاشتراك
-                alert("تم تجديد الاشتراك بنجاح حتى: " + newEndDate);
-                document.getElementById("renewSubscriptionPopupOverlay").style.display = "none";
-                document.getElementById("renewSubscriptionPopup").style.display = "none";
+                alert(`تم تجديد الاشتراك حتى: ${newEndDate}`);
+                $("#renewSubscriptionPopup").fadeOut();
             } else {
                 alert("الرجاء إدخال تاريخ النهاية الجديد.");
             }
         });
 
-        // عند الضغط على زر "إلغاء" داخل المربع المنبثق
-        document.getElementById("cancelRenewBtn").addEventListener("click", function () {
-            document.getElementById("renewSubscriptionPopupOverlay").style.display = "none";
-            document.getElementById("renewSubscriptionPopup").style.display = "none";
+        $("#cancelRenewBtn").click(function () {
+            $("#renewSubscriptionPopup").fadeOut();
         });
+
     </script>
 
 </body>
-</html>
 
+</html>
