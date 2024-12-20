@@ -316,7 +316,7 @@
                                 <td>${$(this).find("td").eq(2).text()}</td>
                                 <td>${$(this).find("td").eq(3).text()}</td>
                                 <td>
-                                    <button class="button" onclick="renewSubscription(this)">تجديد</button>
+                                    <button class="button" onclick="showRenewPopup(this)">تجديد</button>
                                 </td>
                             </tr>`;
                     });
@@ -324,6 +324,7 @@
                     expiredTable += `</tbody></table>`;
                     $("#expiredSubscriptionsList").html(expiredTable);
                     $("#renewSubscriptionPopup").fadeIn();
+                    $(".overlay").fadeIn();
                 } else {
                     alert("لا توجد اشتراكات منتهية.");
                 }
@@ -331,39 +332,31 @@
 
             $("#closeRenewPopup").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
+                $(".overlay").fadeOut();
             });
+
+            // تغيير الاشتراك
+            window.showRenewPopup = function (button) {
+                const row = $(button).closest("tr");
+                const memberName = row.find("td").eq(0).text();
+                const newEndDate = prompt(`إدخال تاريخ نهاية جديد للاشتراك لـ ${memberName}:`);
+
+                if (newEndDate) {
+                    row.find("td").eq(3).text(newEndDate);
+                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                }
+            };
+
+            window.editSubscription = function (button) {
+                // تعديل الاشتراك
+                alert("تعديل الاشتراك");
+            };
+
+            window.removeSubscription = function (button) {
+                $(button).closest("tr").remove();
+                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+            };
         });
-
-        function renewSubscription(button) {
-            const row = $(button).closest("tr");
-            const memberName = row.find("td").eq(0).text();
-            const subscriptionType = row.find("td").eq(1).text();
-            const startDate = row.find("td").eq(2).text();
-            
-            // تاريخ اليوم بعد إضافة فترة التجديد
-            const newEndDate = new Date();
-            newEndDate.setFullYear(newEndDate.getFullYear() + 1);
-            const newEndDateString = newEndDate.toISOString().split("T")[0];
-
-            // تحديث الجدول الأساسي
-            row.find("td").eq(3).text(newEndDateString);
-
-            // تحديث البيانات في التخزين المحلي
-            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-
-            alert(`تم تجديد اشتراك ${memberName} بنجاح!`);
-            $("#renewSubscriptionPopup").fadeOut();
-        }
-
-        function editSubscription(button) {
-            // إضافة الأكواد الخاصة بتعديل الاشتراك
-        }
-
-        function removeSubscription(button) {
-            const row = $(button).closest("tr");
-            row.remove();
-            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-        }
     </script>
 </body>
 
