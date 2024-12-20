@@ -169,12 +169,6 @@
             justify-content: flex-end;
         }
 
-        .update-button-container {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 20px;
-        }
-
     </style>
 
 </head>
@@ -228,11 +222,8 @@
                 </tbody>
             </table>
 
-            <!-- الزر الخاص بتحديث البيانات أسفل الجدول -->
-            <div class="update-button-container">
-                <button class="button" id="updateSubscriptionBtn" style="display: none;">تحديث البيانات</button>
-            </div>
-
+            <!-- زر تحديث البيانات -->
+            <button class="button" id="updateDataBtn">تحديث البيانات</button>
         </div>
     </div>
 
@@ -241,7 +232,7 @@
         <div class="popup-content">
             <h2>تجديد الاشتراك</h2>
             <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" id="applyNewEndDateBtn">تطبيق التاريخ الجديد</button>
+            <button class="button" id="saveRenewalBtn">تجديد</button>
             <button class="button" id="cancelRenewBtn">إلغاء</button>
         </div>
     </div>
@@ -285,40 +276,42 @@
             // عرض نافذة تجديد الاشتراك
             window.showRenewPopup = function (btn) {
                 let row = $(btn).closest("tr");
-                $("#renewSubscriptionPopup input").val(""); // إعادة تعيين قيمة التاريخ
-                $("#applyNewEndDateBtn").data("row", row); // حفظ السطر الذي سيتم تحديثه
+                $("#renewSubscriptionPopup input").val(row.find("td").eq(3).text()); // تحديد تاريخ النهاية الحالي
                 $(".overlay").fadeIn();
                 $("#renewSubscriptionPopup").fadeIn();
+
+                $("#saveRenewalBtn").off("click").click(function () {
+                    let newEndDate = $("#newEndDate").val();
+                    if (newEndDate) {
+                        row.find("td").eq(3).text(newEndDate);
+                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                        alert("تم تجديد الاشتراك بنجاح.");
+                        $("#renewSubscriptionPopup").fadeOut();
+                        $(".overlay").fadeOut();
+                    } else {
+                        alert("الرجاء تحديد تاريخ النهاية الجديد.");
+                    }
+                });
             };
 
-            // تطبيق تاريخ النهاية الجديد
-            $("#applyNewEndDateBtn").click(function () {
-                let newEndDate = $("#newEndDate").val();
-                if (newEndDate) {
-                    let row = $(this).data("row");
-                    row.find("td").eq(3).text(newEndDate); // تحديث تاريخ النهاية
-                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    $(".overlay").fadeOut();
-                    $("#renewSubscriptionPopup").fadeOut();
-                    $("#updateSubscriptionBtn").show(); // إظهار زر "تحديث البيانات"
-                } else {
-                    alert("الرجاء اختيار تاريخ النهاية الجديد.");
-                }
-            });
-
-            // إلغاء تجديد الاشتراك
+            // إغلاق مربع تجديد الاشتراك
             $("#cancelRenewBtn").click(function () {
-                $(".overlay").fadeOut();
                 $("#renewSubscriptionPopup").fadeOut();
+                $(".overlay").fadeOut();
             });
 
             // حذف الاشتراك
             window.removeSubscription = function (btn) {
-                if (confirm("هل أنت متأكد من أنك تريد حذف هذا الاشتراك؟")) {
-                    $(btn).closest("tr").remove();
-                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                }
+                $(btn).closest("tr").remove();
+                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
             };
+
+            // تحديث البيانات بعد تحديد التاريخ الجديد
+            $("#updateDataBtn").click(function () {
+                alert("تم تحديث البيانات بنجاح.");
+                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+            });
+
         });
     </script>
 
