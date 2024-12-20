@@ -175,7 +175,115 @@
 <body>
 
     <!-- زر تجديد الاشتراك -->
-    <button class="button" id="renewSubscriptionBtn">تجديد الاشتراك</button>
+    <!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تجديد الاشتراك</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .button {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .red-button {
+            background-color: #f44336;
+        }
+
+        .red-button:hover {
+            background-color: #e53935;
+        }
+
+        /* المربع المنبثق */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            z-index: 999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            opacity: 0;
+            animation: slideIn 0.5s forwards ease;
+        }
+
+        .popup h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        /* التأثيرات الحركية */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="button" id="saveRenewalBtn">تجديد</button>
 
     <!-- المربع المنبثق لتجديد الاشتراك -->
     <div class="overlay" id="renewSubscriptionPopupOverlay"></div>
@@ -183,18 +291,20 @@
         <div class="popup-content">
             <h2>تجديد الاشتراك</h2>
             <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" id="saveRenewalBtn">تجديد</button>
+            <button class="button" id="saveRenewalActionBtn">تجديد</button>
             <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
         </div>
     </div>
 
     <script>
-        document.getElementById("renewSubscriptionBtn").addEventListener("click", function () {
+        // إظهار المربع المنبثق عند الضغط على زر "تجديد"
+        document.getElementById("saveRenewalBtn").addEventListener("click", function () {
             document.getElementById("renewSubscriptionPopupOverlay").style.display = "block";
             document.getElementById("renewSubscriptionPopup").style.display = "block";
         });
 
-        document.getElementById("saveRenewalBtn").addEventListener("click", function () {
+        // عند الضغط على زر "تجديد" داخل المربع المنبثق
+        document.getElementById("saveRenewalActionBtn").addEventListener("click", function () {
             const newEndDate = document.getElementById("newEndDate").value;
             if (newEndDate) {
                 // من هنا يمكن تحديث الاشتراك
@@ -206,11 +316,13 @@
             }
         });
 
+        // عند الضغط على زر "إلغاء" داخل المربع المنبثق
         document.getElementById("cancelRenewBtn").addEventListener("click", function () {
             document.getElementById("renewSubscriptionPopupOverlay").style.display = "none";
             document.getElementById("renewSubscriptionPopup").style.display = "none";
         });
     </script>
+
 </body>
 </html>
-            
+
