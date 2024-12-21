@@ -1,6 +1,5 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,8 +61,32 @@
             background-color: white;
         }
 
-        .button-container {
-            margin-bottom: 20px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
 
         .button {
@@ -101,7 +124,6 @@
             padding: 30px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             z-index: 1000;
-            width: 50%;
         }
 
         .popup .popup-content {
@@ -132,39 +154,29 @@
             z-index: 999;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end; /* تم تعديل الأزرار لتكون في الاتجاه الأيمن */
         }
 
-        table, th, td {
-            border: 1px solid #ddd;
+        .swal2-loading {
+            display: none;
         }
 
-        th, td {
-            padding: 14px;
+        .waiting-popup {
+            font-size: 18px;
+            font-weight: bold;
             text-align: center;
-            font-size: 16px;
-        }
-
-        th {
-            background-color: #333;
+            padding: 20px;
+            background-color: #4CAF50;
             color: white;
+            border-radius: 8px;
         }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
     </style>
 </head>
 
 <body>
-
     <div class="container">
         <div class="sidebar">
             <h2>إدارة الجيم</h2>
@@ -188,100 +200,115 @@
         </div>
 
         <div class="content">
-            <div class="button-container">
-                <button class="button" id="showExpiredSubscriptionsBtn">عرض الاشتراكات المنتهية</button>
+            <h3>إدارة الاشتراكات</h3>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
+                <div class="button-container">
+                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
+                    <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+                </div>
             </div>
+            <table id="subscriptionsTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>نوع الاشتراك</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- الاشتراكات سيتم إضافتها هنا -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-            <!-- الجدول المنبثق الخاص بالاشتراكات المنتهية -->
-            <div class="popup" id="expiredSubscriptionsPopup">
-                <h3>الاشتراكات المنتهية</h3>
-                <table id="expiredSubscriptionsTable">
-                    <thead>
-                        <tr>
-                            <th>اسم العضو</th>
-                            <th>نوع الاشتراك</th>
-                            <th>تاريخ البداية</th>
-                            <th>تاريخ النهاية</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
-                    </tbody>
-                </table>
-                <button class="button" id="closePopupBtn">إغلاق</button>
-            </div>
+    <!-- المربع المنبثق لإضافة اشتراك -->
+    <div class="overlay" id="addSubscriptionPopupOverlay"></div>
+    <div class="popup" id="addSubscriptionPopup">
+        <div class="popup-content">
+            <h2>إضافة اشتراك جديد</h2>
+            <input type="text" id="memberName" placeholder="اسم العضو">
+            <input type="text" id="subscriptionType" placeholder="نوع الاشتراك">
+            <input type="date" id="startDate" placeholder="تاريخ البداية">
+            <input type="date" id="endDate" placeholder="تاريخ النهاية">
+            <button class="button" id="saveSubscriptionBtn">حفظ</button>
+            <button class="button" id="cancelAddBtn">إلغاء</button>
         </div>
     </div>
 
     <!-- المربع المنبثق لتجديد الاشتراك -->
     <div class="popup" id="renewSubscriptionPopup">
         <div class="popup-content">
-            <h2>تجديد الوقت</h2>
+            <h2>تجديد الاشتراك</h2>
             <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" id="updateDataBtn">تحديث البيانات</button>
+            <button class="button" id="saveRenewalBtn">تجديد</button>
             <button class="button" id="cancelRenewBtn">إلغاء</button>
         </div>
     </div>
 
     <script>
         $(document).ready(function () {
-            // بيانات الاشتراكات المنتهية
-            const expiredSubscriptions = [
-                { name: "أحمد محمد", type: "شهري", startDate: "2024-11-01", endDate: "2024-12-01" },
-                { name: "مريم علي", type: "سنوي", startDate: "2023-12-01", endDate: "2024-12-01" },
-            ];
+            if (localStorage.getItem("subscriptions")) {
+                $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
+            }
 
-            // عرض الاشتراكات المنتهية عند الضغط على زر "عرض الاشتراكات المنتهية"
-            $("#showExpiredSubscriptionsBtn").click(function () {
-                $("#expiredSubscriptionsPopup").fadeIn();
-                // إضافة الاشتراكات المنتهية إلى الجدول
-                expiredSubscriptions.forEach(subscription => {
-                    $("#expiredSubscriptionsTable tbody").append(
-                        `<tr>
-                            <td>${subscription.name}</td>
-                            <td>${subscription.type}</td>
-                            <td>${subscription.startDate}</td>
-                            <td>${subscription.endDate}</td>
-                            <td>
-                                <button class="button" onclick="renewSubscription(this)">تجديد الوقت</button>
-                            </td>
-                        </tr>`
-                    );
-                });
+            $("#addSubscriptionBtn").click(function () {
+                $("#addSubscriptionPopupOverlay").fadeIn();
+                $("#addSubscriptionPopup").fadeIn();
             });
 
-            // فتح مربع تجديد الاشتراك
-            window.renewSubscription = function (button) {
-                const row = $(button).closest("tr");
-                const name = row.find("td:eq(0)").text();
-                const endDate = row.find("td:eq(3)").text();
-                $("#newEndDate").val(endDate);
+            $("#saveSubscriptionBtn").click(function () {
+                const memberName = $("#memberName").val();
+                const subscriptionType = $("#subscriptionType").val();
+                const startDate = $("#startDate").val();
+                const endDate = $("#endDate").val();
+
+                if (memberName && subscriptionType && startDate && endDate) {
+                    $("#subscriptionsTable tbody").append(
+                        `<tr>
+                            <td>${memberName}</td>
+                            <td>${subscriptionType}</td>
+                            <td>${startDate}</td>
+                            <td>${endDate}</td>
+                            <td><button class="button" class="renewBtn">تجديد الوقت</button></td>
+                        </tr>`
+                    );
+                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                    $("#addSubscriptionPopupOverlay").fadeOut();
+                    $("#addSubscriptionPopup").fadeOut();
+                } else {
+                    alert("من فضلك أكمل جميع الحقول!");
+                }
+            });
+
+            $("#cancelAddBtn").click(function () {
+                $("#addSubscriptionPopupOverlay").fadeOut();
+                $("#addSubscriptionPopup").fadeOut();
+            });
+
+            $(document).on("click", ".renewBtn", function () {
+                const row = $(this).closest("tr");
+                const endDate = row.find("td:nth-child(4)").text();
+                $("#renewSubscriptionPopup #newEndDate").val(endDate);
                 $("#renewSubscriptionPopup").fadeIn();
-            };
+            });
 
-            // تحديث البيانات
-            $("#updateDataBtn").click(function () {
+            $("#saveRenewalBtn").click(function () {
                 const newEndDate = $("#newEndDate").val();
-                const row = $("#renewSubscriptionPopup").closest("tr");
-                row.find("td:eq(3)").text(newEndDate);
-
-                // هنا يمكن حفظ التحديثات في قاعدة بيانات أو ملف محلي
+                const row = $("#subscriptionsTable tbody tr").eq(0); // سيحتاج هذا لإضافة شرط أكثر تحديدًا لمراقبة الصف الحالي
+                row.find("td:nth-child(4)").text(newEndDate);
+                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                 $("#renewSubscriptionPopup").fadeOut();
             });
 
-            // إغلاق المربع المنبثق
-            $("#closePopupBtn").click(function () {
-                $("#expiredSubscriptionsPopup").fadeOut();
-            });
-
-            // إلغاء تجديد الاشتراك
             $("#cancelRenewBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
+
         });
     </script>
-
 </body>
-
 </html>
