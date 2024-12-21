@@ -400,37 +400,36 @@
 
 
 
-         <div class="content">
-    <h3>إدارة الاشتراكات</h3>
+        <h3>إدارة الاشتراكات</h3>
 
-    <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
-        <div class="button-container">
-            <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
-            <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-        </div>
+<div class="search-bar">
+    <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
+    <div class="button-container">
+        <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
+        <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
     </div>
-
-    <table id="subscriptionsTable">
-        <thead>
-            <tr>
-                <th>اسم العضو</th>
-                <th>نوع الاشتراك</th>
-                <th>تاريخ البداية</th>
-                <th>تاريخ النهاية</th>
-                <th>الإجراءات</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- بيانات الاشتراكات -->
-        </tbody>
-    </table>
 </div>
 
-<!-- المربع المنبثق لتجديد الاشتراك -->
+<table id="subscriptionsTable">
+    <thead>
+        <tr>
+            <th>اسم العضو</th>
+            <th>نوع الاشتراك</th>
+            <th>تاريخ البداية</th>
+            <th>تاريخ النهاية</th>
+            <th>الإجراءات</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- الاشتراكات سيتم إضافتها هنا -->
+    </tbody>
+</table>
+
+<!-- مربع اختيار تاريخ جديد -->
+<div class="overlay" id="renewSubscriptionPopupOverlay"></div>
 <div class="popup" id="renewSubscriptionPopup">
     <div class="popup-content">
-        <h2>تجديد الاشتراك</h2>
+        <h2>تحديث تاريخ نهاية الاشتراك</h2>
         <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
         <button class="button" id="updateEndDateBtn">تحديث البيانات</button>
         <button class="button" id="cancelRenewBtn">إلغاء</button>
@@ -438,55 +437,53 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // زر "تجديد الاشتراكات"
-        document.getElementById("renewSubscriptionBtn").addEventListener("click", function () {
-            const expiredRows = Array.from(document.querySelectorAll("#subscriptionsTable tbody tr")).filter(row => {
-                const endDate = row.cells[3].textContent;
-                return new Date(endDate) < new Date();
+    $(document).ready(function () {
+        if (localStorage.getItem("subscriptions")) {
+            $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
+        }
+
+        $("#renewSubscriptionBtn").click(function () {
+            let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
+                const endDate = $(this).find("td").eq(3).text();
+                const currentDate = new Date().toISOString().split("T")[0];
+                return endDate < currentDate;
             });
 
-            if (expiredRows.length > 0) {
-                expiredRows.forEach(row => {
-                    const actionsCell = row.cells[4];
-                    actionsCell.innerHTML = `
-                        <button class="button" onclick="openRenewPopup(this)">تجديد الوقت</button>
-                    `;
+            if (expiredSubscriptions.length > 0) {
+                expiredSubscriptions.each(function () {
+                    $(this).find("td:last").html(`
+                        <button class="button" onclick="openRenewalPopup(this)">تجديد الوقت</button>
+                    `);
                 });
-                alert("تم تجهيز قائمة الاشتراكات المنتهية للتجديد.");
             } else {
-                alert("لا توجد اشتراكات منتهية.");
+                alert("لا توجد اشتراكات منتهية لتجديدها.");
             }
         });
 
-        // زر تحديث البيانات
-        document.getElementById("updateEndDateBtn").addEventListener("click", function () {
-            const newEndDate = document.getElementById("newEndDate").value;
-            if (newEndDate) {
-                const row = document.querySelector("#renewSubscriptionPopup").dataset.row;
-                const tableRow = document.querySelector(`#subscriptionsTable tbody tr[data-id="${row}"]`);
-                tableRow.cells[3].textContent = newEndDate;
-                alert("تم تحديث تاريخ الاشتراك بنجاح.");
-                closeRenewPopup();
+        $("#updateEndDateBtn").click(function () {
+            const selectedDate = $("#newEndDate").val();
+            if (selectedDate) {
+                const row = $("#renewSubscriptionPopup").data("currentRow");
+                row.find("td").eq(3).text(selectedDate);
+                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                alert("تم تحديث الاشتراك بنجاح.");
+                $("#renewSubscriptionPopupOverlay").fadeOut();
+                $("#renewSubscriptionPopup").fadeOut();
             } else {
-                alert("يرجى اختيار تاريخ جديد.");
+                alert("الرجاء اختيار تاريخ جديد.");
             }
         });
 
-        document.getElementById("cancelRenewBtn").addEventListener("click", closeRenewPopup);
+        $("#cancelRenewBtn").click(function () {
+            $("#renewSubscriptionPopupOverlay").fadeOut();
+            $("#renewSubscriptionPopup").fadeOut();
+        });
     });
 
-    function openRenewPopup(button) {
-        const row = button.closest("tr").dataset.id;
-        const popup = document.getElementById("renewSubscriptionPopup");
-        popup.dataset.row = row;
-        popup.style.display = "block";
-    }
-
-    function closeRenewPopup() {
-        const popup = document.getElementById("renewSubscriptionPopup");
-        popup.style.display = "none";
-        popup.dataset.row = "";
+    function openRenewalPopup(button) {
+        const row = $(button).closest("tr");
+        $("#renewSubscriptionPopup").data("currentRow", row);
+        $("#renewSubscriptionPopupOverlay").fadeIn();
+        $("#renewSubscriptionPopup").fadeIn();
     }
 </script>
-                       
