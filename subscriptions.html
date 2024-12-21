@@ -271,7 +271,7 @@
             </table>
             <div class="button-container">
                 <button class="button red-button" id="closeRenewPopupBtn">إغلاق</button>
-                <button class="button" id="cancelRenewBtn">إلغاء</button>
+                <button class="button" id="cancelRenewBtn">إلغاء</button> <!-- زر إلغاء -->
             </div>
         </div>
     </div>
@@ -353,10 +353,12 @@
                 }
             });
 
+            // زر إغلاق لتجديد الاشتراك
             $("#closeRenewPopupBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
 
+            // زر إلغاء لتجديد الاشتراك
             $("#cancelRenewBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
