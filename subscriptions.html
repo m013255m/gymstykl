@@ -113,6 +113,18 @@
             background-color: darkred;
         }
 
+        .button.vibrate {
+            animation: vibrate 0.5s ease-in-out infinite;
+        }
+
+        @keyframes vibrate {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(5px); }
+        }
+
         .popup {
             display: none;
             position: fixed;
@@ -120,57 +132,27 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: #fff;
-            border-radius: 15px;
+            border-radius: 10px;
             padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             z-index: 1000;
-            width: 400px;
+        }
+
+        .popup .popup-content {
             text-align: center;
         }
 
-        .popup h2 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
         .popup input {
-            padding: 12px;
+            padding: 10px;
             font-size: 16px;
-            width: 80%;
+            width: 100%;
             margin: 10px 0;
-            border-radius: 8px;
+            border-radius: 5px;
             border: 1px solid #ddd;
-            transition: border-color 0.3s;
         }
 
-        .popup input[type="date"]:focus {
-            outline: none;
-            border-color: #4CAF50;
-        }
-
-        .popup .button {
-            width: 45%;
-            padding: 12px 20px;
-            border-radius: 8px;
-            background-color: #4CAF50;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin: 10px 5px;
-        }
-
-        .popup .button:hover {
-            background-color: #45a049;
-        }
-
-        .popup .red-button {
-            background-color: red;
-        }
-
-        .popup .red-button:hover {
-            background-color: darkred;
+        .popup button {
+            margin-top: 10px;
         }
 
         .overlay {
@@ -186,20 +168,22 @@
 
         .button-container {
             display: flex;
-            justify-content: center;
             gap: 10px;
+            justify-content: flex-end; /* تم تعديل الأزرار لتكون في الاتجاه الأيمن */
         }
 
-        .notification-bell {
-            font-size: 30px;
-            cursor: pointer;
-            color: #ffcc00;
-            transition: transform 0.3s ease, color 0.3s ease;
+        .swal2-loading {
+            display: none;
         }
 
-        .notification-bell.new-subscription {
-            transform: scale(1.2);
-            color: red;
+        .waiting-popup {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -232,7 +216,8 @@
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <div class="button-container">
-                    <i id="renewSubscriptionBtn" class="fas fa-bell notification-bell"></i>
+                    <!-- ترتيب الأزرار الآن في الاتجاه الأيمن -->
+                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
                 </div>
             </div>
@@ -272,10 +257,8 @@
         <div class="popup-content">
             <h2>تجديد الاشتراك</h2>
             <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <div class="button-container">
-                <button class="button" id="saveRenewalBtn">تجديد</button>
-                <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
-            </div>
+            <button class="button" id="saveRenewalBtn">تجديد</button>
+            <button class="button" id="cancelRenewBtn">إلغاء</button>
         </div>
     </div>
 
@@ -312,7 +295,6 @@
                     localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                     $("#addSubscriptionPopupOverlay").fadeOut();
                     $("#addSubscriptionPopup").fadeOut();
-                    checkExpiredSubscriptions();
                 } else {
                     alert("الرجاء ملء جميع الحقول.");
                 }
@@ -351,7 +333,7 @@
                             <td>${row.find("td").eq(2).text()}</td>
                             <td>${row.find("td").eq(3).text()}</td>
                             <td>
-                                <button class="button" onclick="renewSubscription(this)">تجديد</button>
+                                <button class="button vibrate" onclick="renewSubscription(this)">تجديد</button>
                             </td>
                         </tr>`;
                     });
@@ -367,23 +349,7 @@
             $("#cancelRenewBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
-
-            checkExpiredSubscriptions();
         });
-
-        function checkExpiredSubscriptions() {
-            let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
-                const endDate = $(this).find("td").eq(3).text();
-                const currentDate = new Date().toISOString().split("T")[0];
-                return endDate < currentDate;
-            });
-
-            if (expiredSubscriptions.length > 0) {
-                $("#renewSubscriptionBtn").addClass("new-subscription");
-            } else {
-                $("#renewSubscriptionBtn").removeClass("new-subscription");
-            }
-        }
 
         function renewSubscription(button) {
             const row = $(button).closest("tr");
@@ -393,7 +359,6 @@
                 row.find("td").eq(3).text(newEndDate);
                 localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                 alert("تم تجديد الاشتراك بنجاح.");
-                checkExpiredSubscriptions();
             }
         }
 
@@ -402,7 +367,6 @@
                 $(button).closest("tr").remove();
                 localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                 alert("تم حذف الاشتراك بنجاح.");
-                checkExpiredSubscriptions();
             }
         }
 
@@ -418,17 +382,18 @@
             $("#startDate").val(startDate);
             $("#endDate").val(endDate);
 
-            $("#addSubscriptionPopup").fadeIn();
             $("#addSubscriptionPopupOverlay").fadeIn();
+            $("#addSubscriptionPopup").fadeIn();
 
             $("#saveSubscriptionBtn").click(function () {
                 row.find("td").eq(0).text($("#memberName").val());
                 row.find("td").eq(1).text($("#subscriptionType").val());
                 row.find("td").eq(2).text($("#startDate").val());
                 row.find("td").eq(3).text($("#endDate").val());
+
                 localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                $("#addSubscriptionPopup").fadeOut();
                 $("#addSubscriptionPopupOverlay").fadeOut();
+                $("#addSubscriptionPopup").fadeOut();
             });
         }
     </script>
