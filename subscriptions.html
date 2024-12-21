@@ -137,12 +137,19 @@
         }
 
         .popup input {
-            padding: 10px;
-            font-size: 16px;
+            padding: 12px 15px;
+            font-size: 18px;
             width: 100%;
             margin: 10px 0;
-            border-radius: 5px;
+            border-radius: 10px;
             border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .popup input:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.7);
         }
 
         .popup button {
@@ -330,25 +337,11 @@
         </div>
     </div>
 
-    <!-- المربع المنبثق لتعديل الاشتراك -->
-    <div class="overlay" id="editSubscriptionPopupOverlay"></div>
-    <div class="popup" id="editSubscriptionPopup">
+    <!-- المربع المنبثق لتجديد الاشتراك -->
+    <div class="popup" id="renewSubscriptionPopup">
         <div class="popup-content">
-            <h2>تعديل الاشتراك</h2>
-            <input type="text" id="editMemberName" placeholder="اسم العضو">
-            <input type="text" id="editSubscriptionType" placeholder="نوع الاشتراك">
-            <input type="date" id="editStartDate" placeholder="تاريخ البداية">
-            <input type="date" id="editEndDate" placeholder="تاريخ النهاية">
-            <button class="button" id="saveEditBtn">حفظ التعديل</button>
-            <button class="button" id="cancelEditBtn">إلغاء</button>
-        </div>
-    </div>
-
-    <!-- المربع المنبثق لتحديد الاشتراكات المنتهية -->
-    <div class="overlay" id="expiredSubscriptionsPopupOverlay"></div>
-    <div class="popup" id="expiredSubscriptionsPopup">
-        <div class="popup-content">
-            <h2>الاشتراكات المنتهية</h2>
+            <span class="close-icon" id="closeRenewPopupBtn"><i class="fas fa-times"></i></span>
+            <h2>تجديد الاشتراك</h2>
             <table id="expiredSubscriptionsTable">
                 <thead>
                     <tr>
@@ -362,7 +355,9 @@
                     <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
                 </tbody>
             </table>
-            <button class="button" id="closeExpiredPopupBtn">إغلاق</button>
+            <div class="button-container">
+                <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
+            </div>
         </div>
     </div>
 
@@ -411,67 +406,58 @@
                 $("#addSubscriptionPopup").fadeOut();
             });
 
-            // فتح نافذة الاشتراكات المنتهية
             $("#renewSubscriptionBtn").click(function () {
-                // هنا يمكنك إضافة اشتراكات منتهية (للتوضيح، هذا جدول عادي).
-                $("#expiredSubscriptionsPopupOverlay").fadeIn();
-                $("#expiredSubscriptionsPopup").fadeIn();
-            });
+                let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
+                    const endDate = $(this).find("td").eq(3).text();
+                    const currentDate = new Date().toISOString().split("T")[0];
+                    return endDate < currentDate;
+                });
 
-            $("#closeExpiredPopupBtn").click(function () {
-                $("#expiredSubscriptionsPopupOverlay").fadeOut();
-                $("#expiredSubscriptionsPopup").fadeOut();
-            });
-
-            // تعديل الاشتراك
-            window.editSubscription = function (button) {
-                const row = $(button).closest("tr");
-                const memberName = row.find("td:nth-child(1)").text();
-                const subscriptionType = row.find("td:nth-child(2)").text();
-                const startDate = row.find("td:nth-child(3)").text();
-                const endDate = row.find("td:nth-child(4)").text();
-
-                $("#editMemberName").val(memberName);
-                $("#editSubscriptionType").val(subscriptionType);
-                $("#editStartDate").val(startDate);
-                $("#editEndDate").val(endDate);
-
-                $("#editSubscriptionPopupOverlay").fadeIn();
-                $("#editSubscriptionPopup").fadeIn();
-            };
-
-            // حفظ التعديلات
-            $("#saveEditBtn").click(function () {
-                const memberName = $("#editMemberName").val();
-                const subscriptionType = $("#editSubscriptionType").val();
-                const startDate = $("#editStartDate").val();
-                const endDate = $("#editEndDate").val();
-
-                if (memberName && subscriptionType && startDate && endDate) {
-                    const row = $("#subscriptionsTable tbody tr.selected");
-                    row.find("td:nth-child(1)").text(memberName);
-                    row.find("td:nth-child(2)").text(subscriptionType);
-                    row.find("td:nth-child(3)").text(startDate);
-                    row.find("td:nth-child(4)").text(endDate);
-
-                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    $("#editSubscriptionPopupOverlay").fadeOut();
-                    $("#editSubscriptionPopup").fadeOut();
+                if (expiredSubscriptions.length > 0) {
+                    let expiredTable = `<table>
+                        <thead>
+                            <tr>
+                                <th>اسم العضو</th>
+                                <th>نوع الاشتراك</th>
+                                <th>تاريخ البداية</th>
+                                <th>تاريخ النهاية</th>
+                            </tr>
+                        </thead>
+                        <tbody>`; 
+                    expiredSubscriptions.each(function () {
+                        const row = $(this);
+                        expiredTable += `<tr>
+                            <td>${row.find("td").eq(0).text()}</td>
+                            <td>${row.find("td").eq(1).text()}</td>
+                            <td>${row.find("td").eq(2).text()}</td>
+                            <td>${row.find("td").eq(3).text()}</td>
+                        </tr>`;
+                    });
+                    expiredTable += `</tbody></table>`;
+                    $("#renewSubscriptionPopup .popup-content").html(expiredTable + '<button class="button" id="closeRenewPopupBtn">إغلاق</button>');
+                    $("#renewSubscriptionPopup").fadeIn();
+                    $("#closeRenewPopupBtn").click(function () {
+                        $("#renewSubscriptionPopup").fadeOut();
+                    });
+                } else {
+                    alert("لا توجد اشتراكات منتهية.");
                 }
             });
 
-            $("#cancelEditBtn").click(function () {
-                $("#editSubscriptionPopupOverlay").fadeOut();
-                $("#editSubscriptionPopup").fadeOut();
+            // إغلاق نافذة التجديد عند الضغط على زر الإغلاق
+            $("#closeRenewPopupBtn").click(function () {
+                $("#renewSubscriptionPopup").fadeOut();
             });
-
-            // حذف الاشتراك
-            window.removeSubscription = function (button) {
-                const row = $(button).closest("tr");
-                row.remove();
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-            };
         });
+
+        function editSubscription(button) {
+            // من هنا يمكن إضافة كود التعديل في الاشتراكات
+        }
+
+        function removeSubscription(button) {
+            $(button).closest("tr").remove();
+            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+        }
     </script>
 </body>
 </html>
