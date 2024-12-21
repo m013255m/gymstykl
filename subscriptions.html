@@ -124,6 +124,7 @@
             padding: 30px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             z-index: 1000;
+            width: 400px;
         }
 
         .popup .popup-content {
@@ -160,6 +161,18 @@
             justify-content: flex-end;
         }
 
+        .bell-icon {
+            font-size: 30px;
+            color: #ffcc00;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .bell-icon:hover {
+            transform: scale(1.1);
+            color: #f1c40f;
+        }
+
         .swal2-loading {
             display: none;
         }
@@ -172,18 +185,6 @@
             background-color: #4CAF50;
             color: white;
             border-radius: 8px;
-        }
-
-        .bell-icon {
-            font-size: 24px;
-            color: #4CAF50;
-            cursor: pointer;
-            display: none;
-            transition: transform 0.3s ease;
-        }
-
-        .bell-icon.show {
-            display: block;
         }
     </style>
 </head>
@@ -256,8 +257,10 @@
         <div class="popup-content">
             <h2>تجديد الاشتراك</h2>
             <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" id="saveRenewalBtn">تحديث بيانات</button>
-            <button class="button" id="cancelRenewBtn">إلغاء</button>
+            <div class="button-container">
+                <button class="button" id="saveRenewalBtn">تحديث بيانات</button>
+                <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
+            </div>
         </div>
     </div>
 
@@ -321,13 +324,19 @@
             // تحديث الاشتراك
             function renewSubscription(button) {
                 const row = $(button).closest("tr");
-                const newEndDate = prompt("أدخل تاريخ النهاية الجديد:");
-
-                if (newEndDate) {
-                    row.find("td").eq(3).text(newEndDate);
-                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    alert("تم تجديد الاشتراك بنجاح.");
-                }
+                $("#newEndDate").val(""); // إعادة تعيين التاريخ
+                $("#saveRenewalBtn").off('click').on('click', function () {
+                    const newEndDate = $("#newEndDate").val();
+                    if (newEndDate) {
+                        row.find("td").eq(3).text(newEndDate);
+                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                        alert("تم تجديد الاشتراك بنجاح.");
+                        $("#renewSubscriptionPopup").fadeOut();
+                    } else {
+                        alert("يرجى إدخال تاريخ النهاية الجديد.");
+                    }
+                });
+                $("#renewSubscriptionPopup").fadeIn();
             }
 
             // إلغاء المربع المنبثق لتجديد الاشتراك
