@@ -263,11 +263,7 @@
 
     <script>
         $(document).ready(function () {
-            if (localStorage.getItem("subscriptions")) {
-                $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
-            }
-
-            // إظهار الجرس إذا كان هناك اشتراكات منتهية
+            // إظهار الجرس فقط إذا كانت هناك اشتراكات منتهية
             function showBellIcon() {
                 const expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
@@ -280,7 +276,7 @@
                 }
             }
 
-            // عرض الجدول المنبثق لتجديد الاشتراكات المنتهية
+            // إظهار الجدول المنبثق لتجديد الاشتراكات المنتهية
             $("#bellIcon").click(function () {
                 let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
