@@ -119,11 +119,17 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #fff;
-            border-radius: 10px;
+            background: linear-gradient(145deg, #f8f8f8, #e1e1e1);
+            border-radius: 12px;
             padding: 30px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             z-index: 1000;
+            animation: popupFadeIn 0.3s ease-out;
+        }
+
+        @keyframes popupFadeIn {
+            0% { opacity: 0; transform: translate(-50%, -40%); }
+            100% { opacity: 1; transform: translate(-50%, -50%); }
         }
 
         .popup .popup-content {
@@ -174,18 +180,62 @@
             border-radius: 8px;
         }
 
-        /* تأثير الاهتزاز */
-        .shake {
-            animation: shake 0.5s infinite;
+        /* تحسين الجدول */
+        #expiredSubscriptionsTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(0); }
+        #expiredSubscriptionsTable th, #expiredSubscriptionsTable td {
+            padding: 12px;
+            text-align: center;
+            font-size: 16px;
+            border: 1px solid #ddd;
         }
+
+        #expiredSubscriptionsTable th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #expiredSubscriptionsTable tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #expiredSubscriptionsTable tr:hover {
+            background-color: #e1f5e1;
+            cursor: pointer;
+        }
+
+        /* تحسين زر "إلغاء" و"إغلاق" */
+        .popup .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #cancelRenewBtn {
+            background-color: #f44336;
+        }
+
+        #cancelRenewBtn:hover {
+            background-color: #e53935;
+        }
+
+        #closeRenewPopupBtn {
+            background-color: #009688;
+        }
+
+        #closeRenewPopupBtn:hover {
+            background-color: #00796b;
+        }
+
     </style>
 </head>
 
@@ -271,7 +321,7 @@
             </table>
             <div class="button-container">
                 <button class="button red-button" id="closeRenewPopupBtn">إغلاق</button>
-                <button class="button" id="cancelRenewBtn">إلغاء</button> <!-- زر إلغاء لتجديد الاشتراك -->
+                <button class="button" id="cancelRenewBtn">إلغاء</button>
             </div>
         </div>
     </div>
@@ -400,20 +450,6 @@
                 $("#addSubscriptionPopupOverlay").fadeOut();
                 $("#addSubscriptionPopup").fadeOut();
             });
-        }
-
-        function checkExpiredSubscriptions() {
-            let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
-                const endDate = $(this).find("td").eq(3).text();
-                const currentDate = new Date().toISOString().split("T")[0];
-                return endDate < currentDate;
-            });
-
-            if (expiredSubscriptions.length > 0) {
-                $("#renewSubscriptionBtn").addClass("shake");
-            } else {
-                $("#renewSubscriptionBtn").removeClass("shake");
-            }
         }
     </script>
 </body>
