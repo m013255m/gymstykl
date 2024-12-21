@@ -24,7 +24,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: auto;
+            height: 100vh;
         }
 
         .sidebar h2 {
@@ -193,6 +193,23 @@
             100% { opacity: 1; }
         }
 
+        /* مظهر الأيقونة الدوارة */
+        .icon-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150px;
+        }
+
+        .icon-container .icon {
+            font-size: 80px;
+            color: #007BFF;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* نافذة التنبيه عند عدم وجود اشتراكات منتهية */
         .popup-alert {
             position: fixed;
             top: 50%;
@@ -228,6 +245,42 @@
         .popup-alert button:hover {
             background-color: #d32f2f;
         }
+
+        /* المربع المنبثق لتعديل وحذف الاشتراك */
+        .popup-confirm {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            text-align: center;
+            animation: popupConfirmFadeIn 0.3s ease;
+        }
+
+        @keyframes popupConfirmFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .popup-confirm button {
+            padding: 10px 20px;
+            background-color: #FF6347;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .popup-confirm button:hover {
+            background-color: #FF4500;
+        }
+
     </style>
 </head>
 
@@ -280,42 +333,9 @@
         </div>
     </div>
 
-    <!-- المربع المنبثق لإضافة اشتراك -->
-    <div class="overlay" id="addSubscriptionPopupOverlay"></div>
-    <div class="popup" id="addSubscriptionPopup">
-        <div class="popup-content">
-            <h2>إضافة اشتراك جديد</h2>
-            <input type="text" id="memberName" placeholder="اسم العضو">
-            <input type="text" id="subscriptionType" placeholder="نوع الاشتراك">
-            <input type="date" id="startDate" placeholder="تاريخ البداية">
-            <input type="date" id="endDate" placeholder="تاريخ النهاية">
-            <button class="button" id="saveSubscriptionBtn">حفظ</button>
-            <button class="button" id="cancelAddBtn">إلغاء</button>
-        </div>
-    </div>
-
-    <!-- المربع المنبثق لتجديد الاشتراك -->
-    <div class="popup" id="renewSubscriptionPopup">
-        <div class="popup-content">
-            <span class="close-icon" id="closeRenewPopupBtn"><i class="fas fa-times"></i></span>
-            <h2>تجديد الاشتراك</h2>
-            <table id="expiredSubscriptionsTable">
-                <thead>
-                    <tr>
-                        <th>اسم العضو</th>
-                        <th>نوع الاشتراك</th>
-                        <th>تاريخ البداية</th>
-                        <th>تاريخ النهاية</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
-                </tbody>
-            </table>
-            <div class="button-container">
-                <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
-            </div>
-        </div>
+    <!-- الأيقونة الدوارة -->
+    <div class="icon-container">
+        <div class="icon"><i class="fas fa-sync-alt"></i></div>
     </div>
 
     <!-- نافذة التنبيه عند عدم وجود اشتراكات منتهية -->
@@ -324,12 +344,14 @@
         <button onclick="closeAlert()">إغلاق</button>
     </div>
 
-    <!-- الأيقونة الدوارة -->
-    <div class="waiting-popup" id="waitingPopup">
-        <div class="waiting-icon"><i class="fas fa-sync-alt"></i></div>جاري تحميل البيانات...
+    <!-- نافذة تأكيد تعديل/حذف الاشتراك -->
+    <div class="popup-confirm" id="confirmationPopup">
+        <p>هل أنت متأكد من أنك تريد حذف هذا الاشتراك؟</p>
+        <button onclick="confirmDelete()">تأكيد الحذف</button>
     </div>
 
     <script>
+        // إظهار نافذة التنبيه عند عدم وجود اشتراكات منتهية
         $(document).ready(function () {
             if (localStorage.getItem("subscriptions")) {
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
@@ -340,43 +362,12 @@
                 $("#addSubscriptionPopup").fadeIn();
             });
 
-            $("#saveSubscriptionBtn").click(function () {
-                const memberName = $("#memberName").val();
-                const subscriptionType = $("#subscriptionType").val();
-                const startDate = $("#startDate").val();
-                const endDate = $("#endDate").val();
-
-                if (memberName && subscriptionType && startDate && endDate) {
-                    const newRow = `<tr>
-                        <td>${memberName}</td>
-                        <td>${subscriptionType}</td>
-                        <td>${startDate}</td>
-                        <td>${endDate}</td>
-                        <td>
-                            <button class="button" onclick="editSubscription(this)">تعديل</button>
-                            <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
-                        </td>
-                    </tr>`;
-                    $("#subscriptionsTable tbody").append(newRow);
-                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    $("#addSubscriptionPopupOverlay").fadeOut();
-                    $("#addSubscriptionPopup").fadeOut();
-                } else {
-                    alert("الرجاء ملء جميع الحقول.");
-                }
-            });
-
-            $("#cancelAddBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeOut();
-                $("#addSubscriptionPopup").fadeOut();
-            });
-
+            // زر تجديد الاشتراكات
             $("#renewSubscriptionBtn").click(function () {
-                // عرض أيقونة الانتظار
                 $("#waitingPopup").fadeIn();
 
                 setTimeout(function () {
-                    $("#waitingPopup").fadeOut(); // إخفاء الأيقونة بعد 5 ثوانٍ
+                    $("#waitingPopup").fadeOut();
 
                     let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                         const endDate = $(this).find("td").eq(3).text();
@@ -408,16 +399,18 @@
                         $("#renewSubscriptionPopup .popup-content").html(expiredTable + '<button class="button" id="closeRenewPopupBtn">إغلاق</button>');
                         $("#renewSubscriptionPopup").fadeIn();
                     } else {
-                        $("#noExpiredSubscriptionsAlert").fadeIn(); // عرض التنبيه
+                        $("#noExpiredSubscriptionsAlert").fadeIn();
                     }
-                }, 5000); // 5 ثواني
+                }, 5000);
             });
 
-            $("#closeRenewPopupBtn").click(function () {
-                $("#renewSubscriptionPopup").fadeOut();
-            });
+            // حذف الاشتراك
+            function confirmDelete() {
+                // يمكنك إضافة منطق الحذف الفعلي هنا
+                alert("تم حذف الاشتراك.");
+                $(".popup-confirm").fadeOut();
+            }
 
-            // إغلاق التنبيه
             window.closeAlert = function () {
                 $("#noExpiredSubscriptionsAlert").fadeOut();
             };
