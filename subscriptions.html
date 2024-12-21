@@ -24,7 +24,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100vh;
+            height: auto; /* تعديل هنا */
         }
 
         .sidebar h2 {
@@ -416,42 +416,40 @@
                                 <th>تاريخ النهاية</th>
                             </tr>
                         </thead>
-                        <tbody>`;
+                        <tbody>`; 
                     expiredSubscriptions.each(function () {
+                        const row = $(this);
                         expiredTable += `<tr>
-                                <td>${$(this).find("td").eq(0).text()}</td>
-                                <td>${$(this).find("td").eq(1).text()}</td>
-                                <td>${$(this).find("td").eq(2).text()}</td>
-                                <td>${$(this).find("td").eq(3).text()}</td>
-                            </tr>`;
+                            <td>${row.find("td").eq(0).text()}</td>
+                            <td>${row.find("td").eq(1).text()}</td>
+                            <td>${row.find("td").eq(2).text()}</td>
+                            <td>${row.find("td").eq(3).text()}</td>
+                        </tr>`;
                     });
                     expiredTable += `</tbody></table>`;
-                    $("#renewSubscriptionPopup tbody").html(expiredTable);
+                    $("#renewSubscriptionPopup .popup-content").html(expiredTable + '<button class="button" id="closeRenewPopupBtn">إغلاق</button>');
                     $("#renewSubscriptionPopup").fadeIn();
-                    $(".overlay").fadeIn();
+                    $("#closeRenewPopupBtn").click(function () {
+                        $("#renewSubscriptionPopup").fadeOut();
+                    });
                 } else {
                     alert("لا توجد اشتراكات منتهية.");
                 }
             });
 
-            $("#cancelRenewBtn").click(function () {
-                $("#renewSubscriptionPopup").fadeOut();
-                $(".overlay").fadeOut();
-            });
-
+            // إغلاق نافذة التجديد عند الضغط على زر الإغلاق
             $("#closeRenewPopupBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
-                $(".overlay").fadeOut();
             });
         });
+
+        function editSubscription(button) {
+            // من هنا يمكن إضافة كود التعديل في الاشتراكات
+        }
 
         function removeSubscription(button) {
             $(button).closest("tr").remove();
             localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-        }
-
-        function editSubscription(button) {
-            alert("ميزة التعديل قيد التطوير.");
         }
     </script>
 </body>
