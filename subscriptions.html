@@ -13,14 +13,10 @@
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh; /* اجعل الجسم يغطي كامل الارتفاع */
         }
 
         .container {
             display: flex;
-            height: 100%;
         }
 
         .sidebar {
@@ -28,8 +24,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100%;
-            overflow-y: auto;
+            height: 100vh;
         }
 
         .sidebar h2 {
@@ -61,18 +56,9 @@
         }
 
         .content {
-            margin-left: 250px;
+            flex: 1;
             padding: 20px;
             background-color: white;
-            height: 100%;
-            overflow-y: auto; /* يسمح بالتمرير داخل المحتوى */
-            display: flex;
-            flex-direction: column;
-        }
-
-        h3 {
-            font-size: 24px;
-            margin-bottom: 20px;
         }
 
         table {
@@ -101,11 +87,6 @@
 
         tr:nth-child(even) {
             background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #f5f5f5;
-            cursor: pointer;
         }
 
         .button {
@@ -409,7 +390,7 @@
                     $("#addSubscriptionPopupOverlay").fadeOut();
                     $("#addSubscriptionPopup").fadeOut();
                 } else {
-                    alert("يرجى ملء جميع الحقول.");
+                    alert("الرجاء ملء جميع الحقول.");
                 }
             });
 
@@ -418,16 +399,15 @@
                 $("#addSubscriptionPopup").fadeOut();
             });
 
-            // تجديد الاشتراكات
             $("#renewSubscriptionBtn").click(function () {
-                const expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
+                let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
-                    const currentDate = new Date().toISOString().split('T')[0]; // التاريخ الحالي بتنسيق YYYY-MM-DD
+                    const currentDate = new Date().toISOString().split("T")[0];
                     return endDate < currentDate;
                 });
 
                 if (expiredSubscriptions.length > 0) {
-                    let expiredTable = `<table id="expiredSubscriptionsTable">
+                    let expiredTable = `<table>
                         <thead>
                             <tr>
                                 <th>اسم العضو</th>
@@ -439,15 +419,16 @@
                         <tbody>`;
                     expiredSubscriptions.each(function () {
                         expiredTable += `<tr>
-                            <td>${$(this).find("td").eq(0).text()}</td>
-                            <td>${$(this).find("td").eq(1).text()}</td>
-                            <td>${$(this).find("td").eq(2).text()}</td>
-                            <td>${$(this).find("td").eq(3).text()}</td>
-                        </tr>`;
+                                <td>${$(this).find("td").eq(0).text()}</td>
+                                <td>${$(this).find("td").eq(1).text()}</td>
+                                <td>${$(this).find("td").eq(2).text()}</td>
+                                <td>${$(this).find("td").eq(3).text()}</td>
+                            </tr>`;
                     });
                     expiredTable += `</tbody></table>`;
-                    $("#expiredSubscriptionsTable tbody").html(expiredTable);
+                    $("#renewSubscriptionPopup tbody").html(expiredTable);
                     $("#renewSubscriptionPopup").fadeIn();
+                    $(".overlay").fadeIn();
                 } else {
                     alert("لا توجد اشتراكات منتهية.");
                 }
@@ -455,18 +436,22 @@
 
             $("#cancelRenewBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
+                $(".overlay").fadeOut();
             });
 
-            // حفظ التعديلات بعد الحذف
-            $(document).on("click", ".remove-button", function () {
-                $(this).closest("tr").remove();
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+            $("#closeRenewPopupBtn").click(function () {
+                $("#renewSubscriptionPopup").fadeOut();
+                $(".overlay").fadeOut();
             });
         });
 
         function removeSubscription(button) {
             $(button).closest("tr").remove();
             localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+        }
+
+        function editSubscription(button) {
+            alert("ميزة التعديل قيد التطوير.");
         }
     </script>
 </body>
