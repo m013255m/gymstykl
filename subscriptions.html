@@ -173,6 +173,19 @@
             color: white;
             border-radius: 8px;
         }
+
+        /* تأثير الاهتزاز */
+        .shake {
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
     </style>
 </head>
 
@@ -341,6 +354,9 @@
             $("#cancelRenewBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
+
+            // تحقق من الاشتراكات المنتهية عند تحميل الصفحة
+            checkExpiredSubscriptions();
         });
 
         function removeSubscription(button) {
@@ -376,6 +392,20 @@
                 $("#addSubscriptionPopupOverlay").fadeOut();
                 $("#addSubscriptionPopup").fadeOut();
             });
+        }
+
+        function checkExpiredSubscriptions() {
+            let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
+                const endDate = $(this).find("td").eq(3).text();
+                const currentDate = new Date().toISOString().split("T")[0];
+                return endDate < currentDate;
+            });
+
+            if (expiredSubscriptions.length > 0) {
+                $("#renewSubscriptionBtn").addClass("shake");
+            } else {
+                $("#renewSubscriptionBtn").removeClass("shake");
+            }
         }
     </script>
 </body>
