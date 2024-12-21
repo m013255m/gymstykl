@@ -24,7 +24,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: auto;
+            height: auto; /* تعديل هنا */
         }
 
         .sidebar h2 {
@@ -113,20 +113,57 @@
             background-color: darkred;
         }
 
-        /* إضافة الأيقونة أثناء الانتظار */
-        .loader {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 2s linear infinite;
-            margin: 0 auto;
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #f8f8f8, #e1e1e1);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            animation: popupFadeIn 0.3s ease-out;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes popupFadeIn {
+            0% { opacity: 0; transform: translate(-50%, -40%); }
+            100% { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        .popup .popup-content {
+            text-align: center;
+        }
+
+        .popup input {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .popup button {
+            margin-top: 10px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
         }
 
         .waiting-popup {
@@ -134,10 +171,97 @@
             font-weight: bold;
             text-align: center;
             padding: 20px;
-            background-color: #f39c12;
+            background-color: #4CAF50;
             color: white;
             border-radius: 8px;
+        }
+
+        .swal2-loading {
+            display: none;
+        }
+
+        /* أيقونة الانتظار */
+        .waiting-icon {
+            font-size: 40px;
+            color: #4CAF50;
+            margin: 20px auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* تحسين الجدول */
+        #expiredSubscriptionsTable {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #expiredSubscriptionsTable th, #expiredSubscriptionsTable td {
+            padding: 12px;
+            text-align: center;
+            font-size: 16px;
+            border: 1px solid #ddd;
+        }
+
+        #expiredSubscriptionsTable th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #expiredSubscriptionsTable tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #expiredSubscriptionsTable tr:hover {
+            background-color: #e1f5e1;
+            cursor: pointer;
+        }
+
+        /* تحسين زر "إلغاء" و"إغلاق" */
+        .popup .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #cancelRenewBtn {
+            background-color: #f44336;
+        }
+
+        #cancelRenewBtn:hover {
+            background-color: #e53935;
+        }
+
+        #closeRenewPopupBtn {
+            background-color: #009688;
+        }
+
+        #closeRenewPopupBtn:hover {
+            background-color: #00796b;
+        }
+
+        /* أيقونة زر الإغلاق في وسط المربع المنبثق */
+        .popup .close-icon {
+            font-size: 40px;
+            color: #333;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+
+        .popup .close-icon:hover {
+            color: #f44336;
         }
 
     </style>
@@ -189,10 +313,43 @@
                     <!-- الاشتراكات سيتم إضافتها هنا -->
                 </tbody>
             </table>
+        </div>
+    </div>
 
-            <!-- رسالة التنبيه -->
-            <div id="noExpiredSubscriptionsMessage" class="waiting-popup" style="display:none;">
-                لا توجد اشتراكات منتهية.
+    <!-- المربع المنبثق لإضافة اشتراك -->
+    <div class="overlay" id="addSubscriptionPopupOverlay"></div>
+    <div class="popup" id="addSubscriptionPopup">
+        <div class="popup-content">
+            <h2>إضافة اشتراك جديد</h2>
+            <input type="text" id="memberName" placeholder="اسم العضو">
+            <input type="text" id="subscriptionType" placeholder="نوع الاشتراك">
+            <input type="date" id="startDate" placeholder="تاريخ البداية">
+            <input type="date" id="endDate" placeholder="تاريخ النهاية">
+            <button class="button" id="saveSubscriptionBtn">حفظ</button>
+            <button class="button" id="cancelAddBtn">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- المربع المنبثق لتجديد الاشتراك -->
+    <div class="popup" id="renewSubscriptionPopup">
+        <div class="popup-content">
+            <span class="close-icon" id="closeRenewPopupBtn"><i class="fas fa-times"></i></span>
+            <h2>تجديد الاشتراك</h2>
+            <table id="expiredSubscriptionsTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>نوع الاشتراك</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
+                </tbody>
+            </table>
+            <div class="button-container">
+                <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
             </div>
         </div>
     </div>
@@ -203,21 +360,56 @@
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
 
-            // عند الضغط على زر "تجديد الاشتراكات"
-            $("#renewSubscriptionBtn").click(function () {
-                $("#renewSubscriptionBtn").prop('disabled', true).text("جاري البحث...");
-                const loader = $("<div class='loader'></div>");
-                $(".content").append(loader);
+            // إضافة تأثير الاهتزاز على زر "تجديد الاشتراكات"
+            $("#renewSubscriptionBtn").addClass("vibrate");
 
-                // محاكاة فترة الانتظار
+            $("#addSubscriptionBtn").click(function () {
+                $("#addSubscriptionPopupOverlay").fadeIn();
+                $("#addSubscriptionPopup").fadeIn();
+            });
+
+            $("#saveSubscriptionBtn").click(function () {
+                const memberName = $("#memberName").val();
+                const subscriptionType = $("#subscriptionType").val();
+                const startDate = $("#startDate").val();
+                const endDate = $("#endDate").val();
+
+                if (memberName && subscriptionType && startDate && endDate) {
+                    const newRow = `<tr>
+                        <td>${memberName}</td>
+                        <td>${subscriptionType}</td>
+                        <td>${startDate}</td>
+                        <td>${endDate}</td>
+                        <td>
+                            <button class="button" onclick="editSubscription(this)">تعديل</button>
+                            <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
+                        </td>
+                    </tr>`;
+                    $("#subscriptionsTable tbody").append(newRow);
+                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                    $("#addSubscriptionPopupOverlay").fadeOut();
+                    $("#addSubscriptionPopup").fadeOut();
+                } else {
+                    alert("الرجاء ملء جميع الحقول.");
+                }
+            });
+
+            $("#cancelAddBtn").click(function () {
+                $("#addSubscriptionPopupOverlay").fadeOut();
+                $("#addSubscriptionPopup").fadeOut();
+            });
+
+            $("#renewSubscriptionBtn").click(function () {
+                // عرض أيقونة الانتظار
+                $("body").append('<div class="waiting-popup"><div class="waiting-icon"><i class="fas fa-spinner"></i></div>جاري تحميل البيانات...</div>');
                 setTimeout(function () {
+                    $(".waiting-popup").fadeOut();
                     let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                         const endDate = $(this).find("td").eq(3).text();
                         const currentDate = new Date().toISOString().split("T")[0];
                         return endDate < currentDate;
                     });
 
-                    // إذا كانت هناك اشتراكات منتهية
                     if (expiredSubscriptions.length > 0) {
                         let expiredTable = `<table>
                             <thead>
@@ -228,7 +420,7 @@
                                     <th>تاريخ النهاية</th>
                                 </tr>
                             </thead>
-                            <tbody>`;
+                            <tbody>`; 
                         expiredSubscriptions.each(function () {
                             const row = $(this);
                             expiredTable += `<tr>
@@ -239,17 +431,15 @@
                             </tr>`;
                         });
                         expiredTable += `</tbody></table>`;
-                        $("#renewSubscriptionPopup .popup-content").html(expiredTable);
+                        $("#renewSubscriptionPopup .popup-content").html(expiredTable + '<button class="button" id="closeRenewPopupBtn">إغلاق</button>');
                         $("#renewSubscriptionPopup").fadeIn();
+                        $("#closeRenewPopupBtn").click(function () {
+                            $("#renewSubscriptionPopup").fadeOut();
+                        });
                     } else {
-                        // لا توجد اشتراكات منتهية
-                        $("#noExpiredSubscriptionsMessage").fadeIn();
+                        alert("لا توجد اشتراكات منتهية.");
                     }
-
-                    // إزالة الأيقونة الانتظار
-                    loader.remove();
-                    $("#renewSubscriptionBtn").prop('disabled', false).text("تجديد الاشتراكات");
-                }, 2000); // 2 ثانية لمحاكاة عملية البحث
+                }, 5000); // 5 ثواني
             });
 
             // إغلاق نافذة التجديد عند الضغط على زر الإغلاق
@@ -257,6 +447,15 @@
                 $("#renewSubscriptionPopup").fadeOut();
             });
         });
+
+        function editSubscription(button) {
+            // من هنا يمكن إضافة كود التعديل في الاشتراكات
+        }
+
+        function removeSubscription(button) {
+            $(button).closest("tr").remove();
+            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+        }
     </script>
 </body>
 </html>
