@@ -176,15 +176,14 @@
 
         .bell-icon {
             font-size: 24px;
-            color: #f39c12;
+            color: #4CAF50;
             cursor: pointer;
-            margin-left: 10px;
             display: none;
-            transition: transform 0.3s;
+            transition: transform 0.3s ease;
         }
 
-        .bell-icon:hover {
-            transform: scale(1.2);
+        .bell-icon.show {
+            display: block;
         }
     </style>
 </head>
@@ -217,9 +216,8 @@
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <div class="button-container">
-                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-                    <i class="fas fa-bell bell-icon" id="bellIcon"></i>
+                    <i class="fas fa-bell bell-icon" id="bellIcon"></i> <!-- أيقونة الجرس -->
                 </div>
             </div>
             <table id="subscriptionsTable">
@@ -257,75 +255,33 @@
     <div class="popup" id="renewSubscriptionPopup">
         <div class="popup-content">
             <h2>تجديد الاشتراك</h2>
-            <div id="expiredSubscriptionsTable"></div>
+            <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
+            <button class="button" id="saveRenewalBtn">تحديث بيانات</button>
             <button class="button" id="cancelRenewBtn">إلغاء</button>
         </div>
     </div>
 
     <script>
         $(document).ready(function () {
-            const loadSubscriptions = () => {
-                if (localStorage.getItem("subscriptions")) {
-                    $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
-                    checkExpiredSubscriptions();
-                }
-            };
+            if (localStorage.getItem("subscriptions")) {
+                $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
+            }
 
-            const checkExpiredSubscriptions = () => {
-                let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
+            // إظهار الجرس إذا كان هناك اشتراكات منتهية
+            function showBellIcon() {
+                const expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
                     const currentDate = new Date().toISOString().split("T")[0];
                     return endDate < currentDate;
                 });
 
                 if (expiredSubscriptions.length > 0) {
-                    $("#bellIcon").show();
-                } else {
-                    $("#bellIcon").hide();
+                    $("#bellIcon").addClass("show");
                 }
-            };
+            }
 
-            loadSubscriptions();
-
-            $("#addSubscriptionBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeIn();
-                $("#addSubscriptionPopup").fadeIn();
-            });
-
-            $("#saveSubscriptionBtn").click(function () {
-                const memberName = $("#memberName").val();
-                const subscriptionType = $("#subscriptionType").val();
-                const startDate = $("#startDate").val();
-                const endDate = $("#endDate").val();
-
-                if (memberName && subscriptionType && startDate && endDate) {
-                    $("#subscriptionsTable tbody").append(
-                        `<tr>
-                            <td>${memberName}</td>
-                            <td>${subscriptionType}</td>
-                            <td>${startDate}</td>
-                            <td>${endDate}</td>
-                            <td>
-                                <button class="button" onclick="editSubscription(this)">تعديل</button>
-                                <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
-                            </td>
-                        </tr>`
-                    );
-                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    checkExpiredSubscriptions();
-                    $("#addSubscriptionPopupOverlay").fadeOut();
-                    $("#addSubscriptionPopup").fadeOut();
-                } else {
-                    alert("الرجاء ملء جميع الحقول.");
-                }
-            });
-
-            $("#cancelAddBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeOut();
-                $("#addSubscriptionPopup").fadeOut();
-            });
-
-            $("#renewSubscriptionBtn").click(function () {
+            // عرض الجدول المنبثق لتجديد الاشتراكات المنتهية
+            $("#bellIcon").click(function () {
                 let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
                     const currentDate = new Date().toISOString().split("T")[0];
@@ -359,69 +315,71 @@
                     });
 
                     expiredTable += `</tbody></table>`;
-                    $("#expiredSubscriptionsTable").html(expiredTable);
+                    $("#renewSubscriptionPopup .popup-content").html(expiredTable);
                     $("#renewSubscriptionPopup").fadeIn();
                 } else {
                     alert("لا توجد اشتراكات منتهية لتجديدها.");
                 }
             });
 
+            // تحديث الاشتراك
+            function renewSubscription(button) {
+                const row = $(button).closest("tr");
+                const newEndDate = prompt("أدخل تاريخ النهاية الجديد:");
+
+                if (newEndDate) {
+                    row.find("td").eq(3).text(newEndDate);
+                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                    alert("تم تجديد الاشتراك بنجاح.");
+                }
+            }
+
+            // إلغاء المربع المنبثق لتجديد الاشتراك
             $("#cancelRenewBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
 
-            $("#bellIcon").click(function () {
-                $("#renewSubscriptionBtn").click();
+            // إضافة اشتراك جديد
+            $("#addSubscriptionBtn").click(function () {
+                $("#addSubscriptionPopupOverlay").fadeIn();
+                $("#addSubscriptionPopup").fadeIn();
             });
-        });
 
-        function renewSubscription(button) {
-            const row = $(button).closest("tr");
-            const newEndDate = prompt("أدخل تاريخ النهاية الجديد:");
-
-            if (newEndDate) {
-                row.find("td").eq(3).text(newEndDate);
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                alert("تم تجديد الاشتراك بنجاح.");
-                checkExpiredSubscriptions();
-            }
-        }
-
-        function removeSubscription(button) {
-            if (confirm("هل أنت متأكد من حذف هذا الاشتراك؟")) {
-                $(button).closest("tr").remove();
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                checkExpiredSubscriptions();
-                alert("تم حذف الاشتراك بنجاح.");
-            }
-        }
-
-        function editSubscription(button) {
-            const row = $(button).closest("tr");
-            const memberName = row.find("td").eq(0).text();
-            const subscriptionType = row.find("td").eq(1).text();
-            const startDate = row.find("td").eq(2).text();
-            const endDate = row.find("td").eq(3).text();
-
-            $("#memberName").val(memberName);
-            $("#subscriptionType").val(subscriptionType);
-            $("#startDate").val(startDate);
-            $("#endDate").val(endDate);
-
-            $("#addSubscriptionPopupOverlay").fadeIn();
-            $("#addSubscriptionPopup").fadeIn();
-
+            // حفظ اشتراك جديد
             $("#saveSubscriptionBtn").click(function () {
-                row.find("td").eq(0).text($("#memberName").val());
-                row.find("td").eq(1).text($("#subscriptionType").val());
-                row.find("td").eq(2).text($("#startDate").val());
-                row.find("td").eq(3).text($("#endDate").val());
+                const memberName = $("#memberName").val();
+                const subscriptionType = $("#subscriptionType").val();
+                const startDate = $("#startDate").val();
+                const endDate = $("#endDate").val();
 
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                if (memberName && subscriptionType && startDate && endDate) {
+                    $("#subscriptionsTable tbody").append(
+                        `<tr>
+                            <td>${memberName}</td>
+                            <td>${subscriptionType}</td>
+                            <td>${startDate}</td>
+                            <td>${endDate}</td>
+                            <td>
+                                <button class="button" onclick="editSubscription(this)">تعديل</button>
+                                <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
+                            </td>
+                        </tr>`
+                    );
+                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                    $("#addSubscriptionPopupOverlay").fadeOut();
+                    $("#addSubscriptionPopup").fadeOut();
+                    showBellIcon();
+                } else {
+                    alert("الرجاء ملء جميع الحقول.");
+                }
+            });
+
+            // إلغاء إضافة الاشتراك
+            $("#cancelAddBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeOut();
                 $("#addSubscriptionPopup").fadeOut();
             });
-        }
+        });
     </script>
 </body>
 </html>
