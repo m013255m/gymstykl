@@ -174,32 +174,17 @@
             border-radius: 8px;
         }
 
-        /* إضافة تنسيق لأيقونة الجرس */
         .bell-icon {
-            font-size: 30px;
+            font-size: 24px;
             color: #f39c12;
             cursor: pointer;
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 9999;
+            margin-left: 10px;
+            display: none;
+            transition: transform 0.3s;
         }
 
         .bell-icon:hover {
-            color: #e67e22;
-        }
-
-        /* تأثير الاهتزاز البسيط */
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
-
-        .shake {
-            animation: shake 0.5s ease-in-out;
+            transform: scale(1.2);
         }
     </style>
 </head>
@@ -232,7 +217,9 @@
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
                 <div class="button-container">
+                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+                    <i class="fas fa-bell bell-icon" id="bellIcon"></i>
                 </div>
             </div>
             <table id="subscriptionsTable">
@@ -252,31 +239,59 @@
         </div>
     </div>
 
+    <!-- المربع المنبثق لإضافة اشتراك -->
+    <div class="overlay" id="addSubscriptionPopupOverlay"></div>
+    <div class="popup" id="addSubscriptionPopup">
+        <div class="popup-content">
+            <h2>إضافة اشتراك جديد</h2>
+            <input type="text" id="memberName" placeholder="اسم العضو">
+            <input type="text" id="subscriptionType" placeholder="نوع الاشتراك">
+            <input type="date" id="startDate" placeholder="تاريخ البداية">
+            <input type="date" id="endDate" placeholder="تاريخ النهاية">
+            <button class="button" id="saveSubscriptionBtn">حفظ</button>
+            <button class="button" id="cancelAddBtn">إلغاء</button>
+        </div>
+    </div>
+
     <!-- المربع المنبثق لتجديد الاشتراك -->
-    <div class="overlay" id="renewSubscriptionPopupOverlay"></div>
     <div class="popup" id="renewSubscriptionPopup">
         <div class="popup-content">
             <h2>تجديد الاشتراك</h2>
-            <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" id="updateSubscriptionBtn">تحديث البيانات</button>
+            <div id="expiredSubscriptionsTable"></div>
             <button class="button" id="cancelRenewBtn">إلغاء</button>
         </div>
     </div>
 
     <script>
         $(document).ready(function () {
-            // عند تحميل الصفحة، أضف الاشتراكات
-            if (localStorage.getItem("subscriptions")) {
-                $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
-            }
+            const loadSubscriptions = () => {
+                if (localStorage.getItem("subscriptions")) {
+                    $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
+                    checkExpiredSubscriptions();
+                }
+            };
 
-            // إظهار نافذة إضافة اشتراك
+            const checkExpiredSubscriptions = () => {
+                let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
+                    const endDate = $(this).find("td").eq(3).text();
+                    const currentDate = new Date().toISOString().split("T")[0];
+                    return endDate < currentDate;
+                });
+
+                if (expiredSubscriptions.length > 0) {
+                    $("#bellIcon").show();
+                } else {
+                    $("#bellIcon").hide();
+                }
+            };
+
+            loadSubscriptions();
+
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
                 $("#addSubscriptionPopup").fadeIn();
             });
 
-            // حفظ اشتراك جديد
             $("#saveSubscriptionBtn").click(function () {
                 const memberName = $("#memberName").val();
                 const subscriptionType = $("#subscriptionType").val();
@@ -293,11 +308,11 @@
                             <td>
                                 <button class="button" onclick="editSubscription(this)">تعديل</button>
                                 <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
-                                <button class="button" onclick="renewSubscription(this)">تجديد</button>
                             </td>
                         </tr>`
                     );
                     localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                    checkExpiredSubscriptions();
                     $("#addSubscriptionPopupOverlay").fadeOut();
                     $("#addSubscriptionPopup").fadeOut();
                 } else {
@@ -305,52 +320,78 @@
                 }
             });
 
-            // إغلاق نافذة إضافة الاشتراك
             $("#cancelAddBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeOut();
                 $("#addSubscriptionPopup").fadeOut();
             });
 
-            // إغلاق نافذة تجديد الاشتراك
-            $("#cancelRenewBtn").click(function () {
-                $("#renewSubscriptionPopupOverlay").fadeOut();
-                $("#renewSubscriptionPopup").fadeOut();
-            });
+            $("#renewSubscriptionBtn").click(function () {
+                let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
+                    const endDate = $(this).find("td").eq(3).text();
+                    const currentDate = new Date().toISOString().split("T")[0];
+                    return endDate < currentDate;
+                });
 
-            // تجديد الاشتراك
-            $(".button").click(function() {
-                if ($(this).text() === "تجديد") {
-                    let row = $(this).closest("tr");
-                    $("#renewSubscriptionPopupOverlay").fadeIn();
-                    $("#renewSubscriptionPopup").fadeIn();
+                if (expiredSubscriptions.length > 0) {
+                    let expiredTable = `<table>
+                        <thead>
+                            <tr>
+                                <th>اسم العضو</th>
+                                <th>نوع الاشتراك</th>
+                                <th>تاريخ البداية</th>
+                                <th>تاريخ النهاية</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
 
-                    $("#updateSubscriptionBtn").click(function () {
-                        const newEndDate = $("#newEndDate").val();
-                        if (newEndDate) {
-                            row.find("td").eq(3).text(newEndDate);
-                            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                            $("#renewSubscriptionPopupOverlay").fadeOut();
-                            $("#renewSubscriptionPopup").fadeOut();
-                            alert("تم تجديد الاشتراك بنجاح.");
-                        } else {
-                            alert("الرجاء إدخال تاريخ النهاية الجديد.");
-                        }
+                    expiredSubscriptions.each(function () {
+                        const row = $(this);
+                        expiredTable += `<tr>
+                            <td>${row.find("td").eq(0).text()}</td>
+                            <td>${row.find("td").eq(1).text()}</td>
+                            <td>${row.find("td").eq(2).text()}</td>
+                            <td>${row.find("td").eq(3).text()}</td>
+                            <td>
+                                <button class="button" onclick="renewSubscription(this)">تجديد</button>
+                            </td>
+                        </tr>`;
                     });
+
+                    expiredTable += `</tbody></table>`;
+                    $("#expiredSubscriptionsTable").html(expiredTable);
+                    $("#renewSubscriptionPopup").fadeIn();
+                } else {
+                    alert("لا توجد اشتراكات منتهية لتجديدها.");
                 }
             });
 
-            // إضافة تأثير الاهتزاز عند النقر على زر تجديد الاشتراك
-            $(".button").click(function() {
-                $(this).addClass("shake");
-                setTimeout(() => $(this).removeClass("shake"), 500);
+            $("#cancelRenewBtn").click(function () {
+                $("#renewSubscriptionPopup").fadeOut();
             });
 
+            $("#bellIcon").click(function () {
+                $("#renewSubscriptionBtn").click();
+            });
         });
+
+        function renewSubscription(button) {
+            const row = $(button).closest("tr");
+            const newEndDate = prompt("أدخل تاريخ النهاية الجديد:");
+
+            if (newEndDate) {
+                row.find("td").eq(3).text(newEndDate);
+                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                alert("تم تجديد الاشتراك بنجاح.");
+                checkExpiredSubscriptions();
+            }
+        }
 
         function removeSubscription(button) {
             if (confirm("هل أنت متأكد من حذف هذا الاشتراك؟")) {
                 $(button).closest("tr").remove();
                 localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+                checkExpiredSubscriptions();
                 alert("تم حذف الاشتراك بنجاح.");
             }
         }
@@ -382,8 +423,5 @@
             });
         }
     </script>
-
-    <!-- إضافة أيقونة الجرس -->
-    <i class="fas fa-bell bell-icon"></i>
 </body>
 </html>
