@@ -120,27 +120,57 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: #fff;
-            border-radius: 10px;
+            border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-        }
-
-        .popup .popup-content {
+            width: 400px;
             text-align: center;
         }
 
-        .popup input {
-            padding: 10px;
-            font-size: 16px;
-            width: 100%;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
+        .popup h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
         }
 
-        .popup button {
-            margin-top: 10px;
+        .popup input {
+            padding: 12px;
+            font-size: 16px;
+            width: 80%;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: border-color 0.3s;
+        }
+
+        .popup input[type="date"]:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .popup .button {
+            width: 45%;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .popup .button:hover {
+            background-color: #45a049;
+        }
+
+        .popup .red-button {
+            background-color: red;
+        }
+
+        .popup .red-button:hover {
+            background-color: darkred;
         }
 
         .overlay {
@@ -156,8 +186,8 @@
 
         .button-container {
             display: flex;
+            justify-content: center;
             gap: 10px;
-            justify-content: flex-end;
         }
 
         .notification-bell {
@@ -170,20 +200,6 @@
         .notification-bell.new-subscription {
             transform: scale(1.2);
             color: red;
-        }
-
-        .swal2-loading {
-            display: none;
-        }
-
-        .waiting-popup {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            padding: 20px;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 8px;
         }
     </style>
 </head>
@@ -256,8 +272,10 @@
         <div class="popup-content">
             <h2>تجديد الاشتراك</h2>
             <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" id="saveRenewalBtn">تجديد</button>
-            <button class="button" id="cancelRenewBtn">إلغاء</button>
+            <div class="button-container">
+                <button class="button" id="saveRenewalBtn">تجديد</button>
+                <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
+            </div>
         </div>
     </div>
 
@@ -400,19 +418,17 @@
             $("#startDate").val(startDate);
             $("#endDate").val(endDate);
 
-            $("#addSubscriptionPopupOverlay").fadeIn();
             $("#addSubscriptionPopup").fadeIn();
+            $("#addSubscriptionPopupOverlay").fadeIn();
 
             $("#saveSubscriptionBtn").click(function () {
                 row.find("td").eq(0).text($("#memberName").val());
                 row.find("td").eq(1).text($("#subscriptionType").val());
                 row.find("td").eq(2).text($("#startDate").val());
                 row.find("td").eq(3).text($("#endDate").val());
-
                 localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                $("#addSubscriptionPopupOverlay").fadeOut();
                 $("#addSubscriptionPopup").fadeOut();
-                checkExpiredSubscriptions();
+                $("#addSubscriptionPopupOverlay").fadeOut();
             });
         }
     </script>
