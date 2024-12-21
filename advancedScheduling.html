@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الجدولة المتقدمة</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -104,47 +106,6 @@
             transform: scale(1.05);
         }
 
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            width: 400px;
-        }
-
-        .popup input,
-        .popup textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .popup button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .popup button.cancel {
-            background-color: #f44336;
-        }
-
-        .popup button:hover {
-            transform: scale(1.05);
-        }
-
         .search-bar {
             margin-bottom: 20px;
             display: flex;
@@ -163,6 +124,50 @@
         h3 {
             font-size: 22px;
             margin-bottom: 20px;
+        }
+
+        /* نافذة التنبيه */
+        .alert-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            text-align: center;
+        }
+
+        .alert-popup h3 {
+            margin-bottom: 20px;
+        }
+
+        .alert-popup button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .alert-popup button:hover {
+            background-color: #45a049;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
         }
     </style>
 </head>
@@ -212,111 +217,102 @@
         </div>
     </div>
 
-    <!-- نافذة منبثقة لإضافة/تعديل الجدول -->
-    <div id="schedulePopup" class="popup">
-        <h3 id="popupTitle">إضافة جدول</h3>
-        <input type="text" id="scheduleName" placeholder="اسم الجدول" required>
-        <textarea id="scheduleDetails" placeholder="تفاصيل الجدول" required></textarea>
-        <input type="datetime-local" id="scheduleDatetime" required>
-        <button id="saveScheduleBtn" class="button">حفظ</button>
-        <button id="cancelPopupBtn" class="button cancel">إلغاء</button>
+    <!-- نافذة التنبيه -->
+    <div class="overlay" id="alertOverlay"></div>
+    <div class="alert-popup" id="alertPopup">
+        <h3>هل أنت متأكد؟</h3>
+        <p>لن تتمكن من استرجاع هذا الجدول بعد الحذف!</p>
+        <div>
+            <button id="confirmDeleteBtn">نعم، حذف الجدول!</button>
+            <button id="cancelDeleteBtn">إلغاء</button>
+        </div>
     </div>
 
     <script>
         const schedulesKey = "gymAdvancedSchedules";
+        let scheduleToDeleteIndex = -1;
 
-        // تحميل الجداول المخزنة في LocalStorage
+        // تحميل البيانات من التخزين المحلي
         function loadSchedules() {
             const storedSchedules = localStorage.getItem(schedulesKey);
             const schedules = storedSchedules ? JSON.parse(storedSchedules) : [];
-            const schedulesTable = document.querySelector("#schedulesTable tbody");
-            schedulesTable.innerHTML =   ; // مسح الجدول الحالي
+
+            const schedulesTable = document.querySelector('#schedulesTable tbody');
+            schedulesTable.innerHTML = ''; // مسح الجدول قبل الإضافة
 
             schedules.forEach((schedule, index) => {
-                const row = document.createElement("tr");
+                const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${schedule.name}</td>
                     <td>${schedule.details}</td>
                     <td>${schedule.datetime}</td>
                     <td>
                         <button class="button" onclick="editSchedule(${index})">تعديل</button>
-                        <button class="button" onclick="deleteSchedule(${index})">حذف</button>
+                        <button class="button" onclick="showDeleteConfirmation(${index})">حذف</button>
                     </td>
                 `;
                 schedulesTable.appendChild(row);
             });
         }
 
-        // فتح نافذة إضافة الجدول
-        document.getElementById("addScheduleBtn").addEventListener("click", function () {
-            document.getElementById("popupTitle").textContent = "إضافة جدول";
-            document.getElementById("scheduleName").value =   ;
-            document.getElementById("scheduleDetails").value =   ;
-            document.getElementById("scheduleDatetime").value =   ;
-            document.getElementById("schedulePopup").style.display = "block";
-            document.getElementById("saveScheduleBtn").onclick = saveNewSchedule;
-        });
-
-        // حفظ الجدول الجديد
-        function saveNewSchedule() {
-            const name = document.getElementById("scheduleName").value;
-            const details = document.getElementById("scheduleDetails").value;
-            const datetime = document.getElementById("scheduleDatetime").value;
+        // إضافة جدول جديد
+        function addSchedule() {
+            const name = prompt('أدخل اسم الجدول:');
+            const details = prompt('أدخل تفاصيل الجدول:');
+            const datetime = prompt('أدخل التاريخ والوقت (مثال: 2024-11-28 15:00):');
 
             if (name && details && datetime) {
                 const schedules = JSON.parse(localStorage.getItem(schedulesKey)) || [];
                 schedules.push({ name, details, datetime });
                 localStorage.setItem(schedulesKey, JSON.stringify(schedules));
                 loadSchedules();
-                closePopup();
             }
         }
 
-        // تعديل الجدول
+        // تعديل جدول
         function editSchedule(index) {
             const schedules = JSON.parse(localStorage.getItem(schedulesKey));
             const schedule = schedules[index];
-            document.getElementById("popupTitle").textContent = "تعديل جدول";
-            document.getElementById("scheduleName").value = schedule.name;
-            document.getElementById("scheduleDetails").value = schedule.details;
-            document.getElementById("scheduleDatetime").value = schedule.datetime;
-            document.getElementById("schedulePopup").style.display = "block";
 
-            document.getElementById("saveScheduleBtn").onclick = function () {
-                saveEditedSchedule(index);
-            };
-        }
+            const newName = prompt('تعديل اسم الجدول:', schedule.name);
+            const newDetails = prompt('تعديل تفاصيل الجدول:', schedule.details);
+            const newDatetime = prompt('تعديل التاريخ والوقت:', schedule.datetime);
 
-        // حفظ التعديلات على الجدول
-        function saveEditedSchedule(index) {
-            const name = document.getElementById("scheduleName").value;
-            const details = document.getElementById("scheduleDetails").value;
-            const datetime = document.getElementById("scheduleDatetime").value;
-
-            if (name && details && datetime) {
-                const schedules = JSON.parse(localStorage.getItem(schedulesKey));
-                schedules[index] = { name, details, datetime };
-                localStorage.setItem(schedulesKey, JSON.stringify(schedules));
-                loadSchedules();
-                closePopup();
-            }
-        }
-
-        // حذف الجدول
-        function deleteSchedule(index) {
-            if (confirm("هل أنت متأكد من حذف هذا الجدول؟")) {
-                const schedules = JSON.parse(localStorage.getItem(schedulesKey));
-                schedules.splice(index, 1);
+            if (newName && newDetails && newDatetime) {
+                schedule.name = newName;
+                schedule.details = newDetails;
+                schedule.datetime = newDatetime;
                 localStorage.setItem(schedulesKey, JSON.stringify(schedules));
                 loadSchedules();
             }
         }
 
-        // إغلاق النافذة المنبثقة
-        document.getElementById("cancelPopupBtn").addEventListener("click", closePopup);
-        function closePopup() {
-            document.getElementById("schedulePopup").style.display = "none";
+        // إظهار تأكيد الحذف
+        function showDeleteConfirmation(index) {
+            scheduleToDeleteIndex = index;
+            document.getElementById('alertOverlay').style.display = 'block';
+            document.getElementById('alertPopup').style.display = 'block';
         }
+
+        // حذف جدول
+        function deleteSchedule() {
+            const schedules = JSON.parse(localStorage.getItem(schedulesKey));
+            schedules.splice(scheduleToDeleteIndex, 1);
+            localStorage.setItem(schedulesKey, JSON.stringify(schedules));
+            loadSchedules();
+            closeAlert();
+        }
+
+        // إغلاق نافذة التنبيه
+        function closeAlert() {
+            document.getElementById('alertOverlay').style.display = 'none';
+            document.getElementById('alertPopup').style.display = 'none';
+        }
+
+        // إضافة الأحداث
+        document.getElementById('addScheduleBtn').addEventListener('click', addSchedule);
+        document.getElementById('cancelDeleteBtn').addEventListener('click', closeAlert);
+        document.getElementById('confirmDeleteBtn').addEventListener('click', deleteSchedule);
 
         // تحميل الجداول عند تحميل الصفحة
         loadSchedules();
