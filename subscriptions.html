@@ -166,64 +166,6 @@
             justify-content: flex-end;
         }
 
-        .waiting-popup {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            padding: 20px;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 8px;
-        }
-
-        .swal2-loading {
-            display: none;
-        }
-
-        /* أيقونة الانتظار */
-        .waiting-icon {
-            font-size: 40px;
-            color: #4CAF50;
-            margin: 20px auto;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* تحسين الجدول */
-        #expiredSubscriptionsTable {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        #expiredSubscriptionsTable th, #expiredSubscriptionsTable td {
-            padding: 12px;
-            text-align: center;
-            font-size: 16px;
-            border: 1px solid #ddd;
-        }
-
-        #expiredSubscriptionsTable th {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        #expiredSubscriptionsTable tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        #expiredSubscriptionsTable tr:hover {
-            background-color: #e1f5e1;
-            cursor: pointer;
-        }
-
         /* تحسين زر "إلغاء" و"إغلاق" */
         .popup .button {
             padding: 10px 20px;
@@ -264,6 +206,31 @@
             color: #f44336;
         }
 
+        /* الأيقونة المنتظرة */
+        .waiting-popup {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            font-size: 20px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .waiting-icon {
+            font-size: 30px;
+            margin-right: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 
@@ -360,9 +327,6 @@
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
 
-            // إضافة تأثير الاهتزاز على زر "تجديد الاشتراكات"
-            $("#renewSubscriptionBtn").addClass("vibrate");
-
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
                 $("#addSubscriptionPopup").fadeIn();
@@ -402,8 +366,11 @@
             $("#renewSubscriptionBtn").click(function () {
                 // عرض أيقونة الانتظار
                 $("body").append('<div class="waiting-popup"><div class="waiting-icon"><i class="fas fa-spinner"></i></div>جاري تحميل البيانات...</div>');
+                $(".waiting-popup").fadeIn();
+
                 setTimeout(function () {
-                    $(".waiting-popup").fadeOut();
+                    $(".waiting-popup").fadeOut();  // إخفاء الأيقونة بعد 5 ثوانٍ
+
                     let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                         const endDate = $(this).find("td").eq(3).text();
                         const currentDate = new Date().toISOString().split("T")[0];
@@ -433,9 +400,6 @@
                         expiredTable += `</tbody></table>`;
                         $("#renewSubscriptionPopup .popup-content").html(expiredTable + '<button class="button" id="closeRenewPopupBtn">إغلاق</button>');
                         $("#renewSubscriptionPopup").fadeIn();
-                        $("#closeRenewPopupBtn").click(function () {
-                            $("#renewSubscriptionPopup").fadeOut();
-                        });
                     } else {
                         alert("لا توجد اشتراكات منتهية.");
                     }
