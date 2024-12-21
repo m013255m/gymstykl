@@ -24,7 +24,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: auto; /* تعديل هنا */
+            height: auto;
         }
 
         .sidebar h2 {
@@ -236,43 +236,16 @@
             background-color: #00796b;
         }
 
-        /* تأثير الاهتزاز على زر تجديد الاشتراكات */
-        .vibrate {
-            animation: vibrate 0.5s linear infinite;
-        }
-
-        @keyframes vibrate {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(5px); }
-        }
-
-        /* أيقونة زر الإغلاق في وسط المربع المنبثق */
-        .popup .close-icon {
-            font-size: 40px;
-            color: #333;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            cursor: pointer;
-        }
-
-        .popup .close-icon:hover {
-            color: #f44336;
-        }
-
         /* تحسين مربع البحث */
         .search-bar input {
-            padding: 12px;
-            font-size: 16px;
-            width: 60%;
+            padding: 8px 16px;
+            font-size: 14px;
+            width: 50%;
             margin-right: 10px;
             border-radius: 5px;
             border: 1px solid #ddd;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
         }
 
         .search-bar input:focus {
@@ -309,7 +282,7 @@
         <div class="content">
             <h3>إدارة الاشتراكات</h3>
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
+                <input type="text" id="searchInput" placeholder="بحث...">
                 <div class="button-container">
                     <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
@@ -343,6 +316,15 @@
             <input type="date" id="endDate" placeholder="تاريخ النهاية">
             <button class="button" id="saveSubscriptionBtn">حفظ</button>
             <button class="button" id="cancelAddBtn">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- نافذة منبثقة لتجديد الاشتراكات -->
+    <div class="overlay" id="renewSubscriptionPopupOverlay"></div>
+    <div class="popup" id="renewSubscriptionPopup">
+        <div class="popup-content" id="renewSubscriptionPopupContent">
+            <h2>الاشتراكات المنتهية</h2>
+            <button class="button" id="closeRenewPopupBtn">إغلاق</button>
         </div>
     </div>
 
@@ -443,7 +425,7 @@
                 });
 
                 if (expiredSubscriptions.length > 0) {
-                    let expiredTable = `<table>
+                    let expiredTable = `<table id="expiredSubscriptionsTable">
                         <thead>
                             <tr>
                                 <th>اسم العضو</th>
@@ -463,11 +445,8 @@
                         </tr>`; 
                     });
                     expiredTable += `</tbody></table>`; 
-                    $("#renewSubscriptionPopup .popup-content").html(expiredTable + '<button class="button" id="closeRenewPopupBtn">إغلاق</button>');
+                    $("#renewSubscriptionPopupContent").html(expiredTable + '<button class="button" id="closeRenewPopupBtn">إغلاق</button>');
                     $("#renewSubscriptionPopup").fadeIn();
-                    $("#closeRenewPopupBtn").click(function () {
-                        $("#renewSubscriptionPopup").fadeOut();
-                    });
                 } else {
                     alert("لا توجد اشتراكات منتهية.");
                 }
