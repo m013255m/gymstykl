@@ -269,7 +269,8 @@
                     <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
                 </tbody>
             </table>
-            <button class="button" id="cancelRenewBtn">إغلاق</button>
+            <button class="button" id="closeRenewPopupBtn">إغلاق</button>
+            <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
         </div>
     </div>
 
@@ -291,18 +292,17 @@
                 const endDate = $("#endDate").val();
 
                 if (memberName && subscriptionType && startDate && endDate) {
-                    $("#subscriptionsTable tbody").append(
-                        `<tr>
-                            <td>${memberName}</td>
-                            <td>${subscriptionType}</td>
-                            <td>${startDate}</td>
-                            <td>${endDate}</td>
-                            <td>
-                                <button class="button" onclick="editSubscription(this)">تعديل</button>
-                                <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
-                            </td>
-                        </tr>`
-                    );
+                    const newRow = `<tr>
+                        <td>${memberName}</td>
+                        <td>${subscriptionType}</td>
+                        <td>${startDate}</td>
+                        <td>${endDate}</td>
+                        <td>
+                            <button class="button" onclick="editSubscription(this)">تعديل</button>
+                            <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
+                        </td>
+                    </tr>`;
+                    $("#subscriptionsTable tbody").append(newRow);
                     localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                     $("#addSubscriptionPopupOverlay").fadeOut();
                     $("#addSubscriptionPopup").fadeOut();
@@ -351,6 +351,10 @@
                 }
             });
 
+            $("#closeRenewPopupBtn").click(function () {
+                $("#renewSubscriptionPopup").fadeOut();
+            });
+
             $("#cancelRenewBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
@@ -382,7 +386,7 @@
             $("#addSubscriptionPopupOverlay").fadeIn();
             $("#addSubscriptionPopup").fadeIn();
 
-            $("#saveSubscriptionBtn").click(function () {
+            $("#saveSubscriptionBtn").off().click(function () {
                 row.find("td").eq(0).text($("#memberName").val());
                 row.find("td").eq(1).text($("#subscriptionType").val());
                 row.find("td").eq(2).text($("#startDate").val());
