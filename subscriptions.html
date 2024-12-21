@@ -157,7 +157,7 @@
         .button-container {
             display: flex;
             gap: 10px;
-            justify-content: flex-end;
+            justify-content: flex-end; /* تم تعديل الأزرار لتكون في الاتجاه الأيمن */
         }
 
         .swal2-loading {
@@ -174,27 +174,19 @@
             border-radius: 8px;
         }
 
-        .search-bar {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .notification-icon {
-            position: absolute;
-            top: 10px;
-            left: -30px;
-            font-size: 24px;
-            color: red;
+        /* إضافة تنسيق لأيقونة الجرس */
+        .bell-icon {
+            font-size: 30px;
+            color: #f39c12;
             cursor: pointer;
-            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 9999;
+        }
+
+        .bell-icon:hover {
+            color: #e67e22;
         }
     </style>
 </head>
@@ -226,9 +218,7 @@
             <h3>إدارة الاشتراكات</h3>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
-                <i class="fas fa-bell notification-icon" id="notificationIcon"></i>
                 <div class="button-container">
-                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
                     <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
                 </div>
             </div>
@@ -263,33 +253,42 @@
         </div>
     </div>
 
-    <!-- المربع المنبثق لتجديد الاشتراك -->
-    <div class="popup" id="renewSubscriptionPopup">
+    <!-- المربع المنبثق للاشتراكات المنتهية -->
+    <div class="popup" id="expiredSubscriptionsPopup">
         <div class="popup-content">
-            <h2>تجديد الاشتراك</h2>
-            <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
-            <button class="button" id="saveRenewalBtn">تجديد</button>
-            <button class="button" id="cancelRenewBtn">إلغاء</button>
+            <h2>الاشتراكات المنتهية</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>نوع الاشتراك</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="expiredSubscriptionsTable">
+                    <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
+                </tbody>
+            </table>
+            <button class="button" id="closeExpiredPopup">إغلاق</button>
         </div>
     </div>
 
     <script>
         $(document).ready(function () {
-            // Load subscriptions from local storage if available
+            // عند تحميل الصفحة، أضف الاشتراكات
             if (localStorage.getItem("subscriptions")) {
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
 
-            // Check if there are expired subscriptions and show bell icon
-            checkExpiredSubscriptions();
-
-            // Event handler for showing the add subscription popup
+            // إظهار نافذة إضافة اشتراك
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
                 $("#addSubscriptionPopup").fadeIn();
             });
 
-            // Save new subscription
+            // حفظ اشتراك جديد
             $("#saveSubscriptionBtn").click(function () {
                 const memberName = $("#memberName").val();
                 const subscriptionType = $("#subscriptionType").val();
@@ -317,14 +316,14 @@
                 }
             });
 
-            // Cancel add subscription
+            // إغلاق نافذة إضافة الاشتراك
             $("#cancelAddBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeOut();
                 $("#addSubscriptionPopup").fadeOut();
             });
 
-            // Renew subscription
-            $("#renewSubscriptionBtn").click(function () {
+            // عند الضغط على الجرس، عرض الاشتراكات المنتهية
+            $(".bell-icon").click(function () {
                 let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
                     const currentDate = new Date().toISOString().split("T")[0];
@@ -332,17 +331,7 @@
                 });
 
                 if (expiredSubscriptions.length > 0) {
-                    let expiredTable = `<table>
-                        <thead>
-                            <tr>
-                                <th>اسم العضو</th>
-                                <th>نوع الاشتراك</th>
-                                <th>تاريخ البداية</th>
-                                <th>تاريخ النهاية</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
+                    let expiredTable = "";
 
                     expiredSubscriptions.each(function () {
                         const row = $(this);
@@ -351,43 +340,27 @@
                             <td>${row.find("td").eq(1).text()}</td>
                             <td>${row.find("td").eq(2).text()}</td>
                             <td>${row.find("td").eq(3).text()}</td>
-                            <td>
-                                <button class="button" onclick="renewSubscription(this)">تجديد</button>
-                            </td>
+                            <td><button class="button" onclick="renewSubscription(this)">تجديد</button></td>
                         </tr>`;
                     });
 
-                    expiredTable += `</tbody></table>`;
-                    $("#renewSubscriptionPopup .popup-content").html(expiredTable);
-                    $("#renewSubscriptionPopup").fadeIn();
+                    $("#expiredSubscriptionsTable").html(expiredTable);
+                    $("#expiredSubscriptionsPopup").fadeIn();
                 } else {
-                    alert("لا توجد اشتراكات منتهية لتجديدها.");
+                    alert("لا توجد اشتراكات منتهية.");
                 }
             });
 
-            // Cancel renewal
-            $("#cancelRenewBtn").click(function () {
-                $("#renewSubscriptionPopup").fadeOut();
+            // إغلاق نافذة الاشتراكات المنتهية
+            $("#closeExpiredPopup").click(function () {
+                $("#expiredSubscriptionsPopup").fadeOut();
             });
         });
 
-        // Function to check for expired subscriptions and show the bell icon
-        function checkExpiredSubscriptions() {
-            let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
-                const endDate = $(this).find("td").eq(3).text();
-                const currentDate = new Date().toISOString().split("T")[0];
-                return endDate < currentDate;
-            });
-
-            if (expiredSubscriptions.length > 0) {
-                $("#notificationIcon").show();
-            }
-        }
-
-        // Function to renew subscription
         function renewSubscription(button) {
             const row = $(button).closest("tr");
             const newEndDate = prompt("أدخل تاريخ النهاية الجديد:");
+
             if (newEndDate) {
                 row.find("td").eq(3).text(newEndDate);
                 localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
@@ -395,7 +368,6 @@
             }
         }
 
-        // Function to remove subscription
         function removeSubscription(button) {
             if (confirm("هل أنت متأكد من حذف هذا الاشتراك؟")) {
                 $(button).closest("tr").remove();
@@ -404,7 +376,6 @@
             }
         }
 
-        // Function to edit subscription
         function editSubscription(button) {
             const row = $(button).closest("tr");
             const memberName = row.find("td").eq(0).text();
@@ -432,5 +403,9 @@
             });
         }
     </script>
+
+    <!-- إضافة أيقونة الجرس -->
+    <i class="fas fa-bell bell-icon"></i>
+
 </body>
 </html>
