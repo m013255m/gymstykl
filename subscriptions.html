@@ -14,12 +14,14 @@
             margin: 0;
             padding: 0;
             display: flex;
-            height: 100vh;
+            flex-direction: column;
+            height: 100%;
         }
 
         .container {
             display: flex;
-            width: 100%;
+            flex: 1;
+            overflow: hidden;
         }
 
         .sidebar {
@@ -27,11 +29,9 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            height: 100%; /* هذا التعديل لتمديد الشريط الجانبي */
-            overflow-y: auto; /* يسمح بالتمرير إذا كان المحتوى أطول من الشاشة */
+            position: relative;
+            height: 100%;
+            overflow-y: auto; /* يسمح بالتمرير داخل الشريط الجانبي */
         }
 
         .sidebar h2 {
@@ -428,39 +428,31 @@
                         </thead>
                         <tbody>`;
                     expiredSubscriptions.each(function () {
-                        const row = $(this);
                         expiredTable += `<tr>
-                            <td>${row.find("td").eq(0).text()}</td>
-                            <td>${row.find("td").eq(1).text()}</td>
-                            <td>${row.find("td").eq(2).text()}</td>
-                            <td>${row.find("td").eq(3).text()}</td>
+                            <td>${$(this).find("td").eq(0).text()}</td>
+                            <td>${$(this).find("td").eq(1).text()}</td>
+                            <td>${$(this).find("td").eq(2).text()}</td>
+                            <td>${$(this).find("td").eq(3).text()}</td>
                         </tr>`;
                     });
                     expiredTable += `</tbody></table>`;
-                    $("#renewSubscriptionPopup .popup-content").html(expiredTable + '<button class="button" id="closeRenewPopupBtn">إغلاق</button>');
+                    $("#expiredSubscriptionsTable tbody").html(expiredTable);
                     $("#renewSubscriptionPopup").fadeIn();
-                    $("#closeRenewPopupBtn").click(function () {
-                        $("#renewSubscriptionPopup").fadeOut();
-                    });
                 } else {
                     alert("لا توجد اشتراكات منتهية.");
                 }
             });
 
-            // إغلاق نافذة التجديد عند الضغط على زر الإغلاق
-            $("#closeRenewPopupBtn").click(function () {
-                $("#renewSubscriptionPopup").fadeOut();
-            });
-
-            // إغلاق نافذة تجديد الاشتراك عندما يتم الضغط على زر الإلغاء
             $("#cancelRenewBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
-        });
 
-        function editSubscription(button) {
-            // إضافة الكود الخاص بتحرير الاشتراك
-        }
+            // حفظ التعديلات بعد الحذف
+            $(document).on("click", ".remove-button", function () {
+                $(this).closest("tr").remove();
+                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
+            });
+        });
 
         function removeSubscription(button) {
             $(button).closest("tr").remove();
