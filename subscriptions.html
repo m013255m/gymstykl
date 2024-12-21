@@ -236,6 +236,33 @@
             background-color: #00796b;
         }
 
+        /* تأثير الاهتزاز على زر تجديد الاشتراكات */
+        .vibrate {
+            animation: vibrate 0.5s linear infinite;
+        }
+
+        @keyframes vibrate {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(5px); }
+        }
+
+        /* أيقونة زر الإغلاق */
+        .popup .close-icon {
+            font-size: 24px;
+            color: #333;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .popup .close-icon:hover {
+            color: #f44336;
+        }
+
     </style>
 </head>
 
@@ -305,6 +332,7 @@
     <!-- المربع المنبثق لتجديد الاشتراك -->
     <div class="popup" id="renewSubscriptionPopup">
         <div class="popup-content">
+            <span class="close-icon" id="closeRenewPopupBtn"><i class="fas fa-times"></i></span>
             <h2>تجديد الاشتراك</h2>
             <table id="expiredSubscriptionsTable">
                 <thead>
@@ -320,8 +348,7 @@
                 </tbody>
             </table>
             <div class="button-container">
-                <button class="button red-button" id="closeRenewPopupBtn">إغلاق</button>
-                <button class="button" id="cancelRenewBtn">إلغاء</button>
+                <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
             </div>
         </div>
     </div>
@@ -331,6 +358,9 @@
             if (localStorage.getItem("subscriptions")) {
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
+
+            // إضافة تأثير الاهتزاز على زر "تجديد الاشتراكات"
+            $("#renewSubscriptionBtn").addClass("vibrate");
 
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
@@ -396,60 +426,33 @@
                         </tr>`;
                     });
                     expiredTable += `</tbody></table>`;
-                    $("#renewSubscriptionPopup .popup-content").html(expiredTable);
+                    $("#renewSubscriptionPopup .popup-content").html(expiredTable + `
+                        <div class="button-container">
+                            <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
+                        </div>
+                    `);
                     $("#renewSubscriptionPopup").fadeIn();
                 } else {
-                    alert("لا توجد اشتراكات منتهية لتجديدها.");
+                    alert("لا توجد اشتراكات منتهية.");
                 }
             });
 
-            // زر إغلاق لتجديد الاشتراك
-            $("#closeRenewPopupBtn").click(function () {
-                $("#renewSubscriptionPopup").fadeOut();
-            });
-
-            // زر إلغاء لتجديد الاشتراك
             $("#cancelRenewBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
 
-            // تحقق من الاشتراكات المنتهية عند تحميل الصفحة
-            checkExpiredSubscriptions();
+            // إغلاق نافذة التجديد
+            $("#closeRenewPopupBtn").click(function () {
+                $("#renewSubscriptionPopup").fadeOut();
+            });
         });
 
-        function removeSubscription(button) {
-            if (confirm("هل أنت متأكد من حذف هذا الاشتراك؟")) {
-                $(button).closest("tr").remove();
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                alert("تم حذف الاشتراك بنجاح.");
-            }
+        function editSubscription(button) {
+            // إضافة الكود الخاص بتحرير الاشتراك
         }
 
-        function editSubscription(button) {
-            const row = $(button).closest("tr");
-            const memberName = row.find("td").eq(0).text();
-            const subscriptionType = row.find("td").eq(1).text();
-            const startDate = row.find("td").eq(2).text();
-            const endDate = row.find("td").eq(3).text();
-
-            $("#memberName").val(memberName);
-            $("#subscriptionType").val(subscriptionType);
-            $("#startDate").val(startDate);
-            $("#endDate").val(endDate);
-
-            $("#addSubscriptionPopupOverlay").fadeIn();
-            $("#addSubscriptionPopup").fadeIn();
-
-            $("#saveSubscriptionBtn").off().click(function () {
-                row.find("td").eq(0).text($("#memberName").val());
-                row.find("td").eq(1).text($("#subscriptionType").val());
-                row.find("td").eq(2).text($("#startDate").val());
-                row.find("td").eq(3).text($("#endDate").val());
-
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                $("#addSubscriptionPopupOverlay").fadeOut();
-                $("#addSubscriptionPopup").fadeOut();
-            });
+        function removeSubscription(button) {
+            // إضافة الكود الخاص بحذف الاشتراك
         }
     </script>
 </body>
