@@ -249,7 +249,7 @@
             100% { transform: translateX(5px); }
         }
 
-        /* أيقونة زر الإغلاق */
+        /* أيقونة زر الإغلاق في وسط المربع المنبثق */
         .popup .close-icon {
             font-size: 40px;
             color: #333;
@@ -427,23 +427,23 @@
                         </tr>`;
                     });
                     expiredTable += `</tbody></table>`;
-                    $("#renewSubscriptionPopup .popup-content").html(expiredTable + `
-                        <div class="button-container">
-                            <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
-                        </div>
-                    `);
+                    $("#renewSubscriptionPopup .popup-content").html(expiredTable + '<button class="button" id="closeRenewPopupBtn">إغلاق</button>');
                     $("#renewSubscriptionPopup").fadeIn();
+                    $("#closeRenewPopupBtn").click(function () {
+                        $("#renewSubscriptionPopup").fadeOut();
+                    });
                 } else {
                     alert("لا توجد اشتراكات منتهية.");
                 }
             });
 
-            $("#cancelRenewBtn").click(function () {
+            // إغلاق نافذة التجديد عند الضغط على زر الإغلاق
+            $("#closeRenewPopupBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
 
-            // إغلاق نافذة التجديد
-            $("#closeRenewPopupBtn").click(function () {
+            // إغلاق نافذة تجديد الاشتراك عندما يتم الضغط على زر الإلغاء
+            $("#cancelRenewBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
         });
@@ -453,7 +453,8 @@
         }
 
         function removeSubscription(button) {
-            // إضافة الكود الخاص بحذف الاشتراك
+            $(button).closest("tr").remove();
+            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
         }
     </script>
 </body>
