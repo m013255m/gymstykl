@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الاشتراكات</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        /* تنسيقات الصفحة */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -113,7 +113,8 @@
             background-color: darkred;
         }
 
-        .popup {
+        /* مربع إضافة الاشتراك */
+        .popup, .renew-popup {
             display: none;
             position: fixed;
             top: 50%;
@@ -126,11 +127,11 @@
             z-index: 1000;
         }
 
-        .popup .popup-content {
+        .popup .popup-content, .renew-popup .popup-content {
             text-align: center;
         }
 
-        .popup input {
+        .popup input, .renew-popup input {
             padding: 10px;
             font-size: 16px;
             width: 100%;
@@ -139,7 +140,7 @@
             border: 1px solid #ddd;
         }
 
-        .popup button {
+        .popup button, .renew-popup button {
             margin-top: 10px;
         }
 
@@ -154,25 +155,6 @@
             z-index: 999;
         }
 
-        .button-container {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end; /* تم تعديل الأزرار لتكون في الاتجاه الأيمن */
-        }
-
-        .swal2-loading {
-            display: none;
-        }
-
-        .waiting-popup {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            padding: 20px;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 8px;
-        }
     </style>
 </head>
 
@@ -201,14 +183,6 @@
 
         <div class="content">
             <h3>إدارة الاشتراكات</h3>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
-                <div class="button-container">
-                    <!-- ترتيب الأزرار الآن في الاتجاه الأيمن -->
-                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
-                    <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-                </div>
-            </div>
             <table id="subscriptionsTable">
                 <thead>
                     <tr>
@@ -221,27 +195,24 @@
                 </thead>
                 <tbody>
                     <!-- الاشتراكات سيتم إضافتها هنا -->
+                    <tr>
+                        <td>أحمد سعيد</td>
+                        <td>اشتراك شهري</td>
+                        <td>2024-01-01</td>
+                        <td>2024-12-01</td>
+                        <td>
+                            <button class="button renewBtn">تجديد</button>
+                            <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- المربع المنبثق لإضافة اشتراك -->
-    <div class="overlay" id="addSubscriptionPopupOverlay"></div>
-    <div class="popup" id="addSubscriptionPopup">
-        <div class="popup-content">
-            <h2>إضافة اشتراك جديد</h2>
-            <input type="text" id="memberName" placeholder="اسم العضو">
-            <input type="text" id="subscriptionType" placeholder="نوع الاشتراك">
-            <input type="date" id="startDate" placeholder="تاريخ البداية">
-            <input type="date" id="endDate" placeholder="تاريخ النهاية">
-            <button class="button" id="saveSubscriptionBtn">حفظ</button>
-            <button class="button" id="cancelAddBtn">إلغاء</button>
-        </div>
-    </div>
-
     <!-- المربع المنبثق لتجديد الاشتراك -->
-    <div class="popup" id="renewSubscriptionPopup">
+    <div class="overlay" id="overlay"></div>
+    <div class="popup renew-popup" id="renewSubscriptionPopup">
         <div class="popup-content">
             <h2>تجديد الاشتراك</h2>
             <input type="date" id="newEndDate" placeholder="تاريخ النهاية الجديد">
@@ -252,53 +223,7 @@
 
     <script>
         $(document).ready(function () {
-            // استرجاع البيانات من التخزين المحلي في حال وجودها
-            if (localStorage.getItem("subscriptions")) {
-                $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
-            }
-
-            // فتح نافذة إضافة الاشتراك
-            $("#addSubscriptionBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeIn();
-                $("#addSubscriptionPopup").fadeIn();
-            });
-
-            // حفظ الاشتراك الجديد
-            $("#saveSubscriptionBtn").click(function () {
-                const memberName = $("#memberName").val();
-                const subscriptionType = $("#subscriptionType").val();
-                const startDate = $("#startDate").val();
-                const endDate = $("#endDate").val();
-
-                if (memberName && subscriptionType && startDate && endDate) {
-                    $("#subscriptionsTable tbody").append(
-                        `<tr>
-                            <td>${memberName}</td>
-                            <td>${subscriptionType}</td>
-                            <td>${startDate}</td>
-                            <td>${endDate}</td>
-                            <td>
-                                <button class="button renewBtn">تجديد</button>
-                                <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
-                            </td>
-                        </tr>`
-                    );
-                    // حفظ البيانات في التخزين المحلي
-                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    $("#addSubscriptionPopupOverlay").fadeOut();
-                    $("#addSubscriptionPopup").fadeOut();
-                } else {
-                    alert("الرجاء ملء جميع الحقول.");
-                }
-            });
-
-            // إلغاء إضافة الاشتراك
-            $("#cancelAddBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeOut();
-                $("#addSubscriptionPopup").fadeOut();
-            });
-
-            // إظهار المربع المنبثق لتجديد الاشتراك عند الضغط على زر "تجديد"
+            // إظهار مربع تجديد الاشتراك عند الضغط على زر "تجديد"
             $(".renewBtn").click(function () {
                 const row = $(this).closest("tr"); // الحصول على الصف الذي يحتوي على الزر
                 const endDate = row.find("td").eq(3).text(); // الحصول على تاريخ النهاية الحالي
@@ -308,15 +233,13 @@
                 $("#renewSubscriptionPopup").fadeIn();
                 $("#overlay").fadeIn();
 
-                // عند الضغط على "تحديث بيانات"
+                // عند الضغط على "تجديد"
                 $("#saveRenewalBtn").off('click').on('click', function () {
                     const newEndDate = $("#newEndDate").val(); // الحصول على التاريخ الجديد
                     if (newEndDate) {
                         row.find("td").eq(3).text(newEndDate); // تحديث تاريخ النهاية في الجدول
                         $("#renewSubscriptionPopup").fadeOut(); // إغلاق المربع المنبثق
                         $("#overlay").fadeOut(); // إخفاء التعتيم
-                        // حفظ البيانات في التخزين المحلي
-                        localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
                     } else {
                         alert("يرجى إدخال تاريخ النهاية الجديد.");
                     }
@@ -326,14 +249,13 @@
             // إلغاء تجديد الاشتراك
             $("#cancelRenewBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
+                $("#overlay").fadeOut();
             });
         });
 
         function removeSubscription(button) {
             if (confirm("هل أنت متأكد من حذف هذا الاشتراك؟")) {
                 $(button).closest("tr").remove();
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                alert("تم حذف الاشتراك بنجاح.");
             }
         }
     </script>
