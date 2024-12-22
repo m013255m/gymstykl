@@ -243,6 +243,11 @@
                     if (currentDate >= user.startDate && currentDate <= user.endDate) {
                         // إظهار رسالة النجاح
                         document.getElementById('successMessageFixed').style.display = 'block';
+
+                        // بعد 2 ثانية من إظهار رسالة النجاح، الانتقال إلى index2.html
+                        setTimeout(function() {
+                            window.location.href = 'index2.html';
+                        }, 2000);
                     } else {
                         // إذا كانت التواريخ غير صالحة
                         document.getElementById('errorMessageFixed').style.display = 'block';
