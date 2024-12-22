@@ -110,12 +110,12 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* تصميم الرسائل المنبثقة الثابتة */
+        /* تصميم الرسائل المنبثقة في منتصف الشاشة */
         .messagePopupFixed {
             position: fixed;
-            bottom: 30px;  /* تحديد مكان المربع ليكون أسفل الصفحة */
+            top: 50%;  /* تحديد موقع الرسالة في منتصف الشاشة */
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -50%);  /* لتوسيط الرسالة تماماً في المنتصف */
             background-color: #fff;
             padding: 20px;
             border-radius: 15px;
@@ -124,7 +124,7 @@
             font-size: 18px;
             display: none;
             text-align: center;
-            animation: slideUp 0.5s ease-in-out;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
         .messagePopupFixed.success {
@@ -163,14 +163,15 @@
             background-color: #45a049;
         }
 
-        @keyframes slideUp {
+        /* تأثير الحركة عند ظهور المربع */
+        @keyframes fadeIn {
             0% {
                 opacity: 0;
-                transform: translateY(100px);
+                transform: translate(-50%, -50%) scale(0.5);
             }
             100% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translate(-50%, -50%) scale(1);
             }
         }
 
@@ -198,7 +199,7 @@
         <div style="color: white; font-size: 18px; margin-top: 10px;">جاري التحقق... الرجاء الانتظار</div>
     </div>
 
-    <!-- رسائل منبثقة ثابتة -->
+    <!-- رسائل منبثقة في منتصف الشاشة -->
     <div id="successMessageFixed" class="messagePopupFixed success">
         <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="نجاح">
         <div class="messageText">تم التسجيل بنجاح!</div>
@@ -253,6 +254,7 @@
             }, 2000); // تأخير 2 ثانية لمحاكاة التحميل
         }
 
+        // إغلاق الرسائل المنبثقة
         function closeMessage(id) {
             document.getElementById(id).style.display = 'none';
         }
