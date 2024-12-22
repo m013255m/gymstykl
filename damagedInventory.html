@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الجيم</title>
+    <title>إدارة المخزون التالف</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        /* إعدادات أساسية */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -15,18 +14,16 @@
             padding: 0;
         }
 
-        /* إعدادات الحاوية التي تحتوي على الشريط الجانبي والمحتوى */
         .container {
             display: flex;
         }
 
-        /* إعدادات الشريط الجانبي */
         .sidebar {
             width: 250px;
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100vh;
+            height: auto;
         }
 
         .sidebar h2 {
@@ -35,42 +32,155 @@
             margin-bottom: 20px;
         }
 
-        .sidebar nav ul {
+        .sidebar ul {
             list-style: none;
             padding: 0;
         }
 
-        .sidebar nav ul li {
+        .sidebar ul li {
             margin: 15px 0;
         }
 
-        .sidebar nav ul li a {
+        .sidebar ul li a {
             color: white;
             text-decoration: none;
             font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
-        .sidebar nav ul li a:hover {
+        .sidebar ul li a:hover {
             background-color: #575757;
+            padding: 5px;
+            border-radius: 5px;
         }
 
-        /* إعدادات المحتوى الرئيسي */
         .content {
             flex: 1;
             padding: 20px;
             background-color: white;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .red-button {
+            background-color: red;
+        }
+
+        .red-button:hover {
+            background-color: darkred;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .search-bar input {
+            width: 250px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #f8f8f8, #e1e1e1);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-height: 80%;
+            overflow-y: auto;
+            width: 600px;
+        }
+
+        .popup .popup-content {
+            text-align: center;
+        }
+
+        .popup input {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .popup button {
+            margin-top: 10px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
     </style>
 </head>
 
 <body>
-
     <div class="container">
-        <!-- الشريط الجانبي -->
         <div class="sidebar">
             <h2>إدارة الجيم</h2>
             <nav>
@@ -92,13 +202,128 @@
             </nav>
         </div>
 
-        <!-- المحتوى الرئيسي -->
         <div class="content">
-            <h3>مرحبًا بك في لوحة تحكم إدارة الجيم</h3>
-            <p>اختر أحد الأقسام من الشريط الجانبي للتنقل بين النماذج المختلفة.</p>
+            <h3>إدارة المخزون التالف</h3>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="بحث عن منتج تالف...">
+                <div class="button-container">
+                    <button class="button" id="addDamagedProductBtn">إضافة منتج تالف</button>
+                </div>
+            </div>
+            <table id="damagedInventoryTable">
+                <thead>
+                    <tr>
+                        <th>اسم المنتج</th>
+                        <th>الفئة</th>
+                        <th>الكمية التالفة</th>
+                        <th>سبب التلف</th>
+                        <th>تاريخ التلف</th>
+                        <th>العمليات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- المنتجات التالفة سيتم إضافتها هنا -->
+                </tbody>
+            </table>
         </div>
     </div>
 
-</body>
+    <!-- نافذة منبثقة لإضافة منتج تالف -->
+    <div class="overlay" id="addDamagedProductPopupOverlay"></div>
+    <div class="popup" id="addDamagedProductPopup">
+        <div class="popup-content">
+            <h2>إضافة منتج تالف</h2>
+            <input type="text" id="damagedProductName" placeholder="اسم المنتج">
+            <input type="text" id="damagedProductCategory" placeholder="الفئة">
+            <input type="number" id="damagedProductQuantity" placeholder="الكمية التالفة">
+            <input type="text" id="damageCause" placeholder="سبب التلف">
+            <input type="date" id="damageDate" placeholder="تاريخ التلف">
+            <button class="button" id="saveDamagedProductBtn">حفظ</button>
+            <button class="button" id="cancelAddDamagedProductBtn">إلغاء</button>
+        </div>
+    </div>
 
+    <script>
+        $(document).ready(function () {
+            let editingRow = null;
+
+            // فتح نافذة إضافة منتج تالف
+            $("#addDamagedProductBtn").click(function () {
+                editingRow = null; // إعادة تعيين الصف المعدل
+                $("#damagedProductName").val('');
+                $("#damagedProductCategory").val('');
+                $("#damagedProductQuantity").val('');
+                $("#damageCause").val('');
+                $("#damageDate").val('');
+                $("#addDamagedProductPopupOverlay").fadeIn();
+                $("#addDamagedProductPopup").fadeIn();
+            });
+
+            // حفظ المنتج التالف
+            $("#saveDamagedProductBtn").click(function () {
+                const damagedProductName = $("#damagedProductName").val();
+                const damagedProductCategory = $("#damagedProductCategory").val();
+                const damagedProductQuantity = $("#damagedProductQuantity").val();
+                const damageCause = $("#damageCause").val();
+                const damageDate = $("#damageDate").val();
+
+                if (damagedProductName && damagedProductCategory && damagedProductQuantity && damageCause && damageDate) {
+                    let newRow = `<tr>
+                        <td>${damagedProductName}</td>
+                        <td>${damagedProductCategory}</td>
+                        <td>${damagedProductQuantity}</td>
+                        <td>${damageCause}</td>
+                        <td>${damageDate}</td>
+                        <td>
+                            <button class="button" onclick="editDamagedProduct(this)">تعديل</button>
+                            <button class="button red-button" onclick="removeDamagedProduct(this)">حذف</button>
+                        </td>
+                    </tr>`;
+                    $("#damagedInventoryTable tbody").append(newRow);
+                    localStorage.setItem("damagedInventory", $("#damagedInventoryTable tbody").html());
+                    $("#addDamagedProductPopupOverlay").fadeOut();
+                    $("#addDamagedProductPopup").fadeOut();
+                } else {
+                    alert("الرجاء ملء جميع الحقول.");
+                }
+            });
+
+            // إلغاء إضافة منتج تالف
+            $("#cancelAddDamagedProductBtn").click(function () {
+                $("#addDamagedProductPopupOverlay").fadeOut();
+                $("#addDamagedProductPopup").fadeOut();
+            });
+
+            // تعديل المنتج التالف
+            window.editDamagedProduct = function (button) {
+                const row = $(button).closest("tr");
+                editingRow = row;
+                const productName = row.find("td").eq(0).text();
+                const productCategory = row.find("td").eq(1).text();
+                const productQuantity = row.find("td").eq(2).text();
+                const damageCause = row.find("td").eq(3).text();
+                const damageDate = row.find("td").eq(4).text();
+
+                $("#damagedProductName").val(productName);
+                $("#damagedProductCategory").val(productCategory);
+                $("#damagedProductQuantity").val(productQuantity);
+                $("#damageCause").val(damageCause);
+                $("#damageDate").val(damageDate);
+                $("#addDamagedProductPopupOverlay").fadeIn();
+                $("#addDamagedProductPopup").fadeIn();
+            };
+
+            // حذف المنتج التالف
+            window.removeDamagedProduct = function (button) {
+                $(button).closest("tr").remove();
+                localStorage.setItem("damagedInventory", $("#damagedInventoryTable tbody").html());
+            };
+
+            // تحميل المخزون التالف من LocalStorage عند تحميل الصفحة
+            if (localStorage.getItem("damagedInventory")) {
+                $("#damagedInventoryTable tbody").html(localStorage.getItem("damagedInventory"));
+            }
+        });
+    </script>
+</body>
 </html>
