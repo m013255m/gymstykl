@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الاشتراكات</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>إدارة المخزون</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,7 +23,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100vh;
+            height: auto;
         }
 
         .sidebar h2 {
@@ -33,27 +32,26 @@
             margin-bottom: 20px;
         }
 
-        .sidebar nav ul {
+        .sidebar ul {
             list-style: none;
             padding: 0;
         }
 
-        .sidebar nav ul li {
+        .sidebar ul li {
             margin: 15px 0;
         }
 
-        .sidebar nav ul li a {
+        .sidebar ul li a {
             color: white;
             text-decoration: none;
             font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
-        .sidebar nav ul li a:hover {
+        .sidebar ul li a:hover {
             background-color: #575757;
+            padding: 5px;
+            border-radius: 5px;
         }
 
         .content {
@@ -106,163 +104,228 @@
             transform: scale(1.05);
         }
 
+        .red-button {
+            background-color: red;
+        }
+
+        .red-button:hover {
+            background-color: darkred;
+        }
+
         .button-container {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            justify-content: flex-end;
         }
 
-        .swal2-popup {
-            font-family: 'Arial', sans-serif;
+        .search-bar input {
+            width: 250px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            transition: border-color 0.3s ease;
         }
 
-        h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
+        .search-bar input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #f8f8f8, #e1e1e1);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-height: 80%;
+            overflow-y: auto;
+            width: 600px;
+        }
+
+        .popup .popup-content {
+            text-align: center;
+        }
+
+        .popup input {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .popup button {
+            margin-top: 10px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="sidebar">
-            <h2>إدارة الاشتراكات</h2>
+            <h2>إدارة الجيم</h2>
             <nav>
                 <ul>
-                    <li><a href="#">الرئيسية</a></li>
-                    <li><a href="#">إدارة الاشتراكات</a></li>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="members.html">إدارة الأعضاء</a></li>
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
+                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                    <li><a href="inventory.html">إدارة المخزون</a></li>
+                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
+                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+                    <li><a href="ratings.html">التقييمات</a></li>
+                    <li><a href="rewards.html">المكافآت</a></li>
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                    <li><a href="complaints.html">الشكاوي</a></li>
                 </ul>
             </nav>
         </div>
+
         <div class="content">
-            <h3>إدارة الاشتراكات</h3>
-            <div class="button-container">
-                <button class="button" id="addMemberBtn">إضافة مشترك جديد</button>
-                <button class="button" id="renewSubscriptionsBtn">تجديد الاشتراكات</button>
+            <h3>إدارة المخزون</h3>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="بحث عن منتج...">
+                <div class="button-container">
+                    <button class="button" id="addProductBtn">إضافة منتج جديد</button>
+                </div>
             </div>
-            <table id="subscriptionsTable">
+            <table id="inventoryTable">
                 <thead>
                     <tr>
-                        <th>اسم المشترك</th>
-                        <th>تاريخ البداية</th>
-                        <th>تاريخ النهاية</th>
-                        <th>الإجراءات</th>
+                        <th>اسم المنتج</th>
+                        <th>الفئة</th>
+                        <th>الكمية</th>
+                        <th>السعر</th>
+                        <th>العمليات</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- سيتم إضافة الصفوف هنا ديناميكيًا -->
+                    <!-- المنتجات سيتم إضافتها هنا -->
                 </tbody>
             </table>
         </div>
     </div>
+
+    <!-- نافذة منبثقة لإضافة منتج جديد -->
+    <div class="overlay" id="addProductPopupOverlay"></div>
+    <div class="popup" id="addProductPopup">
+        <div class="popup-content">
+            <h2>إضافة منتج جديد</h2>
+            <input type="text" id="productName" placeholder="اسم المنتج">
+            <input type="text" id="productCategory" placeholder="الفئة">
+            <input type="number" id="productQuantity" placeholder="الكمية">
+            <input type="number" id="productPrice" placeholder="السعر" step="0.01">
+            <button class="button" id="saveProductBtn">حفظ</button>
+            <button class="button" id="cancelAddProductBtn">إلغاء</button>
+        </div>
+    </div>
+
     <script>
-        const subscriptionsKey = "subscriptionsData";
+        $(document).ready(function () {
+            let editingRow = null;
 
-        function loadSubscriptions() {
-            const storedData = localStorage.getItem(subscriptionsKey);
-            if (storedData) {
-                JSON.parse(storedData).forEach(subscription => {
-                    addSubscriptionToTable(subscription.name, subscription.startDate, subscription.endDate);
-                });
-            }
-        }
+            // فتح نافذة إضافة منتج جديد
+            $("#addProductBtn").click(function () {
+                editingRow = null; // إعادة تعيين الصف المعدل
+                $("#productName").val('');
+                $("#productCategory").val('');
+                $("#productQuantity").val('');
+                $("#productPrice").val('');
+                $("#addProductPopupOverlay").fadeIn();
+                $("#addProductPopup").fadeIn();
+            });
 
-        function saveSubscriptions() {
-            const rows = document.querySelectorAll("#subscriptionsTable tbody tr");
-            const subscriptions = Array.from(rows).map(row => ({
-                name: row.cells[0].textContent,
-                startDate: row.cells[1].textContent,
-                endDate: row.cells[2].textContent
-            }));
-            localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
-        }
+            // حفظ المنتج
+            $("#saveProductBtn").click(function () {
+                const productName = $("#productName").val();
+                const productCategory = $("#productCategory").val();
+                const productQuantity = $("#productQuantity").val();
+                const productPrice = $("#productPrice").val();
 
-        function addSubscriptionToTable(name, startDate, endDate) {
-            const table = document.querySelector("#subscriptionsTable tbody");
-            const row = table.insertRow();
-            row.innerHTML = `
-                <td>${name}</td>
-                <td>${startDate}</td>
-                <td>${endDate}</td>
-                <td>
-                    <button class="button" onclick="renewSubscription(this)">تجديد</button>
-                </td>
-            `;
-        }
-
-        document.querySelector("#addMemberBtn").addEventListener("click", () => {
-            Swal.fire({
-                title: 'إضافة مشترك جديد',
-                html: `
-                    <input type="text" id="newMemberName" class="swal2-input" placeholder="اسم المشترك">
-                    <input type="date" id="newStartDate" class="swal2-input">
-                    <input type="date" id="newEndDate" class="swal2-input">
-                `,
-                confirmButtonText: 'إضافة',
-                preConfirm: () => ({
-                    name: document.getElementById("newMemberName").value,
-                    startDate: document.getElementById("newStartDate").value,
-                    endDate: document.getElementById("newEndDate").value
-                })
-            }).then(result => {
-                if (result.isConfirmed) {
-                    addSubscriptionToTable(result.value.name, result.value.startDate, result.value.endDate);
-                    saveSubscriptions();
-                    Swal.fire('تمت الإضافة!', 'تم إضافة المشترك بنجاح.', 'success');
+                if (productName && productCategory && productQuantity && productPrice) {
+                    if (editingRow) {
+                        // تعديل المنتج في الجدول
+                        editingRow.find("td").eq(0).text(productName);
+                        editingRow.find("td").eq(1).text(productCategory);
+                        editingRow.find("td").eq(2).text(productQuantity);
+                        editingRow.find("td").eq(3).text(productPrice);
+                    } else {
+                        // إضافة منتج جديد
+                        const newRow = `<tr>
+                                            <td>${productName}</td>
+                                            <td>${productCategory}</td>
+                                            <td>${productQuantity}</td>
+                                            <td>${productPrice}</td>
+                                            <td>
+                                                <button class="button" onclick="editProduct(this)">تعديل</button>
+                                                <button class="button red-button" onclick="removeProduct(this)">حذف</button>
+                                            </td>
+                                        </tr>`;
+                        $("#inventoryTable tbody").append(newRow);
+                    }
+                    localStorage.setItem("inventory", $("#inventoryTable tbody").html());
+                    $("#addProductPopupOverlay").fadeOut();
+                    $("#addProductPopup").fadeOut();
+                } else {
+                    alert("الرجاء ملء جميع الحقول.");
                 }
             });
-        });
 
-        document.querySelector("#renewSubscriptionsBtn").addEventListener("click", () => {
-            const tableData = JSON.parse(localStorage.getItem(subscriptionsKey) || "[]");
-            const expired = tableData.filter(sub => new Date(sub.endDate) < new Date());
-            if (expired.length === 0) {
-                Swal.fire("لا يوجد مشتركون بحاجة للتجديد!");
-                return;
-            }
-
-            const expiredTable = expired.map(sub => `
-                <tr>
-                    <td>${sub.name}</td>
-                    <td>${sub.startDate}</td>
-                    <td>${sub.endDate}</td>
-                    <td><button class="button" onclick="renewSingle('${sub.name}')">تجديد</button></td>
-                </tr>
-            `).join("");
-
-            Swal.fire({
-                title: 'المشتركين المنتهية اشتراكاتهم',
-                html: `
-                    <table style="width: 100%; text-align: center; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background: #333; color: white;">
-                                <th>اسم المشترك</th>
-                                <th>تاريخ البداية</th>
-                                <th>تاريخ النهاية</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody>${expiredTable}</tbody>
-                    </table>
-                `,
-                width: '800px',
-                showConfirmButton: false
+            // إلغاء إضافة منتج
+            $("#cancelAddProductBtn").click(function () {
+                $("#addProductPopupOverlay").fadeOut();
+                $("#addProductPopup").fadeOut();
             });
-        });
 
-        function renewSingle(name) {
-            const subscriptions = JSON.parse(localStorage.getItem(subscriptionsKey) || "[]");
-            const index = subscriptions.findIndex(sub => sub.name === name);
-            if (index !== -1) {
-                const newEndDate = new Date(subscriptions[index].endDate);
-                newEndDate.setMonth(newEndDate.getMonth() + 1);
-                subscriptions[index].endDate = newEndDate.toISOString().split("T")[0];
-                localStorage.setItem(subscriptionsKey, JSON.stringify(subscriptions));
-                loadSubscriptions();
-                Swal.fire("تم التجديد بنجاح!", "", "success");
+            // تعديل المنتج
+            window.editProduct = function (button) {
+                const row = $(button).closest("tr");
+                editingRow = row;
+                const productName = row.find("td").eq(0).text();
+                const productCategory = row.find("td").eq(1).text();
+                const productQuantity = row.find("td").eq(2).text();
+                const productPrice = row.find("td").eq(3).text();
+
+                $("#productName").val(productName);
+                $("#productCategory").val(productCategory);
+                $("#productQuantity").val(productQuantity);
+                $("#productPrice").val(productPrice);
+                $("#addProductPopupOverlay").fadeIn();
+                $("#addProductPopup").fadeIn();
+            };
+
+            // حذف المنتج
+            window.removeProduct = function (button) {
+                $(button).closest("tr").remove();
+                localStorage.setItem("inventory", $("#inventoryTable tbody").html());
+            };
+
+            // تحميل المنتجات من LocalStorage عند تحميل الصفحة
+            if (localStorage.getItem("inventory")) {
+                $("#inventoryTable tbody").html(localStorage.getItem("inventory"));
             }
-        }
-
-        loadSubscriptions();
+        });
     </script>
 </body>
 </html>
