@@ -283,20 +283,21 @@
                         <th>نوع الاشتراك</th>
                         <th>تاريخ البداية</th>
                         <th>تاريخ النهاية</th>
-                        <th>الإجراءات</th>
+                        <th>العمليات</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- الاشتراكات سيتم إضافتها هنا -->
+                    <!-- الاشتراكات ستضاف هنا -->
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- المربع المنبثق لإضافة اشتراك -->
+    <!-- نافذة منبثقة لإضافة اشتراك جديد -->
     <div class="overlay" id="addSubscriptionPopupOverlay"></div>
     <div class="popup" id="addSubscriptionPopup">
         <div class="popup-content">
+            <span class="close-icon" id="closeAddPopupBtn"><i class="fas fa-times"></i></span>
             <h2>إضافة اشتراك جديد</h2>
             <input type="text" id="memberName" placeholder="اسم العضو">
             <input type="text" id="subscriptionType" placeholder="نوع الاشتراك">
@@ -336,9 +337,6 @@
             if (localStorage.getItem("subscriptions")) {
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
-
-            // إضافة تأثير الاهتزاز على زر "تجديد الاشتراكات"
-            $("#renewSubscriptionBtn").addClass("vibrate");
 
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
@@ -414,7 +412,6 @@
                 }
             });
 
-            // إغلاق نافذة التجديد عند الضغط على زر الإغلاق
             $("#closeRenewPopupBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
@@ -435,7 +432,7 @@
             $("#addSubscriptionPopupOverlay").fadeIn();
             $("#addSubscriptionPopup").fadeIn();
 
-            $("#saveSubscriptionBtn").click(function () {
+            $("#saveSubscriptionBtn").off("click").click(function () {
                 row.find("td").eq(0).text($("#memberName").val());
                 row.find("td").eq(1).text($("#subscriptionType").val());
                 row.find("td").eq(2).text($("#startDate").val());
