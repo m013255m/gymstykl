@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        /* إضافة الكود السابق كما هو */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -273,14 +274,9 @@
         </div>
 
         <div class="content">
-            <h3>إدارة الاشتراكات</h3>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
-                <div class="button-container">
-                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
-                    <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-                </div>
-            </div>
+            <h1>إدارة الاشتراكات</h1>
+            <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+            <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
             <table id="subscriptionsTable">
                 <thead>
                     <tr>
@@ -435,7 +431,6 @@
         });
 
         function editSubscription(button) {
-            // من هنا يمكن إضافة كود التعديل في الاشتراكات
             const row = $(button).closest("tr");
             const memberName = row.find("td").eq(0).text();
             const subscriptionType = row.find("td").eq(1).text();
