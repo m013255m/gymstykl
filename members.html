@@ -240,7 +240,6 @@
                         <th>البريد الإلكتروني</th>
                         <th>رقم الهاتف</th>
                         <th>تاريخ التسجيل</th>
-                        <th>العمليات</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -266,12 +265,12 @@
 
     <script>
         $(document).ready(function () {
-            // إذا كانت هناك بيانات أعضاء مخزنة في LocalStorage، قم بتحميلها
+            // إذا كانت هناك بيانات أعضاء مخزنة في LocalStorage، قم بتحميلها في الجدول
             if (localStorage.getItem("members")) {
                 $("#membersTable tbody").html(localStorage.getItem("members"));
             }
 
-            // فتح نافذة إضافة عضو جديد
+            // إضافة عضو جديد
             $("#addMemberBtn").click(function () {
                 $("#addMemberPopupOverlay").fadeIn();
                 $("#addMemberPopup").fadeIn();
@@ -291,10 +290,6 @@
                         <td>${memberEmail}</td>
                         <td>${memberPhone}</td>
                         <td>${memberJoinDate}</td>
-                        <td>
-                            <button class="button" onclick="editMember(this)">تعديل</button>
-                            <button class="button red-button" onclick="removeMember(this)">حذف</button>
-                        </td>
                     </tr>`;
                     $("#membersTable tbody").append(newRow);
                     localStorage.setItem("members", $("#membersTable tbody").html());
@@ -311,10 +306,10 @@
                 $("#addMemberPopup").fadeOut();
             });
 
-            // حذف العضو
+            // حذف الأعضاء المحددين
             $("#removeMemberBtn").click(function () {
-                const selectedMember = $("input:checkbox:checked").closest("tr");
-                selectedMember.remove();
+                const selectedMembers = $("input:checkbox:checked").closest("tr");
+                selectedMembers.remove();
                 localStorage.setItem("members", $("#membersTable tbody").html());
             });
 
@@ -327,45 +322,11 @@
                 });
             });
 
-            // تحديد/إلغاء تحديد كل الأعضاء
+            // تحديد/إلغاء تحديد جميع الأعضاء
             $("#selectAll").change(function () {
                 $("input:checkbox").prop('checked', this.checked);
             });
         });
-
-        // تعديل بيانات العضو
-        function editMember(button) {
-            const row = $(button).closest("tr");
-            const memberName = row.find("td").eq(1).text();
-            const memberEmail = row.find("td").eq(2).text();
-            const memberPhone = row.find("td").eq(3).text();
-            const memberJoinDate = row.find("td").eq(4).text();
-
-            $("#memberName").val(memberName);
-            $("#memberEmail").val(memberEmail);
-            $("#memberPhone").val(memberPhone);
-            $("#memberJoinDate").val(memberJoinDate);
-
-            $("#addMemberPopupOverlay").fadeIn();
-            $("#addMemberPopup").fadeIn();
-
-            $("#saveMemberBtn").off("click").click(function () {
-                row.find("td").eq(1).text($("#memberName").val());
-                row.find("td").eq(2).text($("#memberEmail").val());
-                row.find("td").eq(3).text($("#memberPhone").val());
-                row.find("td").eq(4).text($("#memberJoinDate").val());
-
-                localStorage.setItem("members", $("#membersTable tbody").html());
-                $("#addMemberPopupOverlay").fadeOut();
-                $("#addMemberPopup").fadeOut();
-            });
-        }
-
-        // حذف عضو
-        function removeMember(button) {
-            $(button).closest("tr").remove();
-            localStorage.setItem("members", $("#membersTable tbody").html());
-        }
     </script>
 </body>
 </html>
