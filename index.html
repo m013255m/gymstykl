@@ -19,19 +19,20 @@
         }
 
         .login-box {
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 30px;
             border-radius: 15px;
             width: 350px;
             margin: 100px auto;
             text-align: center;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
         }
 
         h2 {
             font-size: 28px;
             margin-bottom: 20px;
             font-weight: bold;
+            color: #4CAF50;
         }
 
         .input-container {
@@ -104,7 +105,6 @@
             animation: spin 1s linear infinite;
         }
 
-        /* تأثيرات التحميل */
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -165,7 +165,6 @@
             background-color: #45a049;
         }
 
-        /* تأثيرات ظهور الرسائل */
         @keyframes fadeIn {
             0% {
                 opacity: 0;
@@ -177,7 +176,6 @@
             }
         }
 
-        /* تأثير ارتداد للأيقونات */
         @keyframes bounce {
             0%, 100% {
                 transform: translateY(-10px);
@@ -186,7 +184,6 @@
                 transform: translateY(10px);
             }
         }
-
     </style>
 </head>
 <body>
@@ -213,13 +210,13 @@
 
     <!-- رسائل منبثقة -->
     <div id="successMessage" class="messagePopup success">
-        <img src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/umd/images/success.gif" alt="نجاح">
+        <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="نجاح">
         <div class="messageText">تم التسجيل بنجاح!</div>
         <button onclick="closeMessage('successMessage')">موافق</button>
     </div>
 
     <div id="errorMessage" class="messagePopup error">
-        <img src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/umd/images/error.gif" alt="خطأ">
+        <img src="https://media.giphy.com/media/3o6Ztq70Cztnn9g8U0/giphy.gif" alt="خطأ">
         <div class="messageText">اسم المستخدم أو كلمة المرور غير صحيحة.</div>
         <button onclick="closeMessage('errorMessage')">موافق</button>
     </div>
@@ -256,7 +253,7 @@
                         // إظهار رسالة النجاح
                         document.getElementById('successMessage').style.display = 'block';
                     } else {
-                        // إظهار رسالة الخطأ
+                        // إذا كانت التواريخ غير صالحة
                         document.getElementById('errorMessage').style.display = 'block';
                     }
                 } else {
