@@ -169,20 +169,6 @@
             justify-content: flex-end;
         }
 
-        .swal2-loading {
-            display: none;
-        }
-
-        .waiting-popup {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            padding: 20px;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 8px;
-        }
-
         .search-bar input {
             width: 250px;
             padding: 10px;
@@ -228,18 +214,17 @@
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن عضو...">
                 <div class="button-container">
-                    <button class="button red-button" id="removeMemberBtn">حذف الأعضاء المحددين</button>
                     <button class="button" id="addMemberBtn">إضافة عضو جديد</button>
                 </div>
             </div>
             <table id="membersTable">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" id="selectAll"></th>
                         <th>اسم العضو</th>
-                        <th>البريد الإلكتروني</th>
+                        <th>العمر</th>
                         <th>رقم الهاتف</th>
-                        <th>تاريخ التسجيل</th>
+                        <th>العنوان</th>
+                        <th>العمليات</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -255,9 +240,9 @@
         <div class="popup-content">
             <h2>إضافة عضو جديد</h2>
             <input type="text" id="memberName" placeholder="اسم العضو">
-            <input type="email" id="memberEmail" placeholder="البريد الإلكتروني">
+            <input type="number" id="memberAge" placeholder="العمر">
             <input type="tel" id="memberPhone" placeholder="رقم الهاتف">
-            <input type="date" id="memberJoinDate" placeholder="تاريخ التسجيل">
+            <input type="text" id="memberAddress" placeholder="العنوان">
             <button class="button" id="saveMemberBtn">حفظ</button>
             <button class="button" id="cancelAddMemberBtn">إلغاء</button>
         </div>
@@ -279,17 +264,19 @@
             // حفظ العضو الجديد
             $("#saveMemberBtn").click(function () {
                 const memberName = $("#memberName").val();
-                const memberEmail = $("#memberEmail").val();
+                const memberAge = $("#memberAge").val();
                 const memberPhone = $("#memberPhone").val();
-                const memberJoinDate = $("#memberJoinDate").val();
+                const memberAddress = $("#memberAddress").val();
 
-                if (memberName && memberEmail && memberPhone && memberJoinDate) {
+                if (memberName && memberAge && memberPhone && memberAddress) {
                     const newRow = `<tr>
-                        <td><input type="checkbox"></td>
                         <td>${memberName}</td>
-                        <td>${memberEmail}</td>
+                        <td>${memberAge}</td>
                         <td>${memberPhone}</td>
-                        <td>${memberJoinDate}</td>
+                        <td>${memberAddress}</td>
+                        <td>
+                            <button class="button red-button removeBtn">حذف</button>
+                        </td>
                     </tr>`;
                     $("#membersTable tbody").append(newRow);
                     localStorage.setItem("members", $("#membersTable tbody").html());
@@ -306,10 +293,9 @@
                 $("#addMemberPopup").fadeOut();
             });
 
-            // حذف الأعضاء المحددين
-            $("#removeMemberBtn").click(function () {
-                const selectedMembers = $("input:checkbox:checked").closest("tr");
-                selectedMembers.remove();
+            // حذف العضو عند النقر على زر الحذف
+            $(document).on("click", ".removeBtn", function () {
+                $(this).closest("tr").remove();
                 localStorage.setItem("members", $("#membersTable tbody").html());
             });
 
@@ -320,11 +306,6 @@
                     const rowText = $(this).text().toLowerCase();
                     $(this).toggle(rowText.indexOf(searchText) > -1);
                 });
-            });
-
-            // تحديد/إلغاء تحديد جميع الأعضاء
-            $("#selectAll").change(function () {
-                $("input:checkbox").prop('checked', this.checked);
             });
         });
     </script>
