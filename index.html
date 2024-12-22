@@ -90,19 +90,18 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 9999;
-            text-align: center;
             justify-content: center;
             align-items: center;
+            text-align: center;
         }
 
         #loadingSpinner {
-            margin-top: 20%;
-            border: 16px solid #f3f3f3; /* خلفية */
-            border-top: 16px solid #3498db; /* اللون المتحرك */
+            width: 80px;
+            height: 80px;
+            border: 12px solid #f3f3f3; /* خلفية */
+            border-top: 12px solid #3498db; /* اللون المتحرك */
             border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            animation: spin 2s linear infinite;
+            animation: spin 1s linear infinite;
         }
 
         /* تأثيرات التحميل */
@@ -124,7 +123,8 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             text-align: center;
             z-index: 10000;
-            width: 300px;
+            width: 320px;
+            font-size: 18px;
         }
 
         .messagePopup .success {
@@ -135,6 +135,12 @@
         .messagePopup .error {
             background-color: #dc3545;
             color: white;
+        }
+
+        .messagePopup img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 15px;
         }
 
         .messagePopup .messageText {
@@ -176,16 +182,18 @@
     <!-- مربع الانتظار -->
     <div id="loadingOverlay">
         <div id="loadingSpinner"></div>
-        <div class="loading-text" style="color: white; font-size: 18px;">جاري التحقق... الرجاء الانتظار</div>
+        <div style="color: white; font-size: 18px; margin-top: 10px;">جاري التحقق... الرجاء الانتظار</div>
     </div>
 
     <!-- رسائل منبثقة -->
     <div id="successMessage" class="messagePopup success">
+        <img src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/umd/images/success.gif" alt="نجاح">
         <div class="messageText">تم التسجيل بنجاح!</div>
         <button onclick="closeMessage('successMessage')">موافق</button>
     </div>
 
     <div id="errorMessage" class="messagePopup error">
+        <img src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/umd/images/error.gif" alt="خطأ">
         <div class="messageText">اسم المستخدم أو كلمة المرور غير صحيحة.</div>
         <button onclick="closeMessage('errorMessage')">موافق</button>
     </div>
