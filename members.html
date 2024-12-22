@@ -182,11 +182,23 @@
             border-color: #4CAF50;
             outline: none;
         }
+
+        /* محاذاة زر إضافة عضو */
+        .add-button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <!-- الشريط الجانبي -->
         <div class="sidebar">
             <h2>إدارة الجيم</h2>
             <nav>
@@ -199,18 +211,28 @@
                     <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
                     <li><a href="ratings.html">التقييمات</a></li>
                     <li><a href="rewards.html">المكافآت</a></li>
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                    <li><a href="complaints.html">الشكاوي</a></li>
                 </ul>
             </nav>
         </div>
 
+        <!-- المحتوى -->
         <div class="content">
             <h3>إدارة الأعضاء</h3>
+            
+            <!-- شريط البحث وزر إضافة عضو -->
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن عضو...">
-                <div class="button-container">
-                    <button class="button" id="addMemberBtn">إضافة عضو جديد</button>
-                </div>
             </div>
+
+            <div class="add-button-container">
+                <button class="button" id="addMemberBtn">إضافة عضو جديد</button>
+            </div>
+
+            <!-- الجدول -->
             <table id="membersTable">
                 <thead>
                     <tr>
@@ -265,17 +287,19 @@
                 const memberEmail = $("#memberEmail").val();
 
                 if (memberName && memberAge && memberPhone && memberAddress && memberEmail) {
-                    const newRow = `<tr>
-                        <td>${memberName}</td>
-                        <td>${memberAge}</td>
-                        <td>${memberPhone}</td>
-                        <td>${memberAddress}</td>
-                        <td>${memberEmail}</td>
-                        <td>
-                            <button class="button" onclick="editMember(this)">تعديل</button>
-                            <button class="button red-button" onclick="removeMember(this)">حذف</button>
-                        </td>
-                    </tr>`;
+                    const newRow = `
+                        <tr>
+                            <td>${memberName}</td>
+                            <td>${memberAge}</td>
+                            <td>${memberPhone}</td>
+                            <td>${memberAddress}</td>
+                            <td>${memberEmail}</td>
+                            <td>
+                                <button class="button" onclick="editMember(this)">تعديل</button>
+                                <button class="button red-button" onclick="removeMember(this)">حذف</button>
+                            </td>
+                        </tr>
+                    `;
                     $("#membersTable tbody").append(newRow);
                     localStorage.setItem("members", $("#membersTable tbody").html());
                     $("#addMemberPopupOverlay").fadeOut();
