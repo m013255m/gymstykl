@@ -221,8 +221,10 @@
                 <thead>
                     <tr>
                         <th>اسم العضو</th>
-                        <th>البريد الإلكتروني</th>
+                        <th>السن</th>
                         <th>رقم الهاتف</th>
+                        <th>العنوان</th>
+                        <th>البريد الإلكتروني</th>
                         <th>العمليات</th>
                     </tr>
                 </thead>
@@ -239,8 +241,10 @@
         <div class="popup-content">
             <h2>إضافة عضو جديد</h2>
             <input type="text" id="memberName" placeholder="اسم العضو">
-            <input type="email" id="memberEmail" placeholder="البريد الإلكتروني">
+            <input type="number" id="memberAge" placeholder="السن">
             <input type="tel" id="memberPhone" placeholder="رقم الهاتف">
+            <input type="text" id="memberAddress" placeholder="العنوان">
+            <input type="email" id="memberEmail" placeholder="البريد الإلكتروني">
             <button class="button" id="saveMemberBtn">حفظ</button>
             <button class="button" id="cancelAddMemberBtn">إلغاء</button>
         </div>
@@ -259,14 +263,18 @@
 
             $("#saveMemberBtn").click(function () {
                 const memberName = $("#memberName").val();
-                const memberEmail = $("#memberEmail").val();
+                const memberAge = $("#memberAge").val();
                 const memberPhone = $("#memberPhone").val();
+                const memberAddress = $("#memberAddress").val();
+                const memberEmail = $("#memberEmail").val();
 
-                if (memberName && memberEmail && memberPhone) {
+                if (memberName && memberAge && memberPhone && memberAddress && memberEmail) {
                     const newRow = `<tr>
                         <td>${memberName}</td>
-                        <td>${memberEmail}</td>
+                        <td>${memberAge}</td>
                         <td>${memberPhone}</td>
+                        <td>${memberAddress}</td>
+                        <td>${memberEmail}</td>
                         <td>
                             <button class="button" onclick="editMember(this)">تعديل</button>
                             <button class="button red-button" onclick="removeMember(this)">حذف</button>
@@ -290,20 +298,26 @@
         function editMember(button) {
             const row = $(button).closest("tr");
             const memberName = row.find("td").eq(0).text();
-            const memberEmail = row.find("td").eq(1).text();
+            const memberAge = row.find("td").eq(1).text();
             const memberPhone = row.find("td").eq(2).text();
+            const memberAddress = row.find("td").eq(3).text();
+            const memberEmail = row.find("td").eq(4).text();
 
             $("#memberName").val(memberName);
-            $("#memberEmail").val(memberEmail);
+            $("#memberAge").val(memberAge);
             $("#memberPhone").val(memberPhone);
+            $("#memberAddress").val(memberAddress);
+            $("#memberEmail").val(memberEmail);
 
             $("#addMemberPopupOverlay").fadeIn();
             $("#addMemberPopup").fadeIn();
 
             $("#saveMemberBtn").off("click").click(function () {
                 row.find("td").eq(0).text($("#memberName").val());
-                row.find("td").eq(1).text($("#memberEmail").val());
+                row.find("td").eq(1).text($("#memberAge").val());
                 row.find("td").eq(2).text($("#memberPhone").val());
+                row.find("td").eq(3).text($("#memberAddress").val());
+                row.find("td").eq(4).text($("#memberEmail").val());
 
                 localStorage.setItem("members", $("#membersTable tbody").html());
                 $("#addMemberPopupOverlay").fadeOut();
