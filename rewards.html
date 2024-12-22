@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة المكافآت</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,27 +32,26 @@
             margin-bottom: 20px;
         }
 
-        .sidebar nav ul {
+        .sidebar ul {
             list-style: none;
             padding: 0;
         }
 
-        .sidebar nav ul li {
+        .sidebar ul li {
             margin: 15px 0;
         }
 
-        .sidebar nav ul li a {
+        .sidebar ul li a {
             color: white;
             text-decoration: none;
             font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
-        .sidebar nav ul li a:hover {
+        .sidebar ul li a:hover {
             background-color: #575757;
+            padding: 5px;
+            border-radius: 5px;
         }
 
         .content {
@@ -107,28 +104,86 @@
             transform: scale(1.05);
         }
 
-        .swal2-popup {
-            font-family: 'Arial', sans-serif;
+        .red-button {
+            background-color: red;
         }
 
-        .search-bar {
-            margin-bottom: 20px;
+        .red-button:hover {
+            background-color: darkred;
+        }
+
+        .button-container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
         }
 
         .search-bar input {
+            width: 250px;
             padding: 10px;
             font-size: 16px;
-            width: 300px;
-            border: 1px solid #ddd;
             border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            transition: border-color 0.3s ease;
         }
 
-        h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
+        .search-bar input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #f8f8f8, #e1e1e1);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-height: 80%;
+            overflow-y: auto;
+            width: 600px;
+        }
+
+        .popup .popup-content {
+            text-align: center;
+        }
+
+        .popup input {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .popup select {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .popup button {
+            margin-top: 10px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
     </style>
 </head>
@@ -160,15 +215,19 @@
             <h3>إدارة المكافآت</h3>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن مكافأة...">
-                <button class="button" id="addRewardBtn">إضافة مكافأة</button>
+                <div class="button-container">
+                    <button class="button" id="addRewardBtn">إضافة مكافأة</button>
+                </div>
             </div>
             <table id="rewardsTable">
                 <thead>
                     <tr>
-                        <th>اسم العضو</th>
+                        <th>اسم المكافأة</th>
                         <th>نوع المكافأة</th>
-                        <th>التاريخ</th>
-                        <th>الإجراءات</th>
+                        <th>النقاط المطلوبة</th>
+                        <th>قيمة المكافأة</th>
+                        <th>تاريخ الإضافة</th>
+                        <th>العمليات</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -178,115 +237,107 @@
         </div>
     </div>
 
+    <!-- نافذة منبثقة لإضافة/تعديل المكافأة -->
+    <div class="overlay" id="addRewardPopupOverlay"></div>
+    <div class="popup" id="addRewardPopup">
+        <div class="popup-content">
+            <h2>إضافة أو تعديل مكافأة</h2>
+            <input type="text" id="rewardName" placeholder="اسم المكافأة">
+            <select id="rewardType">
+                <option value="">اختار النوع</option>
+                <option value="نقدي">نقدي</option>
+                <option value="منتجات">منتجات</option>
+                <option value="خصم">خصم</option>
+            </select>
+            <input type="number" id="rewardPoints" placeholder="النقاط المطلوبة" min="0">
+            <input type="number" id="rewardValue" placeholder="قيمة المكافأة" min="0">
+            <input type="date" id="rewardDate" placeholder="تاريخ الإضافة">
+            <button class="button" id="saveRewardBtn">حفظ</button>
+            <button class="button" id="cancelRewardBtn">إلغاء</button>
+        </div>
+    </div>
+
     <script>
-        const rewardsKey = "gymRewards";
-
-        // تحميل البيانات من التخزين المحلي
-        function loadRewards() {
-            const storedRewards = localStorage.getItem(rewardsKey);
-            if (storedRewards) {
-                JSON.parse(storedRewards).forEach(reward => {
-                    addRewardToTable(reward.memberName, reward.rewardType, reward.date);
-                });
+        $(document).ready(function () {
+            // تحميل المكافآت من localStorage عند تحميل الصفحة
+            if (localStorage.getItem("rewards")) {
+                $("#rewardsTable tbody").html(localStorage.getItem("rewards"));
             }
-        }
 
-        // حفظ البيانات في التخزين المحلي
-        function saveRewards() {
-            const rows = document.querySelectorAll("#rewardsTable tbody tr");
-            const rewards = Array.from(rows).map(row => ({
-                memberName: row.cells[0].textContent,
-                rewardType: row.cells[1].textContent,
-                date: row.cells[2].textContent
-            }));
-            localStorage.setItem(rewardsKey, JSON.stringify(rewards));
-        }
+            // إضافة مكافأة جديدة
+            $("#addRewardBtn").click(function () {
+                $("#addRewardPopupOverlay").fadeIn();
+                $("#addRewardPopup").fadeIn();
+            });
 
-        // إضافة مكافأة جديدة إلى الجدول
-        function addRewardToTable(memberName, rewardType, date) {
-            const table = document.querySelector("#rewardsTable tbody");
-            const row = table.insertRow();
-            row.innerHTML = `
-                <td>${memberName}</td>
-                <td>${rewardType}</td>
-                <td>${date}</td>
-                <td>
-                    <button class="button" onclick="editReward(this)">تعديل</button>
-                    <button class="button" onclick="deleteReward(this)">حذف</button>
-                </td>
-            `;
-        }
+            // إلغاء إضافة المكافأة
+            $("#cancelRewardBtn").click(function () {
+                $("#addRewardPopupOverlay").fadeOut();
+                $("#addRewardPopup").fadeOut();
+            });
 
-        // إضافة مكافأة جديدة
-        document.querySelector("#addRewardBtn").addEventListener("click", () => {
-            Swal.fire({
-                title: 'إضافة مكافأة جديدة',
-                html: `
-                    <input type="text" id="newMemberName" class="swal2-input" placeholder="اسم العضو">
-                    <input type="text" id="newRewardType" class="swal2-input" placeholder="نوع المكافأة">
-                `,
-                confirmButtonText: 'إضافة',
-                preConfirm: () => ({
-                    memberName: document.getElementById("newMemberName").value,
-                    rewardType: document.getElementById("newRewardType").value,
-                    date: new Date().toLocaleDateString()
-                })
-            }).then(result => {
-                if (result.isConfirmed) {
-                    addRewardToTable(result.value.memberName, result.value.rewardType, result.value.date);
-                    saveRewards();
-                    Swal.fire('تمت الإضافة!', 'تم إضافة المكافأة الجديدة بنجاح.', 'success');
+            // حفظ المكافأة
+            $("#saveRewardBtn").click(function () {
+                const rewardName = $("#rewardName").val();
+                const rewardType = $("#rewardType").val();
+                const rewardPoints = $("#rewardPoints").val();
+                const rewardValue = $("#rewardValue").val();
+                const rewardDate = $("#rewardDate").val();
+
+                if (rewardName && rewardType && rewardPoints && rewardValue && rewardDate) {
+                    let newRow = `<tr>
+                        <td>${rewardName}</td>
+                        <td>${rewardType}</td>
+                        <td>${rewardPoints}</td>
+                        <td>${rewardValue}</td>
+                        <td>${rewardDate}</td>
+                        <td>
+                            <button class="button" onclick="editReward(this)">تعديل</button>
+                            <button class="button red-button" onclick="removeReward(this)">حذف</button>
+                        </td>
+                    </tr>`;
+                    $("#rewardsTable tbody").append(newRow);
+                    localStorage.setItem("rewards", $("#rewardsTable tbody").html());
+                    $("#addRewardPopupOverlay").fadeOut();
+                    $("#addRewardPopup").fadeOut();
+                } else {
+                    alert("الرجاء ملء جميع الحقول.");
                 }
             });
-        });
 
-        // تعديل بيانات المكافأة
-        function editReward(button) {
-            const row = button.closest("tr");
-            const memberName = row.cells[0].textContent;
-            const rewardType = row.cells[1].textContent;
+            // تعديل المكافأة
+            window.editReward = function (button) {
+                const row = $(button).closest("tr");
+                const rewardName = row.find("td").eq(0).text();
+                const rewardType = row.find("td").eq(1).text();
+                const rewardPoints = row.find("td").eq(2).text();
+                const rewardValue = row.find("td").eq(3).text();
+                const rewardDate = row.find("td").eq(4).text();
 
-            Swal.fire({
-                title: 'تعديل بيانات المكافأة',
-                html: `
-                    <input type="text" id="editMemberName" class="swal2-input" value="${memberName}">
-                    <input type="text" id="editRewardType" class="swal2-input" value="${rewardType}">
-                `,
-                confirmButtonText: 'تحديث',
-                preConfirm: () => ({
-                    memberName: document.getElementById("editMemberName").value,
-                    rewardType: document.getElementById("editRewardType").value
-                })
-            }).then(result => {
-                if (result.isConfirmed) {
-                    row.cells[0].textContent = result.value.memberName;
-                    row.cells[1].textContent = result.value.rewardType;
-                    saveRewards();
-                    Swal.fire('تم التحديث!', 'تم تحديث بيانات المكافأة بنجاح.', 'success');
-                }
-            });
-        }
+                $("#rewardName").val(rewardName);
+                $("#rewardType").val(rewardType);
+                $("#rewardPoints").val(rewardPoints);
+                $("#rewardValue").val(rewardValue);
+                $("#rewardDate").val(rewardDate);
 
-        // حذف المكافأة
-        function deleteReward(button) {
-            const row = button.closest("tr");
-            row.remove();
-            saveRewards();
-            Swal.fire('تم الحذف!', 'تم حذف المكافأة بنجاح.', 'success');
-        }
+                $("#addRewardPopupOverlay").fadeIn();
+                $("#addRewardPopup").fadeIn();
+            };
 
-        // البحث عن المكافآت
-        document.getElementById("searchInput").addEventListener("input", () => {
-            const filter = document.getElementById("searchInput").value.toLowerCase();
-            const rows = document.querySelectorAll("#rewardsTable tbody tr");
-            rows.forEach(row => {
-                const cells = row.querySelectorAll("td");
-                const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(filter));
-                row.style.display = match ? "" : "none";
+            // حذف المكافأة
+            window.removeReward = function (button) {
+                $(button).closest("tr").remove();
+                localStorage.setItem("rewards", $("#rewardsTable tbody").html());
+            };
+
+            // البحث عن المكافآت
+            $("#searchInput").keyup(function () {
+                const value = $(this).val().toLowerCase();
+                $("#rewardsTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
             });
         });
-
-        loadRewards();
     </script>
 </body>
 </html>
