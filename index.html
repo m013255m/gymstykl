@@ -111,12 +111,50 @@
             100% { transform: rotate(360deg); }
         }
 
-        .loading-text {
-            color: white;
-            font-size: 18px;
-            margin-top: 20px;
-            font-weight: bold;
+        /* تصميم الرسائل المنبثقة */
+        .messagePopup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            z-index: 10000;
+            width: 300px;
         }
+
+        .messagePopup .success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .messagePopup .error {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .messagePopup .messageText {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .messagePopup button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .messagePopup button:hover {
+            background-color: #45a049;
+        }
+
     </style>
 </head>
 <body>
@@ -138,7 +176,18 @@
     <!-- مربع الانتظار -->
     <div id="loadingOverlay">
         <div id="loadingSpinner"></div>
-        <div class="loading-text">جاري التحقق... الرجاء الانتظار</div>
+        <div class="loading-text" style="color: white; font-size: 18px;">جاري التحقق... الرجاء الانتظار</div>
+    </div>
+
+    <!-- رسائل منبثقة -->
+    <div id="successMessage" class="messagePopup success">
+        <div class="messageText">تم التسجيل بنجاح!</div>
+        <button onclick="closeMessage('successMessage')">موافق</button>
+    </div>
+
+    <div id="errorMessage" class="messagePopup error">
+        <div class="messageText">اسم المستخدم أو كلمة المرور غير صحيحة.</div>
+        <button onclick="closeMessage('errorMessage')">موافق</button>
     </div>
 
     <script>
@@ -170,18 +219,25 @@
                     // التحقق من تاريخ البداية والنهاية
                     var currentDate = new Date().toISOString().split('T')[0];
                     if (currentDate >= user.startDate && currentDate <= user.endDate) {
-                        // الانتقال إلى الصفحة التالية
-                        alert("تم التسجيل بنجاح! أنت الآن مسجل بنجاح.");
-                        window.location.href = 'index2.html';
+                        // إظهار رسالة النجاح
+                        document.getElementById('successMessage').style.display = 'block';
                     } else {
-                        // إذا كانت التواريخ غير صالحة
-                        alert("فترة الاشتراك انتهت أو غير صالحة.");
+                        // إظهار رسالة الخطأ
+                        document.getElementById('errorMessage').style.display = 'block';
                     }
                 } else {
                     // إذا كانت البيانات غير صحيحة
-                    alert("اسم المستخدم أو كلمة المرور غير صحيحة.");
+                    document.getElementById('errorMessage').style.display = 'block';
                 }
             }, 2000); // تأخير 2 ثانية لمحاكاة التحميل
+        }
+
+        // إغلاق الرسائل المنبثقة
+        function closeMessage(messageId) {
+            document.getElementById(messageId).style.display = 'none';
+            if (messageId === 'successMessage') {
+                window.location.href = 'index2.html';  // الانتقال إلى الصفحة الرئيسية بعد النجاح
+            }
         }
     </script>
 
