@@ -13,10 +13,13 @@
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
+            display: flex;
+            height: 100vh;
         }
 
         .container {
             display: flex;
+            width: 100%;
         }
 
         .sidebar {
@@ -24,7 +27,12 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100vh;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-sizing: border-box;
+            overflow-y: auto;
         }
 
         .sidebar h2 {
@@ -59,6 +67,8 @@
             flex: 1;
             padding: 20px;
             background-color: white;
+            margin-left: 250px;
+            box-sizing: border-box;
         }
 
         table {
@@ -252,15 +262,18 @@
 
     <script>
         $(document).ready(function () {
+            // تحميل البيانات المحفوظة في localStorage عند تحميل الصفحة
             if (localStorage.getItem("members")) {
                 $("#membersTable tbody").html(localStorage.getItem("members"));
             }
 
+            // عند الضغط على زر إضافة عضو جديد
             $("#addMemberBtn").click(function () {
                 $("#addMemberPopupOverlay").fadeIn();
                 $("#addMemberPopup").fadeIn();
             });
 
+            // حفظ بيانات العضو الجديد
             $("#saveMemberBtn").click(function () {
                 const memberName = $("#memberName").val();
                 const memberAge = $("#memberAge").val();
@@ -289,46 +302,50 @@
                 }
             });
 
+            // إلغاء إضافة العضو
             $("#cancelAddMemberBtn").click(function () {
                 $("#addMemberPopupOverlay").fadeOut();
                 $("#addMemberPopup").fadeOut();
             });
-        });
 
-        function editMember(button) {
-            const row = $(button).closest("tr");
-            const memberName = row.find("td").eq(0).text();
-            const memberAge = row.find("td").eq(1).text();
-            const memberPhone = row.find("td").eq(2).text();
-            const memberAddress = row.find("td").eq(3).text();
-            const memberEmail = row.find("td").eq(4).text();
+            // تعديل العضو
+            function editMember(button) {
+                const row = $(button).closest("tr");
+                const memberName = row.find("td").eq(0).text();
+                const memberAge = row.find("td").eq(1).text();
+                const memberPhone = row.find("td").eq(2).text();
+                const memberAddress = row.find("td").eq(3).text();
+                const memberEmail = row.find("td").eq(4).text();
 
-            $("#memberName").val(memberName);
-            $("#memberAge").val(memberAge);
-            $("#memberPhone").val(memberPhone);
-            $("#memberAddress").val(memberAddress);
-            $("#memberEmail").val(memberEmail);
+                $("#memberName").val(memberName);
+                $("#memberAge").val(memberAge);
+                $("#memberPhone").val(memberPhone);
+                $("#memberAddress").val(memberAddress);
+                $("#memberEmail").val(memberEmail);
 
-            $("#addMemberPopupOverlay").fadeIn();
-            $("#addMemberPopup").fadeIn();
+                $("#addMemberPopupOverlay").fadeIn();
+                $("#addMemberPopup").fadeIn();
 
-            $("#saveMemberBtn").off("click").click(function () {
-                row.find("td").eq(0).text($("#memberName").val());
-                row.find("td").eq(1).text($("#memberAge").val());
-                row.find("td").eq(2).text($("#memberPhone").val());
-                row.find("td").eq(3).text($("#memberAddress").val());
-                row.find("td").eq(4).text($("#memberEmail").val());
+                // تحديث بيانات العضو
+                $("#saveMemberBtn").off("click").click(function () {
+                    row.find("td").eq(0).text($("#memberName").val());
+                    row.find("td").eq(1).text($("#memberAge").val());
+                    row.find("td").eq(2).text($("#memberPhone").val());
+                    row.find("td").eq(3).text($("#memberAddress").val());
+                    row.find("td").eq(4).text($("#memberEmail").val());
 
+                    localStorage.setItem("members", $("#membersTable tbody").html());
+                    $("#addMemberPopupOverlay").fadeOut();
+                    $("#addMemberPopup").fadeOut();
+                });
+            }
+
+            // حذف العضو
+            function removeMember(button) {
+                $(button).closest("tr").remove();
                 localStorage.setItem("members", $("#membersTable tbody").html());
-                $("#addMemberPopupOverlay").fadeOut();
-                $("#addMemberPopup").fadeOut();
-            });
-        }
-
-        function removeMember(button) {
-            $(button).closest("tr").remove();
-            localStorage.setItem("members", $("#membersTable tbody").html());
-        }
+            }
+        });
     </script>
 </body>
 </html>
