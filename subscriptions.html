@@ -280,6 +280,22 @@
             color: #f44336;
         }
 
+        /* الرسالة المنبثقة عند عدم وجود اشتراكات منتهية */
+        .message-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f44336;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
 
@@ -370,6 +386,11 @@
         </div>
     </div>
 
+    <!-- رسالة منبثقة لعدم وجود اشتراكات منتهية -->
+    <div class="message-popup" id="noExpiredSubscriptionsPopup">
+        لا توجد اشتراكات منتهية.
+    </div>
+
     <script>
         $(document).ready(function () {
             if (localStorage.getItem("subscriptions")) {
@@ -440,7 +461,7 @@
                             <td>${row.find("td").eq(1).text()}</td>
                             <td>${row.find("td").eq(2).text()}</td>
                             <td>${row.find("td").eq(3).text()}</td>
-                        </tr>`;
+                        </tr>`; 
                     });
                     expiredTable += `</tbody></table>`;
                     $("#renewSubscriptionPopup .popup-content").html(expiredTable + '<button class="button" id="closeRenewPopupBtn">إغلاق</button>');
@@ -449,7 +470,8 @@
                         $("#renewSubscriptionPopup").fadeOut();
                     });
                 } else {
-                    alert("لا توجد اشتراكات منتهية.");
+                    // ظهور الرسالة المنبثقة إذا لم توجد اشتراكات منتهية
+                    $("#noExpiredSubscriptionsPopup").fadeIn().delay(2000).fadeOut();
                 }
             });
 
