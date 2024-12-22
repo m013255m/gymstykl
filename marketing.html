@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة حملات التسويق</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,7 +23,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100vh;
+            height: auto;
         }
 
         .sidebar h2 {
@@ -34,27 +32,26 @@
             margin-bottom: 20px;
         }
 
-        .sidebar nav ul {
+        .sidebar ul {
             list-style: none;
             padding: 0;
         }
 
-        .sidebar nav ul li {
+        .sidebar ul li {
             margin: 15px 0;
         }
 
-        .sidebar nav ul li a {
+        .sidebar ul li a {
             color: white;
             text-decoration: none;
             font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
-        .sidebar nav ul li a:hover {
+        .sidebar ul li a:hover {
             background-color: #575757;
+            padding: 5px;
+            border-radius: 5px;
         }
 
         .content {
@@ -107,28 +104,77 @@
             transform: scale(1.05);
         }
 
-        .swal2-popup {
-            font-family: 'Arial', sans-serif;
+        .red-button {
+            background-color: red;
         }
 
-        .search-bar {
-            margin-bottom: 20px;
+        .red-button:hover {
+            background-color: darkred;
+        }
+
+        .button-container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
         }
 
         .search-bar input {
+            width: 250px;
             padding: 10px;
             font-size: 16px;
-            width: 300px;
-            border: 1px solid #ddd;
             border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            transition: border-color 0.3s ease;
         }
 
-        h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
+        .search-bar input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #f8f8f8, #e1e1e1);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-height: 80%;
+            overflow-y: auto;
+            width: 600px;
+        }
+
+        .popup .popup-content {
+            text-align: center;
+        }
+
+        .popup input, .popup textarea, .popup select {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .popup button {
+            margin-top: 10px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
     </style>
 </head>
@@ -159,28 +205,153 @@
         <div class="content">
             <h3>إدارة حملات التسويق</h3>
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن حملة تسويق...">
-                <button class="button" id="addCampaignBtn">إضافة حملة تسويق</button>
+                <input type="text" id="searchInput" placeholder="بحث عن حملة...">
+                <div class="button-container">
+                    <button class="button" id="addCampaignBtn">إضافة حملة جديدة</button>
+                </div>
             </div>
             <table id="campaignsTable">
                 <thead>
                     <tr>
                         <th>اسم الحملة</th>
-                        <th>تفاصيل الحملة</th>
-                        <th>التاريخ</th>
-                        <th>الإجراءات</th>
+                        <th>نوع الحملة</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
+                        <th>حالة الحملة</th>
+                        <th>العمليات</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- الحملات سيتم إضافتها هنا -->
+                    <!-- حملات التسويق سيتم إضافتها هنا -->
                 </tbody>
             </table>
         </div>
     </div>
 
-    <script>
-        const campaignsKey = "gymMarketingCampaigns";
+    <!-- نافذة منبثقة لإضافة أو تعديل حملة تسويقية -->
+    <div class="overlay" id="addCampaignPopupOverlay"></div>
+    <div class="popup" id="addCampaignPopup">
+        <div class="popup-content">
+            <h2>إضافة أو تعديل حملة تسويقية</h2>
+            <input type="text" id="campaignName" placeholder="اسم الحملة">
+            <select id="campaignType">
+                <option value="">اختار نوع الحملة</option>
+                <option value="تسويق عبر الإنترنت">تسويق عبر الإنترنت</option>
+                <option value="تسويق عبر وسائل التواصل">تسويق عبر وسائل التواصل</option>
+                <option value="تسويق تقليدي">تسويق تقليدي</option>
+            </select>
+            <input type="date" id="campaignStartDate" placeholder="تاريخ البداية">
+            <input type="date" id="campaignEndDate" placeholder="تاريخ النهاية">
+            <select id="campaignStatus">
+                <option value="">اختار الحالة</option>
+                <option value="معلق">معلق</option>
+                <option value="قيد التنفيذ">قيد التنفيذ</option>
+                <option value="مكتمل">مكتمل</option>
+            </select>
+            <button class="button" id="saveCampaignBtn">حفظ</button>
+            <button class="button" id="cancelCampaignBtn">إلغاء</button>
+        </div>
+    </div>
 
-        // تحميل البيانات من التخزين المحلي
-        function loadCampaigns() {
-            const storedCampaigns = localStorage.get
+    <script>
+        $(document).ready(function () {
+            let editingRow = null;
+
+            // فتح نافذة إضافة أو تعديل حملة تسويقية
+            $("#addCampaignBtn").click(function () {
+                editingRow = null; // إعادة تعيين الصف المعدل
+                $("#campaignName").val('');
+                $("#campaignType").val('');
+                $("#campaignStartDate").val('');
+                $("#campaignEndDate").val('');
+                $("#campaignStatus").val('');
+                $("#addCampaignPopupOverlay").fadeIn();
+                $("#addCampaignPopup").fadeIn();
+            });
+
+            // حفظ الحملة
+            $("#saveCampaignBtn").click(function () {
+                const campaignName = $("#campaignName").val();
+                const campaignType = $("#campaignType").val();
+                const campaignStartDate = $("#campaignStartDate").val();
+                const campaignEndDate = $("#campaignEndDate").val();
+                const campaignStatus = $("#campaignStatus").val();
+
+                if (campaignName && campaignType && campaignStartDate && campaignEndDate && campaignStatus) {
+                    if (editingRow) {
+                        // تعديل الحملة
+                        editingRow.find("td").eq(0).text(campaignName);
+                        editingRow.find("td").eq(1).text(campaignType);
+                        editingRow.find("td").eq(2).text(campaignStartDate);
+                        editingRow.find("td").eq(3).text(campaignEndDate);
+                        editingRow.find("td").eq(4).text(campaignStatus);
+                    } else {
+                        // إضافة حملة جديدة
+                        const newRow = `<tr>
+                            <td>${campaignName}</td>
+                            <td>${campaignType}</td>
+                            <td>${campaignStartDate}</td>
+                            <td>${campaignEndDate}</td>
+                            <td>${campaignStatus}</td>
+                            <td>
+                                <button class="button" onclick="editCampaign(this)">تعديل</button>
+                                <button class="button red-button" onclick="removeCampaign(this)">حذف</button>
+                            </td>
+                        </tr>`;
+                        $("#campaignsTable tbody").append(newRow);
+                    }
+                    localStorage.setItem("campaigns", $("#campaignsTable tbody").html());
+                    $("#addCampaignPopupOverlay").fadeOut();
+                    $("#addCampaignPopup").fadeOut();
+                } else {
+                    alert("الرجاء ملء جميع الحقول.");
+                }
+            });
+
+            // إلغاء إضافة أو تعديل الحملة
+            $("#cancelCampaignBtn").click(function () {
+                $("#addCampaignPopupOverlay").fadeOut();
+                $("#addCampaignPopup").fadeOut();
+            });
+
+            // تعديل الحملة
+            window.editCampaign = function (button) {
+                const row = $(button).closest("tr");
+                editingRow = row;
+                const campaignName = row.find("td").eq(0).text();
+                const campaignType = row.find("td").eq(1).text();
+                const campaignStartDate = row.find("td").eq(2).text();
+                const campaignEndDate = row.find("td").eq(3).text();
+                const campaignStatus = row.find("td").eq(4).text();
+
+                $("#campaignName").val(campaignName);
+                $("#campaignType").val(campaignType);
+                $("#campaignStartDate").val(campaignStartDate);
+                $("#campaignEndDate").val(campaignEndDate);
+                $("#campaignStatus").val(campaignStatus);
+                $("#addCampaignPopupOverlay").fadeIn();
+                $("#addCampaignPopup").fadeIn();
+            };
+
+            // حذف الحملة
+            window.removeCampaign = function (button) {
+                $(button).closest("tr").remove();
+                localStorage.setItem("campaigns", $("#campaignsTable tbody").html());
+            };
+
+            // تحميل الحملات من LocalStorage عند تحميل الصفحة
+            if (localStorage.getItem("campaigns")) {
+                $("#campaignsTable tbody").html(localStorage.getItem("campaigns"));
+            }
+
+            // البحث عن الحملات
+            $("#searchInput").keyup(function () {
+                const value = $(this).val().toLowerCase();
+                $("#campaignsTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
