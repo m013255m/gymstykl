@@ -183,6 +183,13 @@
             border-color: #4CAF50;
             outline: none;
         }
+
+        /* التعديل على ترتيب الأزرار في عمود العمليات */
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
     </style>
 </head>
 
@@ -259,7 +266,7 @@
 
             // إضافة عضو جديد
             $("#addMemberBtn").click(function () {
-                editingRow = null; // عند إضافة عضو جديد نعيد تعيين قيمة editingRow
+                editingRow = null; // عند إضافة عضو جديد نعيد تعيين قيمة متغير الصف
                 $("#memberName").val('');
                 $("#memberAge").val('');
                 $("#memberPhone").val('');
@@ -289,7 +296,7 @@
                             <td>${memberAge}</td>
                             <td>${memberPhone}</td>
                             <td>${memberAddress}</td>
-                            <td>
+                            <td class="actions">
                                 <button class="button red-button removeBtn">حذف</button>
                                 <button class="button editBtn">تعديل</button>
                             </td>
