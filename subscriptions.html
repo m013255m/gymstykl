@@ -24,7 +24,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: auto; /* تعديل هنا */
+            height: auto;
         }
 
         .sidebar h2 {
@@ -180,7 +180,6 @@
             border-radius: 8px;
         }
 
-        /* تحسين الجدول */
         #expiredSubscriptionsTable {
             width: 100%;
             border-collapse: collapse;
@@ -211,7 +210,6 @@
             cursor: pointer;
         }
 
-        /* تحسين زر "إلغاء" و"إغلاق" */
         .popup .button {
             padding: 10px 20px;
             font-size: 16px;
@@ -248,38 +246,6 @@
             75% { transform: translateX(-5px); }
             100% { transform: translateX(5px); }
         }
-
-        /* تحسين شكل مربع البحث */
-        .search-bar input {
-            width: 250px;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            margin: 10px 0;
-            transition: border-color 0.3s ease;
-        }
-
-        .search-bar input:focus {
-            border-color: #4CAF50;
-            outline: none;
-        }
-
-        /* أيقونة زر الإغلاق في وسط المربع المنبثق */
-        .popup .close-icon {
-            font-size: 40px;
-            color: #333;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            cursor: pointer;
-        }
-
-        .popup .close-icon:hover {
-            color: #f44336;
-        }
-
     </style>
 </head>
 
@@ -376,8 +342,17 @@
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
 
-            // إضافة تأثير الاهتزاز على زر "تجديد الاشتراكات"
-            $("#renewSubscriptionBtn").addClass("vibrate");
+            // تحقق من الاشتراكات المنتهية عند تحميل الصفحة
+            let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
+                const endDate = $(this).find("td").eq(3).text();
+                const currentDate = new Date().toISOString().split("T")[0];
+                return endDate < currentDate;
+            });
+
+            if (expiredSubscriptions.length > 0) {
+                // إضافة تأثير الاهتزاز على زر "تجديد الاشتراكات" إذا كانت هناك اشتراكات منتهية
+                $("#renewSubscriptionBtn").addClass("vibrate");
+            }
 
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
@@ -432,7 +407,7 @@
                                 <th>تاريخ النهاية</th>
                             </tr>
                         </thead>
-                        <tbody>`; 
+                        <tbody>`;
                     expiredSubscriptions.each(function () {
                         const row = $(this);
                         expiredTable += `<tr>
