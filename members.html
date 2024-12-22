@@ -13,23 +13,18 @@
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
-            display: flex;
         }
 
         .container {
             display: flex;
-            width: 100%;
         }
 
-        /* الشريط الجانبي الممتد للأسفل */
         .sidebar {
             width: 250px;
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
+            height: auto;
         }
 
         .sidebar h2 {
@@ -41,8 +36,6 @@
         .sidebar ul {
             list-style: none;
             padding: 0;
-            margin: 0;
-            flex-grow: 1;
         }
 
         .sidebar ul li {
@@ -62,33 +55,10 @@
             border-radius: 5px;
         }
 
-        /* المحتوى */
         .content {
-            flex-grow: 1;
+            flex: 1;
             padding: 20px;
             background-color: white;
-            display: flex;
-            flex-direction: column;
-        }
-
-        h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
-        }
-
-        .search-bar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-        }
-
-        .search-bar input {
-            width: 250px;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            margin: 0;
         }
 
         table {
@@ -193,60 +163,88 @@
             z-index: 999;
         }
 
-        .add-button-container {
+        .button-container {
             display: flex;
+            gap: 10px;
             justify-content: flex-end;
-            margin-bottom: 20px;
+        }
+
+        .swal2-loading {
+            display: none;
+        }
+
+        .waiting-popup {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 8px;
+        }
+
+        .search-bar input {
+            width: 250px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: #4CAF50;
+            outline: none;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <!-- الشريط الجانبي -->
         <div class="sidebar">
             <h2>إدارة الجيم</h2>
             <nav>
                 <ul>
                     <li><a href="index.html">الرئيسية</a></li>
                     <li><a href="members.html">إدارة الأعضاء</a></li>
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
                     <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
                     <li><a href="inventory.html">إدارة المخزون</a></li>
                     <li><a href="damagedInventory.html">المخزون التالف</a></li>
                     <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
                     <li><a href="ratings.html">التقييمات</a></li>
                     <li><a href="rewards.html">المكافآت</a></li>
+                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                    <li><a href="marketing.html">حملات التسويق</a></li>
+                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                    <li><a href="complaints.html">الشكاوي</a></li>
                 </ul>
             </nav>
         </div>
 
-        <!-- المحتوى -->
         <div class="content">
             <h3>إدارة الأعضاء</h3>
-            
-            <!-- شريط البحث وزر إضافة عضو -->
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن عضو...">
+                <div class="button-container">
+                    <button class="button red-button" id="removeMemberBtn">حذف الأعضاء المحددين</button>
+                    <button class="button" id="addMemberBtn">إضافة عضو جديد</button>
+                </div>
             </div>
-
-            <div class="add-button-container">
-                <button class="button" id="addMemberBtn">إضافة عضو جديد</button>
-            </div>
-
-            <!-- الجدول -->
             <table id="membersTable">
                 <thead>
                     <tr>
+                        <th><input type="checkbox" id="selectAll"></th>
                         <th>اسم العضو</th>
-                        <th>العمر</th>
-                        <th>الهاتف</th>
-                        <th>العنوان</th>
                         <th>البريد الإلكتروني</th>
+                        <th>رقم الهاتف</th>
+                        <th>تاريخ التسجيل</th>
                         <th>العمليات</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- الأعضاء ستضاف هنا -->
+                    <!-- الأعضاء سيتم إضافتهم هنا -->
                 </tbody>
             </table>
         </div>
@@ -258,22 +256,22 @@
         <div class="popup-content">
             <h2>إضافة عضو جديد</h2>
             <input type="text" id="memberName" placeholder="اسم العضو">
-            <input type="number" id="memberAge" placeholder="العمر">
-            <input type="tel" id="memberPhone" placeholder="الهاتف">
-            <input type="text" id="memberAddress" placeholder="العنوان">
             <input type="email" id="memberEmail" placeholder="البريد الإلكتروني">
+            <input type="tel" id="memberPhone" placeholder="رقم الهاتف">
+            <input type="date" id="memberJoinDate" placeholder="تاريخ التسجيل">
             <button class="button" id="saveMemberBtn">حفظ</button>
-            <button class="button" id="cancelAddBtn">إلغاء</button>
+            <button class="button" id="cancelAddMemberBtn">إلغاء</button>
         </div>
     </div>
 
     <script>
         $(document).ready(function () {
+            // إذا كانت هناك بيانات أعضاء مخزنة في LocalStorage، قم بتحميلها
             if (localStorage.getItem("members")) {
                 $("#membersTable tbody").html(localStorage.getItem("members"));
             }
 
-            // إضافة عضو جديد
+            // فتح نافذة إضافة عضو جديد
             $("#addMemberBtn").click(function () {
                 $("#addMemberPopupOverlay").fadeIn();
                 $("#addMemberPopup").fadeIn();
@@ -282,25 +280,22 @@
             // حفظ العضو الجديد
             $("#saveMemberBtn").click(function () {
                 const memberName = $("#memberName").val();
-                const memberAge = $("#memberAge").val();
-                const memberPhone = $("#memberPhone").val();
-                const memberAddress = $("#memberAddress").val();
                 const memberEmail = $("#memberEmail").val();
+                const memberPhone = $("#memberPhone").val();
+                const memberJoinDate = $("#memberJoinDate").val();
 
-                if (memberName && memberAge && memberPhone && memberAddress && memberEmail) {
-                    const newRow = `
-                        <tr>
-                            <td>${memberName}</td>
-                            <td>${memberAge}</td>
-                            <td>${memberPhone}</td>
-                            <td>${memberAddress}</td>
-                            <td>${memberEmail}</td>
-                            <td>
-                                <button class="button" onclick="editMember(this)">تعديل</button>
-                                <button class="button red-button" onclick="removeMember(this)">حذف</button>
-                            </td>
-                        </tr>
-                    `;
+                if (memberName && memberEmail && memberPhone && memberJoinDate) {
+                    const newRow = `<tr>
+                        <td><input type="checkbox"></td>
+                        <td>${memberName}</td>
+                        <td>${memberEmail}</td>
+                        <td>${memberPhone}</td>
+                        <td>${memberJoinDate}</td>
+                        <td>
+                            <button class="button" onclick="editMember(this)">تعديل</button>
+                            <button class="button red-button" onclick="removeMember(this)">حذف</button>
+                        </td>
+                    </tr>`;
                     $("#membersTable tbody").append(newRow);
                     localStorage.setItem("members", $("#membersTable tbody").html());
                     $("#addMemberPopupOverlay").fadeOut();
@@ -310,37 +305,55 @@
                 }
             });
 
-            // إلغاء إضافة العضو
-            $("#cancelAddBtn").click(function () {
+            // إلغاء إضافة العضو الجديد
+            $("#cancelAddMemberBtn").click(function () {
                 $("#addMemberPopupOverlay").fadeOut();
                 $("#addMemberPopup").fadeOut();
             });
+
+            // حذف العضو
+            $("#removeMemberBtn").click(function () {
+                const selectedMember = $("input:checkbox:checked").closest("tr");
+                selectedMember.remove();
+                localStorage.setItem("members", $("#membersTable tbody").html());
+            });
+
+            // بحث عن عضو
+            $("#searchInput").on("input", function () {
+                const searchText = $(this).val().toLowerCase();
+                $("#membersTable tbody tr").each(function () {
+                    const rowText = $(this).text().toLowerCase();
+                    $(this).toggle(rowText.indexOf(searchText) > -1);
+                });
+            });
+
+            // تحديد/إلغاء تحديد كل الأعضاء
+            $("#selectAll").change(function () {
+                $("input:checkbox").prop('checked', this.checked);
+            });
         });
 
-        // تعديل عضو
+        // تعديل بيانات العضو
         function editMember(button) {
             const row = $(button).closest("tr");
-            const memberName = row.find("td").eq(0).text();
-            const memberAge = row.find("td").eq(1).text();
-            const memberPhone = row.find("td").eq(2).text();
-            const memberAddress = row.find("td").eq(3).text();
-            const memberEmail = row.find("td").eq(4).text();
+            const memberName = row.find("td").eq(1).text();
+            const memberEmail = row.find("td").eq(2).text();
+            const memberPhone = row.find("td").eq(3).text();
+            const memberJoinDate = row.find("td").eq(4).text();
 
             $("#memberName").val(memberName);
-            $("#memberAge").val(memberAge);
-            $("#memberPhone").val(memberPhone);
-            $("#memberAddress").val(memberAddress);
             $("#memberEmail").val(memberEmail);
+            $("#memberPhone").val(memberPhone);
+            $("#memberJoinDate").val(memberJoinDate);
 
             $("#addMemberPopupOverlay").fadeIn();
             $("#addMemberPopup").fadeIn();
 
             $("#saveMemberBtn").off("click").click(function () {
-                row.find("td").eq(0).text($("#memberName").val());
-                row.find("td").eq(1).text($("#memberAge").val());
-                row.find("td").eq(2).text($("#memberPhone").val());
-                row.find("td").eq(3).text($("#memberAddress").val());
-                row.find("td").eq(4).text($("#memberEmail").val());
+                row.find("td").eq(1).text($("#memberName").val());
+                row.find("td").eq(2).text($("#memberEmail").val());
+                row.find("td").eq(3).text($("#memberPhone").val());
+                row.find("td").eq(4).text($("#memberJoinDate").val());
 
                 localStorage.setItem("members", $("#membersTable tbody").html());
                 $("#addMemberPopupOverlay").fadeOut();
