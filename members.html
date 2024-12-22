@@ -13,18 +13,23 @@
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
+            display: flex;
         }
 
         .container {
             display: flex;
+            width: 100%;
         }
 
+        /* الشريط الجانبي الممتد للأسفل */
         .sidebar {
             width: 250px;
             background-color: #333;
             color: white;
             padding: 20px;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .sidebar h2 {
@@ -36,6 +41,8 @@
         .sidebar ul {
             list-style: none;
             padding: 0;
+            margin: 0;
+            flex-grow: 1;
         }
 
         .sidebar ul li {
@@ -55,15 +62,33 @@
             border-radius: 5px;
         }
 
+        /* المحتوى */
         .content {
-            flex: 1;
+            flex-grow: 1;
             padding: 20px;
             background-color: white;
+            display: flex;
+            flex-direction: column;
         }
 
         h3 {
             font-size: 22px;
             margin-bottom: 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 250px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 0;
         }
 
         table {
@@ -168,29 +193,9 @@
             z-index: 999;
         }
 
-        .search-bar input {
-            width: 250px;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            margin: 10px 0;
-            transition: border-color 0.3s ease;
-        }
-
-        .search-bar input:focus {
-            border-color: #4CAF50;
-            outline: none;
-        }
-
-        /* محاذاة زر إضافة عضو */
         .add-button-container {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 20px;
-        }
-
-        .search-bar {
             margin-bottom: 20px;
         }
     </style>
@@ -211,10 +216,6 @@
                     <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
                     <li><a href="ratings.html">التقييمات</a></li>
                     <li><a href="rewards.html">المكافآت</a></li>
-                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
-                    <li><a href="marketing.html">حملات التسويق</a></li>
-                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                    <li><a href="complaints.html">الشكاوي</a></li>
                 </ul>
             </nav>
         </div>
