@@ -248,6 +248,28 @@
             border-color: #4CAF50;
             outline: none;
         }
+
+        /* تخصيص أزرار التحريك */
+        .move-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .move-buttons button {
+            background-color: #007bff;
+            color: white;
+            font-size: 14px;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .move-buttons button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
@@ -268,21 +290,15 @@
                     <li><a href="rewards.html">المكافآت</a></li>
                     <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
                     <li><a href="marketing.html">حملات التسويق</a></li>
-                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                    <li><a href="complaints.html">الشكاوي</a></li>
+                    <li><a href="statistics.html">الإحصائيات</a></li>
                 </ul>
             </nav>
         </div>
-
         <div class="content">
-            <h3>إدارة الاشتراكات</h3>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن اشتراك...">
-                <div class="button-container">
-                    <button class="button red-button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
-                    <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
-                </div>
-            </div>
+            <h1>إدارة الاشتراكات</h1>
+            <button class="button" id="addSubscriptionBtn">إضافة اشتراك جديد</button>
+            <button class="button" id="renewSubscriptionBtn">تجديد الاشتراكات</button>
+
             <table id="subscriptionsTable">
                 <thead>
                     <tr>
@@ -290,7 +306,8 @@
                         <th>نوع الاشتراك</th>
                         <th>تاريخ البداية</th>
                         <th>تاريخ النهاية</th>
-                        <th>الإجراءات</th>
+                        <th>إجراء</th>
+                        <th>التحريك</th> <!-- عمود جديد للتحريك -->
                     </tr>
                 </thead>
                 <tbody>
@@ -313,6 +330,7 @@
                         <th>تاريخ البداية</th>
                         <th>تاريخ النهاية</th>
                         <th>إجراء</th> <!-- إضافة العمود الجديد -->
+                        <th>التحريك</th> <!-- عمود للتحريك داخل الجدول المنبثق -->
                     </tr>
                 </thead>
                 <tbody>
@@ -327,129 +345,53 @@
 
     <script>
         $(document).ready(function () {
-            if (localStorage.getItem("subscriptions")) {
-                $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
+            // حركات الصفحة للأعلى والأسفل باستخدام الأزرار
+            function moveRowUp(button) {
+                const row = $(button).closest('tr');
+                const prevRow = row.prev();
+                if (prevRow.length) {
+                    row.insertBefore(prevRow);
+                }
             }
 
-            // إضافة تأثير الاهتزاز على زر "تجديد الاشتراكات"
-            $("#renewSubscriptionBtn").addClass("vibrate");
-
-            $("#addSubscriptionBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeIn();
-                $("#addSubscriptionPopup").fadeIn();
-            });
-
-            $("#saveSubscriptionBtn").click(function () {
-                const memberName = $("#memberName").val();
-                const subscriptionType = $("#subscriptionType").val();
-                const startDate = $("#startDate").val();
-                const endDate = $("#endDate").val();
-
-                if (memberName && subscriptionType && startDate && endDate) {
-                    const newRow = `<tr>
-                        <td>${memberName}</td>
-                        <td>${subscriptionType}</td>
-                        <td>${startDate}</td>
-                        <td>${endDate}</td>
-                        <td>
-                            <button class="button" onclick="editSubscription(this)">تعديل</button>
-                            <button class="button red-button" onclick="removeSubscription(this)">حذف</button>
-                        </td>
-                    </tr>`;
-                    $("#subscriptionsTable tbody").append(newRow);
-                    localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                    $("#addSubscriptionPopupOverlay").fadeOut();
-                    $("#addSubscriptionPopup").fadeOut();
-                } else {
-                    alert("الرجاء ملء جميع الحقول.");
+            function moveRowDown(button) {
+                const row = $(button).closest('tr');
+                const nextRow = row.next();
+                if (nextRow.length) {
+                    row.insertAfter(nextRow);
                 }
+            }
+
+            // إضافة الأزرار داخل العمود
+            $("#subscriptionsTable tbody").on("mouseenter", "tr", function () {
+                const moveButtons = `
+                    <div class="move-buttons">
+                        <button onclick="moveRowUp(this)">↑</button>
+                        <button onclick="moveRowDown(this)">↓</button>
+                    </div>
+                `;
+                $(this).find("td:last-child").html(moveButtons);
+            }).on("mouseleave", "tr", function () {
+                $(this).find("td:last-child").html('');
             });
 
-            $("#cancelAddBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeOut();
-                $("#addSubscriptionPopup").fadeOut();
+            // إضافة نفس الأزرار داخل المربع المنبثق
+            $("#expiredSubscriptionsTable tbody").on("mouseenter", "tr", function () {
+                const moveButtons = `
+                    <div class="move-buttons">
+                        <button onclick="moveRowUp(this)">↑</button>
+                        <button onclick="moveRowDown(this)">↓</button>
+                    </div>
+                `;
+                $(this).find("td:last-child").html(moveButtons);
+            }).on("mouseleave", "tr", function () {
+                $(this).find("td:last-child").html('');
             });
 
-            $("#renewSubscriptionBtn").click(function () {
-                let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
-                    const endDate = $(this).find("td").eq(3).text();
-                    const currentDate = new Date().toISOString().split("T")[0];
-                    return endDate < currentDate;
-                });
-
-                if (expiredSubscriptions.length > 0) {
-                    let expiredTable = `<table>
-                        <thead>
-                            <tr>
-                                <th>اسم العضو</th>
-                                <th>نوع الاشتراك</th>
-                                <th>تاريخ البداية</th>
-                                <th>تاريخ النهاية</th>
-                                <th>إجراء</th> <!-- إضافة العمود الجديد -->
-                            </tr>
-                        </thead>
-                        <tbody>`;
-                    expiredSubscriptions.each(function () {
-                        const row = $(this);
-                        expiredTable += `<tr>
-                            <td>${row.find("td").eq(0).text()}</td>
-                            <td>${row.find("td").eq(1).text()}</td>
-                            <td>${row.find("td").eq(2).text()}</td>
-                            <td>${row.find("td").eq(3).text()}</td>
-                            <td><button class="button">تجديد</button></td> <!-- زر التجديد -->
-                        </tr>`;
-                    });
-                    expiredTable += `</tbody></table>`;
-                    $("#renewSubscriptionPopup .popup-content").html(expiredTable + '<button class="button" id="closeRenewPopupBtn">إغلاق</button>');
-                    $("#renewSubscriptionPopup").fadeIn();
-                    $("#closeRenewPopupBtn").click(function () {
-                        $("#renewSubscriptionPopup").fadeOut();
-                    });
-                } else {
-                    alert("لا توجد اشتراكات منتهية.");
-                }
-            });
-
-            // إغلاق نافذة التجديد عند الضغط على زر الإغلاق
-            $("#closeRenewPopupBtn").click(function () {
-                $("#renewSubscriptionPopup").fadeOut();
-            });
+            // أزرار التحريك تعمل على تحريك الصفوف للأعلى والأسفل
+            window.moveRowUp = moveRowUp;
+            window.moveRowDown = moveRowDown;
         });
-
-        function editSubscription(button) {
-            // من هنا يمكن إضافة كود التعديل في الاشتراكات
-            const row = $(button).closest("tr");
-            const memberName = row.find("td").eq(0).text();
-            const subscriptionType = row.find("td").eq(1).text();
-            const startDate = row.find("td").eq(2).text();
-            const endDate = row.find("td").eq(3).text();
-
-            // هنا يمكنك إضافة البيانات في مربعات النص لتعديلها
-            $("#memberName").val(memberName);
-            $("#subscriptionType").val(subscriptionType);
-            $("#startDate").val(startDate);
-            $("#endDate").val(endDate);
-
-            $("#addSubscriptionPopupOverlay").fadeIn();
-            $("#addSubscriptionPopup").fadeIn();
-
-            // التعديل سيتم حفظه عند الضغط على زر حفظ
-            $("#saveSubscriptionBtn").click(function () {
-                row.find("td").eq(0).text($("#memberName").val());
-                row.find("td").eq(1).text($("#subscriptionType").val());
-                row.find("td").eq(2).text($("#startDate").val());
-                row.find("td").eq(3).text($("#endDate").val());
-
-                localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-                $("#addSubscriptionPopupOverlay").fadeOut();
-                $("#addSubscriptionPopup").fadeOut();
-            });
-        }
-
-        function removeSubscription(button) {
-            $(button).closest("tr").remove();
-            localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
-        }
     </script>
 </body>
 </html>
