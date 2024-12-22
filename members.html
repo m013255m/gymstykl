@@ -255,13 +255,20 @@
                 $("#membersTable tbody").html(localStorage.getItem("members"));
             }
 
+            let editingRow = null; // متغير لحفظ الصف الذي نقوم بتعديله
+
             // إضافة عضو جديد
             $("#addMemberBtn").click(function () {
+                editingRow = null; // عند إضافة عضو جديد نعيد تعيين قيمة editingRow
+                $("#memberName").val('');
+                $("#memberAge").val('');
+                $("#memberPhone").val('');
+                $("#memberAddress").val('');
                 $("#addMemberPopupOverlay").fadeIn();
                 $("#addMemberPopup").fadeIn();
             });
 
-            // حفظ العضو الجديد
+            // حفظ العضو
             $("#saveMemberBtn").click(function () {
                 const memberName = $("#memberName").val();
                 const memberAge = $("#memberAge").val();
@@ -269,16 +276,26 @@
                 const memberAddress = $("#memberAddress").val();
 
                 if (memberName && memberAge && memberPhone && memberAddress) {
-                    const newRow = `<tr>
-                        <td>${memberName}</td>
-                        <td>${memberAge}</td>
-                        <td>${memberPhone}</td>
-                        <td>${memberAddress}</td>
-                        <td>
-                            <button class="button red-button removeBtn">حذف</button>
-                        </td>
-                    </tr>`;
-                    $("#membersTable tbody").append(newRow);
+                    if (editingRow) {
+                        // تعديل العضو في الجدول
+                        editingRow.find("td").eq(0).text(memberName);
+                        editingRow.find("td").eq(1).text(memberAge);
+                        editingRow.find("td").eq(2).text(memberPhone);
+                        editingRow.find("td").eq(3).text(memberAddress);
+                    } else {
+                        // إضافة عضو جديد
+                        const newRow = `<tr>
+                            <td>${memberName}</td>
+                            <td>${memberAge}</td>
+                            <td>${memberPhone}</td>
+                            <td>${memberAddress}</td>
+                            <td>
+                                <button class="button red-button removeBtn">حذف</button>
+                                <button class="button editBtn">تعديل</button>
+                            </td>
+                        </tr>`;
+                        $("#membersTable tbody").append(newRow);
+                    }
                     localStorage.setItem("members", $("#membersTable tbody").html());
                     $("#addMemberPopupOverlay").fadeOut();
                     $("#addMemberPopup").fadeOut();
@@ -293,7 +310,18 @@
                 $("#addMemberPopup").fadeOut();
             });
 
-            // حذف العضو عند النقر على زر الحذف
+            // تعديل العضو
+            $(document).on("click", ".editBtn", function () {
+                editingRow = $(this).closest("tr");
+                $("#memberName").val(editingRow.find("td").eq(0).text());
+                $("#memberAge").val(editingRow.find("td").eq(1).text());
+                $("#memberPhone").val(editingRow.find("td").eq(2).text());
+                $("#memberAddress").val(editingRow.find("td").eq(3).text());
+                $("#addMemberPopupOverlay").fadeIn();
+                $("#addMemberPopup").fadeIn();
+            });
+
+            // حذف العضو
             $(document).on("click", ".removeBtn", function () {
                 $(this).closest("tr").remove();
                 localStorage.setItem("members", $("#membersTable tbody").html());
