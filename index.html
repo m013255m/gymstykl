@@ -110,46 +110,45 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* تصميم الرسائل المنبثقة */
-        .messagePopup {
-            display: none;
+        /* تصميم الرسائل المنبثقة الثابتة */
+        .messagePopupFixed {
             position: fixed;
-            top: 50%;
+            bottom: 30px;  /* تحديد مكان المربع ليكون أسفل الصفحة */
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             background-color: #fff;
-            padding: 30px;
+            padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            z-index: 10000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             width: 350px;
             font-size: 18px;
-            animation: fadeIn 0.5s ease-in-out;
+            display: none;
+            text-align: center;
+            animation: slideUp 0.5s ease-in-out;
         }
 
-        .messagePopup .success {
+        .messagePopupFixed.success {
             background-color: #28a745;
             color: white;
         }
 
-        .messagePopup .error {
+        .messagePopupFixed.error {
             background-color: #dc3545;
             color: white;
         }
 
-        .messagePopup img {
+        .messagePopupFixed img {
             width: 60px;
             height: 60px;
             margin-bottom: 15px;
         }
 
-        .messagePopup .messageText {
+        .messagePopupFixed .messageText {
             font-size: 20px;
             margin: 10px 0;
         }
 
-        .messagePopup button {
+        .messagePopupFixed button {
             padding: 12px 20px;
             background-color: #4CAF50;
             color: white;
@@ -160,20 +159,21 @@
             transition: background-color 0.3s;
         }
 
-        .messagePopup button:hover {
+        .messagePopupFixed button:hover {
             background-color: #45a049;
         }
 
-        @keyframes fadeIn {
+        @keyframes slideUp {
             0% {
                 opacity: 0;
-                transform: translateY(-50px);
+                transform: translateY(100px);
             }
             100% {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
+
     </style>
 </head>
 <body>
@@ -198,17 +198,17 @@
         <div style="color: white; font-size: 18px; margin-top: 10px;">جاري التحقق... الرجاء الانتظار</div>
     </div>
 
-    <!-- رسائل منبثقة -->
-    <div id="successMessage" class="messagePopup success">
+    <!-- رسائل منبثقة ثابتة -->
+    <div id="successMessageFixed" class="messagePopupFixed success">
         <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="نجاح">
         <div class="messageText">تم التسجيل بنجاح!</div>
-        <button onclick="closeMessage('successMessage')">موافق</button>
+        <button onclick="closeMessage('successMessageFixed')">موافق</button>
     </div>
 
-    <div id="errorMessage" class="messagePopup error">
+    <div id="errorMessageFixed" class="messagePopupFixed error">
         <img src="https://media.giphy.com/media/xT0xezbVtBepSDo2gE/giphy.gif" alt="خطأ">
         <div class="messageText">اسم المستخدم أو كلمة المرور غير صحيحة.</div>
-        <button onclick="closeMessage('errorMessage')">موافق</button>
+        <button onclick="closeMessage('errorMessageFixed')">موافق</button>
     </div>
 
     <script>
@@ -241,19 +241,18 @@
                     var currentDate = new Date().toISOString().split('T')[0];
                     if (currentDate >= user.startDate && currentDate <= user.endDate) {
                         // إظهار رسالة النجاح
-                        document.getElementById('successMessage').style.display = 'block';
+                        document.getElementById('successMessageFixed').style.display = 'block';
                     } else {
                         // إذا كانت التواريخ غير صالحة
-                        document.getElementById('errorMessage').style.display = 'block';
+                        document.getElementById('errorMessageFixed').style.display = 'block';
                     }
                 } else {
                     // إذا كانت البيانات غير صحيحة
-                    document.getElementById('errorMessage').style.display = 'block';
+                    document.getElementById('errorMessageFixed').style.display = 'block';
                 }
             }, 2000); // تأخير 2 ثانية لمحاكاة التحميل
         }
 
-        // إغلاق الرسائل المنبثقة
         function closeMessage(id) {
             document.getElementById(id).style.display = 'none';
         }
