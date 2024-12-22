@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الطلبات الخاصة</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,7 +23,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100vh;
+            height: auto;
         }
 
         .sidebar h2 {
@@ -34,27 +32,26 @@
             margin-bottom: 20px;
         }
 
-        .sidebar nav ul {
+        .sidebar ul {
             list-style: none;
             padding: 0;
         }
 
-        .sidebar nav ul li {
+        .sidebar ul li {
             margin: 15px 0;
         }
 
-        .sidebar nav ul li a {
+        .sidebar ul li a {
             color: white;
             text-decoration: none;
             font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
-        .sidebar nav ul li a:hover {
+        .sidebar ul li a:hover {
             background-color: #575757;
+            padding: 5px;
+            border-radius: 5px;
         }
 
         .content {
@@ -107,28 +104,77 @@
             transform: scale(1.05);
         }
 
-        .swal2-popup {
-            font-family: 'Arial', sans-serif;
+        .red-button {
+            background-color: red;
         }
 
-        .search-bar {
-            margin-bottom: 20px;
+        .red-button:hover {
+            background-color: darkred;
+        }
+
+        .button-container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
         }
 
         .search-bar input {
+            width: 250px;
             padding: 10px;
             font-size: 16px;
-            width: 300px;
-            border: 1px solid #ddd;
             border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            transition: border-color 0.3s ease;
         }
 
-        h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
+        .search-bar input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #f8f8f8, #e1e1e1);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-height: 80%;
+            overflow-y: auto;
+            width: 600px;
+        }
+
+        .popup .popup-content {
+            text-align: center;
+        }
+
+        .popup input, .popup textarea, .popup select {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .popup button {
+            margin-top: 10px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
     </style>
 </head>
@@ -159,16 +205,19 @@
         <div class="content">
             <h3>إدارة الطلبات الخاصة</h3>
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="بحث عن طلب خاص...">
-                <button class="button" id="addRequestBtn">إضافة طلب خاص</button>
+                <input type="text" id="searchInput" placeholder="بحث عن طلب...">
+                <div class="button-container">
+                    <button class="button" id="addRequestBtn">إضافة طلب جديد</button>
+                </div>
             </div>
             <table id="requestsTable">
                 <thead>
                     <tr>
-                        <th>اسم العضو</th>
-                        <th>تفاصيل الطلب</th>
-                        <th>التاريخ</th>
-                        <th>الإجراءات</th>
+                        <th>نوع الطلب</th>
+                        <th>وصف الطلب</th>
+                        <th>تاريخ الطلب</th>
+                        <th>حالة الطلب</th>
+                        <th>العمليات</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -178,115 +227,118 @@
         </div>
     </div>
 
+    <!-- نافذة منبثقة لإضافة أو تعديل طلب خاص -->
+    <div class="overlay" id="addRequestPopupOverlay"></div>
+    <div class="popup" id="addRequestPopup">
+        <div class="popup-content">
+            <h2>إضافة أو تعديل طلب خاص</h2>
+            <input type="text" id="requestType" placeholder="نوع الطلب">
+            <textarea id="requestDescription" placeholder="وصف الطلب" rows="3"></textarea>
+            <input type="date" id="requestDate" placeholder="تاريخ الطلب">
+            <select id="requestStatus">
+                <option value="">اختار الحالة</option>
+                <option value="معلق">معلق</option>
+                <option value="قيد التنفيذ">قيد التنفيذ</option>
+                <option value="تمت المعالجة">تمت المعالجة</option>
+            </select>
+            <button class="button" id="saveRequestBtn">حفظ</button>
+            <button class="button" id="cancelRequestBtn">إلغاء</button>
+        </div>
+    </div>
+
     <script>
-        const requestsKey = "gymSpecialRequests";
+        $(document).ready(function () {
+            let editingRow = null;
 
-        // تحميل البيانات من التخزين المحلي
-        function loadRequests() {
-            const storedRequests = localStorage.getItem(requestsKey);
-            if (storedRequests) {
-                JSON.parse(storedRequests).forEach(request => {
-                    addRequestToTable(request.memberName, request.requestDetails, request.date);
-                });
+            // فتح نافذة إضافة أو تعديل طلب خاص
+            $("#addRequestBtn").click(function () {
+                editingRow = null; // إعادة تعيين الصف المعدل
+                $("#requestType").val('');
+                $("#requestDescription").val('');
+                $("#requestDate").val('');
+                $("#requestStatus").val('');
+                $("#addRequestPopupOverlay").fadeIn();
+                $("#addRequestPopup").fadeIn();
+            });
+
+            // حفظ الطلب الخاص
+            $("#saveRequestBtn").click(function () {
+                const requestType = $("#requestType").val();
+                const requestDescription = $("#requestDescription").val();
+                const requestDate = $("#requestDate").val();
+                const requestStatus = $("#requestStatus").val();
+
+                if (requestType && requestDescription && requestDate && requestStatus) {
+                    if (editingRow) {
+                        // تعديل الطلب
+                        editingRow.find("td").eq(0).text(requestType);
+                        editingRow.find("td").eq(1).text(requestDescription);
+                        editingRow.find("td").eq(2).text(requestDate);
+                        editingRow.find("td").eq(3).text(requestStatus);
+                    } else {
+                        // إضافة طلب جديد
+                        const newRow = `<tr>
+                            <td>${requestType}</td>
+                            <td>${requestDescription}</td>
+                            <td>${requestDate}</td>
+                            <td>${requestStatus}</td>
+                            <td>
+                                <button class="button" onclick="editRequest(this)">تعديل</button>
+                                <button class="button red-button" onclick="removeRequest(this)">حذف</button>
+                            </td>
+                        </tr>`;
+                        $("#requestsTable tbody").append(newRow);
+                    }
+                    localStorage.setItem("requests", $("#requestsTable tbody").html());
+                    $("#addRequestPopupOverlay").fadeOut();
+                    $("#addRequestPopup").fadeOut();
+                } else {
+                    alert("الرجاء ملء جميع الحقول.");
+                }
+            });
+
+            // إلغاء إضافة أو تعديل الطلب
+            $("#cancelRequestBtn").click(function () {
+                $("#addRequestPopupOverlay").fadeOut();
+                $("#addRequestPopup").fadeOut();
+            });
+
+            // تعديل الطلب
+            window.editRequest = function (button) {
+                const row = $(button).closest("tr");
+                editingRow = row;
+                const requestType = row.find("td").eq(0).text();
+                const requestDescription = row.find("td").eq(1).text();
+                const requestDate = row.find("td").eq(2).text();
+                const requestStatus = row.find("td").eq(3).text();
+
+                $("#requestType").val(requestType);
+                $("#requestDescription").val(requestDescription);
+                $("#requestDate").val(requestDate);
+                $("#requestStatus").val(requestStatus);
+                $("#addRequestPopupOverlay").fadeIn();
+                $("#addRequestPopup").fadeIn();
+            };
+
+            // حذف الطلب
+            window.removeRequest = function (button) {
+                $(button).closest("tr").remove();
+                localStorage.setItem("requests", $("#requestsTable tbody").html());
+            };
+
+            // تحميل الطلبات من LocalStorage عند تحميل الصفحة
+            if (localStorage.getItem("requests")) {
+                $("#requestsTable tbody").html(localStorage.getItem("requests"));
             }
-        }
 
-        // حفظ البيانات في التخزين المحلي
-        function saveRequests() {
-            const rows = document.querySelectorAll("#requestsTable tbody tr");
-            const requests = Array.from(rows).map(row => ({
-                memberName: row.cells[0].textContent,
-                requestDetails: row.cells[1].textContent,
-                date: row.cells[2].textContent
-            }));
-            localStorage.setItem(requestsKey, JSON.stringify(requests));
-        }
-
-        // إضافة طلب خاص جديد إلى الجدول
-        function addRequestToTable(memberName, requestDetails, date) {
-            const table = document.querySelector("#requestsTable tbody");
-            const row = table.insertRow();
-            row.innerHTML = `
-                <td>${memberName}</td>
-                <td>${requestDetails}</td>
-                <td>${date}</td>
-                <td>
-                    <button class="button" onclick="editRequest(this)">تعديل</button>
-                    <button class="button" onclick="deleteRequest(this)">حذف</button>
-                </td>
-            `;
-        }
-
-        // إضافة طلب خاص جديد
-        document.querySelector("#addRequestBtn").addEventListener("click", () => {
-            Swal.fire({
-                title: 'إضافة طلب خاص جديد',
-                html: `
-                    <input type="text" id="newMemberName" class="swal2-input" placeholder="اسم العضو">
-                    <textarea id="newRequestDetails" class="swal2-textarea" placeholder="تفاصيل الطلب"></textarea>
-                `,
-                confirmButtonText: 'إضافة',
-                preConfirm: () => ({
-                    memberName: document.getElementById("newMemberName").value,
-                    requestDetails: document.getElementById("newRequestDetails").value,
-                    date: new Date().toLocaleDateString()
-                })
-            }).then(result => {
-                if (result.isConfirmed) {
-                    addRequestToTable(result.value.memberName, result.value.requestDetails, result.value.date);
-                    saveRequests();
-                    Swal.fire('تمت الإضافة!', 'تم إضافة الطلب الخاص بنجاح.', 'success');
-                }
+            // البحث عن الطلبات الخاصة
+            $("#searchInput").keyup(function () {
+                const value = $(this).val().toLowerCase();
+                $("#requestsTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
             });
         });
-
-        // تعديل بيانات الطلب
-        function editRequest(button) {
-            const row = button.closest("tr");
-            const memberName = row.cells[0].textContent;
-            const requestDetails = row.cells[1].textContent;
-
-            Swal.fire({
-                title: 'تعديل بيانات الطلب',
-                html: `
-                    <input type="text" id="editMemberName" class="swal2-input" value="${memberName}">
-                    <textarea id="editRequestDetails" class="swal2-textarea">${requestDetails}</textarea>
-                `,
-                confirmButtonText: 'تحديث',
-                preConfirm: () => ({
-                    memberName: document.getElementById("editMemberName").value,
-                    requestDetails: document.getElementById("editRequestDetails").value
-                })
-            }).then(result => {
-                if (result.isConfirmed) {
-                    row.cells[0].textContent = result.value.memberName;
-                    row.cells[1].textContent = result.value.requestDetails;
-                    saveRequests();
-                    Swal.fire('تم التحديث!', 'تم تحديث بيانات الطلب بنجاح.', 'success');
-                }
-            });
-        }
-
-        // حذف الطلب
-        function deleteRequest(button) {
-            const row = button.closest("tr");
-            row.remove();
-            saveRequests();
-            Swal.fire('تم الحذف!', 'تم حذف الطلب بنجاح.', 'success');
-        }
-
-        // البحث عن الطلبات
-        document.getElementById("searchInput").addEventListener("input", () => {
-            const filter = document.getElementById("searchInput").value.toLowerCase();
-            const rows = document.querySelectorAll("#requestsTable tbody tr");
-            rows.forEach(row => {
-                const cells = row.querySelectorAll("td");
-                const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(filter));
-                row.style.display = match ? "" : "none";
-            });
-        });
-
-        loadRequests();
     </script>
 </body>
 </html>
