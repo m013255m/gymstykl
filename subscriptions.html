@@ -24,7 +24,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100vh;
+            height: auto;
         }
 
         .sidebar h2 {
@@ -213,6 +213,20 @@
             cursor: pointer;
         }
 
+        .popup .close-icon {
+            font-size: 40px;
+            color: #333;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+
+        .popup .close-icon:hover {
+            color: #f44336;
+        }
+
         .search-bar input {
             width: 250px;
             padding: 10px;
@@ -226,20 +240,6 @@
         .search-bar input:focus {
             border-color: #4CAF50;
             outline: none;
-        }
-
-        .popup .close-icon {
-            font-size: 40px;
-            color: #333;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            cursor: pointer;
-        }
-
-        .popup .close-icon:hover {
-            color: #f44336;
         }
     </style>
 </head>
@@ -333,24 +333,18 @@
 
     <script>
         $(document).ready(function () {
-            // عرض البيانات المخزنة من localStorage عند تحميل الصفحة
             if (localStorage.getItem("subscriptions")) {
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
 
-            // إظهار نافذة إضافة الاشتراك
+            // إضافة تأثير الاهتزاز على زر "تجديد الاشتراكات"
+            $("#renewSubscriptionBtn").addClass("vibrate");
+
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
                 $("#addSubscriptionPopup").fadeIn();
             });
 
-            // إغلاق نافذة إضافة الاشتراك
-            $("#cancelAddBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeOut();
-                $("#addSubscriptionPopup").fadeOut();
-            });
-
-            // حفظ الاشتراك الجديد
             $("#saveSubscriptionBtn").click(function () {
                 const memberName = $("#memberName").val();
                 const subscriptionType = $("#subscriptionType").val();
@@ -377,7 +371,11 @@
                 }
             });
 
-            // تجديد الاشتراكات المنتهية
+            $("#cancelAddBtn").click(function () {
+                $("#addSubscriptionPopupOverlay").fadeOut();
+                $("#addSubscriptionPopup").fadeOut();
+            });
+
             $("#renewSubscriptionBtn").click(function () {
                 let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
@@ -395,7 +393,7 @@
                                 <th>تاريخ النهاية</th>
                             </tr>
                         </thead>
-                        <tbody>`;
+                        <tbody>`; 
                     expiredSubscriptions.each(function () {
                         const row = $(this);
                         expiredTable += `<tr>
@@ -416,21 +414,12 @@
                 }
             });
 
-            // إغلاق نافذة تجديد الاشتراك
+            // إغلاق نافذة التجديد عند الضغط على زر الإغلاق
             $("#closeRenewPopupBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
-
-            // البحث في الجدول
-            $("#searchInput").on("keyup", function () {
-                let value = $(this).val().toLowerCase();
-                $("#subscriptionsTable tbody tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
         });
 
-        // تعديل اشتراك
         function editSubscription(button) {
             const row = $(button).closest("tr");
             const memberName = row.find("td").eq(0).text();
@@ -458,7 +447,6 @@
             });
         }
 
-        // حذف اشتراك
         function removeSubscription(button) {
             $(button).closest("tr").remove();
             localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
