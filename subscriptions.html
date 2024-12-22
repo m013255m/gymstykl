@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        /* تنسيق CSS كما هو في الكود السابق */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -25,7 +24,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: auto;
+            height: 100vh;
         }
 
         .sidebar h2 {
@@ -242,7 +241,6 @@
         .popup .close-icon:hover {
             color: #f44336;
         }
-
     </style>
 </head>
 
@@ -335,15 +333,24 @@
 
     <script>
         $(document).ready(function () {
+            // عرض البيانات المخزنة من localStorage عند تحميل الصفحة
             if (localStorage.getItem("subscriptions")) {
                 $("#subscriptionsTable tbody").html(localStorage.getItem("subscriptions"));
             }
 
+            // إظهار نافذة إضافة الاشتراك
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
                 $("#addSubscriptionPopup").fadeIn();
             });
 
+            // إغلاق نافذة إضافة الاشتراك
+            $("#cancelAddBtn").click(function () {
+                $("#addSubscriptionPopupOverlay").fadeOut();
+                $("#addSubscriptionPopup").fadeOut();
+            });
+
+            // حفظ الاشتراك الجديد
             $("#saveSubscriptionBtn").click(function () {
                 const memberName = $("#memberName").val();
                 const subscriptionType = $("#subscriptionType").val();
@@ -370,11 +377,7 @@
                 }
             });
 
-            $("#cancelAddBtn").click(function () {
-                $("#addSubscriptionPopupOverlay").fadeOut();
-                $("#addSubscriptionPopup").fadeOut();
-            });
-
+            // تجديد الاشتراكات المنتهية
             $("#renewSubscriptionBtn").click(function () {
                 let expiredSubscriptions = $("#subscriptionsTable tbody tr").filter(function () {
                     const endDate = $(this).find("td").eq(3).text();
@@ -392,7 +395,7 @@
                                 <th>تاريخ النهاية</th>
                             </tr>
                         </thead>
-                        <tbody>`; 
+                        <tbody>`;
                     expiredSubscriptions.each(function () {
                         const row = $(this);
                         expiredTable += `<tr>
@@ -413,11 +416,21 @@
                 }
             });
 
+            // إغلاق نافذة تجديد الاشتراك
             $("#closeRenewPopupBtn").click(function () {
                 $("#renewSubscriptionPopup").fadeOut();
             });
+
+            // البحث في الجدول
+            $("#searchInput").on("keyup", function () {
+                let value = $(this).val().toLowerCase();
+                $("#subscriptionsTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
         });
 
+        // تعديل اشتراك
         function editSubscription(button) {
             const row = $(button).closest("tr");
             const memberName = row.find("td").eq(0).text();
@@ -445,6 +458,7 @@
             });
         }
 
+        // حذف اشتراك
         function removeSubscription(button) {
             $(button).closest("tr").remove();
             localStorage.setItem("subscriptions", $("#subscriptionsTable tbody").html());
