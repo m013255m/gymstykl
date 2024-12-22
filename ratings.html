@@ -23,7 +23,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100vh;
+            height: auto;
         }
 
         .sidebar h2 {
@@ -153,16 +153,7 @@
             text-align: center;
         }
 
-        .popup input {
-            padding: 10px;
-            font-size: 16px;
-            width: 100%;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        .popup select {
+        .popup input, .popup select {
             padding: 10px;
             font-size: 16px;
             width: 100%;
@@ -201,7 +192,7 @@
                     <li><a href="inventory.html">إدارة المخزون</a></li>
                     <li><a href="damagedInventory.html">المخزون التالف</a></li>
                     <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
-                    <li><a href="ratings.html">التقييمات</a></li>
+                    <li><a href="ratings.html">إدارة التقييمات</a></li>
                     <li><a href="rewards.html">المكافآت</a></li>
                     <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
                     <li><a href="marketing.html">حملات التسويق</a></li>
@@ -216,7 +207,7 @@
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن تقييم...">
                 <div class="button-container">
-                    <button class="button" id="addRatingBtn">إضافة تقييم</button>
+                    <button class="button" id="addRatingBtn">إضافة تقييم جديد</button>
                 </div>
             </div>
             <table id="ratingsTable">
@@ -236,11 +227,11 @@
         </div>
     </div>
 
-    <!-- نافذة منبثقة لإضافة/تعديل التقييم -->
+    <!-- نافذة منبثقة لإضافة تقييم جديد -->
     <div class="overlay" id="addRatingPopupOverlay"></div>
     <div class="popup" id="addRatingPopup">
         <div class="popup-content">
-            <h2>إضافة أو تعديل تقييم</h2>
+            <h2>إضافة تقييم جديد</h2>
             <input type="text" id="memberName" placeholder="اسم العضو">
             <select id="ratingValue">
                 <option value="">اختار التقييم</option>
@@ -253,27 +244,23 @@
             <input type="text" id="comments" placeholder="التعليقات">
             <input type="date" id="ratingDate" placeholder="تاريخ التقييم">
             <button class="button" id="saveRatingBtn">حفظ</button>
-            <button class="button" id="cancelRatingBtn">إلغاء</button>
+            <button class="button" id="cancelAddRatingBtn">إلغاء</button>
         </div>
     </div>
 
     <script>
         $(document).ready(function () {
-            // تحميل التقييمات من localStorage عند تحميل الصفحة
-            if (localStorage.getItem("ratings")) {
-                $("#ratingsTable tbody").html(localStorage.getItem("ratings"));
-            }
+            let editingRow = null;
 
-            // إضافة تقييم جديد
+            // فتح نافذة إضافة تقييم جديد
             $("#addRatingBtn").click(function () {
+                editingRow = null; // إعادة تعيين الصف المعدل
+                $("#memberName").val('');
+                $("#ratingValue").val('');
+                $("#comments").val('');
+                $("#ratingDate").val('');
                 $("#addRatingPopupOverlay").fadeIn();
                 $("#addRatingPopup").fadeIn();
-            });
-
-            // إلغاء إضافة التقييم
-            $("#cancelRatingBtn").click(function () {
-                $("#addRatingPopupOverlay").fadeOut();
-                $("#addRatingPopup").fadeOut();
             });
 
             // حفظ التقييم
@@ -284,17 +271,26 @@
                 const ratingDate = $("#ratingDate").val();
 
                 if (memberName && ratingValue && comments && ratingDate) {
-                    let newRow = `<tr>
-                        <td>${memberName}</td>
-                        <td>${ratingValue}</td>
-                        <td>${comments}</td>
-                        <td>${ratingDate}</td>
-                        <td>
-                            <button class="button" onclick="editRating(this)">تعديل</button>
-                            <button class="button red-button" onclick="removeRating(this)">حذف</button>
-                        </td>
-                    </tr>`;
-                    $("#ratingsTable tbody").append(newRow);
+                    if (editingRow) {
+                        // تعديل التقييم في الجدول
+                        editingRow.find("td").eq(0).text(memberName);
+                        editingRow.find("td").eq(1).text(ratingValue);
+                        editingRow.find("td").eq(2).text(comments);
+                        editingRow.find("td").eq(3).text(ratingDate);
+                    } else {
+                        // إضافة تقييم جديد
+                        const newRow = `<tr>
+                            <td>${memberName}</td>
+                            <td>${ratingValue}</td>
+                            <td>${comments}</td>
+                            <td>${ratingDate}</td>
+                            <td>
+                                <button class="button" onclick="editRating(this)">تعديل</button>
+                                <button class="button red-button" onclick="removeRating(this)">حذف</button>
+                            </td>
+                        </tr>`;
+                        $("#ratingsTable tbody").append(newRow);
+                    }
                     localStorage.setItem("ratings", $("#ratingsTable tbody").html());
                     $("#addRatingPopupOverlay").fadeOut();
                     $("#addRatingPopup").fadeOut();
@@ -303,9 +299,16 @@
                 }
             });
 
+            // إلغاء إضافة التقييم
+            $("#cancelAddRatingBtn").click(function () {
+                $("#addRatingPopupOverlay").fadeOut();
+                $("#addRatingPopup").fadeOut();
+            });
+
             // تعديل التقييم
             window.editRating = function (button) {
                 const row = $(button).closest("tr");
+                editingRow = row;
                 const memberName = row.find("td").eq(0).text();
                 const ratingValue = row.find("td").eq(1).text();
                 const comments = row.find("td").eq(2).text();
@@ -315,7 +318,6 @@
                 $("#ratingValue").val(ratingValue);
                 $("#comments").val(comments);
                 $("#ratingDate").val(ratingDate);
-
                 $("#addRatingPopupOverlay").fadeIn();
                 $("#addRatingPopup").fadeIn();
             };
@@ -326,7 +328,12 @@
                 localStorage.setItem("ratings", $("#ratingsTable tbody").html());
             };
 
-            // البحث عن التقييمات
+            // تحميل التقييمات من LocalStorage عند تحميل الصفحة
+            if (localStorage.getItem("ratings")) {
+                $("#ratingsTable tbody").html(localStorage.getItem("ratings"));
+            }
+
+            // البحث في التقييمات
             $("#searchInput").keyup(function () {
                 const value = $(this).val().toLowerCase();
                 $("#ratingsTable tbody tr").filter(function () {
