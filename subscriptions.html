@@ -24,7 +24,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: auto;
+            height: auto; /* تعديل هنا */
         }
 
         .sidebar h2 {
@@ -180,7 +180,6 @@
             border-radius: 8px;
         }
 
-        /* تحسين الجدول */
         #expiredSubscriptionsTable {
             width: 100%;
             border-collapse: collapse;
@@ -211,7 +210,6 @@
             cursor: pointer;
         }
 
-        /* تأثير الاهتزاز على زر تجديد الاشتراكات */
         .vibrate {
             animation: vibrate 0.5s linear infinite;
         }
@@ -224,7 +222,6 @@
             100% { transform: translateX(5px); }
         }
 
-        /* تحسين شكل مربع البحث */
         .search-bar input {
             width: 250px;
             padding: 10px;
@@ -240,7 +237,6 @@
             outline: none;
         }
 
-        /* أيقونة زر الإغلاق في وسط المربع المنبثق */
         .popup .close-icon {
             font-size: 40px;
             color: #333;
@@ -255,6 +251,20 @@
             color: #f44336;
         }
 
+        .no-expired-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f44336;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            z-index: 1001;
+        }
     </style>
 </head>
 
@@ -345,6 +355,11 @@
         </div>
     </div>
 
+    <!-- رسالة منبثقة إذا لم توجد اشتراكات منتهية -->
+    <div class="no-expired-popup" id="noExpiredPopup">
+        لا توجد اشتراكات منتهية.
+    </div>
+
     <script>
         $(document).ready(function () {
             if (localStorage.getItem("subscriptions")) {
@@ -352,7 +367,7 @@
             }
 
             // إضافة تأثير الاهتزاز على زر "تجديد الاشتراكات"
-            $("#renewSubscriptionBtn").removeClass("vibrate");
+            $("#renewSubscriptionBtn").addClass("vibrate");
 
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
@@ -423,11 +438,10 @@
                     $("#closeRenewPopupBtn").click(function () {
                         $("#renewSubscriptionPopup").fadeOut();
                     });
-
-                    // إضافة تأثير الاهتزاز فقط إذا كان هناك اشتراكات منتهية
-                    $("#renewSubscriptionBtn").addClass("vibrate");
                 } else {
-                    alert("لا توجد اشتراكات منتهية.");
+                    // إظهار رسالة منبثقة
+                    $("#noExpiredPopup").fadeIn().delay(2000).fadeOut();
+                    // إزالة الاهتزاز من الزر
                     $("#renewSubscriptionBtn").removeClass("vibrate");
                 }
             });
