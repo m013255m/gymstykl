@@ -211,31 +211,6 @@
             cursor: pointer;
         }
 
-        /* تحسين زر "إلغاء" و"إغلاق" */
-        .popup .button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #cancelRenewBtn {
-            background-color: #f44336;
-        }
-
-        #cancelRenewBtn:hover {
-            background-color: #e53935;
-        }
-
-        #closeRenewPopupBtn {
-            background-color: #009688;
-        }
-
-        #closeRenewPopupBtn:hover {
-            background-color: #00796b;
-        }
-
         /* تأثير الاهتزاز على زر تجديد الاشتراكات */
         .vibrate {
             animation: vibrate 0.5s linear infinite;
@@ -280,22 +255,6 @@
             color: #f44336;
         }
 
-        /* الرسالة المنبثقة عند عدم وجود اشتراكات منتهية */
-        .message-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #f44336;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            font-size: 18px;
-            text-align: center;
-            z-index: 1000;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
     </style>
 </head>
 
@@ -386,11 +345,6 @@
         </div>
     </div>
 
-    <!-- رسالة منبثقة لعدم وجود اشتراكات منتهية -->
-    <div class="message-popup" id="noExpiredSubscriptionsPopup">
-        لا توجد اشتراكات منتهية.
-    </div>
-
     <script>
         $(document).ready(function () {
             if (localStorage.getItem("subscriptions")) {
@@ -398,7 +352,7 @@
             }
 
             // إضافة تأثير الاهتزاز على زر "تجديد الاشتراكات"
-            $("#renewSubscriptionBtn").addClass("vibrate");
+            $("#renewSubscriptionBtn").removeClass("vibrate");
 
             $("#addSubscriptionBtn").click(function () {
                 $("#addSubscriptionPopupOverlay").fadeIn();
@@ -461,7 +415,7 @@
                             <td>${row.find("td").eq(1).text()}</td>
                             <td>${row.find("td").eq(2).text()}</td>
                             <td>${row.find("td").eq(3).text()}</td>
-                        </tr>`; 
+                        </tr>`;
                     });
                     expiredTable += `</tbody></table>`;
                     $("#renewSubscriptionPopup .popup-content").html(expiredTable + '<button class="button" id="closeRenewPopupBtn">إغلاق</button>');
@@ -469,9 +423,12 @@
                     $("#closeRenewPopupBtn").click(function () {
                         $("#renewSubscriptionPopup").fadeOut();
                     });
+
+                    // إضافة تأثير الاهتزاز فقط إذا كان هناك اشتراكات منتهية
+                    $("#renewSubscriptionBtn").addClass("vibrate");
                 } else {
-                    // ظهور الرسالة المنبثقة إذا لم توجد اشتراكات منتهية
-                    $("#noExpiredSubscriptionsPopup").fadeIn().delay(2000).fadeOut();
+                    alert("لا توجد اشتراكات منتهية.");
+                    $("#renewSubscriptionBtn").removeClass("vibrate");
                 }
             });
 
@@ -488,18 +445,15 @@
             const startDate = row.find("td").eq(2).text();
             const endDate = row.find("td").eq(3).text();
 
-            // إدخال البيانات في مربعات النص
             $("#memberName").val(memberName);
             $("#subscriptionType").val(subscriptionType);
             $("#startDate").val(startDate);
             $("#endDate").val(endDate);
 
-            // فتح المربع المنبثق
             $("#addSubscriptionPopupOverlay").fadeIn();
             $("#addSubscriptionPopup").fadeIn();
 
-            // التعديل عند الضغط على زر "حفظ"
-            $("#saveSubscriptionBtn").off("click").click(function () {
+            $("#saveSubscriptionBtn").click(function () {
                 row.find("td").eq(0).text($("#memberName").val());
                 row.find("td").eq(1).text($("#subscriptionType").val());
                 row.find("td").eq(2).text($("#startDate").val());
