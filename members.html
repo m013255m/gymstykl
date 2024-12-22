@@ -176,8 +176,8 @@
                 <ul>
                     <li><a href="index.html">الرئيسية</a></li>
                     <li><a href="members.html">إدارة الأعضاء</a></li>
-                    <li><a href="trainers.html">إدارة المدربين</a></li>
                     <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                    <li><a href="trainers.html">إدارة المدربين</a></li>
                     <li><a href="inventory.html">إدارة المخزون</a></li>
                     <li><a href="damagedInventory.html">المخزون التالف</a></li>
                     <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
@@ -229,6 +229,7 @@
 
     <script>
         $(document).ready(function () {
+            // استرجاع البيانات المخزنة في المتصفح
             if (localStorage.getItem("members")) {
                 $("#membersTable tbody").html(localStorage.getItem("members"));
             }
@@ -261,12 +262,10 @@
                     localStorage.setItem("members", $("#membersTable tbody").html());
                     $("#addMemberPopupOverlay").fadeOut();
                     $("#addMemberPopup").fadeOut();
-                } else {
-                    alert("الرجاء ملء جميع الحقول.");
                 }
             });
 
-            // إغلاق نافذة إضافة عضو جديد
+            // إغلاق نافذة إضافة العضو
             $("#cancelAddMemberBtn").click(function () {
                 $("#addMemberPopupOverlay").fadeOut();
                 $("#addMemberPopup").fadeOut();
