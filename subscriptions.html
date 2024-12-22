@@ -125,9 +125,9 @@
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             z-index: 1000;
             animation: popupFadeIn 0.3s ease-out;
-            max-height: 80%;
-            overflow-y: auto; /* إضافة خاصية التمرير العمودي */
-            width: 600px;
+            max-height: 80%; /* تحديد أقصى ارتفاع للمربع المنبثق */
+            overflow-y: auto; /* تمكين التمرير العمودي */
+            width: 600px; /* يمكن تعديل العرض حسب الحاجة */
         }
 
         @keyframes popupFadeIn {
@@ -335,28 +335,40 @@
         </div>
     </div>
 
+    <!-- المربع المنبثق لإضافة اشتراك -->
+    <div class="overlay" id="addSubscriptionPopupOverlay"></div>
+    <div class="popup" id="addSubscriptionPopup">
+        <div class="popup-content">
+            <h2>إضافة اشتراك جديد</h2>
+            <input type="text" id="memberName" placeholder="اسم العضو">
+            <input type="text" id="subscriptionType" placeholder="نوع الاشتراك">
+            <input type="date" id="startDate" placeholder="تاريخ البداية">
+            <input type="date" id="endDate" placeholder="تاريخ النهاية">
+            <button class="button" id="saveSubscriptionBtn">حفظ</button>
+            <button class="button" id="cancelAddBtn">إلغاء</button>
+        </div>
+    </div>
+
     <!-- المربع المنبثق لتجديد الاشتراك -->
     <div class="popup" id="renewSubscriptionPopup">
         <div class="popup-content">
             <span class="close-icon" id="closeRenewPopupBtn"><i class="fas fa-times"></i></span>
             <h2>تجديد الاشتراك</h2>
-            <div class="popup-content">
-                <table id="expiredSubscriptionsTable">
-                    <thead>
-                        <tr>
-                            <th>اسم العضو</th>
-                            <th>نوع الاشتراك</th>
-                            <th>تاريخ البداية</th>
-                            <th>تاريخ النهاية</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
-                    </tbody>
-                </table>
-                <div class="button-container">
-                    <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
-                </div>
+            <table id="expiredSubscriptionsTable">
+                <thead>
+                    <tr>
+                        <th>اسم العضو</th>
+                        <th>نوع الاشتراك</th>
+                        <th>تاريخ البداية</th>
+                        <th>تاريخ النهاية</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- الاشتراكات المنتهية سيتم إضافتها هنا -->
+                </tbody>
+            </table>
+            <div class="button-container">
+                <button class="button red-button" id="cancelRenewBtn">إلغاء</button>
             </div>
         </div>
     </div>
