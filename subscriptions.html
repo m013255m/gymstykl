@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        /* الأسلوب العام */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -24,7 +25,7 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: auto; /* تعديل هنا */
+            height: auto;
         }
 
         .sidebar h2 {
@@ -166,10 +167,6 @@
             justify-content: flex-end;
         }
 
-        .swal2-loading {
-            display: none;
-        }
-
         .waiting-popup {
             font-size: 18px;
             font-weight: bold;
@@ -251,22 +248,6 @@
             border-color: #4CAF50;
             outline: none;
         }
-
-        /* أيقونة زر الإغلاق في وسط المربع المنبثق */
-        .popup .close-icon {
-            font-size: 40px;
-            color: #333;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            cursor: pointer;
-        }
-
-        .popup .close-icon:hover {
-            color: #f44336;
-        }
-
     </style>
 </head>
 
@@ -319,20 +300,6 @@
         </div>
     </div>
 
-    <!-- المربع المنبثق لإضافة اشتراك -->
-    <div class="overlay" id="addSubscriptionPopupOverlay"></div>
-    <div class="popup" id="addSubscriptionPopup">
-        <div class="popup-content">
-            <h2>إضافة اشتراك جديد</h2>
-            <input type="text" id="memberName" placeholder="اسم العضو">
-            <input type="text" id="subscriptionType" placeholder="نوع الاشتراك">
-            <input type="date" id="startDate" placeholder="تاريخ البداية">
-            <input type="date" id="endDate" placeholder="تاريخ النهاية">
-            <button class="button" id="saveSubscriptionBtn">حفظ</button>
-            <button class="button" id="cancelAddBtn">إلغاء</button>
-        </div>
-    </div>
-
     <!-- المربع المنبثق لتجديد الاشتراك -->
     <div class="popup" id="renewSubscriptionPopup">
         <div class="popup-content">
@@ -345,6 +312,7 @@
                         <th>نوع الاشتراك</th>
                         <th>تاريخ البداية</th>
                         <th>تاريخ النهاية</th>
+                        <th>إجراء</th> <!-- إضافة العمود الجديد -->
                     </tr>
                 </thead>
                 <tbody>
@@ -417,9 +385,10 @@
                                 <th>نوع الاشتراك</th>
                                 <th>تاريخ البداية</th>
                                 <th>تاريخ النهاية</th>
+                                <th>إجراء</th> <!-- إضافة العمود الجديد -->
                             </tr>
                         </thead>
-                        <tbody>`; 
+                        <tbody>`;
                     expiredSubscriptions.each(function () {
                         const row = $(this);
                         expiredTable += `<tr>
@@ -427,6 +396,7 @@
                             <td>${row.find("td").eq(1).text()}</td>
                             <td>${row.find("td").eq(2).text()}</td>
                             <td>${row.find("td").eq(3).text()}</td>
+                            <td><button class="button">تجديد</button></td> <!-- زر التجديد -->
                         </tr>`;
                     });
                     expiredTable += `</tbody></table>`;
