@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الوجبات الغذائية</title>
+    <title>إدارة الوجبات الغذائية للأعضاء</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,27 +32,26 @@
             margin-bottom: 20px;
         }
 
-        .sidebar nav ul {
+        .sidebar ul {
             list-style: none;
             padding: 0;
         }
 
-        .sidebar nav ul li {
+        .sidebar ul li {
             margin: 15px 0;
         }
 
-        .sidebar nav ul li a {
+        .sidebar ul li a {
             color: white;
             text-decoration: none;
             font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
-        .sidebar nav ul li a:hover {
+        .sidebar ul li a:hover {
             background-color: #575757;
+            padding: 5px;
+            border-radius: 5px;
         }
 
         .content {
@@ -107,28 +104,86 @@
             transform: scale(1.05);
         }
 
-        .swal2-popup {
-            font-family: 'Arial', sans-serif;
+        .red-button {
+            background-color: red;
         }
 
-        .search-bar {
-            margin-bottom: 20px;
+        .red-button:hover {
+            background-color: darkred;
+        }
+
+        .button-container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
         }
 
         .search-bar input {
+            width: 250px;
             padding: 10px;
             font-size: 16px;
-            width: 300px;
-            border: 1px solid #ddd;
             border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            transition: border-color 0.3s ease;
         }
 
-        h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
+        .search-bar input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #f8f8f8, #e1e1e1);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-height: 80%;
+            overflow-y: auto;
+            width: 600px;
+        }
+
+        .popup .popup-content {
+            text-align: center;
+        }
+
+        .popup input {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .popup select {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .popup button {
+            margin-top: 10px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
     </style>
 </head>
@@ -157,19 +212,24 @@
         </div>
 
         <div class="content">
-            <h3>إدارة الوجبات الغذائية</h3>
+            <h3>إدارة الوجبات الغذائية للأعضاء</h3>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="بحث عن وجبة...">
-                <button class="button" id="addMealBtn">إضافة وجبة</button>
+                <div class="button-container">
+                    <button class="button" id="addMealBtn">إضافة وجبة غذائية</button>
+                </div>
             </div>
             <table id="mealsTable">
                 <thead>
                     <tr>
                         <th>اسم الوجبة</th>
+                        <th>الفئة</th>
                         <th>المكونات</th>
                         <th>السعر</th>
-                        <th>الوصف</th>
-                        <th>الإجراءات</th>
+                        <th>السعرات الحرارية</th>
+                        <th>الوقت المناسب</th>
+                        <th>تاريخ الإضافة/التعديل</th>
+                        <th>العمليات</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -179,128 +239,118 @@
         </div>
     </div>
 
+    <!-- نافذة منبثقة لإضافة/تعديل الوجبة الغذائية -->
+    <div class="overlay" id="addMealPopupOverlay"></div>
+    <div class="popup" id="addMealPopup">
+        <div class="popup-content">
+            <h2>إضافة أو تعديل وجبة غذائية</h2>
+            <input type="text" id="mealName" placeholder="اسم الوجبة">
+            <select id="mealCategory">
+                <option value="">اختار الفئة</option>
+                <option value="فطور">فطور</option>
+                <option value="غداء">غداء</option>
+                <option value="عشاء">عشاء</option>
+                <option value="وجبة خفيفة">وجبة خفيفة</option>
+            </select>
+            <textarea id="mealIngredients" placeholder="المكونات" rows="3"></textarea>
+            <input type="number" id="mealPrice" placeholder="السعر (جنيه)" min="0">
+            <input type="number" id="mealCalories" placeholder="السعرات الحرارية" min="0">
+            <input type="text" id="mealTime" placeholder="الوقت المناسب للتناول">
+            <input type="date" id="mealDate" placeholder="تاريخ الإضافة/التعديل">
+            <button class="button" id="saveMealBtn">حفظ</button>
+            <button class="button" id="cancelMealBtn">إلغاء</button>
+        </div>
+    </div>
+
     <script>
-        const mealsKey = "gymMeals";
-
-        // تحميل البيانات من التخزين المحلي
-        function loadMeals() {
-            const storedMeals = localStorage.getItem(mealsKey);
-            if (storedMeals) {
-                JSON.parse(storedMeals).forEach(meal => {
-                    addMealToTable(meal.name, meal.ingredients, meal.price, meal.description);
-                });
+        $(document).ready(function () {
+            // تحميل الوجبات الغذائية من localStorage عند تحميل الصفحة
+            if (localStorage.getItem("meals")) {
+                $("#mealsTable tbody").html(localStorage.getItem("meals"));
             }
-        }
 
-        // حفظ البيانات في التخزين المحلي
-        function saveMeals() {
-            const rows = document.querySelectorAll("#mealsTable tbody tr");
-            const meals = Array.from(rows).map(row => ({
-                name: row.cells[0].textContent,
-                ingredients: row.cells[1].textContent,
-                price: row.cells[2].textContent,
-                description: row.cells[3].textContent
-            }));
-            localStorage.setItem(mealsKey, JSON.stringify(meals));
-        }
+            // إضافة وجبة غذائية جديدة
+            $("#addMealBtn").click(function () {
+                $("#addMealPopupOverlay").fadeIn();
+                $("#addMealPopup").fadeIn();
+            });
 
-        // إضافة وجبة جديدة إلى الجدول
-        function addMealToTable(name, ingredients, price, description) {
-            const table = document.querySelector("#mealsTable tbody");
-            const row = table.insertRow();
-            row.innerHTML = `
-                <td>${name}</td>
-                <td>${ingredients}</td>
-                <td>${price}</td>
-                <td>${description}</td>
-                <td>
-                    <button class="button" onclick="editMeal(this)">تعديل</button>
-                    <button class="button" onclick="deleteMeal(this)">حذف</button>
-                </td>
-            `;
-        }
+            // إلغاء إضافة الوجبة الغذائية
+            $("#cancelMealBtn").click(function () {
+                $("#addMealPopupOverlay").fadeOut();
+                $("#addMealPopup").fadeOut();
+            });
 
-        // إضافة وجبة جديدة
-        document.querySelector("#addMealBtn").addEventListener("click", () => {
-            Swal.fire({
-                title: 'إضافة وجبة جديدة',
-                html: `
-                    <input type="text" id="newMealName" class="swal2-input" placeholder="اسم الوجبة">
-                    <input type="text" id="newMealIngredients" class="swal2-input" placeholder="المكونات">
-                    <input type="number" id="newMealPrice" class="swal2-input" placeholder="السعر">
-                    <textarea id="newMealDescription" class="swal2-textarea" placeholder="الوصف"></textarea>
-                `,
-                confirmButtonText: 'إضافة',
-                preConfirm: () => ({
-                    name: document.getElementById("newMealName").value,
-                    ingredients: document.getElementById("newMealIngredients").value,
-                    price: document.getElementById("newMealPrice").value,
-                    description: document.getElementById("newMealDescription").value
-                })
-            }).then(result => {
-                if (result.isConfirmed) {
-                    addMealToTable(result.value.name, result.value.ingredients, result.value.price, result.value.description);
-                    saveMeals();
-                    Swal.fire('تمت الإضافة!', 'تم إضافة الوجبة الجديدة بنجاح.', 'success');
+            // حفظ الوجبة الغذائية
+            $("#saveMealBtn").click(function () {
+                const mealName = $("#mealName").val();
+                const mealCategory = $("#mealCategory").val();
+                const mealIngredients = $("#mealIngredients").val();
+                const mealPrice = $("#mealPrice").val();
+                const mealCalories = $("#mealCalories").val();
+                const mealTime = $("#mealTime").val();
+                const mealDate = $("#mealDate").val();
+
+                if (mealName && mealCategory && mealIngredients && mealPrice && mealCalories && mealTime && mealDate) {
+                    let newRow = `<tr>
+                        <td>${mealName}</td>
+                        <td>${mealCategory}</td>
+                        <td>${mealIngredients}</td>
+                        <td>${mealPrice}</td>
+                        <td>${mealCalories}</td>
+                        <td>${mealTime}</td>
+                        <td>${mealDate}</td>
+                        <td>
+                            <button class="button" onclick="editMeal(this)">تعديل</button>
+                            <button class="button red-button" onclick="removeMeal(this)">حذف</button>
+                        </td>
+                    </tr>`;
+                    $("#mealsTable tbody").append(newRow);
+                    localStorage.setItem("meals", $("#mealsTable tbody").html());
+                    $("#addMealPopupOverlay").fadeOut();
+                    $("#addMealPopup").fadeOut();
+                } else {
+                    alert("الرجاء ملء جميع الحقول.");
                 }
             });
-        });
 
-        // تعديل بيانات الوجبة
-        function editMeal(button) {
-            const row = button.closest("tr");
-            const name = row.cells[0].textContent;
-            const ingredients = row.cells[1].textContent;
-            const price = row.cells[2].textContent;
-            const description = row.cells[3].textContent;
+            // تعديل الوجبة الغذائية
+            window.editMeal = function (button) {
+                const row = $(button).closest("tr");
+                const mealName = row.find("td").eq(0).text();
+                const mealCategory = row.find("td").eq(1).text();
+                const mealIngredients = row.find("td").eq(2).text();
+                const mealPrice = row.find("td").eq(3).text();
+                const mealCalories = row.find("td").eq(4).text();
+                const mealTime = row.find("td").eq(5).text();
+                const mealDate = row.find("td").eq(6).text();
 
-            Swal.fire({
-                title: 'تعديل بيانات الوجبة',
-                html: `
-                    <input type="text" id="editMealName" class="swal2-input" value="${name}">
-                    <input type="text" id="editMealIngredients" class="swal2-input" value="${ingredients}">
-                    <input type="number" id="editMealPrice" class="swal2-input" value="${price}">
-                    <textarea id="editMealDescription" class="swal2-textarea">${description}</textarea>
-                `,
-                confirmButtonText: 'تحديث',
-                preConfirm: () => ({
-                    name: document.getElementById("editMealName").value,
-                    ingredients: document.getElementById("editMealIngredients").value,
-                    price: document.getElementById("editMealPrice").value,
-                    description: document.getElementById("editMealDescription").value
-                })
-            }).then(result => {
-                if (result.isConfirmed) {
-                    row.cells[0].textContent = result.value.name;
-                    row.cells[1].textContent = result.value.ingredients;
-                    row.cells[2].textContent = result.value.price;
-                    row.cells[3].textContent = result.value.description;
-                    saveMeals();
-                    Swal.fire('تم التحديث!', 'تم تحديث بيانات الوجبة بنجاح.', 'success');
-                }
-            });
-        }
+                $("#mealName").val(mealName);
+                $("#mealCategory").val(mealCategory);
+                $("#mealIngredients").val(mealIngredients);
+                $("#mealPrice").val(mealPrice);
+                $("#mealCalories").val(mealCalories);
+                $("#mealTime").val(mealTime);
+                $("#mealDate").val(mealDate);
 
-        // حذف الوجبة
-        function deleteMeal(button) {
-            const row = button.closest("tr");
-            row.remove();
-            saveMeals();
-            Swal.fire('تم الحذف!', 'تم حذف الوجبة بنجاح.', 'success');
-        }
+                $("#addMealPopupOverlay").fadeIn();
+                $("#addMealPopup").fadeIn();
+            };
 
-        // البحث عن وجبة
-        document.getElementById("searchInput").addEventListener("input", () => {
-            const filter = document.getElementById("searchInput").value.toLowerCase();
-            const rows = document.querySelectorAll("#mealsTable tbody tr");
-            rows.forEach(row => {
-                const cells = row.querySelectorAll("td");
-                const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(filter));
-                row.style.display = match ? "" : "none";
+            // حذف الوجبة الغذائية
+            window.removeMeal = function (button) {
+                $(button).closest("tr").remove();
+                localStorage.setItem("meals", $("#mealsTable tbody").html());
+            };
+
+            // البحث عن الوجبات الغذائية
+            $("#searchInput").keyup(function () {
+                const value = $(this).val().toLowerCase();
+                $("#mealsTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
             });
         });
-
-        loadMeals();
     </script>
 </body>
 </html>
