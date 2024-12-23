@@ -12,9 +12,11 @@
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
-            display: flex; /* استخدام Flexbox لجعل الشريط الجانبي والمحتوى بجانب بعض */
-            min-height: 100vh; /* ضمان أن الجسم يمتد طول الصفحة */
-            flex-direction: row; /* ترتيب العناصر أفقيًا */
+        }
+
+        .container {
+            display: flex; /* استخدام flexbox لترتيب الشريط الجانبي والمحتوى بجانب بعض */
+            min-height: 100vh; /* جعل الحاوية تمتد على طول الصفحة */
         }
 
         /* إعدادات الشريط الجانبي */
@@ -23,8 +25,8 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100vh; /* الشريط الجانبي ممتد على كامل ارتفاع الصفحة */
-            position: relative; /* لضمان أنه ليس مثبتًا */
+            height: auto; /* السماح للشريط الجانبي بتمتد بناءً على المحتوى */
+            flex-shrink: 0; /* عدم تغيير حجم الشريط الجانبي */
         }
 
         .sidebar h2 {
@@ -33,41 +35,155 @@
             margin-bottom: 20px;
         }
 
-        .sidebar nav ul {
+        .sidebar ul {
             list-style: none;
             padding: 0;
         }
 
-        .sidebar nav ul li {
+        .sidebar ul li {
             margin: 15px 0;
         }
 
-        .sidebar nav ul li a {
+        .sidebar ul li a {
             color: white;
             text-decoration: none;
             font-size: 18px;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
-        .sidebar nav ul li a:hover {
+        .sidebar ul li a:hover {
             background-color: #575757;
+            padding: 5px;
+            border-radius: 5px;
         }
 
         /* إعدادات المحتوى الرئيسي */
         .content {
-            flex: 1;
+            flex: 1; /* السماح للمحتوى أن يتوسع لملء المساحة المتبقية */
             padding: 20px;
             background-color: white;
-            height: 100vh; /* التوسع ليغطي كامل الصفحة */
-            overflow: hidden; /* لمنع ظهور شريط التمرير داخل المحتوى */
+            overflow: hidden; /* منع ظهور التمرير داخل المحتوى */
         }
 
-        /* من أجل أفضل تجربة للمستخدم عند زيادة المحتوى */
-        body, html {
-            overflow-x: hidden; /* إخفاء التمرير الأفقي غير الضروري */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* الأزرار */
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .red-button {
+            background-color: red;
+        }
+
+        .red-button:hover {
+            background-color: darkred;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* البحث */
+        .search-bar input {
+            width: 250px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        /* النوافذ المنبثقة */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #f8f8f8, #e1e1e1);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-height: 80%;
+            overflow-y: auto;
+            width: 600px;
+        }
+
+        .popup .popup-content {
+            text-align: center;
+        }
+
+        .popup input, .popup textarea {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .popup button {
+            margin-top: 10px;
+        }
+
+        /* الطبقة الخلفية للنوافذ المنبثقة */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
     </style>
 </head>
@@ -78,32 +194,25 @@
         <!-- الشريط الجانبي -->
         <div class="sidebar">
             <h2>إدارة الجيم</h2>
-            <nav>
-                <ul>
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="members.html">إدارة الأعضاء</a></li>
-                    <li><a href="trainers.html">إدارة المدربين</a></li>
-                    <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
-                    <li><a href="inventory.html">إدارة المخزون</a></li>
-                    <li><a href="damagedInventory.html">المخزون التالف</a></li>
-                    <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
-                    <li><a href="ratings.html">التقييمات</a></li>
-                    <li><a href="rewards.html">المكافآت</a></li>
-                    <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
-                    <li><a href="marketing.html">حملات التسويق</a></li>
-                    <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
-                    <li><a href="complaints.html">الشكاوي</a></li>
-                </ul>
-            </nav>
+            <ul>
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="members.html">إدارة الأعضاء</a></li>
+                <li><a href="trainers.html">إدارة المدربين</a></li>
+                <li><a href="subscriptions.html">إدارة الاشتراكات</a></li>
+                <li><a href="inventory.html">إدارة المخزون</a></li>
+                <li><a href="damagedInventory.html">المخزون التالف</a></li>
+                <li><a href="meals.html">إدارة الوجبات الغذائية</a></li>
+                <li><a href="ratings.html">التقييمات</a></li>
+                <li><a href="rewards.html">المكافآت</a></li>
+                <li><a href="specialRequests.html">الطلبات الخاصة</a></li>
+                <li><a href="marketing.html">حملات التسويق</a></li>
+                <li><a href="advancedScheduling.html">الجدولة المتقدمة</a></li>
+                <li><a href="complaints.html">الشكاوي</a></li>
+            </ul>
         </div>
 
         <!-- المحتوى الرئيسي -->
         <div class="content">
             <h3>مرحبًا بك في لوحة تحكم إدارة الجيم</h3>
             <p>اختر أحد الأقسام من الشريط الجانبي للتنقل بين النماذج المختلفة.</p>
-        </div>
-    </div>
-
-</body>
-
-</html>
+            <table>
