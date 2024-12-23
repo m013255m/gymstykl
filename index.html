@@ -84,9 +84,9 @@
         /* تصميم الرسائل المنبثقة في منتصف الشاشة */
         .messagePopupFixed {
             position: fixed;
-            top: 50%;  /* تحديد موقع الرسالة في منتصف الشاشة */
+            top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);  /* لتوسيط الرسالة تماماً في المنتصف */
+            transform: translate(-50%, -50%);
             background-color: #fff;
             padding: 20px;
             border-radius: 15px;
@@ -180,9 +180,17 @@
     <script>
         // تحميل بيانات المستخدمين من ملف JSON
         async function loadUsers() {
-            const response = await fetch('users.json'); // تحميل ملف JSON
-            const users = await response.json(); // تحويل البيانات إلى JSON
-            return users;
+            try {
+                const response = await fetch('users.json'); // تحميل ملف JSON
+                if (!response.ok) {
+                    throw new Error('لم يتم العثور على ملف البيانات');
+                }
+                const users = await response.json(); // تحويل البيانات إلى JSON
+                return users;
+            } catch (error) {
+                console.error("خطأ في تحميل البيانات: ", error);
+                return [];
+            }
         }
 
         async function login() {
