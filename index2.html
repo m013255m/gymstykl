@@ -12,12 +12,9 @@
             background-color: #f4f4f9;
             margin: 0;
             padding: 0;
-        }
-
-        /* إعدادات الحاوية التي تحتوي على الشريط الجانبي والمحتوى */
-        .container {
-            display: flex;
-            height: 100vh;
+            display: flex; /* استخدام Flexbox لجعل الشريط الجانبي والمحتوى بجانب بعض */
+            min-height: 100vh; /* ضمان أن الجسم يمتد طول الصفحة */
+            flex-direction: row; /* ترتيب العناصر أفقيًا */
         }
 
         /* إعدادات الشريط الجانبي */
@@ -26,8 +23,8 @@
             background-color: #333;
             color: white;
             padding: 20px;
-            height: 100vh;  /* جعل الشريط الجانبي ممتد بالكامل */
-            overflow-y: auto; /* للسماح بالتمرير إذا كان المحتوى أطول من الشاشة */
+            height: 100vh; /* الشريط الجانبي ممتد على كامل ارتفاع الصفحة */
+            position: relative; /* لضمان أنه ليس مثبتًا */
         }
 
         .sidebar h2 {
@@ -64,14 +61,13 @@
             flex: 1;
             padding: 20px;
             background-color: white;
-            height: 100vh;  /* لضمان امتداد المحتوى على كامل ارتفاع الصفحة */
-            overflow-y: auto; /* للسماح بالتمرير في حالة كان المحتوى طويلًا */
+            height: 100vh; /* التوسع ليغطي كامل الصفحة */
+            overflow: hidden; /* لمنع ظهور شريط التمرير داخل المحتوى */
         }
 
-        /* تصحيح التمرير في حالة وجود محتوى طويل */
-        body {
-            display: flex;
-            flex-direction: column;
+        /* من أجل أفضل تجربة للمستخدم عند زيادة المحتوى */
+        body, html {
+            overflow-x: hidden; /* إخفاء التمرير الأفقي غير الضروري */
         }
     </style>
 </head>
