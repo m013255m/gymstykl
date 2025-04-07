@@ -2,12 +2,12 @@
     {
         "username": "halok",
         "password": "halok",
-        "startDate": "2025-01-02T00:00:00Z",
-        "endDate": "2025-03-20T23:59:59Z"
+        "startDate": "2025-04-02T00:00:00Z",
+        "endDate": "2025-07-20T23:59:59Z"
     },
     {
-        "username": "halok",
-        "password": "halok",
+        "username": "halo",
+        "password": "halo",
         "startDate": "2025-01-02T00:00:00Z",
         "endDate": "2025-03-20T23:59:59Z"
     }
